@@ -101,11 +101,11 @@ workflow:
 
 | 阶段ID | 名称 | 输入 | 产出物 | 确认标准 |
 |--------|------|------|--------|----------|
-| **STAGE_0** | 项目探测 | 用户需求 | `project_snapshot.md` | 自动进入下一阶段 |
+| **STAGE_0** | 项目探测 | 用户需求 | `project_snapshot.md` | 包含 `{{CONFIRM}}` 标记需用户确认 |
 | **STAGE_1** | 需求定义 | project_snapshot + 用户需求 | `prd.md` | 包含 `{{CONFIRM}}` 标记需用户确认 |
 | **STAGE_2** | 技术设计 | prd.md | `tech_design.md` | 包含 `{{CONFIRM}}` 标记需用户确认 |
-| **STAGE_3** | 开发计划 | tech_design.md | `todo_list.md` | 自动进入下一阶段 |
-| **STAGE_4** | 代码开发 | todo_list当前任务 | 代码文件 | 每个任务完成后标记，支持回溯 |
+| **STAGE_3** | 开发计划 | tech_design.md | `todo_list.md` | 包含 `{{CONFIRM}}` 标记需用户确认 |
+| **STAGE_4** | 代码开发 | todo_list当前任务 | 代码文件 | 每个任务完成后需用户确认，支持回溯 |
 
 ---
 
@@ -162,50 +162,77 @@ cat .workflow/requirements/{{current_requirement_id}}/requirement_state.yaml
 cat .workflow/requirements/{{current_requirement_id}}/{stage}/{artifact_file}
 ```
 
-### 步骤2：根据当前阶段执行动作
+### 步骤2：动态切换到对应阶段的专业prompt
+
+**核心机制**：作为AI项目协调专家，根据当前阶段动态切换到对应的专业prompt来指导具体行动。
 
 **如果当前是 STAGE_0**：
-1. 调用 `_STAGE0_DETECT_.prompt.md`
-2. 输入：`{{user_input}}`
-3. 输出：`.workflow/requirements/{{requirement_id}}/stage0_detect/project_snapshot.md`
-4. 更新需求状态：`current_stage: STAGE_REQUIRE`
+```markdown
+## 当前阶段：项目探测
+
+我现在切换到 **项目探测模式**，使用 `_STAGE0_DETECT_.prompt.md` 指导行动：
+
+{完整引用 _STAGE0_DETECT_.prompt.md 的内容作为当前行动指南}
+
+---
+现在开始执行项目探测任务...
+```
 
 **如果当前是 STAGE_1**：
-1. 读取 `stage0_detect/project_snapshot.md`
-2. 调用 `_STAGE1_REQUIRE_.prompt.md`
-3. 输入：`project_snapshot.md` + `{{user_input}}`
-4. 输出：`.workflow/requirements/{{requirement_id}}/stage1_require/prd.md`
-5. 检查输出是否包含 `{{CLARIFY}}` 标记
-   - 如有：提出澄清问题，等待用户回答
-   - 如无：更新状态为 STAGE_DESIGN
+```markdown
+## 当前阶段：需求定义
+
+我现在切换到 **需求定义模式**，使用 `_STAGE1_REQUIRE_.prompt.md` 指导行动：
+
+{完整引用 _STAGE1_REQUIRE_.prompt.md 的内容作为当前行动指南}
+
+---
+现在开始执行需求定义任务...
+```
 
 **如果当前是 STAGE_2**：
-1. 读取 `stage1_require/prd.md`
-2. 调用 `_STAGE2_DESIGN_.prompt.md`
-3. 输入：`prd.md`
-4. 输出：`.workflow/requirements/{{requirement_id}}/stage2_design/tech_design.md`
-5. 检查输出是否包含 `{{CLARIFY}}` 标记
-   - 如有：提出澄清问题，等待用户回答
-   - 如无：更新状态为 STAGE_PLAN
+```markdown
+## 当前阶段：技术设计
+
+我现在切换到 **技术设计模式**，使用 `_STAGE2_DESIGN_.prompt.md` 指导行动：
+
+{完整引用 _STAGE2_DESIGN_.prompt.md 的内容作为当前行动指南}
+
+---
+现在开始执行技术设计任务...
+```
 
 **如果当前是 STAGE_3**：
-1. 读取 `stage2_design/tech_design.md`
-2. 调用 `_STAGE3_PLAN_.prompt.md`
-3. 输入：`tech_design.md`
-4. 输出：`.workflow/requirements/{{requirement_id}}/stage3_plan/todo_list.md`
-5. 更新状态为 STAGE_EXECUTE
+```markdown
+## 当前阶段：开发计划
+
+我现在切换到 **开发计划模式**，使用 `_STAGE3_PLAN_.prompt.md` 指导行动：
+
+{完整引用 _STAGE3_PLAN_.prompt.md 的内容作为当前行动指南}
+
+---
+现在开始执行开发计划任务...
+```
 
 **如果当前是 STAGE_4**：
-1. 读取 `stage3_plan/todo_list.md`
-2. 找到第一个未完成的任务（`[ ]`标记）
-3. 调用 `_STAGE4_EXECUTE_.prompt.md`
-4. 输入：当前任务详情 + `prd.md` + `tech_design.md` + 项目代码结构
-5. 输出：具体代码文件
-6. 在 `stage4_execute/changes/` 中记录变更摘要
-7. 标记任务为已完成（`[x]`）
-8. 检查是否还有未完成任务
-   - 有：继续 STAGE_4
-   - 无：生成完成总结，状态更新为 completed
+```markdown
+## 当前阶段：代码开发
+
+我现在切换到 **代码开发模式**，使用 `_STAGE4_EXECUTE_.prompt.md` 指导行动：
+
+{完整引用 _STAGE4_EXECUTE_.prompt.md 的内容作为当前行动指南}
+
+---
+现在开始执行代码开发任务...
+```
+
+### 动态prompt切换规则
+
+1. **保持身份一致性**：始终是AI项目协调专家
+2. **专业模式切换**：根据阶段切换到对应的专业模式
+3. **完整prompt引用**：每次都完整引用对应阶段的prompt内容
+4. **上下文传递**：确保变量和状态正确传递到专业prompt中
+5. **输出格式统一**：按照专业prompt的要求生成输出
 
 ### 步骤3：更新需求状态
 
