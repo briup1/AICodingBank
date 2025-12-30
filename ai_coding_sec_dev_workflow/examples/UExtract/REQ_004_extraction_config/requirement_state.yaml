@@ -1,0 +1,69 @@
+requirement:
+  id: REQ_004_extraction_config
+  name: 信息抽取配置功能
+  description: 新增抽取字段、抽取列表、抽取模板配置页面及信息抽取页面
+  created_at: "2025-12-30T00:00:00Z"
+  status: developing
+
+workflow:
+  current_stage: STAGE_EXECUTE
+  completed_stages: [STAGE_DETECT, STAGE_REQUIRE, STAGE_DESIGN, STAGE_PLAN]
+  stage_history:
+    - stage: STAGE_DETECT
+      timestamp: "2025-12-30T00:00:00Z"
+      input: "用户需求：新增信息抽取配置功能"
+      output: "stage0_detect/project_snapshot.md"
+      status: completed
+    - stage: STAGE_REQUIRE
+      timestamp: "2025-12-30T01:00:00Z"
+      input: "生成PRD文档"
+      output: "stage1_require/prd.md"
+      status: completed
+    - stage: STAGE_DESIGN
+      timestamp: "2025-12-30T02:00:00Z"
+      input: "生成技术方案设计书"
+      output: "stage2_design/tech_design.md"
+      status: completed
+    - stage: STAGE_PLAN
+      timestamp: "2025-12-30T03:00:00Z"
+      input: "生成TDD模块化开发任务清单"
+      output: "stage3_plan/todo_list.md"
+      status: completed
+    - stage: STAGE_EXECUTE
+      timestamp: "2025-12-30T04:00:00Z"
+      input: "开始代码开发"
+      output: "stage4_execute/"
+      status: in_progress
+
+artifacts:
+  project_snapshot: stage0_detect/project_snapshot.md
+  prd: stage1_require/prd.md
+  tech_design: stage2_design/tech_design.md
+  todo_list: stage3_plan/todo_list.md
+pending_clarifications: []
+
+clarifications_resolved:
+  - question_id: 1
+    question: "字段类型枚举值"
+    answer: "1A"
+    details: "基础类型：text, number, date, boolean"
+  - question_id: 2
+    question: "别名列表数据结构"
+    answer: "2B"
+    details: "数组类型,存储多个可能的变体名称"
+  - question_id: 3
+    question: "数据隔离级别"
+    answer: "3A"
+    details: "用户级隔离,每个用户只能看到和管理自己创建的数据"
+  - question_id: 4
+    question: "硅基流动API信息"
+    answer: "已提供"
+    details: "API文档：tasks/技术选型-ai大模型接口说明.md"
+  - question_id: 5
+    question: "抽取结果的数据结构"
+    answer: "5B"
+    details: "嵌套结构：{fields: [...], lists: [...], metadata: {...}}"
+  - question_id: 6
+    question: "文件上传限制"
+    answer: "6"
+    details: "单个文件最大10MB"
