@@ -15,13 +15,6 @@ graph TD
     E -->|测试反馈| B
     E -->|Bug报告| C
 
-    %% 样式美化
-    style S fill:#f0f0f0,stroke:#555,stroke-width:2px
-    style A fill:#ffe4b5,stroke:#333
-    style B fill:#add8e6,stroke:#333
-    style C fill:#98fb98,stroke:#333
-    style D fill:#dda0dd,stroke:#333
-    style E fill:#ffb6c1,stroke:#333
 ```
 
 ---
