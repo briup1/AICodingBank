@@ -1,5 +1,5 @@
 ---
-name: sec-dev-workflow
+name: ai_coding_sec_dev_workflow
 description: AI驱动二次开发工作流协调器。管理从需求分析到代码开发的完整5阶段流程（项目探测→需求定义→技术设计→开发计划→代码开发）。当用户提出新功能需求、添加特性、实现功能、开发需求时激活。支持需求隔离、状态持久化、澄清交互和回溯修正。
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ---
@@ -34,39 +34,6 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 阶段4: 代码开发 → 逐个任务完成
     ↓
 需求完成 → 归档
-```
-
-## 使用工作流脚本
-
-首先检查 `.workflow/project_state.yaml` 获取当前状态。
-
-### 查看当前状态
-```bash
-python3 .claude/skills/sec-dev-workflow/scripts/workflow.py status
-```
-
-### 启动新需求
-```bash
-python3 .claude/skills/sec-dev-workflow/scripts/workflow.py start "需求描述"
-```
-
-### 继续下一阶段
-```bash
-python3 .claude/skills/sec-dev-workflow/scripts/workflow.py continue
-```
-
-### 切换需求
-```bash
-python3 .claude/skills/sec-dev-workflow/scripts/workflow.py switch REQ_XXX
-```
-
-### 回溯修正
-```bash
-# 回溯到需求定义阶段
-python3 .claude/skills/sec-dev-workflow/scripts/workflow.py backtrack STAGE_REQUIRE
-
-# 回溯到技术设计阶段
-python3 .claude/skills/sec-dev-workflow/scripts/workflow.py backtrack STAGE_DESIGN
 ```
 
 ## 阶段提示词模板
@@ -118,12 +85,6 @@ cat .workflow/requirements/{当前需求ID}/requirement_state.yaml
 - 输出 `{{CONFIRM}}` 标记
 - 等待用户回复"确认"或"修改"
 
-### 5. 更新状态并推进
-
-```bash
-# 更新需求状态
-python3 .claude/skills/sec-dev-workflow/scripts/workflow.py update-stage {下一阶段}
-```
 
 ## 回溯机制
 
@@ -206,12 +167,12 @@ python3 .claude/skills/sec-dev-workflow/scripts/workflow.py update-stage {下一
 ## 开始使用
 
 当用户提出新需求时：
-1. 调用 `workflow.py start` 创建需求工作空间
+1. 根据用户需求 创建需求工作空间
 2. 读取并执行当前阶段提示词模板
 3. 生成产出物并等待用户确认
 4. 更新状态并进入下一阶段
 
 当用户继续开发时：
-1. 调用 `workflow.py status` 查看当前状态
+1. 根据用户需求 查看当前状态
 2. 读取当前阶段提示词模板
 3. 继续执行阶段任务
