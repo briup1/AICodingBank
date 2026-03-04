@@ -1,0 +1,19 @@
+# 依赖和构建产物
+node_modules/
+dist/
+build/
+.next/
+__pycache__/
+
+# 锁文件和日志
+*.lock
+*.log
+
+# 版本控制和IDE
+.git/
+.idea/
+.vscode/
+
+# 测试覆盖率
+coverage/
+.cache/

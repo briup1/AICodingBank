@@ -1,0 +1,35 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git status)",
+      "Bash(git log:*)",
+      "Bash(git diff:*)",
+      "Bash(npm test:*)",
+      "Bash(npm run lint:*)",
+      "Edit(src/**/*.{ts,tsx})",
+      "Edit(tests/**/*.test.ts)",
+      "Read(src/**/*.ts)",
+      "Write(src/components/*.tsx)"
+    ],
+    "ask": [
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(git pull:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run build)",
+      "Edit(package.json)",
+      "Edit(tsconfig.json)",
+      "Read(.env)",
+      "Read(config/secrets.*)"
+    ],
+    "deny": [
+      "Bash(rm -rf:*)",
+      "Bash(sudo:*)",
+      "Bash(curl * | sh)",
+      "Bash(wget * | sh)",
+      "Edit(.git/*)",
+      "Write(/etc/*)",
+      "Read(/etc/passwd)"
+    ]
+  }
+}
