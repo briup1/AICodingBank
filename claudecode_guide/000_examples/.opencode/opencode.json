@@ -1,0 +1,58 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "plugin": [
+    // "oh-my-opencode"
+  ],
+  "provider": {
+    "hgj-openai": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "hgj-openai",
+      "options": {
+        "baseURL": "https://coding-aihub.hgj.com/v1"
+      },
+      "models": {
+        "gpt-5.3-codex": {
+          "name": "gpt-5.3-codex"
+        },
+        "gpt-5.4": {
+          "name": "gpt-5.4"
+        },
+        "gemini-3-flash-preview": {
+          "name": "gemini-3-flash-preview"
+        },
+        "gemini-3.1-flash-lite-preview": {
+          "name": "gemini-3.1-flash-lite-preview"
+        },
+        "gemini-3.1-pro-preview": {
+          "name": "gemini-3.1-pro-preview"
+        },
+        "glm-4.7": {
+          "name": "glm-4.7"
+        },
+        "glm-5": {
+          "name": "glm-5"
+        }
+      }
+    },
+    "hgj-anthropic": {
+      "npm": "@ai-sdk/anthropic",
+      "name": "hgj-anthropic",
+      "options": {
+        "baseURL": "https://coding-aihub.hgj.com/v1"
+      },
+      "models": {
+        "claude-haiku-4-5": {
+          "name": "claude-haiku-4-5"
+        },
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
+        },
+        "claude-sonnet-4-6": {
+          "name": "claude-sonnet-4-6"
+        }
+      }
+    }
+  },
+  "small_model": "zai-coding-plan/glm-4.7",
+  "autoupdate": false
+}
