@@ -25,12 +25,25 @@
         },
         "gemini-3.1-pro-preview": {
           "name": "gemini-3.1-pro-preview"
+        }
+      }
+    },
+    "hgj-buzz": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "hgj-buzz",
+      "options": {
+        "baseURL": "https://hgj.buzzcloud.ai/v1",
+        "apiKey": "sk-88pqNF9QczdzgbeRGLmioER4utYjkVCWUXHDql39SWlkaraJ"
+      },
+      "models": {
+        "claude-opus-4-6": {
+          "name": "claude-opus-4-6"
         },
-        "glm-4.7": {
-          "name": "glm-4.7"
+        "claude-opus-4-5-20251101": {
+          "name": "claude-opus-4-5-20251101"
         },
-        "glm-5": {
-          "name": "glm-5"
+        "gemini-3-pro-preview": {
+          "name": "gemini-3-pro-preview"
         }
       }
     },
@@ -49,6 +62,18 @@
         },
         "claude-sonnet-4-6": {
           "name": "claude-sonnet-4-6"
+        },
+        "glm-4.7": {
+          "name": "glm-4.7"
+        },
+        "glm-5": {
+          "name": "glm-5"
+        },
+        "glm-5.1": {
+          "name": "glm-5.1"
+        },
+        "glm-5-turbo": {
+          "name": "glm-5-turbo"
         }
       }
     }
