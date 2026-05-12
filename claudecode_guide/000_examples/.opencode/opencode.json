@@ -51,7 +51,8 @@
       "npm": "@ai-sdk/anthropic",
       "name": "hgj-anthropic",
       "options": {
-        "baseURL": "https://coding-aihub.hgj.com/v1"
+        "baseURL": "https://coding-aihub.hgj.com/v1",
+        "apiKey": "sk-YaIlRP4UVftXck6MDF1kXlxuOnDf0x8QAOpBwhqfJjxt3TE0"
       },
       "models": {
         "claude-haiku-4-5": {
