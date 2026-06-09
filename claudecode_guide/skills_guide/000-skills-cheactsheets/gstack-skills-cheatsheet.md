@@ -7,17 +7,17 @@
 
 ## 快速索引（按场景）
 
-| 场景 | 推荐 Skill |
-|---|---|
-| 🐛 调试 Bug | `/investigate` |
+| 场景 | 推荐 Skill | 备注 |
+|---|---|---|
+| 🐛 调试 Bug | `/investigate` | 好用, 将报错原因贴过来查找根本原因
 | 🔍 代码审查 | `/review` |
 | 🚀 发布/提交 PR | `/ship` |
-| 🧪 测试网站 | `/qa` |
+| 🧪 测试网站 | `/qa` | 好用, 将url贴过来, 分析问题
 | 📊 性能基准 | `/benchmark` |
 | 🔒 安全审计 | `/cso` |
 | 💡 产品创意 | `/office-hours` |
-| 🏗️ 架构评审 | `/plan-eng-review` |
-| 🎨 设计评审 | `/plan-design-review` |
+| 🏗️ 架构评审 | `/plan-eng-review` | 需要重点测试,评估其方案评估能力
+| 🎨 设计评审 | `/plan-design-review` | 需要重点测试,评估其方案评估能力
 | 📦 部署上线 | `/land-and-deploy` |
 | 💾 保存进度 | `/context-save` |
 | 📂 恢复进度 | `/context-restore` |

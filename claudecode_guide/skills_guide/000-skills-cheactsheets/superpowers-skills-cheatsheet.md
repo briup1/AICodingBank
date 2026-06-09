@@ -9,15 +9,15 @@
 
 ## 快速索引（按场景）
 
-| 场景 | 推荐 Skill |
-|---|---|
-| 💡 新功能设计 | `/brainstorming` |
+| 场景 | 推荐 Skill | 备注 |
+|---|---|---|
+| 💡 新功能设计 | `/brainstorming` | 好用, 帮我清晰想法
 | 🐛 调试 Bug | `/systematic-debugging` |
 | 📝 拆解任务 | `/writing-plans` |
-| 🚀 并行开发 | `/subagent-driven-development` |
+| 🚀 并行开发 | `/subagent-driven-development` | 需重点测试并发效果与能力
 | 🔧 串行开发 | `/executing-plans` |
 | ✅ 测试驱动 | `/test-driven-development` |
-| 🔍 代码审查 | `/requesting-code-review` |
+| 🔍 代码审查 | `/requesting-code-review` | 好用, 写完代码进行审查
 | 🌿 工作区隔离 | `/using-git-worktrees` |
 | 🏁 收尾工作 | `/finishing-a-development-branch` |
 | 🔁 重置上下文 | `/using-superpowers` |
