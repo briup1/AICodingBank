@@ -1,0 +1,78 @@
+{
+  "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-opencode/dev/assets/oh-my-opencode.schema.json",
+  "agents": {
+    "sisyphus": {
+      "model": "hgj-anthropic/claude-sonnet-4-6", //主要策划者。他负责规划、委派给专家，并以积极的并行执行推动任务完成
+      "variant": "max"
+    },
+    "hephaestus": {
+      "model": "hgj-anthropic/glm-5.1", //他探索代码库，研究模式，并从头到尾执行，无需手把手指导
+      "variant": "medium"
+    },
+    "oracle": {
+      "model": "hgj-anthropic/claude-sonnet-4-6",//只读高智商顾问，负责架构决策和复杂调试
+      "variant": "high"
+    },
+    "librarian": {
+      "model": "hgj-anthropic/glm-4.7" //代码库管理员，负责维护代码库的结构和文档
+    },
+    "explore": {
+      "model": "hgj-anthropic/glm-4.7" //探索者，负责在代码库中寻找相关信息和模式
+    },
+    "multimodal-looker": {
+      "model": "hgj-anthropic/glm-4.7", //多模态查看器，负责从代码库中提取多模态信息
+      "variant": "medium"
+    },
+    "prometheus": {
+      "model": "hgj-anthropic/glm-5.1", //会提出澄清性的问题。明确范围和歧义。在动用一行代码之前，就制定详细的计划。
+      "variant": "max"
+    },
+    "metis": {
+      "model": "hgj-anthropic/glm-5.1",  //差值分析仪。捕捉普罗米修斯在计划最终确定前遗漏的内容。
+      "variant": "max"
+    },
+    "momus": {
+      "model": "hgj-anthropic/glm-5.1", //无情的评论员。根据清晰度、核实和上下文标准验证计划。
+      "variant": "xhigh"
+    },
+    "atlas": {
+      "model": "hgj-anthropic/glm-4.7" //阿特拉斯执行普罗米修斯的计划。将任务分配给专业的子代理。在各项任务中积累学习。独立验证完备性。
+    }
+  },
+  "categories": {
+    "visual-engineering": {
+      "model": "hgj-buzz/gemini-3.1-flash-lite-preview",
+      "variant": "high"
+    },
+    "ultrabrain": {
+      "model": "hgj-openai/gpt-5.3-codex",
+      "variant": "xhigh"
+    },
+    "deep": {
+      "model": "hgj-openai/gpt-5.3-codex",
+      "variant": "medium"
+    },
+    "artistry": {
+      "model": "hgj-buzz/gemini-3.1-flash-lite-preview",
+      "variant": "high"
+    },
+    "quick": {
+      "model": "hgj-anthropic/claude-haiku-4-5"
+    },
+    "unspecified-low": {
+      "model": "hgj-anthropic/claude-sonnet-4-6"
+    },
+    "unspecified-high": {
+      "model": "hgj-anthropic/claude-sonnet-4-6"
+    },
+    "writing": {
+      "model": "hgj-buzz/gemini-3.1-flash-lite-preview"
+    }
+  },
+  "claude_code": {
+    "mcp": false,
+    "commands": false,
+    "skills": false,
+    "hooks": false
+  }
+}
