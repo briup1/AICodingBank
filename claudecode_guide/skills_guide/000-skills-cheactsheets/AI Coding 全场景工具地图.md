@@ -1,0 +1,370 @@
+---
+markmap:
+  colorFreezeLevel: 2
+---
+
+# AI Coding 全场景工具地图
+
+- 外部信息与研究
+  - 搜索最新资料/竞品/API
+    - 首选 /tavily-search
+    - 辅助 /tavily-dynamic-search
+    - 输入 查询词/时间范围/域名限制
+    - 产出 精简搜索结果
+  - 抓取单个网页内容
+    - 首选 /tavily-extract
+    - 辅助 /scrape
+    - 输入 URL/query/chunks
+    - 产出 markdown/text
+  - 发现网站文档页面
+    - 首选 /tavily-map
+    - 辅助 /tavily-crawl
+    - 输入 站点URL/路径过滤
+    - 产出 URL清单/本地文档集
+  - 系统性调研报告
+    - 首选 /tavily-research
+    - 辅助 /company-research
+    - 输入 研究问题/引用格式
+    - 产出 带引用研究报告
+  - SDK/第三方集成调研
+    - 首选 /tavily-best-practices
+    - 辅助 /tavily-cli
+    - 产出 集成方式/API用法
+- 问题澄清与产品定义
+  - 模糊想法变清晰方案
+    - 首选 /brainstorming
+    - 辅助 /office-hours
+    - 输入 想法/目标用户/约束
+    - 产出 问题定义/方案轮廓
+  - 只探索不动代码
+    - 首选 /opsx:explore
+    - 辅助 /brainstorming
+    - 产出 选项/风险/建议
+  - 用户故事与验收标准
+    - 首选 /user-story
+    - 辅助 OpenSpec specs
+    - 产出 User Story/Gherkin
+  - 路线图与优先级
+    - 首选 /roadmap-planning
+    - 辅助 /office-hours
+    - 产出 Roadmap/里程碑
+  - 产品计划审查
+    - CEO视角 /plan-ceo-review
+    - 设计视角 /plan-design-review
+    - 工程视角 /plan-eng-review
+    - 全自动 /autoplan
+- PRD与规格驱动开发
+  - 创建完整规格方案
+    - 首选 /opsx:propose
+    - 辅助 /opsx:new
+    - 快速模式 /opsx:ff
+    - 输入 我想做某功能
+    - 产出 proposal/specs/design/tasks
+  - 继续完善Artifacts
+    - 首选 /opsx:continue
+    - 辅助 openspec status
+    - 产出 下一个artifact
+  - 按Tasks实现
+    - 首选 /opsx:apply
+    - 辅助 /executing-plans
+    - 输入 change名称
+    - 产出 代码改动
+  - 验证实现符合规格
+    - 首选 /opsx:verify
+    - 辅助 /review
+    - 产出 Completeness/Correctness/Coherence报告
+  - 同步与归档规格
+    - 同步 /opsx:sync-specs
+    - 单个归档 /opsx:archive
+    - 批量归档 /opsx:bulk-archive
+    - 产出 主规格更新/归档记录
+  - Artifact类型
+    - proposal
+      - Why/What Changes/Capabilities/Impact
+    - specs
+      - Requirements/Scenarios
+    - design
+      - Context/Goals/Decisions/Approach
+    - tasks
+      - Checkboxed implementation tasks
+- 技术设计与架构
+  - 工程架构评审
+    - 首选 /plan-eng-review
+    - 辅助 /autoplan
+    - 输入 设计方案/代码上下文
+    - 产出 架构风险/执行建议
+  - 全栈架构实践
+    - 首选 /fullstack-dev
+    - 覆盖 API/DB/Auth/Error/Logging/Cache/Realtime
+    - 产出 架构决策/实现模式
+  - API设计
+    - 工具 /fullstack-dev
+    - 关注 URL/状态码/分页/GraphQL/gRPC
+  - 数据库设计
+    - 工具 /fullstack-dev
+    - 关注 schema/index/migration/transaction/N+1
+  - 认证与权限
+    - 工具 /fullstack-dev
+    - 关注 JWT/session/RBAC/refresh token/middleware
+  - 生产化设计
+    - 工具 /fullstack-dev
+    - 关注 health check/graceful shutdown/env/secrets
+  - 开发者体验
+    - 首选 /plan-devex-review
+    - 实时审计 /devex-review
+    - 产出 DX评分/摩擦点/魔法时刻
+- UI与前端体验
+  - 前端工程实现
+    - 首选 /frontend-dev
+    - 覆盖 UI架构/组件/动效/资产/质量门禁
+  - 从零设计视觉系统
+    - 首选 /design-consultation
+    - 辅助 /frontend-dev
+    - 产出 设计方向/规范
+  - 多方案探索
+    - 首选 /design-shotgun
+    - 辅助 /plan-design-review
+    - 产出 多个设计方案
+  - HTML/CSS实现
+    - 首选 /design-html
+    - 辅助 /frontend-dev
+    - 产出 HTML/CSS页面
+  - 视觉质量检查
+    - 首选 /design-review
+    - 辅助 /qa
+    - 辅助 /browse
+    - 输入 URL/范围/深度
+    - 产出 视觉问题清单
+  - 前端动效选择
+    - Framer Motion
+      - UI进出场/layout/spring
+    - GSAP ScrollTrigger
+      - 滚动叙事/pin/scrub
+    - Lottie
+      - 循环图标
+    - Three.js/R3F
+      - 3D/WebGL
+    - CSS
+      - hover/focus/native scroll animation
+- 移动端开发
+  - Android原生
+    - 首选 /android-native-dev
+    - 覆盖 Gradle/Kotlin/Compose/Material3/Testing
+    - 构建错误
+      - 辅助 /investigate
+    - 产出 Gradle配置/Compose实现/测试方案
+  - iOS原生
+    - 首选 /ios-application-dev
+    - 覆盖 UIKit/SwiftUI/Accessibility/Permissions
+    - 体验检查
+      - 辅助 /plan-design-review
+    - 产出 iOS组件和实现规范
+- 开发计划与编码实现
+  - 拆解可执行计划
+    - 首选 /writing-plans
+    - 辅助 OpenSpec tasks
+    - 产出 分步执行计划
+  - 串行执行
+    - 首选 /executing-plans
+    - 适合 简单任务/不支持subagent环境
+    - 产出 当前会话完成实现
+  - 并行子代理开发
+    - 首选 /subagent-driven-development
+    - 辅助 /dispatching-parallel-agents
+    - 适合 多模块/多页面/独立任务
+    - 产出 多代理实现/多分支结果
+  - 测试驱动开发
+    - 首选 /test-driven-development
+    - 辅助 /verification-before-completion
+    - 适合 业务规则/边界多/历史bug
+    - 产出 失败测试+实现
+  - 前端开发
+    - 首选 /frontend-dev
+  - 全栈开发
+    - 首选 /fullstack-dev
+  - 移动端开发
+    - Android /android-native-dev
+    - iOS /ios-application-dev
+- 调试与排错
+  - 查Bug根因
+    - 首选 /investigate
+    - 辅助 /systematic-debugging
+    - 输入 错误日志/复现步骤
+    - 产出 根因/最小修复
+  - 系统性调试流程
+    - Phase1 根因调查
+    - Phase2 模式分析
+    - Phase3 单假设验证
+    - Phase4 实现修复
+  - Web页面复现
+    - 首选 /browse
+    - 辅助 /qa
+    - 辅助 /open-gstack-browser
+    - 产出 浏览器证据/截图/日志
+  - Android构建错误
+    - 首选 /android-native-dev
+    - 辅助 /investigate
+  - 安全地调试
+    - 编辑范围 /freeze
+    - 解除范围 /unfreeze
+    - 危险操作警戒 /careful
+    - 完全安全模式 /guard
+- 测试与质量验证
+  - Web自动QA并修复
+    - 首选 /qa
+    - 辅助 /setup-browser-cookies
+    - 输入 URL/登录状态/范围
+    - 产出 bug列表+修复
+  - Web只报告不修复
+    - 首选 /qa-only
+    - 辅助 /browse
+    - 产出 QA报告
+  - 浏览器自动化测试
+    - 无头 /browse
+    - 可视化 /open-gstack-browser
+    - Cookie /setup-browser-cookies
+  - 性能回归检测
+    - 首选 /benchmark
+    - 跨模型 /benchmark-models
+    - 产出 性能对比
+  - 完成前验证
+    - 首选 /verification-before-completion
+    - 辅助 /health
+    - 产出 验证结果/质量仪表板
+  - 移动端测试
+    - Android
+      - Unit/JUnit
+      - Robolectric
+      - Compose UI
+      - Espresso
+      - UI Automator
+    - iOS
+      - UIKit/SwiftUI检查
+      - Accessibility
+      - Lifecycle/Permissions
+- 代码审查与安全
+  - 提交前自审
+    - 首选 /requesting-code-review
+    - 辅助 /review
+    - 输入 diff/测试结果
+    - 产出 审查意见
+  - 预合并PR审查
+    - 首选 /review
+    - 第二意见 /codex
+    - 产出 bug/风险/测试缺口
+  - 接收审查意见
+    - 首选 /receiving-code-review
+    - 产出 修复计划/确认项
+  - 安全审计
+    - 首选 /cso
+    - 辅助 /guard
+    - 关注 权限/基础设施/数据/依赖/密钥
+  - 工作区隔离
+    - 首选 /using-git-worktrees
+    - 辅助 /context-save
+    - 产出 独立worktree
+- 发布与部署
+  - 完整提交发布
+    - 首选 /ship
+    - 辅助 /finishing-a-development-branch
+    - 输入 当前分支/测试状态
+    - 产出 PR/合并/发布准备
+  - 合并并部署
+    - 首选 /land-and-deploy
+    - 辅助 /setup-deploy
+    - 产出 部署完成
+  - 发布后监控
+    - 首选 /canary
+    - 辅助 /health
+    - 产出 线上异常报告
+  - 发布文档
+    - 首选 /document-release
+    - 辅助 /make-pdf
+    - 产出 Release docs/PDF
+  - OpenSpec发布收尾
+    - 验证 /opsx:verify
+    - 同步 /opsx:sync-specs
+    - 归档 /opsx:archive
+- 项目上下文与知识管理
+  - 保存上下文
+    - 首选 /context-save
+    - 辅助 /learn
+    - 产出 可恢复上下文
+  - 恢复上下文
+    - 首选 /context-restore
+    - 辅助 /landing-report
+    - 产出 恢复后的任务状态
+  - 项目学习记录
+    - 首选 /learn
+    - 产出 决策/经验/事实库
+  - 工程复盘
+    - 首选 /retro
+    - 输入 git history/变更
+    - 产出 周报/经验沉淀
+  - 质量仪表板
+    - 首选 /health
+  - Markdown转PDF
+    - 首选 /make-pdf
+- 工具与技能建设
+  - Tavily CLI
+    - 总入口 /tavily-cli
+    - Search tvly search
+    - Extract tvly extract
+    - Map tvly map
+    - Crawl tvly crawl
+    - Research tvly research
+  - gbrain
+    - 配置 /setup-gbrain
+    - 同步 /sync-gbrain
+  - gstack维护
+    - 升级 /gstack-upgrade
+    - 提问策略 /plan-tune
+  - 固化抓取流程
+    - 首选 /skillify
+    - 辅助 /scrape
+    - 产出 可复用skill
+  - 编写自定义Skill
+    - 首选 /writing-skills
+    - 辅助 skill-creator
+    - 产出 新skill
+- 推荐组合Workflow
+  - 新功能开发
+    - /brainstorming
+    - /tavily-research
+    - /opsx:propose
+    - /plan-eng-review
+    - /opsx:apply
+    - /requesting-code-review
+    - /opsx:verify
+    - /ship
+  - 前端体验开发
+    - /frontend-dev
+    - /design-consultation
+    - /design-shotgun
+    - /design-html
+    - /qa
+    - /design-review
+    - /benchmark
+  - 全栈生产功能
+    - /opsx:propose
+    - /fullstack-dev
+    - /plan-eng-review
+    - /test-driven-development
+    - /opsx:apply
+    - /review
+    - /ship
+    - /canary
+  - Bug修复
+    - /investigate
+    - /systematic-debugging
+    - /test-driven-development
+    - /verification-before-completion
+    - /requesting-code-review
+  - 发布上线
+    - /review
+    - /opsx:verify
+    - /ship
+    - /land-and-deploy
+    - /canary
+    - /document-release
+    - /opsx:archive
