@@ -5,6 +5,24 @@
 
 ---
 
+## 快速索引（按场景）
+
+| 场景 | 推荐 Skill | 备注 |
+|---|---|---|
+| ✨ 创建并生成完整方案 | `/opsx:propose` | 推荐入口 |
+| 📝 逐步创建 change | `/opsx:new` |
+| ⚡ 快速生成 artifacts | `/opsx:ff` |
+| 🔍 只探索不实现 | `/opsx:explore` |
+| 🚀 继续现有 change | `/opsx:continue` |
+| 💻 按 tasks 实现代码 | `/opsx:apply` |
+| 🔄 同步 delta 规格 | `/opsx:sync-specs` |
+| ✅ 验证实现 | `/opsx:verify` |
+| 📦 归档单个 change | `/opsx:archive` |
+| 📦 批量归档 | `/opsx:bulk-archive` |
+| 🎓 首次入门引导 | `/opsx:onboard` |
+
+---
+
 ## 目录
 
 - [一、OpenSpec 概述](#一openspec-概述)

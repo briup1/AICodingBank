@@ -9,19 +9,51 @@
 
 | 场景 | 推荐 Skill | 备注 |
 |---|---|---|
-| 🐛 调试 Bug | `/investigate` | 好用, 将报错原因贴过来查找根本原因
+| 🐛 调试 Bug | `/investigate` | 好用, 将报错原因贴过来查找根本原因 |
+| 🛡️ 安全警戒 | `/careful` | 危险操作前警告 |
+| 🧊 编辑范围锁定 | `/freeze` | 限制只在指定目录编辑 |
+| 🔓 解除编辑锁定 | `/unfreeze` | 清除 `/freeze` 边界 |
+| 🚨 完全安全模式 | `/guard` | `/careful` + `/freeze` |
 | 🔍 代码审查 | `/review` |
+| ⚡ 全流程自动化审查 | `/autoplan` |
+| 🧠 Codex 第二意见 | `/codex` | 外部独立审查 |
 | 🚀 发布/提交 PR | `/ship` |
-| 🧪 测试网站 | `/qa` | 好用, 将url贴过来, 分析问题
+| 📦 部署上线 | `/land-and-deploy` |
+| ⚙️ 部署配置 | `/setup-deploy` | 首次配置部署平台 |
+| 🐤 发布后监控 | `/canary` |
+| 📝 发布后文档 | `/document-release` |
+| 🧪 测试网站 | `/qa` | 好用, 将url贴过来, 分析问题 |
+| 📋 QA 报告 | `/qa-only` | 只报告不修复 |
+| 🌐 无头浏览器 | `/browse` |
+| 🖥️ 可视化浏览器 | `/open-gstack-browser` |
+| 🍪 导入浏览器 Cookie | `/setup-browser-cookies` |
+| 🔗 网页数据抓取 | `/scrape` |
+| 📌 固化抓取脚本 | `/skillify` |
+| 👥 配对远程 Agent | `/pair-agent` |
 | 📊 性能基准 | `/benchmark` |
+| 🏎️ 跨模型基准 | `/benchmark-models` |
 | 🔒 安全审计 | `/cso` |
 | 💡 产品创意 | `/office-hours` |
-| 🏗️ 架构评审 | `/plan-eng-review` | 需要重点测试,评估其方案评估能力
-| 🎨 设计评审 | `/plan-design-review` | 需要重点测试,评估其方案评估能力
-| 📦 部署上线 | `/land-and-deploy` |
+| 🎯 CEO/创始人视角 | `/plan-ceo-review` |
+| 🏗️ 架构评审 | `/plan-eng-review` | 需要重点测试,评估其方案评估能力 |
+| 🎨 设计评审 | `/plan-design-review` | 需要重点测试,评估其方案评估能力 |
+| 🧑‍💻 开发者体验评审 | `/plan-devex-review` |
+| 🎨 设计系统咨询 | `/design-consultation` |
+| 🎭 多方案设计探索 | `/design-shotgun` |
+| 🔍 设计 QA | `/design-review` |
+| 🧱 设计实现 HTML/CSS | `/design-html` |
+| 📈 实时 DX 审计 | `/devex-review` |
 | 💾 保存进度 | `/context-save` |
 | 📂 恢复进度 | `/context-restore` |
-| ⚡ 全流程自动化审查 | `/autoplan` |
+| 📚 学习记录 | `/learn` |
+| 📅 工程周报 | `/retro` |
+| 📊 发布队列仪表板 | `/landing-report` |
+| 📄 Markdown 转 PDF | `/make-pdf` |
+| 🏥 代码健康度 | `/health` |
+| 🧠 配置 gbrain | `/setup-gbrain` |
+| 🔄 同步 gbrain | `/sync-gbrain` |
+| ⬆️ 升级 gstack | `/gstack-upgrade` |
+| 🎛️ 调整提问策略 | `/plan-tune` |
 
 ---
 

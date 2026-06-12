@@ -18,9 +18,13 @@
 | 🔧 串行开发 | `/executing-plans` |
 | ✅ 测试驱动 | `/test-driven-development` |
 | 🔍 代码审查 | `/requesting-code-review` | 好用, 写完代码进行审查
+| 🗣️ 接收审查意见 | `/receiving-code-review` |
+| 🧪 完成前验证 | `/verification-before-completion` |
+| 🚀 并行派发代理 | `/dispatching-parallel-agents` | 多独立任务并行
 | 🌿 工作区隔离 | `/using-git-worktrees` |
 | 🏁 收尾工作 | `/finishing-a-development-branch` |
 | 🔁 重置上下文 | `/using-superpowers` |
+| 🛠️ 编写自定义 Skill | `/writing-skills` |
 
 ---
 

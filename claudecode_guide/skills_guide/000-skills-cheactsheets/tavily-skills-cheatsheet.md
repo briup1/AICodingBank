@@ -5,6 +5,21 @@
 
 ---
 
+## 快速索引（按场景）
+
+| 场景 | 推荐 Skill | 备注 |
+|---|---|---|
+| 🔎 快速网页搜索 | `/tavily-search` |
+| 🧹 搜索并过滤 | `/tavily-dynamic-search` | Python 沙箱压缩上下文 |
+| 📄 提取 URL 内容 | `/tavily-extract` |
+| 🗺️ 发现网站页面 | `/tavily-map` |
+| 🕷️ 批量爬取站点 | `/tavily-crawl` |
+| 📚 深度研究报告 | `/tavily-research` |
+| 🔧 SDK 集成参考 | `/tavily-best-practices` |
+| 📖 CLI 总入口 | `/tavily-cli` |
+
+---
+
 ## 目录
 
 - [一、核心搜索技能](#一核心搜索技能)
