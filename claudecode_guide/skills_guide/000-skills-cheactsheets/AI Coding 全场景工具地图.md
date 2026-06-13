@@ -113,6 +113,11 @@ markmap:
     - 首选 /plan-devex-review
     - 实时审计 /devex-review
     - 产出 DX评分/摩擦点/魔法时刻
+  - 代码结构可视化
+    - 首选 /code-review-graph:architecture_map
+    - 辅助 /code-review-graph:explore-codebase
+    - 输入 已构建图谱
+    - 产出 Mermaid架构图/模块耦合/关键执行流
 - UI与前端体验
   - 前端工程实现
     - 首选 /frontend-dev
@@ -191,6 +196,12 @@ markmap:
     - 辅助 /systematic-debugging
     - 输入 错误日志/复现步骤
     - 产出 根因/最小修复
+  - 用代码图谱辅助调试
+    - 首选 /code-review-graph:debug-issue
+    - MCP workflow /code-review-graph:debug_issue
+    - 辅助 /code-review-graph:explore-codebase
+    - 输入 错误描述/异常现象
+    - 产出 调用链/相关函数/根因定位
   - 系统性调试流程
     - Phase1 根因调查
     - Phase2 模式分析
@@ -248,6 +259,14 @@ markmap:
     - 辅助 /review
     - 输入 diff/测试结果
     - 产出 审查意见
+  - 基于代码图谱的审查
+    - 首选 /code-review-graph:review-delta
+    - 完整PR /code-review-graph:review-pr
+    - 结构化风险审查 /code-review-graph:review-changes
+    - MCP workflow /code-review-graph:review_changes
+    - 合并前检查 /code-review-graph:pre_merge_check
+    - 输入 diff/分支/PR
+    - 产出 风险分级/爆炸半径/测试缺口/GO-NOGO
   - 预合并PR审查
     - 首选 /review
     - 第二意见 /codex
@@ -290,6 +309,13 @@ markmap:
     - 首选 /context-save
     - 辅助 /learn
     - 产出 可恢复上下文
+  - 构建与探索代码图谱
+    - 构建 /code-review-graph:build-graph
+    - 探索 /code-review-graph:explore-codebase
+    - 重构分析 /code-review-graph:refactor-safely
+    - 新人上手 /code-review-graph:onboard_developer
+    - 输入 代码库
+    - 产出 图谱统计/模块结构/调用关系/影响面
   - 恢复上下文
     - 首选 /context-restore
     - 辅助 /landing-report
@@ -357,11 +383,19 @@ markmap:
   - Bug修复
     - /investigate
     - /systematic-debugging
+    - /code-review-graph:debug-issue
     - /test-driven-development
     - /verification-before-completion
     - /requesting-code-review
+  - 代码库理解与重构
+    - /code-review-graph:build-graph
+    - /code-review-graph:explore-codebase
+    - /code-review-graph:refactor-safely
+    - /code-review-graph:architecture_map
   - 发布上线
     - /review
+    - /code-review-graph:review-pr
+    - /code-review-graph:pre_merge_check
     - /opsx:verify
     - /ship
     - /land-and-deploy
