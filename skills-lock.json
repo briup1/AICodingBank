@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "diagram": {
+      "source": "312362115/claude",
+      "sourceType": "github",
+      "skillPath": "skills/diagram/SKILL.md",
+      "computedHash": "04e06c200007d5e20fb7a26edb434770c3b6b72a5f94d0c9fba2fb55d2562c54"
+    }
+  }
+}
