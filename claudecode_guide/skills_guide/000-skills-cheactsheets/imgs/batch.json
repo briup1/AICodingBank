@@ -1,0 +1,54 @@
+{
+  "tasks": [
+    {
+      "id": "illustration-01",
+      "promptFiles": [
+        "E:\\code_and_data\\selfcode\\AICodingBank\\claudecode_guide\\skills_guide\\000-skills-cheactsheets\\imgs\\prompts\\01-infographic-gstack-skill-landscape.md"
+      ],
+      "image": "E:\\code_and_data\\selfcode\\AICodingBank\\claudecode_guide\\skills_guide\\000-skills-cheactsheets\\imgs\\01-infographic-gstack-skill-landscape.png",
+      "provider": "replicate",
+      "ar": "16:9",
+      "quality": "2k"
+    },
+    {
+      "id": "illustration-02",
+      "promptFiles": [
+        "E:\\code_and_data\\selfcode\\AICodingBank\\claudecode_guide\\skills_guide\\000-skills-cheactsheets\\imgs\\prompts\\02-framework-debug-safety-stack.md"
+      ],
+      "image": "E:\\code_and_data\\selfcode\\AICodingBank\\claudecode_guide\\skills_guide\\000-skills-cheactsheets\\imgs\\02-infographic-debug-safety-stack.png",
+      "provider": "replicate",
+      "ar": "16:9",
+      "quality": "2k"
+    },
+    {
+      "id": "illustration-03",
+      "promptFiles": [
+        "E:\\code_and_data\\selfcode\\AICodingBank\\claudecode_guide\\skills_guide\\000-skills-cheactsheets\\imgs\\prompts\\03-flowchart-review-pipeline.md"
+      ],
+      "image": "E:\\code_and_data\\selfcode\\AICodingBank\\claudecode_guide\\skills_guide\\000-skills-cheactsheets\\imgs\\03-flowchart-review-pipeline.png",
+      "provider": "replicate",
+      "ar": "16:9",
+      "quality": "2k"
+    },
+    {
+      "id": "illustration-04",
+      "promptFiles": [
+        "E:\\code_and_data\\selfcode\\AICodingBank\\claudecode_guide\\skills_guide\\000-skills-cheactsheets\\imgs\\prompts\\04-flowchart-design-pipeline.md"
+      ],
+      "image": "E:\\code_and_data\\selfcode\\AICodingBank\\claudecode_guide\\skills_guide\\000-skills-cheactsheets\\imgs\\04-flowchart-design-pipeline.png",
+      "provider": "replicate",
+      "ar": "16:9",
+      "quality": "2k"
+    },
+    {
+      "id": "illustration-05",
+      "promptFiles": [
+        "E:\\code_and_data\\selfcode\\AICodingBank\\claudecode_guide\\skills_guide\\000-skills-cheactsheets\\imgs\\prompts\\05-flowchart-ship-pipeline.md"
+      ],
+      "image": "E:\\code_and_data\\selfcode\\AICodingBank\\claudecode_guide\\skills_guide\\000-skills-cheactsheets\\imgs\\05-flowchart-ship-pipeline.png",
+      "provider": "replicate",
+      "ar": "16:9",
+      "quality": "2k"
+    }
+  ]
+}
