@@ -33,7 +33,7 @@ If any dimension is weak or missing, `/goal` is probably not the right tool.
 
 ### Step 1: Confirm the goal
 
-If the user only says something like `/goal-coach` or "帮我看看这个适不适合 goal", ask:
+If the user only says something like `/goal-coach` or "帮我看看这个需求适不适合 goal命令", ask:
 
 > 请描述你想交给 /goal 完成的具体任务是什么？
 
