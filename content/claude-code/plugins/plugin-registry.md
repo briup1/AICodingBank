@@ -1,0 +1,350 @@
+---
+title: "Plugin Registry"
+date: 2026-06-21
+category: claude-code
+tags: []
+status: published
+description: "Notes on Plugin Registry."
+---
+
+# Claude Code 插件收录登记
+
+本文档用于记录 `plugin_store/` 目录中收录的所有插件信息，方便快速查找和使用。
+
+---
+
+## 插件目录
+
+| 插件名称 | 版本 | 描述 | 主要功能 |
+|---------|------|------|----------|
+| [feature-dev](#feature-dev) | 1.0.0 | 综合功能开发工作流 | 代码探索、架构设计、代码审查 |
+| [code-review](#code-review) | 1.0.0 | PR 自动代码审查 | 多代理并行审查、置信度评分 |
+| [code-simplifier](#code-simplifier) | 1.0.0 | 代码简化和优化代理 | 代码简化、可读性改进 |
+| [pr-review-toolkit](#pr-review-toolkit) | - | PR 审查代理集合 | 注释分析、测试覆盖、错误处理 |
+| [plugin-dev](#plugin-dev) | 0.1.0 | 插件开发工具包 | Hooks、MCP、Skills 开发指南 |
+| [superpowers](#superpowers) | - | 超级能力集合 | 多种增强功能 |
+
+---
+
+## 插件详情
+
+### feature-dev
+
+**版本**: 1.0.0
+**作者**: Anthropic
+**描述**: 综合功能开发工作流，配备代码探索、架构设计和质量审查专用代理
+
+**命令**: `/feature-dev`
+
+**核心功能**:
+- 7 阶段结构化开发流程
+  1. 发现阶段 - 理解需求
+  2. 代码库探索 - 并行分析现有代码
+  3. 澄清问题 - 解决所有歧义
+  4. 架构设计 - 多方案对比
+  5. 实现 - 构建功能
+  6. 质量审查 - 多维度代码检查
+  7. 总结 - 文档化完成内容
+
+**代理**:
+- `code-explorer` - 深度代码库分析
+- `code-architect` - 架构设计
+- `code-reviewer` - 代码质量审查
+
+**适用场景**:
+- 新功能开发（涉及多个文件）
+- 需要架构决策的功能
+- 与现有代码的复杂集成
+- 需求不明确的功能
+
+**目录**: `plugin_store/feature-dev/`
+
+---
+
+### code-review
+
+**版本**: 1.0.0
+**作者**: Boris Cherny (Anthropic)
+**描述**: 使用多个专业代理进行 PR 自动代码审查，基于置信度评分过滤误报
+
+**命令**: `/code-review`
+
+**核心功能**:
+- 4 个并行代理独立审查
+  - 2x CLAUDE.md 合规检查
+  - 1x Bug 检测
+  - 1x Git 历史分析
+- 置信度评分系统（0-100）
+- 自动过滤低于 80 分的误报
+- 智能跳过已关闭/草稿/已审查的 PR
+
+**审查维度**:
+- CLAUDE.md 准则合规性
+- 明显的 Bug 检测
+- 历史上下文分析
+- 代码质量问题
+
+**适用场景**:
+- 所有有意义的 PR
+- 涉及关键代码路径的 PR
+- 多贡献者的 PR
+- 需要准则合规的 PR
+
+**目录**: `plugin_store/code-review/`
+
+---
+
+### code-simplifier
+
+**版本**: 1.0.0
+**作者**: Anthropic
+**描述**: 简化和优化代码以提高清晰度、一致性和可维护性，同时保持功能不变
+
+**代理**: `code-simplifier`
+
+**核心功能**:
+- 代码清晰度和可读性分析
+- 识别不必要的复杂性和嵌套
+- 消除冗余代码和抽象
+- 检查与项目标准的一致性
+- 简化过度紧凑或聪明的代码
+
+**触发示例**:
+```
+"Simplify this code"
+"Make this clearer"
+"Refine this implementation"
+```
+
+**适用场景**:
+- 代码可以工作但感觉复杂
+- 通过代码审查后的优化
+- 提高代码可维护性
+- 重构遗留代码
+
+**目录**: `plugin_store/code-simplifier/`
+
+---
+
+### pr-review-toolkit
+
+**作者**: Daisy Hollman (Anthropic)
+**描述**: 全面的 PR 审查专用代理集合，涵盖代码注释、测试覆盖、错误处理、类型设计、代码质量和代码简化
+
+**代理** (6 个):
+
+1. **comment-analyzer** - 注释分析
+   - 注释准确性 vs 实际代码
+   - 文档完整性
+   - 注释腐烂和技术债务
+
+2. **pr-test-analyzer** - 测试覆盖分析
+   - 行为覆盖率 vs 行覆盖率
+   - 测试覆盖的关键缺口
+   - 测试质量和弹性
+
+3. **silent-failure-hunter** - 静默失败检测
+   - catch 块中的静默失败
+   - 错误处理不足
+   - 缺少错误日志
+
+4. **type-design-analyzer** - 类型设计分析
+   - 类型封装（1-10 分）
+   - 不变量表达（1-10 分）
+   - 类型有效性（1-10 分）
+   - 不变量强制（1-10 分）
+
+5. **code-reviewer** - 常规代码审查
+   - CLAUDE.md 合规性
+   - 风格违规
+   - Bug 检测
+
+6. **code-simplifier** - 代码简化
+   - 代码清晰度和可读性
+   - 不必要的复杂性
+
+**推荐工作流**:
+1. 写代码 → code-reviewer
+2. 修复问题 → silent-failure-hunter（如有错误处理）
+3. 添加测试 → pr-test-analyzer
+4. 文档化 → comment-analyzer
+5. 审查通过 → code-simplifier（优化）
+6. 创建 PR
+
+**目录**: `plugin_store/pr-review-toolkit/`
+
+---
+
+### plugin-dev
+
+**版本**: 0.1.0
+**作者**: Daisy Hollman (Anthropic)
+**描述**: 全面的插件开发工具包，提供 Hooks、MCP 集成、插件结构、插件设置、命令开发、代理开发和技能开发的专家指南
+
+**命令**: `/plugin-dev:create-plugin`
+
+**7 大 Skills**:
+
+1. **Hook Development**
+   - Prompt-based hooks（推荐）
+   - 所有 hook 事件
+   - Hook 输出格式和 JSON schemas
+   - 安全最佳实践
+   - 3 个工具脚本
+
+2. **MCP Integration**
+   - MCP 服务器配置
+   - 所有服务器类型（stdio/SSE/HTTP/WebSocket）
+   - 环境变量扩展
+   - 认证模式
+
+3. **Plugin Structure**
+   - 标准插件目录结构
+   - plugin.json 清单格式
+   - 组件组织
+   - 文件命名约定
+
+4. **Plugin Settings**
+   - .local.md 配置模式
+   - YAML frontmatter + markdown
+   - Bash 解析技术
+   - 原子文件更新
+
+5. **Command Development**
+   - 斜杠命令结构
+   - YAML frontmatter 字段
+   - 动态参数和文件引用
+   - 命令组织
+
+6. **Agent Development**
+   - 代理文件结构
+   - 所有 frontmatter 字段
+   - 描述格式（含示例块）
+   - AI 辅助代理生成
+
+7. **Skill Development**
+   - 技能结构（SKILL.md）
+   - 渐进式披露原则
+   - 强触发器描述
+   - 写作风格指南
+
+**8 阶段插件创建流程**:
+1. 发现 - 理解插件目的
+2. 组件规划 - 确定需要的组件
+3. 详细设计 - 规范化每个组件
+4. 结构创建 - 设置目录和清单
+5. 组件实现 - 创建每个组件
+6. 验证 - 运行验证检查
+7. 测试 - 在 Claude Code 中验证
+8. 文档 - 最终化 README
+
+**目录**: `plugin_store/plugin-dev/`
+
+**内容统计**:
+- 核心技能：~11,065 词
+- 参考文档：~10,000+ 词
+- 示例：12+ 个工作示例
+- 工具脚本：6 个生产就绪的脚本
+
+---
+
+### superpowers
+
+**描述**: 超级能力集合，提供多种增强功能
+
+**目录**: `plugin_store/superpowers/`
+
+**注意**: 此插件为 Git 子模块，需要单独初始化
+
+---
+
+## 插件快速索引
+
+### 按功能分类
+
+#### 代码审查
+- [code-review](#code-review) - PR 自动审查
+- [pr-review-toolkit](#pr-review-toolkit) - 全面 PR 审查工具包
+
+#### 代码质量
+- [code-simplifier](#code-simplifier) - 代码简化
+
+#### 开发工作流
+- [feature-dev](#feature-dev) - 功能开发流程
+
+#### 插件开发
+- [plugin-dev](#plugin-dev) - 插件开发工具包
+
+#### 扩展功能
+- [superpowers](#superpowers) - 超级能力集合
+
+### 按组件类型分类
+
+#### 包含 Commands 的插件
+- feature-dev - `/feature-dev`
+- code-review - `/code-review`
+- plugin-dev - `/plugin-dev:create-plugin`
+
+#### 包含 Agents 的插件
+- feature-dev - code-explorer, code-architect, code-reviewer
+- code-simplifier - code-simplifier
+- pr-review-toolkit - 6 个专业审查代理
+- plugin-dev - plugin-validator, skill-reviewer, agent-creator
+
+#### 包含 Skills 的插件
+- plugin-dev - 7 个开发技能
+
+---
+
+## 插件使用示例
+
+### 快速开始
+
+1. **加载插件**:
+```bash
+claude --plugin-dir ./plugin_store/feature-dev
+```
+
+2. **使用插件命令**:
+```bash
+/feature-dev 添加用户认证功能
+```
+
+3. **触发插件代理**:
+```
+"Launch code-explorer to trace how authentication works"
+```
+
+### 组合使用
+
+```bash
+# 同时加载多个插件
+claude --plugin-dir ./plugin_store/feature-dev \
+       --plugin-dir ./plugin_store/code-review \
+       --plugin-dir ./plugin_store/plugin-dev
+
+claude --plugin-dir .claude/.claude-plugin/superpowers
+```
+
+---
+
+## 插件维护记录
+
+| 日期 | 插件 | 操作 | 说明 |
+|------|------|------|------|
+| 2026-03-03 | 全部 | 初始记录 | 创建收录登记文档 |
+
+---
+
+## 新增插件流程
+
+1. 在 `plugin_store/` 下创建插件目录
+2. 按照插件标准结构组织文件
+3. 在本登记文档中添加插件信息
+4. 更新维护记录
+
+---
+
+**文档维护**: 本文档应随新增插件及时更新，以确保插件信息的准确性和可查找性。
+
+**最后更新**: 2026-03-03

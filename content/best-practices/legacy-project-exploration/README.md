@@ -1,0 +1,24 @@
+---
+title: "Readme"
+date: 2026-06-21
+category: best-practices
+tags: []
+status: published
+description: "Notes on Readme."
+---
+
+我需要对本历史项目进行系统性探查，为二次开发做准备。
+
+项目信息：@CLAUDE.md @backend/CLAUDE.md @frontend/CLAUDE.md
+探查目的：**我需要为此项目增加一个给‘客户’导出报价单的功能**
+
+请使用 legacy-project-checklist-zh skill，按照类别顺序逐一探查：
+
+要求：
+每完成一个类别的探查，立即生成对应的 markdown 文档
+文档存放位置：[@openspec/历史项目探查]
+文档命名格式：01-架构与扩展.md、02-环境与构建.md 等
+每个文档聚焦单一主题，便于后续单独引用
+发现关键信息后立即记录，不等待全部探查完成
+所有输出使用中文
+现在请从第 1 类"架构与扩展锚点"开始探查。
