@@ -1,0 +1,5 @@
+{"ts":"2026-08-20T05:19:22.085Z","cmd":"goto","args":"http://127.0.0.1:18770","origin":"http://127.0.0.1:18770/","durationMs":18,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-08-20T05:19:22.588Z","cmd":"fill","args":"#name State","origin":"http://127.0.0.1:18770/","durationMs":467,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-08-20T05:19:22.708Z","cmd":"click","args":"#go","origin":"http://127.0.0.1:18770/","durationMs":58,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-08-20T05:19:22.745Z","cmd":"text","args":"","origin":"http://127.0.0.1:18770/","durationMs":3,"status":"ok","hasCookies":false,"mode":"launched"}
+{"ts":"2026-08-20T05:19:22.826Z","cmd":"screenshot","args":"--viewport /tmp/tmp.jntPeu7bmf/result.png","origin":"http://127.0.0.1:18770/","durationMs":39,"status":"ok","hasCookies":false,"mode":"launched"}
