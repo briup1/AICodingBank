@@ -1,0 +1,21 @@
+# AICodingBank 统一 skill 登记表
+# 本仓库是唯一获取入口：自研 skill 直接在 skills/ 内，第三方只登记不复制。
+# 新机器：git clone 本仓库 && python3 install.py
+
+# 各 agent 运行时的实际加载位置（install.py 会向这些目录建软链）
+targets:
+  - ~/.agents/skills
+  - ~/.claude/skills
+
+# 自研 skill：path 指向本仓库内目录，git 直接跟踪文件本体
+self:
+  - name: goal-coach
+    path: skills/goal-coach
+  - name: excalidraw-diagram-generator # 来源待确认，暂按自研管理
+    path: skills/excalidraw-diagram-generator
+
+# 第三方 skill：由 skills-lock.json 治理（安装工具自动维护，勿手改）。
+# install.py 会把 lock 里的上游仓库 clone 到 vendor/（已 gitignore），
+# 再按 lock 登记逐个软链到 targets。
+third_party:
+  lock: skills-lock.json
