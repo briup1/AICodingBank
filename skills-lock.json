@@ -234,6 +234,12 @@
       "sourceType": "github",
       "skillPath": "skills/in-progress/writing-shape/SKILL.md",
       "computedHash": "77007511510c05b602835acdb91a88f435ce5a08a9dbf95ade148f02e4b09548"
+    },
+    "excalidraw-diagram-generator": {
+      "source": "p-rp/excalidraw-diagram-generator",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "8595d930b261c8017d3149f3373eb74b81111fdae69b73e625b1573fe1b3bae0"
     }
   }
 }

@@ -11,8 +11,6 @@ targets:
 self:
   - name: goal-coach
     path: skills/goal-coach
-  - name: excalidraw-diagram-generator # 来源待确认，暂按自研管理
-    path: skills/excalidraw-diagram-generator
 
 # 第三方 skill：由 skills-lock.json 治理（安装工具自动维护，勿手改）。
 # install.py 会把 lock 里的上游仓库 clone 到 vendor/（已 gitignore），
