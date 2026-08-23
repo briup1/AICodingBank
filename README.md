@@ -45,18 +45,34 @@ python3 install.py
 
 ### 收藏第三方 skill
 
-**不要把文件拷进仓库。** 只在 `skills-lock.json` 的 `skills` 里加一条登记：
+**不要把文件拷进仓库。** 只在 `skills-lock.json` 的 `skills` 里加一条登记，**必须当场写三行人话**（30 秒的事，攒多了就补不动了）：
 
 ```json
 "some-skill": {
   "source": "owner/repo",
   "sourceType": "github",
   "skillPath": "path/to/SKILL.md",
-  "computedHash": ""
+  "computedHash": "",
+  "capability": "它能干什么，一句话，用你自己的语言",
+  "boundary": "它不干什么、什么时候别用、有什么外部依赖",
+  "tags": ["写作", "图像"],
+  "verified": ""
 }
 ```
 
-然后 `python3 install.py` 会自动 clone 上游到 `vendor/` 并软链出去。
+然后 `python3 install.py` 会自动 clone 上游到 `vendor/`。
+
+**verified 闸门**：`verified` 为空的 skill 只登记、只进目录，**不会被软链到加载位置——agent 根本看不到它**。你在实际项目里用过一次确认靠谱，填上日期（如 `"2026-08-23"`），重跑 `install.py`，它才进入 agent 的视野。agent 的可选集合 = 你的信任集合。
+
+**tags 用扁平小词表**：写作/图像/图表/编程/调试/测试/架构/规划/研究/运维/协作/教学/翻译/抓取/效率。不搞树状分类——层级会腐烂，标签不会。
+
+### 找 skill：看 CATALOG.md
+
+`install.py` 每次运行都会重新生成 `CATALOG.md`：按 tag 分组，每条一行能力 + 一行边界 + 验证状态。这是给人看的总览，**勿手改**（改了会被覆盖）。三层分工：
+
+- `CATALOG.md`：它是什么、边界在哪（一眼看穿全局）
+- wiki entity 页：深度使用经验、踩坑（只给值得长期用的建）
+- `SKILL.md`：行为本身，要改才看
 
 ### 更新第三方 skill
 
@@ -77,5 +93,7 @@ python3 install.py   # 重跑即 pull 所有上游到最新
 
 1. **skill 文件只有两个合法居所**：自研的在 `skills/`，第三方的在 `vendor/`（install.py 自动管理）。任何其他位置的 skill 副本都是腐烂源头，发现即删。
 2. **第三方只登记不复制**：`skills-lock.json` 是唯一登记处。
-3. **改了登记就跑 `install.py`**：它是幂等的，随时可重跑。
-4. 使用经验、踩坑、评测写在 wiki 的 entity 页，不写在这里。
+3. **登记必写三行人话**：capability / boundary / tags，当场写，不赊账。
+4. **未验证不安装**：没填 `verified` 的 skill 不进 agent 加载位置。
+5. **改了登记就跑 `install.py`**：它是幂等的，随时可重跑，同时刷新 CATALOG.md。
+6. 使用经验、踩坑、评测写在 wiki 的 entity 页，不写在这里。

@@ -5,241 +5,490 @@
       "source": "mattpocock/skills",
       "sourceType": "github",
       "skillPath": "skills/engineering/ask-matt/SKILL.md",
-      "computedHash": "cacd2e77c8c0b456133a60be07493dd091ace65f52b02f90cbb8f75de15989f5"
+      "computedHash": "cacd2e77c8c0b456133a60be07493dd091ace65f52b02f90cbb8f75de15989f5",
+      "capability": "在 mattpocock 全家桶里帮你选合适的 skill 或流程",
+      "boundary": "只是路由器，本身不执行具体工作",
+      "tags": [
+        "效率"
+      ],
+      "verified": "2026-08-23"
     },
     "baoyu-format-markdown": {
       "source": "jimliu/baoyu-skills",
       "sourceType": "github",
       "skillPath": "skills/baoyu-format-markdown/SKILL.md",
-      "computedHash": "188fda27907b76d5f040bcd1e49754ec9e0a948ccb38898114df3c2448ef793a"
+      "computedHash": "188fda27907b76d5f040bcd1e49754ec9e0a948ccb38898114df3c2448ef793a",
+      "capability": "给纯文本/markdown 自动排版：frontmatter、标题、摘要、加粗、列表、代码块",
+      "boundary": "只排版不改写内容",
+      "tags": [
+        "写作"
+      ],
+      "verified": "2026-08-23"
     },
     "baoyu-image-gen": {
       "source": "jimliu/baoyu-skills",
       "sourceType": "github",
       "skillPath": "skills/baoyu-image-gen/SKILL.md",
-      "computedHash": "4b1dfd36f262f61bdce0b90229dc6e611be3424c2830400a975c4a026e9e6f1d"
+      "computedHash": "4b1dfd36f262f61bdce0b90229dc6e611be3424c2830400a975c4a026e9e6f1d",
+      "capability": "多平台 AI 出图：GPT Image、即梦、Seedream、MiniMax 等十几家 API，支持文生图和参考图",
+      "boundary": "只出图不管文章排版；依赖外部图像 API key",
+      "tags": [
+        "图像"
+      ],
+      "verified": "2026-08-23"
     },
     "baoyu-infographic": {
       "source": "jimliu/baoyu-skills",
       "sourceType": "github",
       "skillPath": "skills/baoyu-infographic/SKILL.md",
-      "computedHash": "0aa212ad387a07c9b848ec7a8e85a54d85ffe42469717ae13aa94438d1955f92"
+      "computedHash": "0aa212ad387a07c9b848ec7a8e85a54d85ffe42469717ae13aa94438d1955f92",
+      "capability": "生成专业信息图：21 种布局 × 22 种视觉风格，自动推荐组合",
+      "boundary": "依赖图像生成 API；适合单页信息图而非长文",
+      "tags": [
+        "图像",
+        "写作"
+      ],
+      "verified": "2026-08-23"
     },
     "baoyu-markdown-to-html": {
       "source": "jimliu/baoyu-skills",
       "sourceType": "github",
       "skillPath": "skills/baoyu-markdown-to-html/SKILL.md",
-      "computedHash": "4ce18a657644ae75c5bb0fd85104eb0c7a7e975c6119dd77bc226933c4112a2e"
+      "computedHash": "4ce18a657644ae75c5bb0fd85104eb0c7a7e975c6119dd77bc226933c4112a2e",
+      "capability": "markdown 转带主题 HTML，兼容微信公众号；支持代码高亮、数学公式、Mermaid、PlantUML",
+      "boundary": "Mermaid 转 PNG 需 headless Chrome",
+      "tags": [
+        "写作"
+      ],
+      "verified": "2026-08-23"
     },
     "baoyu-translate": {
       "source": "jimliu/baoyu-skills",
       "sourceType": "github",
       "skillPath": "skills/baoyu-translate/SKILL.md",
-      "computedHash": "25d799dbf105dc92f415089c091862954bd1803136fbd3d174557058073ab8c7"
+      "computedHash": "25d799dbf105dc92f415089c091862954bd1803136fbd3d174557058073ab8c7",
+      "capability": "中英互译、精翻、本地化与译后校对",
+      "boundary": "只翻译润色，不做内容创作",
+      "tags": [
+        "翻译",
+        "写作"
+      ],
+      "verified": "2026-08-23"
     },
     "baoyu-url-to-markdown": {
       "source": "jimliu/baoyu-skills",
       "sourceType": "github",
       "skillPath": "skills/baoyu-url-to-markdown/SKILL.md",
-      "computedHash": "ca98ae07f45f5a5ae8976845a2df3f3be307181e280b0c51dd04fe4cd32699b6"
+      "computedHash": "ca98ae07f45f5a5ae8976845a2df3f3be307181e280b0c51dd04fe4cd32699b6",
+      "capability": "抓任意 URL 转 markdown，内置 X/YouTube 字幕/Hacker News 等站点适配器",
+      "boundary": "依赖 baoyu-fetch CLI 和 Chrome CDP",
+      "tags": [
+        "抓取",
+        "研究"
+      ],
+      "verified": "2026-08-23"
     },
     "claude-handoff": {
       "source": "mattpocock/skills",
       "sourceType": "github",
       "skillPath": "skills/in-progress/claude-handoff/SKILL.md",
-      "computedHash": "6bde27729c8a56b601b4137024a6a9e8056e214b45d2cfc64c69eec93d0b6f66"
+      "computedHash": "6bde27729c8a56b601b4137024a6a9e8056e214b45d2cfc64c69eec93d0b6f66",
+      "capability": "把当前对话即时交接给新的后台 agent 继续干",
+      "boundary": "只管交接，不管任务本身",
+      "tags": [
+        "协作"
+      ],
+      "verified": "2026-08-23"
     },
     "code-review": {
       "source": "mattpocock/skills",
       "sourceType": "github",
       "skillPath": "skills/engineering/code-review/SKILL.md",
-      "computedHash": "4a17d9d3e0fc87ae48544d371a820fac5a4a78f4c05e7e6b3229094fbf8a7e26"
+      "computedHash": "4a17d9d3e0fc87ae48544d371a820fac5a4a78f4c05e7e6b3229094fbf8a7e26",
+      "capability": "从固定点（commit/branch/tag）起审 diff：编码规范 + 是否符合 spec 双轴并行",
+      "boundary": "只审不改",
+      "tags": [
+        "编程"
+      ],
+      "verified": "2026-08-23"
     },
     "codebase-design": {
       "source": "mattpocock/skills",
       "sourceType": "github",
       "skillPath": "skills/engineering/codebase-design/SKILL.md",
-      "computedHash": "2426dc4accf1a85dedfb560edb3a877ec8828b7375ea08c970df2b6c900a2a22"
+      "computedHash": "2426dc4accf1a85dedfb560edb3a877ec8828b7375ea08c970df2b6c900a2a22",
+      "capability": "深模块设计方法论：设计模块接口、找深化机会、定接缝位置",
+      "boundary": "是词汇表/方法论，不是自动化工具",
+      "tags": [
+        "架构"
+      ],
+      "verified": "2026-08-23"
     },
     "diagnosing-bugs": {
       "source": "mattpocock/skills",
       "sourceType": "github",
       "skillPath": "skills/engineering/diagnosing-bugs/SKILL.md",
-      "computedHash": "1a993ce9b2aaa653ee441c8d7efb7f27de03493c722be6dfb8137bcb8db1bc72"
+      "computedHash": "1a993ce9b2aaa653ee441c8d7efb7f27de03493c722be6dfb8137bcb8db1bc72",
+      "capability": "疑难 bug 和性能回退的结构化诊断循环",
+      "boundary": "针对难治问题；简单 bug 不必动用",
+      "tags": [
+        "调试"
+      ],
+      "verified": "2026-08-23"
     },
     "diagram": {
       "source": "312362115/claude",
       "sourceType": "github",
       "skillPath": "skills/diagram/SKILL.md",
-      "computedHash": "04e06c200007d5e20fb7a26edb434770c3b6b72a5f94d0c9fba2fb55d2562c54"
+      "computedHash": "04e06c200007d5e20fb7a26edb434770c3b6b72a5f94d0c9fba2fb55d2562c54",
+      "capability": "生成 29 种专业 PNG 图表：流程/时序/架构/ER/甘特 + 柱线饼雷等统计图，统一设计规范",
+      "boundary": "HTML/SVG+JS 渲染输出 PNG，非矢量源文件",
+      "tags": [
+        "图表"
+      ],
+      "verified": "2026-08-23"
     },
     "domain-modeling": {
       "source": "mattpocock/skills",
       "sourceType": "github",
       "skillPath": "skills/engineering/domain-modeling/SKILL.md",
-      "computedHash": "67343881f5def98487d56243155716110afbcbf22ec92421c882d532b941cb17"
+      "computedHash": "67343881f5def98487d56243155716110afbcbf22ec92421c882d532b941cb17",
+      "capability": "打磨项目领域模型：统一术语、CONTEXT.md、ADR",
+      "boundary": "偏讨论与文档产出，不写实现代码",
+      "tags": [
+        "架构"
+      ],
+      "verified": "2026-08-23"
     },
     "git-guardrails-claude-code": {
       "source": "mattpocock/skills",
       "sourceType": "github",
       "skillPath": "skills/misc/git-guardrails-claude-code/SKILL.md",
-      "computedHash": "53a1de29d2b76481202608376fa4a20a8bd7e65b0b8a907a8c9578e629cf313f"
+      "computedHash": "53a1de29d2b76481202608376fa4a20a8bd7e65b0b8a907a8c9578e629cf313f",
+      "capability": "给 Claude Code 配 git 安全 hook，拦截 push/reset --hard/clean 等危险命令",
+      "boundary": "只防 git 危险操作，不管其他命令",
+      "tags": [
+        "运维",
+        "编程"
+      ],
+      "verified": "2026-08-23"
     },
     "grill-me": {
       "source": "mattpocock/skills",
       "sourceType": "github",
       "skillPath": "skills/productivity/grill-me/SKILL.md",
-      "computedHash": "f321507f77702a54af1db66549ec1685fc625390d06c57d7949cdcda8eb1b5c7"
+      "computedHash": "f321507f77702a54af1db66549ec1685fc625390d06c57d7949cdcda8eb1b5c7",
+      "capability": "无情追问，把你的计划或设计逼问到无懈可击",
+      "boundary": "只提问施压，不产出文档",
+      "tags": [
+        "规划"
+      ],
+      "verified": "2026-08-23"
     },
     "grill-with-docs": {
       "source": "mattpocock/skills",
       "sourceType": "github",
       "skillPath": "skills/engineering/grill-with-docs/SKILL.md",
-      "computedHash": "e7ef25bbee50cda2eb7b3a8ef541db0a0396dad7d369f7d14fb610671dd1864b"
+      "computedHash": "e7ef25bbee50cda2eb7b3a8ef541db0a0396dad7d369f7d14fb610671dd1864b",
+      "capability": "追问打磨方案，同时沉淀 ADR 和术语表",
+      "boundary": "grill-me 的带文档产出版",
+      "tags": [
+        "规划"
+      ],
+      "verified": "2026-08-23"
     },
     "grilling": {
       "source": "mattpocock/skills",
       "sourceType": "github",
       "skillPath": "skills/productivity/grilling/SKILL.md",
-      "computedHash": "1de9e777a60b184b29412fadacb7bbde8c14bb7037e5c4d9d086c941281d1742"
+      "computedHash": "1de9e777a60b184b29412fadacb7bbde8c14bb7037e5c4d9d086c941281d1742",
+      "capability": "压力测试你的想法、决策或计划",
+      "boundary": "偏触发词路由，与 grill-me 同族",
+      "tags": [
+        "规划"
+      ],
+      "verified": "2026-08-23"
     },
     "handoff": {
       "source": "mattpocock/skills",
       "sourceType": "github",
       "skillPath": "skills/productivity/handoff/SKILL.md",
-      "computedHash": "87e353708ab36062eac54ddb593a97ca553c0cb4bfa1ed1fdaf68520700723f1"
+      "computedHash": "87e353708ab36062eac54ddb593a97ca553c0cb4bfa1ed1fdaf68520700723f1",
+      "capability": "把当前对话压缩成交接文档，供另一个 agent 接手",
+      "boundary": "产出文档；要即时交接用 claude-handoff",
+      "tags": [
+        "协作"
+      ],
+      "verified": "2026-08-23"
     },
     "implement": {
       "source": "mattpocock/skills",
       "sourceType": "github",
       "skillPath": "skills/engineering/implement/SKILL.md",
-      "computedHash": "0d51255cab5cf937b8fe41252f00213706e0175ca9607fc00409d29562b5b839"
+      "computedHash": "0d51255cab5cf937b8fe41252f00213706e0175ca9607fc00409d29562b5b839",
+      "capability": "按 spec 或 ticket 实现具体工作",
+      "boundary": "需要已有 spec/ticket，不做需求澄清",
+      "tags": [
+        "编程"
+      ],
+      "verified": "2026-08-23"
     },
     "improve-codebase-architecture": {
       "source": "mattpocock/skills",
       "sourceType": "github",
       "skillPath": "skills/engineering/improve-codebase-architecture/SKILL.md",
-      "computedHash": "8bf292143ca93b00276a0de0fc5f84f2381f4690c5b0d32e99fa283a072f392f"
+      "computedHash": "8bf292143ca93b00276a0de0fc5f84f2381f4690c5b0d32e99fa283a072f392f",
+      "capability": "扫描代码库找架构深化机会，生成可视化 HTML 报告并逐项追问",
+      "boundary": "偏 TS/JS 项目语境",
+      "tags": [
+        "架构"
+      ],
+      "verified": "2026-08-23"
     },
     "loop-me": {
       "source": "mattpocock/skills",
       "sourceType": "github",
       "skillPath": "skills/in-progress/loop-me/SKILL.md",
-      "computedHash": "b3306d9b5af2e9ed341ec290ea97898205f27fb3131b16b8535549b8c90343f8"
+      "computedHash": "b3306d9b5af2e9ed341ec290ea97898205f27fb3131b16b8535549b8c90343f8",
+      "capability": "在本工作区内追问你想构建的 workflow 的 spec",
+      "boundary": "限当前 workspace",
+      "tags": [
+        "规划"
+      ],
+      "verified": "2026-08-23"
     },
     "migrate-to-shoehorn": {
       "source": "mattpocock/skills",
       "sourceType": "github",
       "skillPath": "skills/misc/migrate-to-shoehorn/SKILL.md",
-      "computedHash": "8f1a623a019abca0ab5e22e8deaae375829368cc1344016010201cf650331d33"
+      "computedHash": "8f1a623a019abca0ab5e22e8deaae375829368cc1344016010201cf650331d33",
+      "capability": "把测试文件里的 as 类型断言迁移到 @total-typescript/shoehorn",
+      "boundary": "仅 TS 测试数据场景",
+      "tags": [
+        "测试",
+        "编程"
+      ],
+      "verified": "2026-08-23"
     },
     "prototype": {
       "source": "mattpocock/skills",
       "sourceType": "github",
       "skillPath": "skills/engineering/prototype/SKILL.md",
-      "computedHash": "86dc9537ca578d75866329effa07398f30e69d6c7e906013ce3438053646c601"
+      "computedHash": "86dc9537ca578d75866329effa07398f30e69d6c7e906013ce3438053646c601",
+      "capability": "快速搭一次性原型，验证状态模型逻辑或 UI 感觉",
+      "boundary": "是 throwaway 代码，别当正式实现",
+      "tags": [
+        "编程",
+        "设计"
+      ],
+      "verified": "2026-08-23"
     },
     "research": {
       "source": "mattpocock/skills",
       "sourceType": "github",
       "skillPath": "skills/engineering/research/SKILL.md",
-      "computedHash": "87d17f5103899fbe179b552a85485d50f2316ca5b3128f5716af7d88817533e1"
+      "computedHash": "87d17f5103899fbe179b552a85485d50f2316ca5b3128f5716af7d88817533e1",
+      "capability": "对着高可信一手资料做调研，结论落盘为 repo 里的 markdown",
+      "boundary": "需要网络访问；不做观点创作",
+      "tags": [
+        "研究"
+      ],
+      "verified": "2026-08-23"
     },
     "resolving-merge-conflicts": {
       "source": "mattpocock/skills",
       "sourceType": "github",
       "skillPath": "skills/engineering/resolving-merge-conflicts/SKILL.md",
-      "computedHash": "bff6e06cec85897477759ed052410450aa91057644f5b70d888e26bc8b348847"
+      "computedHash": "bff6e06cec85897477759ed052410450aa91057644f5b70d888e26bc8b348847",
+      "capability": "解决进行中的 git merge/rebase 冲突",
+      "boundary": "只管冲突解决这一步",
+      "tags": [
+        "编程"
+      ],
+      "verified": "2026-08-23"
     },
     "scaffold-exercises": {
       "source": "mattpocock/skills",
       "sourceType": "github",
       "skillPath": "skills/misc/scaffold-exercises/SKILL.md",
-      "computedHash": "486d60a7e984b76850bd22b3b58b98d0063a3b9b3acf319e4d5a37bf1283ea02"
+      "computedHash": "486d60a7e984b76850bd22b3b58b98d0063a3b9b3acf319e4d5a37bf1283ea02",
+      "capability": "脚手架生成练习目录：分节、题目、答案、讲解，过 lint",
+      "boundary": "面向课程/教学内容制作",
+      "tags": [
+        "教学"
+      ],
+      "verified": "2026-08-23"
     },
     "setup-matt-pocock-skills": {
       "source": "mattpocock/skills",
       "sourceType": "github",
       "skillPath": "skills/engineering/setup-matt-pocock-skills/SKILL.md",
-      "computedHash": "4850d7286f7176178963ff53aeb928b241854785a0d8b5d8fe6d285190188651"
+      "computedHash": "4850d7286f7176178963ff53aeb928b241854785a0d8b5d8fe6d285190188651",
+      "capability": "首次使用 mattpocock 工程 skill 前的仓库初始化：issue tracker、标签词表、文档布局",
+      "boundary": "每个仓库只需跑一次",
+      "tags": [
+        "运维"
+      ],
+      "verified": "2026-08-23"
     },
     "setup-pre-commit": {
       "source": "mattpocock/skills",
       "sourceType": "github",
       "skillPath": "skills/misc/setup-pre-commit/SKILL.md",
-      "computedHash": "f9aeedf0a1f560ec465c3939c54434c2d949ac8b958a0493db52216f688a0366"
+      "computedHash": "f9aeedf0a1f560ec465c3939c54434c2d949ac8b958a0493db52216f688a0366",
+      "capability": "配置 Husky pre-commit：lint-staged、Prettier、类型检查、测试",
+      "boundary": "仅 JS/TS 仓库",
+      "tags": [
+        "运维",
+        "编程"
+      ],
+      "verified": "2026-08-23"
     },
     "setup-ts-deep-modules": {
       "source": "mattpocock/skills",
       "sourceType": "github",
       "skillPath": "skills/in-progress/setup-ts-deep-modules/SKILL.md",
-      "computedHash": "609aee622bcb0f517b956a42cc9103ae7d76ecaab09fa0abdb54ad178b583198"
+      "computedHash": "609aee622bcb0f517b956a42cc9103ae7d76ecaab09fa0abdb54ad178b583198",
+      "capability": "接入 dependency-cruiser，强制 TS 包深模块化、隐藏内部实现",
+      "boundary": "仅 TS monorepo",
+      "tags": [
+        "架构",
+        "编程"
+      ],
+      "verified": "2026-08-23"
     },
     "tdd": {
       "source": "mattpocock/skills",
       "sourceType": "github",
       "skillPath": "skills/engineering/tdd/SKILL.md",
-      "computedHash": "c9326b88419cfba1d54dd713b7ddb23020e6a93f4b0d13aea58cebba58cda2ee"
+      "computedHash": "c9326b88419cfba1d54dd713b7ddb23020e6a93f4b0d13aea58cebba58cda2ee",
+      "capability": "测试驱动开发：red-green-refactor，集成测试优先",
+      "boundary": "需要项目已有测试基建",
+      "tags": [
+        "测试",
+        "编程"
+      ],
+      "verified": "2026-08-23"
     },
     "teach": {
       "source": "mattpocock/skills",
       "sourceType": "github",
       "skillPath": "skills/productivity/teach/SKILL.md",
-      "computedHash": "9cd31ea42b40915ea5fd3949ed229b217d1dfad07dd93d9b0db771dcdd6a6c8a"
+      "computedHash": "9cd31ea42b40915ea5fd3949ed229b217d1dfad07dd93d9b0db771dcdd6a6c8a",
+      "capability": "在工作区内教会你一个技能或概念",
+      "boundary": "教学对话，不产出工程代码",
+      "tags": [
+        "教学"
+      ],
+      "verified": "2026-08-23"
     },
     "to-spec": {
       "source": "mattpocock/skills",
       "sourceType": "github",
       "skillPath": "skills/engineering/to-spec/SKILL.md",
-      "computedHash": "c5d294a88d00942a38dc589299423e35ea07157cf29eed21434378edb5cfafa4"
+      "computedHash": "c5d294a88d00942a38dc589299423e35ea07157cf29eed21434378edb5cfafa4",
+      "capability": "把当前对话直接综合成 spec 并发布到 issue tracker",
+      "boundary": "不做采访式追问（那是 grill 系的事）",
+      "tags": [
+        "规划"
+      ],
+      "verified": "2026-08-23"
     },
     "to-tickets": {
       "source": "mattpocock/skills",
       "sourceType": "github",
       "skillPath": "skills/engineering/to-tickets/SKILL.md",
-      "computedHash": "683ed84afd324a6b0163157489ecf1c996a3af3cffedc1d877a89948d4adfc7c"
+      "computedHash": "683ed84afd324a6b0163157489ecf1c996a3af3cffedc1d877a89948d4adfc7c",
+      "capability": "把计划/spec 拆成带依赖边的 tracer-bullet tickets，发布到 tracker",
+      "boundary": "需要先配置 issue tracker",
+      "tags": [
+        "规划"
+      ],
+      "verified": "2026-08-23"
     },
     "triage": {
       "source": "mattpocock/skills",
       "sourceType": "github",
       "skillPath": "skills/engineering/triage/SKILL.md",
-      "computedHash": "b77ea99c2e6e97815b373cc476ad4cc1835d3e736867b764602147be71f6c131"
+      "computedHash": "b77ea99c2e6e97815b373cc476ad4cc1835d3e736867b764602147be71f6c131",
+      "capability": "issue 和外部 PR 的分诊状态机：分类、验证、追问，产出 agent 可直接执行的简报",
+      "boundary": "面向开源仓库维护场景",
+      "tags": [
+        "协作"
+      ],
+      "verified": "2026-08-23"
     },
     "wayfinder": {
       "source": "mattpocock/skills",
       "sourceType": "github",
       "skillPath": "skills/engineering/wayfinder/SKILL.md",
-      "computedHash": "3eb72cd9abdfaa00e10fa69f0b4410ff8639a6cf4eb9e5d187b289c3aa9be2fc"
+      "computedHash": "3eb72cd9abdfaa00e10fa69f0b4410ff8639a6cf4eb9e5d187b289c3aa9be2fc",
+      "capability": "把超过单个会话的大工程拆成 decision ticket 地图，逐个解决直到路径清晰",
+      "boundary": "小任务用它杀鸡用牛刀",
+      "tags": [
+        "规划"
+      ],
+      "verified": "2026-08-23"
     },
     "wizard": {
       "source": "mattpocock/skills",
       "sourceType": "github",
       "skillPath": "skills/engineering/wizard/SKILL.md",
-      "computedHash": "6ac45e430f0ca1409e618729156096fb042a81a12e0d2824920b7dfc0adc9329"
+      "computedHash": "6ac45e430f0ca1409e618729156096fb042a81a12e0d2824920b7dfc0adc9329",
+      "capability": "生成交互式 bash 向导，引导人完成只有人能做的步骤：配密钥、CI secrets、第三方后台",
+      "boundary": "agent 自己能干的活别用它",
+      "tags": [
+        "运维"
+      ],
+      "verified": "2026-08-23"
     },
     "writing-beats": {
       "source": "mattpocock/skills",
       "sourceType": "github",
       "skillPath": "skills/in-progress/writing-beats/SKILL.md",
-      "computedHash": "b2bb74a1e15fcac1fec9aac4fa4c8244e8ed7c4eef1f9096ea3b52b7eb091943"
+      "computedHash": "b2bb74a1e15fcac1fec9aac4fa4c8244e8ed7c4eef1f9096ea3b52b7eb091943",
+      "capability": "写作·exploit：把素材组装成节拍化叙事，先立术语再用",
+      "boundary": "只管结构节奏，不挖素材",
+      "tags": [
+        "写作"
+      ],
+      "verified": "2026-08-23"
     },
     "writing-fragments": {
       "source": "mattpocock/skills",
       "sourceType": "github",
       "skillPath": "skills/in-progress/writing-fragments/SKILL.md",
-      "computedHash": "394bc75401f55d242ecebb548e9932a211b84423ca25ebe7bbfdebde4f6066ce"
+      "computedHash": "394bc75401f55d242ecebb548e9932a211b84423ca25ebe7bbfdebde4f6066ce",
+      "capability": "写作·explore：挖掘原始碎片素材，尚无结构",
+      "boundary": "早期探索阶段，不出成稿",
+      "tags": [
+        "写作"
+      ],
+      "verified": "2026-08-23"
     },
     "writing-shape": {
       "source": "mattpocock/skills",
       "sourceType": "github",
       "skillPath": "skills/in-progress/writing-shape/SKILL.md",
-      "computedHash": "77007511510c05b602835acdb91a88f435ce5a08a9dbf95ade148f02e4b09548"
+      "computedHash": "77007511510c05b602835acdb91a88f435ce5a08a9dbf95ade148f02e4b09548",
+      "capability": "写作·exploit：逐段把素材塑形成文章",
+      "boundary": "偏成稿阶段，需要已有素材",
+      "tags": [
+        "写作"
+      ],
+      "verified": "2026-08-23"
     },
     "excalidraw-diagram-generator": {
       "source": "p-rp/excalidraw-diagram-generator",
       "sourceType": "github",
       "skillPath": "SKILL.md",
-      "computedHash": "8595d930b261c8017d3149f3373eb74b81111fdae69b73e625b1573fe1b3bae0"
+      "computedHash": "8595d930b261c8017d3149f3373eb74b81111fdae69b73e625b1573fe1b3bae0",
+      "capability": "自然语言生成 Excalidraw 图：流程图、架构图、思维导图、关系图",
+      "boundary": "输出 .excalidraw JSON，需 Excalidraw 打开查看",
+      "tags": [
+        "图表"
+      ],
+      "verified": "2026-08-23"
     }
   }
 }
