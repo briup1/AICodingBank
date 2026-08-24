@@ -43,6 +43,17 @@ python3 install.py
 
 改进自研 skill = 直接改 `skills/` 里的文件，软链即时生效，commit 即版本化。
 
+### 仅在当前电脑停用某个 Skill
+
+不要改共享的 `skills.yaml` 验证状态。在仓库根目录创建不会被 Git 跟踪的 `skills.local.yaml`：
+
+```yaml
+disabled:
+  - agent-dag-reporting
+```
+
+再次运行 `python3 install.py` 后，该 Skill 仍保留在仓库和 `CATALOG.md`，但当前电脑的加载目录不会存在它的软链接。安装器只会自动移除软链接；若加载位置是历史真实目录，会报错并要求先迁移，避免误删源码。删除禁用项并重跑安装器即可重新启用。
+
 ### 收录生成式 Skill Pack
 
 由 `framework-skill-author` 生成的一组关联 Skill 按 Pack 保存，避免来源清单和生成报告散落：

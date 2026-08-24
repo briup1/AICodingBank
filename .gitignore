@@ -1,1 +1,4 @@
 vendor/
+
+skills.local.yaml
+__pycache__/

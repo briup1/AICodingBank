@@ -1,6 +1,6 @@
 # Skill 总目录（install.py 自动生成，勿手改）
 
-共 47 个 · 已验证 47 · 待验证 0
+共 48 个 · 已验证 48 · 待验证 0
 
 想看深度使用经验 → wiki entity 页；想改行为 → SKILL.md；本目录只回答“它能干什么、边界在哪”。
 
@@ -21,6 +21,8 @@
   边界：偏成稿阶段，需要已有素材
 
 ## 协作
+- **agent-dag-reporting**（自研·已验证 2026-08-24）— 将多步骤任务的计划、状态、产物和检查点按 agent-dag/v1 上报到 Personal Workbench
+  边界：仅负责可观测性上报，不改变任务执行方式；依赖宿主提供对应 MCP 上报工具
 - **claude-handoff**（第三方·mattpocock/skills·已验证 2026-08-23）— 把当前对话即时交接给新的后台 agent 继续干
   边界：只管交接，不管任务本身
 - **handoff**（第三方·mattpocock/skills·已验证 2026-08-23）— 把当前对话压缩成交接文档，供另一个 agent 接手
@@ -45,6 +47,8 @@
   边界：依赖 baoyu-fetch CLI 和 Chrome CDP
 
 ## 效率
+- **agent-dag-reporting**（自研·已验证 2026-08-24）— 将多步骤任务的计划、状态、产物和检查点按 agent-dag/v1 上报到 Personal Workbench
+  边界：仅负责可观测性上报，不改变任务执行方式；依赖宿主提供对应 MCP 上报工具
 - **ask-matt**（第三方·mattpocock/skills·已验证 2026-08-23）— 在 mattpocock 全家桶里帮你选合适的 skill 或流程
   边界：只是路由器，本身不执行具体工作
 - **deepagents-subagents**（自研·已验证 2026-08-21）— 设计 DeepAgents 同步、动态和异步子 Agent 委派及并发取消语义
@@ -133,6 +137,8 @@
   边界：只翻译润色，不做内容创作
 
 ## 规划
+- **agent-dag-reporting**（自研·已验证 2026-08-24）— 将多步骤任务的计划、状态、产物和检查点按 agent-dag/v1 上报到 Personal Workbench
+  边界：仅负责可观测性上报，不改变任务执行方式；依赖宿主提供对应 MCP 上报工具
 - **goal-coach**（自研·已验证 2026-08-23）— 判断任务是否适合 /goal，并生成完整中文 /goal prompt（完成标准/边界/停止规则）
   边界：只服务 Claude Code 的 /goal 命令场景
 - **grill-me**（第三方·mattpocock/skills·已验证 2026-08-23）— 无情追问，把你的计划或设计逼问到无懈可击

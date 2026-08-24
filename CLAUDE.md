@@ -9,4 +9,5 @@
 3. 新增自研 skill 放 `skills/` 并在 `skills.yaml` 登记（同样带三行人话）。
 4. `verified` 为空的 skill 不会被安装；验证通过才填日期。
 5. `CATALOG.md` 由 install.py 自动生成，不要手改。
-4. prompt/spec 模板放对应主题目录，用 `.prompt.md` / `.prompt.xml` 后缀。
+6. 当前机器临时停用已验证 Skill 时，写入 Git 忽略的 `skills.local.yaml`，不要篡改共享验证状态。
+7. prompt/spec 模板放对应主题目录，用 `.prompt.md` / `.prompt.xml` 后缀。

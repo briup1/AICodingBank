@@ -10,6 +10,15 @@ self:
   - 规划
   - 效率
   verified: '2026-08-23'
+- name: agent-dag-reporting
+  path: skills/agent-dag-reporting
+  capability: 将多步骤任务的计划、状态、产物和检查点按 agent-dag/v1 上报到 Personal Workbench
+  boundary: 仅负责可观测性上报，不改变任务执行方式；依赖宿主提供对应 MCP 上报工具
+  tags:
+  - 规划
+  - 协作
+  - 效率
+  verified: '2026-08-24'
 - name: framework-skill-author
   path: skills/framework-skill-author
   capability: 基于框架官方文档、API、版本记录和源码创建、刷新或审计可追溯的中文 Skill Pack
