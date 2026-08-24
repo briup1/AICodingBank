@@ -7,7 +7,7 @@ AI Coding 兵工厂：统一管理**自研 skill、第三方 skill 登记、prom
 ## 目录结构
 
 ```
-├── skills/              # 自研 skill 本体（git 跟踪，你是上游）
+├── skills/              # 自研 skill 本体与生成式 Skill Pack（git 跟踪，你是上游）
 ├── skills.yaml          # 总登记表：加载位置 + 自研清单 + lock 指针
 ├── skills-lock.json     # 第三方 skill 登记（只登记上游地址，不复制文件）
 ├── install.py           # 安装器：clone 上游到 vendor/ → 软链到各加载位置
@@ -42,6 +42,22 @@ python3 install.py
 3. `python3 install.py` 建立软链，git commit
 
 改进自研 skill = 直接改 `skills/` 里的文件，软链即时生效，commit 即版本化。
+
+### 收录生成式 Skill Pack
+
+由 `framework-skill-author` 生成的一组关联 Skill 按 Pack 保存，避免来源清单和生成报告散落：
+
+```text
+skills/<framework>-pack/
+├── source-manifest.json
+├── generation-report.md
+└── skills/
+    └── <skill-name>/
+        ├── SKILL.md
+        └── sources.md
+```
+
+每个可加载 Skill 仍需单独登记到 `skills.yaml` 的 `self:`，其 `path` 指向 Pack 内的具体目录。
 
 ### 收藏第三方 skill
 

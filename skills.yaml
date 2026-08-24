@@ -10,5 +10,57 @@ self:
   - 规划
   - 效率
   verified: '2026-08-23'
+- name: framework-skill-author
+  path: skills/framework-skill-author
+  capability: 基于框架官方文档、API、版本记录和源码创建、刷新或审计可追溯的中文 Skill Pack
+  boundary: 不用于普通文档摘要，也不接受非官方资料作为核心依据
+  tags:
+  - 编程
+  - 架构
+  - 研究
+  verified: '2026-08-21'
+- name: deepagents-getting-started
+  path: skills/deepagents-pack/skills/deepagents-getting-started
+  capability: 提供 DeepAgents 0.7.8 的最小闭环、总体架构和核心组件选型规则
+  boundary: 不处理具体后端安全、子 Agent 拆分或版本敏感 API 查询
+  tags:
+  - 编程
+  - 架构
+  - 教学
+  verified: '2026-08-21'
+- name: deepagents-execution-environment
+  path: skills/deepagents-pack/skills/deepagents-execution-environment
+  capability: 设计 DeepAgents backend、虚拟文件系统、sandbox、shell 和权限边界
+  boundary: 不负责总体入门、长期记忆建模或子 Agent 拆分
+  tags:
+  - 编程
+  - 架构
+  - 运维
+  verified: '2026-08-21'
+- name: deepagents-context-memory
+  path: skills/deepagents-pack/skills/deepagents-context-memory
+  capability: 设计 DeepAgents 上下文分层、文件化 offload、checkpoint 和跨线程长期记忆
+  boundary: 不处理 sandbox 权限细节或子 Agent 拓扑
+  tags:
+  - 编程
+  - 架构
+  verified: '2026-08-21'
+- name: deepagents-subagents
+  path: skills/deepagents-pack/skills/deepagents-subagents
+  capability: 设计 DeepAgents 同步、动态和异步子 Agent 委派及并发取消语义
+  boundary: 不处理一般 backend 权限或单 Agent 入门
+  tags:
+  - 编程
+  - 架构
+  - 效率
+  verified: '2026-08-21'
+- name: deepagents-docs
+  path: skills/deepagents-pack/skills/deepagents-docs
+  capability: 查询并核验 DeepAgents 官方文档、API、版本差异和长尾问题
+  boundary: 不替代入门、执行环境、上下文记忆或子 Agent 的稳定决策规则
+  tags:
+  - 编程
+  - 研究
+  verified: '2026-08-21'
 third_party:
   lock: skills-lock.json

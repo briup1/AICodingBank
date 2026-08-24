@@ -1,0 +1,475 @@
+{
+  "schema_version": "1",
+  "framework": "DeepAgents",
+  "target_version": "0.7.8",
+  "generated_at": "2026-08-21T09:27:47+00:00",
+  "inventory_retrieved_at": "2026-08-21T09:13:05+00:00",
+  "official_hosts": [
+    "docs.langchain.com",
+    "github.com"
+  ],
+  "sources": [
+    {
+      "url": "https://docs.langchain.com/oss/python/deepagents/async-subagents.md",
+      "final_url": "https://docs.langchain.com/oss/python/deepagents/async-subagents.md",
+      "status": 200,
+      "available": true,
+      "content_type": "text/markdown",
+      "bytes_hashed": 15878,
+      "truncated": false,
+      "sha256": "1a3f1e7a1081b6b09b8f33186bbe2388b341dd4354548c078c959467d6e5ac7c",
+      "source_type": "docs",
+      "official_entry": "https://docs.langchain.com/oss/python/deepagents/overview",
+      "verification": "verified",
+      "used_by": [
+        "deepagents-subagents"
+      ]
+    },
+    {
+      "url": "https://docs.langchain.com/oss/python/deepagents/backends.md",
+      "final_url": "https://docs.langchain.com/oss/python/deepagents/backends.md",
+      "status": 200,
+      "available": true,
+      "content_type": "text/markdown",
+      "bytes_hashed": 58277,
+      "truncated": false,
+      "sha256": "9e3011f15502ad6027e93100d174fd137fe7b3915bcf801f7ad6af2b1d2b232e",
+      "source_type": "docs",
+      "official_entry": "https://docs.langchain.com/oss/python/deepagents/overview",
+      "verification": "verified",
+      "used_by": [
+        "deepagents-context-memory",
+        "deepagents-execution-environment"
+      ]
+    },
+    {
+      "url": "https://docs.langchain.com/oss/python/deepagents/changelog-py.md",
+      "final_url": "https://docs.langchain.com/oss/python/deepagents/changelog-py.md",
+      "status": 200,
+      "available": true,
+      "content_type": "text/html",
+      "bytes_hashed": 905184,
+      "truncated": false,
+      "sha256": "ac15c9ceec203aa423dc0185166236c3293b1b94f9b2b5b80dae0d1734576b77",
+      "source_type": "docs",
+      "official_entry": "https://docs.langchain.com/oss/python/deepagents/overview",
+      "verification": "verified",
+      "used_by": [
+        "deepagents-docs"
+      ]
+    },
+    {
+      "url": "https://docs.langchain.com/oss/python/deepagents/context-engineering.md",
+      "final_url": "https://docs.langchain.com/oss/python/deepagents/context-engineering.md",
+      "status": 200,
+      "available": true,
+      "content_type": "text/markdown",
+      "bytes_hashed": 52756,
+      "truncated": false,
+      "sha256": "f4d7a76cba0c967bf74610955242a08acb5201d15f716fd4a1ce0483aaa52414",
+      "source_type": "docs",
+      "official_entry": "https://docs.langchain.com/oss/python/deepagents/overview",
+      "verification": "verified",
+      "used_by": [
+        "deepagents-context-memory",
+        "deepagents-subagents"
+      ]
+    },
+    {
+      "url": "https://docs.langchain.com/oss/python/deepagents/customization.md",
+      "final_url": "https://docs.langchain.com/oss/python/deepagents/customization.md",
+      "status": 200,
+      "available": true,
+      "content_type": "text/markdown",
+      "bytes_hashed": 153282,
+      "truncated": false,
+      "sha256": "c09abceabcf4b1f42b046e83c5d7e1cf67a9438544f8a02edf71edac121d5230",
+      "source_type": "docs",
+      "official_entry": "https://docs.langchain.com/oss/python/deepagents/overview",
+      "verification": "verified",
+      "used_by": [
+        "deepagents-getting-started"
+      ]
+    },
+    {
+      "url": "https://docs.langchain.com/oss/python/deepagents/dynamic-subagents.md",
+      "final_url": "https://docs.langchain.com/oss/python/deepagents/dynamic-subagents.md",
+      "status": 200,
+      "available": true,
+      "content_type": "text/markdown",
+      "bytes_hashed": 61257,
+      "truncated": false,
+      "sha256": "821954a0e247db7f13142be2287b5c1b862976f7523bed3cc06c2b98904d1b9e",
+      "source_type": "docs",
+      "official_entry": "https://docs.langchain.com/oss/python/deepagents/overview",
+      "verification": "verified",
+      "used_by": [
+        "deepagents-subagents"
+      ]
+    },
+    {
+      "url": "https://docs.langchain.com/oss/python/deepagents/interpreters.md",
+      "final_url": "https://docs.langchain.com/oss/python/deepagents/interpreters.md",
+      "status": 200,
+      "available": true,
+      "content_type": "text/markdown",
+      "bytes_hashed": 29163,
+      "truncated": false,
+      "sha256": "ebd5f12baf58161aec0f95ccf792792c7bc85c4e0d2542d1c07f71a138858269",
+      "source_type": "docs",
+      "official_entry": "https://docs.langchain.com/oss/python/deepagents/overview",
+      "verification": "verified",
+      "used_by": [
+        "deepagents-execution-environment"
+      ]
+    },
+    {
+      "url": "https://docs.langchain.com/oss/python/deepagents/llms.txt",
+      "final_url": "https://docs.langchain.com/oss/python/deepagents/llms.txt",
+      "status": 200,
+      "available": true,
+      "content_type": "text/plain",
+      "etag": "W/\"~\"",
+      "last_modified": "Thu, 20 Aug 2026 17:53:14 GMT",
+      "bytes_hashed": 3569,
+      "truncated": false,
+      "sha256": "7f44424040e19eb4900e0523fa6c76f13feed5f54ed6d461d3001bc9feffc88c",
+      "redirected_cross_host": false,
+      "source_type": "llms-index",
+      "official_entry": "https://docs.langchain.com/oss/python/deepagents/overview",
+      "verification": "verified",
+      "used_by": [
+        "deepagents-docs"
+      ]
+    },
+    {
+      "url": "https://docs.langchain.com/oss/python/deepagents/memory.md",
+      "final_url": "https://docs.langchain.com/oss/python/deepagents/memory.md",
+      "status": 200,
+      "available": true,
+      "content_type": "text/markdown",
+      "bytes_hashed": 27395,
+      "truncated": false,
+      "sha256": "c9631c6f227f5bd9e6511e65d52c4642a0cd73644d36eb7ef749485225c684f2",
+      "source_type": "docs",
+      "official_entry": "https://docs.langchain.com/oss/python/deepagents/overview",
+      "verification": "verified",
+      "used_by": [
+        "deepagents-context-memory"
+      ]
+    },
+    {
+      "url": "https://docs.langchain.com/oss/python/deepagents/overview",
+      "final_url": "https://docs.langchain.com/oss/python/deepagents/overview",
+      "status": 200,
+      "available": true,
+      "content_type": "text/markdown; charset=utf-8",
+      "etag": "",
+      "last_modified": "",
+      "bytes_hashed": 30402,
+      "truncated": false,
+      "sha256": "29d84867ff83c3c00c4b9b37392118a18f33c46570c7cd2da531a088e4d29a23",
+      "redirected_cross_host": false,
+      "source_type": "docs-entry",
+      "official_entry": "https://docs.langchain.com/oss/python/deepagents/overview",
+      "verification": "verified",
+      "used_by": [
+        "deepagents-docs",
+        "deepagents-getting-started"
+      ]
+    },
+    {
+      "url": "https://docs.langchain.com/oss/python/deepagents/permissions.md",
+      "final_url": "https://docs.langchain.com/oss/python/deepagents/permissions.md",
+      "status": 200,
+      "available": true,
+      "content_type": "text/markdown",
+      "bytes_hashed": 13360,
+      "truncated": false,
+      "sha256": "2d983db041d5ee787bca1be61581e11bb5895d9b03b8c184b801a081f65605e9",
+      "source_type": "docs",
+      "official_entry": "https://docs.langchain.com/oss/python/deepagents/overview",
+      "verification": "verified",
+      "used_by": [
+        "deepagents-execution-environment"
+      ]
+    },
+    {
+      "url": "https://docs.langchain.com/oss/python/deepagents/quickstart.md",
+      "final_url": "https://docs.langchain.com/oss/python/deepagents/quickstart.md",
+      "status": 200,
+      "available": true,
+      "content_type": "text/markdown",
+      "bytes_hashed": 14817,
+      "truncated": false,
+      "sha256": "450876ec858fa61dc57356b1ff92bbba05337bf4db2cb414f62fa122ececada1",
+      "source_type": "docs",
+      "official_entry": "https://docs.langchain.com/oss/python/deepagents/overview",
+      "verification": "verified",
+      "used_by": [
+        "deepagents-getting-started"
+      ]
+    },
+    {
+      "url": "https://docs.langchain.com/oss/python/deepagents/sandboxes.md",
+      "final_url": "https://docs.langchain.com/oss/python/deepagents/sandboxes.md",
+      "status": 200,
+      "available": true,
+      "content_type": "text/markdown",
+      "bytes_hashed": 72349,
+      "truncated": false,
+      "sha256": "93f473cd9a7d79ab2eae979d12f1326586c3e3769c2d99abe099c9f9edfb1213",
+      "source_type": "docs",
+      "official_entry": "https://docs.langchain.com/oss/python/deepagents/overview",
+      "verification": "verified",
+      "used_by": [
+        "deepagents-execution-environment"
+      ]
+    },
+    {
+      "url": "https://docs.langchain.com/oss/python/deepagents/skills.md",
+      "final_url": "https://docs.langchain.com/oss/python/deepagents/skills.md",
+      "status": 200,
+      "available": true,
+      "content_type": "text/markdown",
+      "bytes_hashed": 81404,
+      "truncated": false,
+      "sha256": "869b164404ebc5660a107e30b812ef69408a421abb706ce9629dc724ab52a9e4",
+      "source_type": "docs",
+      "official_entry": "https://docs.langchain.com/oss/python/deepagents/overview",
+      "verification": "verified",
+      "used_by": [
+        "deepagents-context-memory"
+      ]
+    },
+    {
+      "url": "https://docs.langchain.com/oss/python/deepagents/subagents.md",
+      "final_url": "https://docs.langchain.com/oss/python/deepagents/subagents.md",
+      "status": 200,
+      "available": true,
+      "content_type": "text/markdown",
+      "bytes_hashed": 108520,
+      "truncated": false,
+      "sha256": "c68ce3afbdd4a45f5da091fc3cf38a920dbe70de57d9363553d37264809595f9",
+      "source_type": "docs",
+      "official_entry": "https://docs.langchain.com/oss/python/deepagents/overview",
+      "verification": "verified",
+      "used_by": [
+        "deepagents-subagents"
+      ]
+    },
+    {
+      "url": "https://github.com/langchain-ai/deepagents/blob/1e261ba201bb1af4dbc5cbc8b6424e709b850ea8/libs/deepagents/deepagents/backends/composite.py",
+      "final_url": "https://github.com/langchain-ai/deepagents/blob/1e261ba201bb1af4dbc5cbc8b6424e709b850ea8/libs/deepagents/deepagents/backends/composite.py",
+      "status": 200,
+      "available": true,
+      "content_type": "text/html",
+      "bytes_hashed": 39110,
+      "truncated": false,
+      "sha256": "afbaf8a75d03ec26fa9f31aa3cad35e9f41296754e74f096f86153cb3c4268ac",
+      "source_type": "source",
+      "official_entry": "https://docs.langchain.com/oss/python/deepagents/overview",
+      "verification": "verified",
+      "used_by": [
+        "deepagents-execution-environment"
+      ]
+    },
+    {
+      "url": "https://github.com/langchain-ai/deepagents/blob/1e261ba201bb1af4dbc5cbc8b6424e709b850ea8/libs/deepagents/deepagents/backends/protocol.py",
+      "final_url": "https://github.com/langchain-ai/deepagents/blob/1e261ba201bb1af4dbc5cbc8b6424e709b850ea8/libs/deepagents/deepagents/backends/protocol.py",
+      "status": 200,
+      "available": true,
+      "content_type": "text/html",
+      "bytes_hashed": 34732,
+      "truncated": false,
+      "sha256": "fabb3d322a5d498be9a5d04adc83bc66b59ce3a778e16ad378e671a437b7f7e4",
+      "source_type": "source",
+      "official_entry": "https://docs.langchain.com/oss/python/deepagents/overview",
+      "verification": "verified",
+      "used_by": [
+        "deepagents-execution-environment"
+      ]
+    },
+    {
+      "url": "https://github.com/langchain-ai/deepagents/blob/1e261ba201bb1af4dbc5cbc8b6424e709b850ea8/libs/deepagents/deepagents/backends/sandbox.py",
+      "final_url": "https://github.com/langchain-ai/deepagents/blob/1e261ba201bb1af4dbc5cbc8b6424e709b850ea8/libs/deepagents/deepagents/backends/sandbox.py",
+      "status": 200,
+      "available": true,
+      "content_type": "text/html",
+      "bytes_hashed": 77838,
+      "truncated": false,
+      "sha256": "fc7edf653625cedb2af8def53e5a3f006eb3d073c43a0670fc7019616739a291",
+      "source_type": "source",
+      "official_entry": "https://docs.langchain.com/oss/python/deepagents/overview",
+      "verification": "verified",
+      "used_by": [
+        "deepagents-execution-environment"
+      ]
+    },
+    {
+      "url": "https://github.com/langchain-ai/deepagents/blob/1e261ba201bb1af4dbc5cbc8b6424e709b850ea8/libs/deepagents/deepagents/graph.py",
+      "final_url": "https://github.com/langchain-ai/deepagents/blob/1e261ba201bb1af4dbc5cbc8b6424e709b850ea8/libs/deepagents/deepagents/graph.py",
+      "status": 200,
+      "available": true,
+      "content_type": "text/html",
+      "bytes_hashed": 45148,
+      "truncated": false,
+      "sha256": "fb08f3cae27492c39febb4a41dd7b1ae9ee98a71872c12595bf20d893dc132ef",
+      "source_type": "source",
+      "official_entry": "https://docs.langchain.com/oss/python/deepagents/overview",
+      "verification": "verified",
+      "used_by": [
+        "deepagents-getting-started"
+      ]
+    },
+    {
+      "url": "https://github.com/langchain-ai/deepagents/blob/1e261ba201bb1af4dbc5cbc8b6424e709b850ea8/libs/deepagents/deepagents/middleware/async_subagents.py",
+      "final_url": "https://github.com/langchain-ai/deepagents/blob/1e261ba201bb1af4dbc5cbc8b6424e709b850ea8/libs/deepagents/deepagents/middleware/async_subagents.py",
+      "status": 200,
+      "available": true,
+      "content_type": "text/html",
+      "bytes_hashed": 36290,
+      "truncated": false,
+      "sha256": "7ca6663bc9aff07796c57ee14145252db079028909683d33ef24cf6fea0633d3",
+      "source_type": "source",
+      "official_entry": "https://docs.langchain.com/oss/python/deepagents/overview",
+      "verification": "verified",
+      "used_by": [
+        "deepagents-subagents"
+      ]
+    },
+    {
+      "url": "https://github.com/langchain-ai/deepagents/blob/1e261ba201bb1af4dbc5cbc8b6424e709b850ea8/libs/deepagents/deepagents/middleware/filesystem.py",
+      "final_url": "https://github.com/langchain-ai/deepagents/blob/1e261ba201bb1af4dbc5cbc8b6424e709b850ea8/libs/deepagents/deepagents/middleware/filesystem.py",
+      "status": 200,
+      "available": true,
+      "content_type": "text/html",
+      "bytes_hashed": 156219,
+      "truncated": false,
+      "sha256": "66f4cabced2bc71148bc1229c26b138cb1042a9c197212135def5bb12c5af2f9",
+      "source_type": "source",
+      "official_entry": "https://docs.langchain.com/oss/python/deepagents/overview",
+      "verification": "verified",
+      "used_by": [
+        "deepagents-execution-environment"
+      ]
+    },
+    {
+      "url": "https://github.com/langchain-ai/deepagents/blob/1e261ba201bb1af4dbc5cbc8b6424e709b850ea8/libs/deepagents/deepagents/middleware/memory.py",
+      "final_url": "https://github.com/langchain-ai/deepagents/blob/1e261ba201bb1af4dbc5cbc8b6424e709b850ea8/libs/deepagents/deepagents/middleware/memory.py",
+      "status": 200,
+      "available": true,
+      "content_type": "text/html",
+      "bytes_hashed": 17867,
+      "truncated": false,
+      "sha256": "21cdd92ea4aa8c09cd06d1c9e112c0a56af6b37e68b6dc8f69bf303bd6cf7a6e",
+      "source_type": "source",
+      "official_entry": "https://docs.langchain.com/oss/python/deepagents/overview",
+      "verification": "verified",
+      "used_by": [
+        "deepagents-context-memory"
+      ]
+    },
+    {
+      "url": "https://github.com/langchain-ai/deepagents/blob/1e261ba201bb1af4dbc5cbc8b6424e709b850ea8/libs/deepagents/deepagents/middleware/skills.py",
+      "final_url": "https://github.com/langchain-ai/deepagents/blob/1e261ba201bb1af4dbc5cbc8b6424e709b850ea8/libs/deepagents/deepagents/middleware/skills.py",
+      "status": 200,
+      "available": true,
+      "content_type": "text/html",
+      "bytes_hashed": 39646,
+      "truncated": false,
+      "sha256": "ce342abfc5f2647cbf6cf2baf2b0afae581e17e834fc3c4bf16796a19b29c063",
+      "source_type": "source",
+      "official_entry": "https://docs.langchain.com/oss/python/deepagents/overview",
+      "verification": "verified",
+      "used_by": [
+        "deepagents-context-memory"
+      ]
+    },
+    {
+      "url": "https://github.com/langchain-ai/deepagents/blob/1e261ba201bb1af4dbc5cbc8b6424e709b850ea8/libs/deepagents/deepagents/middleware/subagents.py",
+      "final_url": "https://github.com/langchain-ai/deepagents/blob/1e261ba201bb1af4dbc5cbc8b6424e709b850ea8/libs/deepagents/deepagents/middleware/subagents.py",
+      "status": 200,
+      "available": true,
+      "content_type": "text/html",
+      "bytes_hashed": 29580,
+      "truncated": false,
+      "sha256": "b95afaa0fb09f4e7e180e9b49864cca2b51bf032c3a6b1989cd526d081cd5714",
+      "source_type": "source",
+      "official_entry": "https://docs.langchain.com/oss/python/deepagents/overview",
+      "verification": "verified",
+      "used_by": [
+        "deepagents-subagents"
+      ]
+    },
+    {
+      "url": "https://github.com/langchain-ai/deepagents/blob/1e261ba201bb1af4dbc5cbc8b6424e709b850ea8/libs/deepagents/pyproject.toml",
+      "final_url": "https://github.com/langchain-ai/deepagents/blob/1e261ba201bb1af4dbc5cbc8b6424e709b850ea8/libs/deepagents/pyproject.toml",
+      "status": 200,
+      "available": true,
+      "content_type": "text/html",
+      "bytes_hashed": 6330,
+      "truncated": false,
+      "sha256": "2b23cfde4709c85e902c14870c0ab700290572ea4f55fcc464a60a3359518741",
+      "source_type": "source",
+      "official_entry": "https://docs.langchain.com/oss/python/deepagents/overview",
+      "verification": "verified",
+      "used_by": [
+        "deepagents-getting-started"
+      ]
+    },
+    {
+      "url": "https://github.com/langchain-ai/deepagents/releases/tag/deepagents%3D%3D0.7.8",
+      "final_url": "https://github.com/langchain-ai/deepagents/releases/tag/deepagents%3D%3D0.7.8",
+      "status": 200,
+      "available": true,
+      "content_type": "text/html",
+      "bytes_hashed": 8026,
+      "truncated": false,
+      "sha256": "52479b871a56691f8d833ef56b6ba1427a037d25441db89e04293a8d1f2948d7",
+      "source_type": "release",
+      "official_entry": "https://docs.langchain.com/oss/python/deepagents/overview",
+      "verification": "verified",
+      "used_by": [
+        "deepagents-docs"
+      ]
+    },
+    {
+      "url": "https://github.com/langchain-ai/deepagents/tree/1e261ba201bb1af4dbc5cbc8b6424e709b850ea8",
+      "final_url": "https://github.com/langchain-ai/deepagents/tree/1e261ba201bb1af4dbc5cbc8b6424e709b850ea8",
+      "status": 200,
+      "available": true,
+      "content_type": "text/html",
+      "bytes_hashed": 60999680,
+      "truncated": false,
+      "sha256": "b48c76b4f0e751f5843a1be7f78b5b0fccb726382cf7159dfc16cdc3a6a0c9ea",
+      "source_type": "source",
+      "official_entry": "https://docs.langchain.com/oss/python/deepagents/overview",
+      "verification": "verified",
+      "used_by": [
+        "deepagents-docs",
+        "deepagents-getting-started"
+      ]
+    },
+    {
+      "url": "https://reference.langchain.com/python/deepagents/",
+      "final_url": "https://reference.langchain.com/python/deepagents/",
+      "status": 200,
+      "available": true,
+      "content_type": "text/html",
+      "bytes_hashed": 17723,
+      "truncated": false,
+      "sha256": "c522b16b607c63db304e62ba78a3c970f4d270b20c115020d6bfcec40c8ae193",
+      "source_type": "api",
+      "official_entry": "https://docs.langchain.com/oss/python/deepagents/overview",
+      "verification": "verified",
+      "used_by": [
+        "deepagents-docs"
+      ]
+    }
+  ],
+  "issues": {
+    "missing_sources_files": [],
+    "unverified_urls": []
+  }
+}

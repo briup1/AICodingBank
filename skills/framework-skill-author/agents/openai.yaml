@@ -1,0 +1,4 @@
+interface:
+  display_name: "技术栈 Skill 创建器"
+  short_description: "从框架官方资料生成可验证且可维护的技术栈 Skill 包"
+  default_prompt: "使用 $framework-skill-author 从指定框架的官方文档和源码生成中文 Skill 包。"
