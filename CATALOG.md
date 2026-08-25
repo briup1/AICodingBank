@@ -1,6 +1,6 @@
 # Skill 总目录（install.py 自动生成，勿手改）
 
-共 51 个 · 已验证 48 · 待验证 3
+共 67 个 · 已验证 48 · 待验证 19
 
 想看深度使用经验 → wiki entity 页；想改行为 → SKILL.md；本目录只回答“它能干什么、边界在哪”。
 
@@ -13,6 +13,8 @@
   边界：Mermaid 转 PNG 需 headless Chrome
 - **baoyu-translate**（第三方·jimliu/baoyu-skills·已验证 2026-08-23）— 中英互译、精翻、本地化与译后校对
   边界：只翻译润色，不做内容创作
+- **inspector-docs**（第三方·CopilotKit/CopilotKit·**待验证（未安装）**）— 维护 CopilotKit Inspector 文档与已发布 Pane、Tab、Overlay 行为的一致性
+  边界：仅服务 CopilotKit 上游 Inspector 文档维护，不用于 Inspector UI 润色或未发布功能设计
 - **writing-beats**（第三方·mattpocock/skills·已验证 2026-08-23）— 写作·exploit：把素材组装成节拍化叙事，先立术语再用
   边界：只管结构节奏，不挖素材
 - **writing-fragments**（第三方·mattpocock/skills·已验证 2026-08-23）— 写作·explore：挖掘原始碎片素材，尚无结构
@@ -23,10 +25,18 @@
 ## 协作
 - **agent-dag-reporting**（自研·已验证 2026-08-24）— 将多步骤任务的计划、状态、产物和检查点按 agent-dag/v1 上报到 Personal Workbench
   边界：仅负责可观测性上报，不改变任务执行方式；依赖宿主提供对应 MCP 上报工具
+- **channels-setup**（第三方·CopilotKit/CopilotKit·**待验证（未安装）**）— 从零搭建可在 Slack 或 Microsoft Teams 响应消息的 CopilotKit Channels Agent
+  边界：端到端初始化流程会在运行时读取官方在线指南，并依赖 CopilotKit CLI、托管 Channel 与平台配置
 - **claude-handoff**（第三方·mattpocock/skills·已验证 2026-08-23）— 把当前对话即时交接给新的后台 agent 继续干
   边界：只管交接，不管任务本身
+- **copilotkit-channels**（第三方·CopilotKit/CopilotKit·**待验证（未安装）**）— 编写和定制 CopilotKit 托管 Channel 的声明、常驻 Host 与激活逻辑
+  边界：只覆盖 Channel 代码侧；首次创建 Slack App 应改用 setup-slack-channel
+- **copilotkit-contribute**（第三方·CopilotKit/CopilotKit·**待验证（未安装）**）— 指导参与 CopilotKit 开源仓库开发：Fork、环境搭建、分支、测试与提交 PR
+  边界：仅面向 CopilotKit/CopilotKit 上游贡献，不是业务项目的通用 Git 工作流
 - **handoff**（第三方·mattpocock/skills·已验证 2026-08-23）— 把当前对话压缩成交接文档，供另一个 agent 接手
   边界：产出文档；要即时交接用 claude-handoff
+- **setup-slack-channel**（第三方·CopilotKit/CopilotKit·**待验证（未安装）**）— 完成 CopilotKit Channels 的 Slack Provider 侧首次配置、Token、托管 Channel 绑定与连通性验证
+  边界：只覆盖首次 Slack Provider 配置，且主要适配 OpenTag 或 channels-sdk 示例约定；Channel 代码定制用 copilotkit-channels
 - **triage**（第三方·mattpocock/skills·已验证 2026-08-23）— issue 和外部 PR 的分诊状态机：分类、验证、追问，产出 agent 可直接执行的简报
   边界：面向开源仓库维护场景
 
@@ -59,6 +69,8 @@
   边界：仅负责可观测性上报，不改变任务执行方式；依赖宿主提供对应 MCP 上报工具
 - **ask-matt**（第三方·mattpocock/skills·已验证 2026-08-23）— 在 mattpocock 全家桶里帮你选合适的 skill 或流程
   边界：只是路由器，本身不执行具体工作
+- **copilotkit-self-update**（第三方·CopilotKit/CopilotKit·**待验证（未安装）**）— 刷新或重装 CopilotKit 官方 Agent Skills，使本地知识与最新 API 保持同步
+  边界：只更新 CopilotKit Skills，不升级业务依赖；其官方安装命令会直接写 Agent 加载目录，可能绕过本仓库登记流程
 - **deepagents-subagents**（自研·已验证 2026-08-21）— 设计 DeepAgents 同步、动态和异步子 Agent 委派及并发取消语义
   边界：不处理一般 backend 权限或单 Agent 入门
 - **goal-coach**（自研·已验证 2026-08-23）— 判断任务是否适合 /goal，并生成完整中文 /goal prompt（完成标准/边界/停止规则）
@@ -75,6 +87,10 @@
 ## 架构
 - **codebase-design**（第三方·mattpocock/skills·已验证 2026-08-23）— 深模块设计方法论：设计模块接口、找深化机会、定接缝位置
   边界：是词汇表/方法论，不是自动化工具
+- **copilotkit-agui**（第三方·CopilotKit/CopilotKit·**待验证（未安装）**）— 实现和调试 AG-UI 协议、自定义 Agent 后端、SSE 事件流、状态同步与人机协同
+  边界：聚焦 Agent 与前端通信协议，不负责 CopilotKit React 界面组件的具体使用
+- **copilotkit-integrations**（第三方·CopilotKit/CopilotKit·**待验证（未安装）**）— 通过 AG-UI 将 LangGraph、CrewAI、PydanticAI、Mastra 等外部 Agent 框架接入 CopilotKit
+  边界：只处理外部 Agent 框架集成，不覆盖 CopilotKit 前端组件或常规运行时开发
 - **deepagents-context-memory**（自研·已验证 2026-08-21）— 设计 DeepAgents 上下文分层、文件化 offload、checkpoint 和跨线程长期记忆
   边界：不处理 sandbox 权限细节或子 Agent 拓扑
 - **deepagents-execution-environment**（自研·已验证 2026-08-21）— 设计 DeepAgents backend、虚拟文件系统、sandbox、shell 和权限边界
@@ -85,10 +101,14 @@
   边界：不处理一般 backend 权限或单 Agent 入门
 - **domain-modeling**（第三方·mattpocock/skills·已验证 2026-08-23）— 打磨项目领域模型：统一术语、CONTEXT.md、ADR
   边界：偏讨论与文档产出，不写实现代码
+- **fastapi**（第三方·fastapi/fastapi·**待验证（未安装）**）— 遵循 FastAPI 官方最佳实践编写 API、Pydantic 模型、依赖注入、流式响应、SSE 与前端资源服务代码
+  边界：跟随 FastAPI master 分支的最新模式；用于较旧固定版本时需先核对 API 兼容性，不替代具体业务架构设计
 - **framework-skill-author**（自研·已验证 2026-08-21）— 基于框架官方文档、API、版本记录和源码创建、刷新或审计可追溯的中文 Skill Pack
   边界：不用于普通文档摘要，也不接受非官方资料作为核心依据
 - **improve-codebase-architecture**（第三方·mattpocock/skills·已验证 2026-08-23）— 扫描代码库找架构深化机会，生成可视化 HTML 报告并逐项追问
   边界：偏 TS/JS 项目语境
+- **runtime**（第三方·CopilotKit/CopilotKit·**待验证（未安装）**）— 使用 @copilotkit/runtime 搭建服务端 CopilotRuntime、AgentRunner、工具、Intelligence 与语音转录
+  边界：聚焦服务端运行时，不负责 React 前端组件；优先采用 fetch-native handler 而非旧适配器
 - **setup-ts-deep-modules**（第三方·mattpocock/skills·已验证 2026-08-23）— 接入 dependency-cruiser，强制 TS 包深模块化、隐藏内部实现
   边界：仅 TS monorepo
 
@@ -109,8 +129,26 @@
   边界：需要网络访问；不做观点创作
 
 ## 编程
+- **a2ui-renderer**（第三方·CopilotKit/CopilotKit·**待验证（未安装）**）— 在 CopilotKit v2 中接入和渲染 A2UI 声明式界面，覆盖运行时、Provider、主题与动作桥接
+  边界：仅处理 A2UI 渲染链路，不替代通用前端设计；依赖 CopilotKit v2 与对应 npm 包
+- **channels-setup**（第三方·CopilotKit/CopilotKit·**待验证（未安装）**）— 从零搭建可在 Slack 或 Microsoft Teams 响应消息的 CopilotKit Channels Agent
+  边界：端到端初始化流程会在运行时读取官方在线指南，并依赖 CopilotKit CLI、托管 Channel 与平台配置
 - **code-review**（第三方·mattpocock/skills·已验证 2026-08-23）— 从固定点（commit/branch/tag）起审 diff：编码规范 + 是否符合 spec 双轴并行
   边界：只审不改
+- **copilotkit-agui**（第三方·CopilotKit/CopilotKit·**待验证（未安装）**）— 实现和调试 AG-UI 协议、自定义 Agent 后端、SSE 事件流、状态同步与人机协同
+  边界：聚焦 Agent 与前端通信协议，不负责 CopilotKit React 界面组件的具体使用
+- **copilotkit-channels**（第三方·CopilotKit/CopilotKit·**待验证（未安装）**）— 编写和定制 CopilotKit 托管 Channel 的声明、常驻 Host 与激活逻辑
+  边界：只覆盖 Channel 代码侧；首次创建 Slack App 应改用 setup-slack-channel
+- **copilotkit-contribute**（第三方·CopilotKit/CopilotKit·**待验证（未安装）**）— 指导参与 CopilotKit 开源仓库开发：Fork、环境搭建、分支、测试与提交 PR
+  边界：仅面向 CopilotKit/CopilotKit 上游贡献，不是业务项目的通用 Git 工作流
+- **copilotkit-develop**（第三方·CopilotKit/CopilotKit·**待验证（未安装）**）— 使用 CopilotKit v2 开发聊天界面、前端工具、上下文共享、Agent 中断与运行时能力
+  边界：面向已有或正在建设的 v2 功能；首次初始化和版本迁移分别使用 setup、upgrade Skill
+- **copilotkit-integrations**（第三方·CopilotKit/CopilotKit·**待验证（未安装）**）— 通过 AG-UI 将 LangGraph、CrewAI、PydanticAI、Mastra 等外部 Agent 框架接入 CopilotKit
+  边界：只处理外部 Agent 框架集成，不覆盖 CopilotKit 前端组件或常规运行时开发
+- **copilotkit-setup**（第三方·CopilotKit/CopilotKit·**待验证（未安装）**）— 在现有项目接入 CopilotKit 或从零初始化，完成依赖、运行时、Provider 与首个聊天链路
+  边界：用于首次搭建；CopilotKit v1 到 v2 的存量迁移应使用 copilotkit-upgrade
+- **copilotkit-upgrade**（第三方·CopilotKit/CopilotKit·**待验证（未安装）**）— 将 CopilotKit v1 应用迁移到 v2，处理包导入、废弃 API、组件与 AG-UI 运行时变更
+  边界：仅适用于 v1 到 v2 迁移，不负责新项目初始化或普通依赖升级
 - **deepagents-context-memory**（自研·已验证 2026-08-21）— 设计 DeepAgents 上下文分层、文件化 offload、checkpoint 和跨线程长期记忆
   边界：不处理 sandbox 权限细节或子 Agent 拓扑
 - **deepagents-docs**（自研·已验证 2026-08-21）— 查询并核验 DeepAgents 官方文档、API、版本差异和长尾问题
@@ -121,20 +159,30 @@
   边界：不处理具体后端安全、子 Agent 拆分或版本敏感 API 查询
 - **deepagents-subagents**（自研·已验证 2026-08-21）— 设计 DeepAgents 同步、动态和异步子 Agent 委派及并发取消语义
   边界：不处理一般 backend 权限或单 Agent 入门
+- **fastapi**（第三方·fastapi/fastapi·**待验证（未安装）**）— 遵循 FastAPI 官方最佳实践编写 API、Pydantic 模型、依赖注入、流式响应、SSE 与前端资源服务代码
+  边界：跟随 FastAPI master 分支的最新模式；用于较旧固定版本时需先核对 API 兼容性，不替代具体业务架构设计
 - **framework-skill-author**（自研·已验证 2026-08-21）— 基于框架官方文档、API、版本记录和源码创建、刷新或审计可追溯的中文 Skill Pack
   边界：不用于普通文档摘要，也不接受非官方资料作为核心依据
 - **git-guardrails-claude-code**（第三方·mattpocock/skills·已验证 2026-08-23）— 给 Claude Code 配 git 安全 hook，拦截 push/reset --hard/clean 等危险命令
   边界：只防 git 危险操作，不管其他命令
 - **implement**（第三方·mattpocock/skills·已验证 2026-08-23）— 按 spec 或 ticket 实现具体工作
   边界：需要已有 spec/ticket，不做需求澄清
+- **inspector-docs**（第三方·CopilotKit/CopilotKit·**待验证（未安装）**）— 维护 CopilotKit Inspector 文档与已发布 Pane、Tab、Overlay 行为的一致性
+  边界：仅服务 CopilotKit 上游 Inspector 文档维护，不用于 Inspector UI 润色或未发布功能设计
 - **migrate-to-shoehorn**（第三方·mattpocock/skills·已验证 2026-08-23）— 把测试文件里的 as 类型断言迁移到 @total-typescript/shoehorn
   边界：仅 TS 测试数据场景
 - **prototype**（第三方·mattpocock/skills·已验证 2026-08-23）— 快速搭一次性原型，验证状态模型逻辑或 UI 感觉
   边界：是 throwaway 代码，别当正式实现
+- **react-core**（第三方·CopilotKit/CopilotKit·**待验证（未安装）**）— 使用 @copilotkit/react-core/v2 接入 Provider、聊天组件、Agent、线程、工具、附件与渲染器
+  边界：只覆盖 React 前端核心 API，不处理服务端 CopilotRuntime 或外部 Agent 框架集成
 - **resolving-merge-conflicts**（第三方·mattpocock/skills·已验证 2026-08-23）— 解决进行中的 git merge/rebase 冲突
   边界：只管冲突解决这一步
+- **runtime**（第三方·CopilotKit/CopilotKit·**待验证（未安装）**）— 使用 @copilotkit/runtime 搭建服务端 CopilotRuntime、AgentRunner、工具、Intelligence 与语音转录
+  边界：聚焦服务端运行时，不负责 React 前端组件；优先采用 fetch-native handler 而非旧适配器
 - **setup-pre-commit**（第三方·mattpocock/skills·已验证 2026-08-23）— 配置 Husky pre-commit：lint-staged、Prettier、类型检查、测试
   边界：仅 JS/TS 仓库
+- **setup-slack-channel**（第三方·CopilotKit/CopilotKit·**待验证（未安装）**）— 完成 CopilotKit Channels 的 Slack Provider 侧首次配置、Token、托管 Channel 绑定与连通性验证
+  边界：只覆盖首次 Slack Provider 配置，且主要适配 OpenTag 或 channels-sdk 示例约定；Channel 代码定制用 copilotkit-channels
 - **setup-ts-deep-modules**（第三方·mattpocock/skills·已验证 2026-08-23）— 接入 dependency-cruiser，强制 TS 包深模块化、隐藏内部实现
   边界：仅 TS monorepo
 - **tdd**（第三方·mattpocock/skills·已验证 2026-08-23）— 测试驱动开发：red-green-refactor，集成测试优先
@@ -169,10 +217,16 @@
   边界：是 throwaway 代码，别当正式实现
 
 ## 调试
+- **copilotkit-agui**（第三方·CopilotKit/CopilotKit·**待验证（未安装）**）— 实现和调试 AG-UI 协议、自定义 Agent 后端、SSE 事件流、状态同步与人机协同
+  边界：聚焦 Agent 与前端通信协议，不负责 CopilotKit React 界面组件的具体使用
+- **copilotkit-debug**（第三方·CopilotKit/CopilotKit·**待验证（未安装）**）— 诊断 CopilotKit 连接、流式响应、工具调用、转录、版本及 AG-UI 事件问题
+  边界：聚焦故障定位，不负责首次接入、功能开发或 v1 到 v2 迁移
 - **diagnosing-bugs**（第三方·mattpocock/skills·已验证 2026-08-23）— 疑难 bug 和性能回退的结构化诊断循环
   边界：针对难治问题；简单 bug 不必动用
 
 ## 运维
+- **copilotkit-self-update**（第三方·CopilotKit/CopilotKit·**待验证（未安装）**）— 刷新或重装 CopilotKit 官方 Agent Skills，使本地知识与最新 API 保持同步
+  边界：只更新 CopilotKit Skills，不升级业务依赖；其官方安装命令会直接写 Agent 加载目录，可能绕过本仓库登记流程
 - **deepagents-execution-environment**（自研·已验证 2026-08-21）— 设计 DeepAgents backend、虚拟文件系统、sandbox、shell 和权限边界
   边界：不负责总体入门、长期记忆建模或子 Agent 拆分
 - **git-guardrails-claude-code**（第三方·mattpocock/skills·已验证 2026-08-23）— 给 Claude Code 配 git 安全 hook，拦截 push/reset --hard/clean 等危险命令

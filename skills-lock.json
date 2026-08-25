@@ -489,6 +489,209 @@
         "图表"
       ],
       "verified": "2026-08-23"
+    },
+    "a2ui-renderer": {
+      "source": "CopilotKit/CopilotKit",
+      "sourceType": "github",
+      "skillPath": "skills/a2ui-renderer/SKILL.md",
+      "computedHash": "",
+      "capability": "在 CopilotKit v2 中接入和渲染 A2UI 声明式界面，覆盖运行时、Provider、主题与动作桥接",
+      "boundary": "仅处理 A2UI 渲染链路，不替代通用前端设计；依赖 CopilotKit v2 与对应 npm 包",
+      "tags": [
+        "编程"
+      ],
+      "verified": ""
+    },
+    "channels-setup": {
+      "source": "CopilotKit/CopilotKit",
+      "sourceType": "github",
+      "skillPath": "skills/channels-setup/SKILL.md",
+      "computedHash": "",
+      "capability": "从零搭建可在 Slack 或 Microsoft Teams 响应消息的 CopilotKit Channels Agent",
+      "boundary": "端到端初始化流程会在运行时读取官方在线指南，并依赖 CopilotKit CLI、托管 Channel 与平台配置",
+      "tags": [
+        "编程",
+        "协作"
+      ],
+      "verified": ""
+    },
+    "copilotkit-agui": {
+      "source": "CopilotKit/CopilotKit",
+      "sourceType": "github",
+      "skillPath": "skills/copilotkit-agui/SKILL.md",
+      "computedHash": "",
+      "capability": "实现和调试 AG-UI 协议、自定义 Agent 后端、SSE 事件流、状态同步与人机协同",
+      "boundary": "聚焦 Agent 与前端通信协议，不负责 CopilotKit React 界面组件的具体使用",
+      "tags": [
+        "编程",
+        "架构",
+        "调试"
+      ],
+      "verified": ""
+    },
+    "copilotkit-channels": {
+      "source": "CopilotKit/CopilotKit",
+      "sourceType": "github",
+      "skillPath": "skills/copilotkit-channels/SKILL.md",
+      "computedHash": "",
+      "capability": "编写和定制 CopilotKit 托管 Channel 的声明、常驻 Host 与激活逻辑",
+      "boundary": "只覆盖 Channel 代码侧；首次创建 Slack App 应改用 setup-slack-channel",
+      "tags": [
+        "编程",
+        "协作"
+      ],
+      "verified": ""
+    },
+    "copilotkit-contribute": {
+      "source": "CopilotKit/CopilotKit",
+      "sourceType": "github",
+      "skillPath": "skills/copilotkit-contribute/SKILL.md",
+      "computedHash": "",
+      "capability": "指导参与 CopilotKit 开源仓库开发：Fork、环境搭建、分支、测试与提交 PR",
+      "boundary": "仅面向 CopilotKit/CopilotKit 上游贡献，不是业务项目的通用 Git 工作流",
+      "tags": [
+        "编程",
+        "协作"
+      ],
+      "verified": ""
+    },
+    "copilotkit-debug": {
+      "source": "CopilotKit/CopilotKit",
+      "sourceType": "github",
+      "skillPath": "skills/copilotkit-debug/SKILL.md",
+      "computedHash": "",
+      "capability": "诊断 CopilotKit 连接、流式响应、工具调用、转录、版本及 AG-UI 事件问题",
+      "boundary": "聚焦故障定位，不负责首次接入、功能开发或 v1 到 v2 迁移",
+      "tags": [
+        "调试"
+      ],
+      "verified": ""
+    },
+    "copilotkit-develop": {
+      "source": "CopilotKit/CopilotKit",
+      "sourceType": "github",
+      "skillPath": "skills/copilotkit-develop/SKILL.md",
+      "computedHash": "",
+      "capability": "使用 CopilotKit v2 开发聊天界面、前端工具、上下文共享、Agent 中断与运行时能力",
+      "boundary": "面向已有或正在建设的 v2 功能；首次初始化和版本迁移分别使用 setup、upgrade Skill",
+      "tags": [
+        "编程"
+      ],
+      "verified": ""
+    },
+    "copilotkit-integrations": {
+      "source": "CopilotKit/CopilotKit",
+      "sourceType": "github",
+      "skillPath": "skills/copilotkit-integrations/SKILL.md",
+      "computedHash": "",
+      "capability": "通过 AG-UI 将 LangGraph、CrewAI、PydanticAI、Mastra 等外部 Agent 框架接入 CopilotKit",
+      "boundary": "只处理外部 Agent 框架集成，不覆盖 CopilotKit 前端组件或常规运行时开发",
+      "tags": [
+        "编程",
+        "架构"
+      ],
+      "verified": ""
+    },
+    "copilotkit-self-update": {
+      "source": "CopilotKit/CopilotKit",
+      "sourceType": "github",
+      "skillPath": "skills/copilotkit-self-update/SKILL.md",
+      "computedHash": "",
+      "capability": "刷新或重装 CopilotKit 官方 Agent Skills，使本地知识与最新 API 保持同步",
+      "boundary": "只更新 CopilotKit Skills，不升级业务依赖；其官方安装命令会直接写 Agent 加载目录，可能绕过本仓库登记流程",
+      "tags": [
+        "运维",
+        "效率"
+      ],
+      "verified": ""
+    },
+    "copilotkit-setup": {
+      "source": "CopilotKit/CopilotKit",
+      "sourceType": "github",
+      "skillPath": "skills/copilotkit-setup/SKILL.md",
+      "computedHash": "",
+      "capability": "在现有项目接入 CopilotKit 或从零初始化，完成依赖、运行时、Provider 与首个聊天链路",
+      "boundary": "用于首次搭建；CopilotKit v1 到 v2 的存量迁移应使用 copilotkit-upgrade",
+      "tags": [
+        "编程"
+      ],
+      "verified": ""
+    },
+    "copilotkit-upgrade": {
+      "source": "CopilotKit/CopilotKit",
+      "sourceType": "github",
+      "skillPath": "skills/copilotkit-upgrade/SKILL.md",
+      "computedHash": "",
+      "capability": "将 CopilotKit v1 应用迁移到 v2，处理包导入、废弃 API、组件与 AG-UI 运行时变更",
+      "boundary": "仅适用于 v1 到 v2 迁移，不负责新项目初始化或普通依赖升级",
+      "tags": [
+        "编程"
+      ],
+      "verified": ""
+    },
+    "inspector-docs": {
+      "source": "CopilotKit/CopilotKit",
+      "sourceType": "github",
+      "skillPath": "skills/inspector-docs/SKILL.md",
+      "computedHash": "",
+      "capability": "维护 CopilotKit Inspector 文档与已发布 Pane、Tab、Overlay 行为的一致性",
+      "boundary": "仅服务 CopilotKit 上游 Inspector 文档维护，不用于 Inspector UI 润色或未发布功能设计",
+      "tags": [
+        "写作",
+        "编程"
+      ],
+      "verified": ""
+    },
+    "react-core": {
+      "source": "CopilotKit/CopilotKit",
+      "sourceType": "github",
+      "skillPath": "skills/react-core/SKILL.md",
+      "computedHash": "",
+      "capability": "使用 @copilotkit/react-core/v2 接入 Provider、聊天组件、Agent、线程、工具、附件与渲染器",
+      "boundary": "只覆盖 React 前端核心 API，不处理服务端 CopilotRuntime 或外部 Agent 框架集成",
+      "tags": [
+        "编程"
+      ],
+      "verified": ""
+    },
+    "runtime": {
+      "source": "CopilotKit/CopilotKit",
+      "sourceType": "github",
+      "skillPath": "skills/runtime/SKILL.md",
+      "computedHash": "",
+      "capability": "使用 @copilotkit/runtime 搭建服务端 CopilotRuntime、AgentRunner、工具、Intelligence 与语音转录",
+      "boundary": "聚焦服务端运行时，不负责 React 前端组件；优先采用 fetch-native handler 而非旧适配器",
+      "tags": [
+        "编程",
+        "架构"
+      ],
+      "verified": ""
+    },
+    "setup-slack-channel": {
+      "source": "CopilotKit/CopilotKit",
+      "sourceType": "github",
+      "skillPath": "skills/setup-slack-channel/SKILL.md",
+      "computedHash": "",
+      "capability": "完成 CopilotKit Channels 的 Slack Provider 侧首次配置、Token、托管 Channel 绑定与连通性验证",
+      "boundary": "只覆盖首次 Slack Provider 配置，且主要适配 OpenTag 或 channels-sdk 示例约定；Channel 代码定制用 copilotkit-channels",
+      "tags": [
+        "编程",
+        "协作"
+      ],
+      "verified": ""
+    },
+    "fastapi": {
+      "source": "fastapi/fastapi",
+      "sourceType": "github",
+      "skillPath": "fastapi/.agents/skills/fastapi/SKILL.md",
+      "computedHash": "",
+      "capability": "遵循 FastAPI 官方最佳实践编写 API、Pydantic 模型、依赖注入、流式响应、SSE 与前端资源服务代码",
+      "boundary": "跟随 FastAPI master 分支的最新模式；用于较旧固定版本时需先核对 API 兼容性，不替代具体业务架构设计",
+      "tags": [
+        "编程",
+        "架构"
+      ],
+      "verified": ""
     }
   }
 }
