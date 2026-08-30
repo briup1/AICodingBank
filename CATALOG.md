@@ -1,6 +1,6 @@
 # Skill 总目录（install.py 自动生成，勿手改）
 
-共 48 个 · 已验证 48 · 待验证 0
+共 44 个 · 已验证 41 · 待验证 3
 
 想看深度使用经验 → wiki entity 页；想改行为 → SKILL.md；本目录只回答“它能干什么、边界在哪”。
 
@@ -21,8 +21,6 @@
   边界：偏成稿阶段，需要已有素材
 
 ## 协作
-- **agent-dag-reporting**（自研·已验证 2026-08-24）— 将多步骤任务的计划、状态、产物和检查点按 agent-dag/v1 上报到 Personal Workbench
-  边界：仅负责可观测性上报，不改变任务执行方式；依赖宿主提供对应 MCP 上报工具
 - **claude-handoff**（第三方·mattpocock/skills·已验证 2026-08-23）— 把当前对话即时交接给新的后台 agent 继续干
   边界：只管交接，不管任务本身
 - **handoff**（第三方·mattpocock/skills·已验证 2026-08-23）— 把当前对话压缩成交接文档，供另一个 agent 接手
@@ -42,23 +40,25 @@
 - **excalidraw-diagram-generator**（第三方·p-rp/excalidraw-diagram-generator·已验证 2026-08-23）— 自然语言生成 Excalidraw 图：流程图、架构图、思维导图、关系图
   边界：输出 .excalidraw JSON，需 Excalidraw 打开查看
 
+## 开发流程
+- **wl_design-doc**（自研·**待验证（未安装）**）— 方案设计——需求批准后产出可批准的《方案设计文档》（映射/契约/复用分析/多方案/附证据审查/最小验证）
+  边界：前置 wl_req-confirm 已批准；只出方案不写实现代码，不替用户拍板选方案
+- **wl_req-confirm**（自研·**待验证（未安装）**）— 需求确认——把模糊诉求变成人审批准的《需求确认文档》（重定义需求/用户故事/Out of Scope/验收）
+  边界：只回答要什么/为什么/怎么算完成，不回答怎么做（方案设计归 wl_design-doc）
+- **wl_ticket-run**（自研·**待验证（未安装）**）— 工单执行——方案批准后拆垂直切片工单（G/W/T 验收），/list 并行调度、/goal 审计执行到验收
+  边界：前置 wl_design-doc 已批准；管执行纪律（台账/熔断/停机），不做需求与方案决策
+
 ## 抓取
 - **baoyu-url-to-markdown**（第三方·jimliu/baoyu-skills·已验证 2026-08-23）— 抓任意 URL 转 markdown，内置 X/YouTube 字幕/Hacker News 等站点适配器
   边界：依赖 baoyu-fetch CLI 和 Chrome CDP
 
 ## 效率
-- **agent-dag-reporting**（自研·已验证 2026-08-24）— 将多步骤任务的计划、状态、产物和检查点按 agent-dag/v1 上报到 Personal Workbench
-  边界：仅负责可观测性上报，不改变任务执行方式；依赖宿主提供对应 MCP 上报工具
 - **ask-matt**（第三方·mattpocock/skills·已验证 2026-08-23）— 在 mattpocock 全家桶里帮你选合适的 skill 或流程
   边界：只是路由器，本身不执行具体工作
-- **deepagents-subagents**（自研·已验证 2026-08-21）— 设计 DeepAgents 同步、动态和异步子 Agent 委派及并发取消语义
-  边界：不处理一般 backend 权限或单 Agent 入门
 - **goal-coach**（自研·已验证 2026-08-23）— 判断任务是否适合 /goal，并生成完整中文 /goal prompt（完成标准/边界/停止规则）
   边界：只服务 Claude Code 的 /goal 命令场景
 
 ## 教学
-- **deepagents-getting-started**（自研·已验证 2026-08-21）— 提供 DeepAgents 0.7.8 的最小闭环、总体架构和核心组件选型规则
-  边界：不处理具体后端安全、子 Agent 拆分或版本敏感 API 查询
 - **scaffold-exercises**（第三方·mattpocock/skills·已验证 2026-08-23）— 脚手架生成练习目录：分节、题目、答案、讲解，过 lint
   边界：面向课程/教学内容制作
 - **teach**（第三方·mattpocock/skills·已验证 2026-08-23）— 在工作区内教会你一个技能或概念
@@ -67,18 +67,8 @@
 ## 架构
 - **codebase-design**（第三方·mattpocock/skills·已验证 2026-08-23）— 深模块设计方法论：设计模块接口、找深化机会、定接缝位置
   边界：是词汇表/方法论，不是自动化工具
-- **deepagents-context-memory**（自研·已验证 2026-08-21）— 设计 DeepAgents 上下文分层、文件化 offload、checkpoint 和跨线程长期记忆
-  边界：不处理 sandbox 权限细节或子 Agent 拓扑
-- **deepagents-execution-environment**（自研·已验证 2026-08-21）— 设计 DeepAgents backend、虚拟文件系统、sandbox、shell 和权限边界
-  边界：不负责总体入门、长期记忆建模或子 Agent 拆分
-- **deepagents-getting-started**（自研·已验证 2026-08-21）— 提供 DeepAgents 0.7.8 的最小闭环、总体架构和核心组件选型规则
-  边界：不处理具体后端安全、子 Agent 拆分或版本敏感 API 查询
-- **deepagents-subagents**（自研·已验证 2026-08-21）— 设计 DeepAgents 同步、动态和异步子 Agent 委派及并发取消语义
-  边界：不处理一般 backend 权限或单 Agent 入门
 - **domain-modeling**（第三方·mattpocock/skills·已验证 2026-08-23）— 打磨项目领域模型：统一术语、CONTEXT.md、ADR
   边界：偏讨论与文档产出，不写实现代码
-- **framework-skill-author**（自研·已验证 2026-08-21）— 基于框架官方文档、API、版本记录和源码创建、刷新或审计可追溯的中文 Skill Pack
-  边界：不用于普通文档摘要，也不接受非官方资料作为核心依据
 - **improve-codebase-architecture**（第三方·mattpocock/skills·已验证 2026-08-23）— 扫描代码库找架构深化机会，生成可视化 HTML 报告并逐项追问
   边界：偏 TS/JS 项目语境
 - **setup-ts-deep-modules**（第三方·mattpocock/skills·已验证 2026-08-23）— 接入 dependency-cruiser，强制 TS 包深模块化、隐藏内部实现
@@ -93,28 +83,12 @@
 ## 研究
 - **baoyu-url-to-markdown**（第三方·jimliu/baoyu-skills·已验证 2026-08-23）— 抓任意 URL 转 markdown，内置 X/YouTube 字幕/Hacker News 等站点适配器
   边界：依赖 baoyu-fetch CLI 和 Chrome CDP
-- **deepagents-docs**（自研·已验证 2026-08-21）— 查询并核验 DeepAgents 官方文档、API、版本差异和长尾问题
-  边界：不替代入门、执行环境、上下文记忆或子 Agent 的稳定决策规则
-- **framework-skill-author**（自研·已验证 2026-08-21）— 基于框架官方文档、API、版本记录和源码创建、刷新或审计可追溯的中文 Skill Pack
-  边界：不用于普通文档摘要，也不接受非官方资料作为核心依据
 - **research**（第三方·mattpocock/skills·已验证 2026-08-23）— 对着高可信一手资料做调研，结论落盘为 repo 里的 markdown
   边界：需要网络访问；不做观点创作
 
 ## 编程
 - **code-review**（第三方·mattpocock/skills·已验证 2026-08-23）— 从固定点（commit/branch/tag）起审 diff：编码规范 + 是否符合 spec 双轴并行
   边界：只审不改
-- **deepagents-context-memory**（自研·已验证 2026-08-21）— 设计 DeepAgents 上下文分层、文件化 offload、checkpoint 和跨线程长期记忆
-  边界：不处理 sandbox 权限细节或子 Agent 拓扑
-- **deepagents-docs**（自研·已验证 2026-08-21）— 查询并核验 DeepAgents 官方文档、API、版本差异和长尾问题
-  边界：不替代入门、执行环境、上下文记忆或子 Agent 的稳定决策规则
-- **deepagents-execution-environment**（自研·已验证 2026-08-21）— 设计 DeepAgents backend、虚拟文件系统、sandbox、shell 和权限边界
-  边界：不负责总体入门、长期记忆建模或子 Agent 拆分
-- **deepagents-getting-started**（自研·已验证 2026-08-21）— 提供 DeepAgents 0.7.8 的最小闭环、总体架构和核心组件选型规则
-  边界：不处理具体后端安全、子 Agent 拆分或版本敏感 API 查询
-- **deepagents-subagents**（自研·已验证 2026-08-21）— 设计 DeepAgents 同步、动态和异步子 Agent 委派及并发取消语义
-  边界：不处理一般 backend 权限或单 Agent 入门
-- **framework-skill-author**（自研·已验证 2026-08-21）— 基于框架官方文档、API、版本记录和源码创建、刷新或审计可追溯的中文 Skill Pack
-  边界：不用于普通文档摘要，也不接受非官方资料作为核心依据
 - **git-guardrails-claude-code**（第三方·mattpocock/skills·已验证 2026-08-23）— 给 Claude Code 配 git 安全 hook，拦截 push/reset --hard/clean 等危险命令
   边界：只防 git 危险操作，不管其他命令
 - **implement**（第三方·mattpocock/skills·已验证 2026-08-23）— 按 spec 或 ticket 实现具体工作
@@ -137,8 +111,6 @@
   边界：只翻译润色，不做内容创作
 
 ## 规划
-- **agent-dag-reporting**（自研·已验证 2026-08-24）— 将多步骤任务的计划、状态、产物和检查点按 agent-dag/v1 上报到 Personal Workbench
-  边界：仅负责可观测性上报，不改变任务执行方式；依赖宿主提供对应 MCP 上报工具
 - **goal-coach**（自研·已验证 2026-08-23）— 判断任务是否适合 /goal，并生成完整中文 /goal prompt（完成标准/边界/停止规则）
   边界：只服务 Claude Code 的 /goal 命令场景
 - **grill-me**（第三方·mattpocock/skills·已验证 2026-08-23）— 无情追问，把你的计划或设计逼问到无懈可击
@@ -165,8 +137,6 @@
   边界：针对难治问题；简单 bug 不必动用
 
 ## 运维
-- **deepagents-execution-environment**（自研·已验证 2026-08-21）— 设计 DeepAgents backend、虚拟文件系统、sandbox、shell 和权限边界
-  边界：不负责总体入门、长期记忆建模或子 Agent 拆分
 - **git-guardrails-claude-code**（第三方·mattpocock/skills·已验证 2026-08-23）— 给 Claude Code 配 git 安全 hook，拦截 push/reset --hard/clean 等危险命令
   边界：只防 git 危险操作，不管其他命令
 - **setup-matt-pocock-skills**（第三方·mattpocock/skills·已验证 2026-08-23）— 首次使用 mattpocock 工程 skill 前的仓库初始化：issue tracker、标签词表、文档布局
