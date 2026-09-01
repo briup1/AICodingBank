@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+set -euo pipefail
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+export BROWSE_SERVER_SCRIPT="$ROOT/src/server.ts"
+if [ -z "${BROWSE_STATE_FILE:-}" ]; then
+  if project_root=$(git rev-parse --show-toplevel 2>/dev/null); then
+    export BROWSE_STATE_FILE="$project_root/.wl-ai-skills/browse/browse.json"
+  else
+    export BROWSE_STATE_FILE="$PWD/.wl-ai-skills/browse/browse.json"
+  fi
+fi
+export WL_AI_SKILLS_STATE_HOME="${WL_AI_SKILLS_STATE_HOME:-$HOME/.local/state/wl-ai-skills/browse}"
+if [ -z "${WL_BROWSE_CHROMIUM_PATH:-}" ]; then
+  for candidate in /usr/bin/google-chrome /usr/bin/chromium /usr/bin/chromium-browser; do
+    if [ -x "$candidate" ]; then export WL_BROWSE_CHROMIUM_PATH="$candidate"; break; fi
+  done
+fi
+exec "$ROOT/dist/browse" "$@"

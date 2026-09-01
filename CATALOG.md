@@ -1,18 +1,14 @@
 # Skill 总目录（install.py 自动生成，勿手改）
 
-共 67 个 · 已验证 48 · 待验证 19
+共 69 个 · 已验证 53 · 待验证 16
 
 想看深度使用经验 → wiki entity 页；想改行为 → SKILL.md；本目录只回答“它能干什么、边界在哪”。
 
+## 代码审查
+- **wl-requesting-code-review**（自研·已验证 2026-09-01）— 在交付前依据需求、架构、风险与测试证据审查已完成的代码
+  边界：用于完整任务或重要功能实现后的代码审查，不用于需求澄清或方案设计
+
 ## 写作
-- **baoyu-format-markdown**（第三方·jimliu/baoyu-skills·已验证 2026-08-23）— 给纯文本/markdown 自动排版：frontmatter、标题、摘要、加粗、列表、代码块
-  边界：只排版不改写内容
-- **baoyu-infographic**（第三方·jimliu/baoyu-skills·已验证 2026-08-23）— 生成专业信息图：21 种布局 × 22 种视觉风格，自动推荐组合
-  边界：依赖图像生成 API；适合单页信息图而非长文
-- **baoyu-markdown-to-html**（第三方·jimliu/baoyu-skills·已验证 2026-08-23）— markdown 转带主题 HTML，兼容微信公众号；支持代码高亮、数学公式、Mermaid、PlantUML
-  边界：Mermaid 转 PNG 需 headless Chrome
-- **baoyu-translate**（第三方·jimliu/baoyu-skills·已验证 2026-08-23）— 中英互译、精翻、本地化与译后校对
-  边界：只翻译润色，不做内容创作
 - **inspector-docs**（第三方·CopilotKit/CopilotKit·**待验证（未安装）**）— 维护 CopilotKit Inspector 文档与已发布 Pane、Tab、Overlay 行为的一致性
   边界：仅服务 CopilotKit 上游 Inspector 文档维护，不用于 Inspector UI 润色或未发布功能设计
 - **writing-beats**（第三方·mattpocock/skills·已验证 2026-08-23）— 写作·exploit：把素材组装成节拍化叙事，先立术语再用
@@ -21,6 +17,10 @@
   边界：早期探索阶段，不出成稿
 - **writing-shape**（第三方·mattpocock/skills·已验证 2026-08-23）— 写作·exploit：逐段把素材塑形成文章
   边界：偏成稿阶段，需要已有素材
+
+## 前端
+- **wl-plan-design-review**（自研·已验证 2026-09-01）— 在编码前审查并完善 UI/UX 实施计划，使交互和视觉决策达到可实施状态
+  边界：只审查前端体验与设计计划，不替代工程架构评审或代码实现
 
 ## 协作
 - **agent-dag-reporting**（自研·已验证 2026-08-24）— 将多步骤任务的计划、状态、产物和检查点按 agent-dag/v1 上报到 Personal Workbench
@@ -40,29 +40,39 @@
 - **triage**（第三方·mattpocock/skills·已验证 2026-08-23）— issue 和外部 PR 的分诊状态机：分类、验证、追问，产出 agent 可直接执行的简报
   边界：面向开源仓库维护场景
 
-## 图像
-- **baoyu-image-gen**（第三方·jimliu/baoyu-skills·已验证 2026-08-23）— 多平台 AI 出图：GPT Image、即梦、Seedream、MiniMax 等十几家 API，支持文生图和参考图
-  边界：只出图不管文章排版；依赖外部图像 API key
-- **baoyu-infographic**（第三方·jimliu/baoyu-skills·已验证 2026-08-23）— 生成专业信息图：21 种布局 × 22 种视觉风格，自动推荐组合
-  边界：依赖图像生成 API；适合单页信息图而非长文
-
 ## 图表
 - **diagram**（第三方·312362115/claude·已验证 2026-08-23）— 生成 29 种专业 PNG 图表：流程/时序/架构/ER/甘特 + 柱线饼雷等统计图，统一设计规范
   边界：HTML/SVG+JS 渲染输出 PNG，非矢量源文件
 - **excalidraw-diagram-generator**（第三方·p-rp/excalidraw-diagram-generator·已验证 2026-08-23）— 自然语言生成 Excalidraw 图：流程图、架构图、思维导图、关系图
   边界：输出 .excalidraw JSON，需 Excalidraw 打开查看
 
-## 开发流程
-- **wl_design-doc**（自研·**待验证（未安装）**）— 方案设计——需求批准后产出可批准的《方案设计文档》（映射/契约/复用分析/多方案/附证据审查/最小验证）
-  边界：前置 wl_req-confirm 已批准；只出方案不写实现代码，不替用户拍板选方案
-- **wl_req-confirm**（自研·**待验证（未安装）**）— 需求确认——把模糊诉求变成人审批准的《需求确认文档》（重定义需求/用户故事/Out of Scope/验收）
-  边界：只回答要什么/为什么/怎么算完成，不回答怎么做（方案设计归 wl_design-doc）
-- **wl_ticket-run**（自研·**待验证（未安装）**）— 工单执行——方案批准后拆垂直切片工单（G/W/T 验收），/list 并行调度、/goal 审计执行到验收
-  边界：前置 wl_design-doc 已批准；管执行纪律（台账/熔断/停机），不做需求与方案决策
+## 多智能体
+- **wl-subagent-driven-development**（自研·已验证 2026-09-01）— 按已批准计划逐任务调度隔离 Worker，以测试优先、规格审查和质量审查完成开发
+  边界：仅在方案已批准后使用；子 Agent 未获授权或不可用时必须在本地执行同等闸门
 
-## 抓取
-- **baoyu-url-to-markdown**（第三方·jimliu/baoyu-skills·已验证 2026-08-23）— 抓任意 URL 转 markdown，内置 X/YouTube 字幕/Hacker News 等站点适配器
-  边界：依赖 baoyu-fetch CLI 和 Chrome CDP
+## 审查
+- **wl-plan-design-review**（自研·已验证 2026-09-01）— 在编码前审查并完善 UI/UX 实施计划，使交互和视觉决策达到可实施状态
+  边界：只审查前端体验与设计计划，不替代工程架构评审或代码实现
+- **wl-plan-eng-review**（自研·已验证 2026-09-01）— 从架构、影响域、接口、数据、安全、性能、迁移、回滚和测试等维度审查实施计划
+  边界：只做编码前的工程方案审查，不直接实施计划或替代代码审查
+
+## 开发流程
+- **wl-brainstorming**（自研·已验证 2026-09-01）— 将模糊的软件想法或行为变更澄清为经确认、可测试的设计
+  边界：用于新功能或显著行为变更的需求与设计定稿，不执行已经批准的实现方案
+- **wl-investigate**（自研·已验证 2026-09-01）— 以证据优先和根因分析方式独立复现、定位并修复缺陷或回归
+  边界：仅用于缺陷诊断与修复；修复前必须有失败复现，修复后必须验证
+- **wl-requesting-code-review**（自研·已验证 2026-09-01）— 在交付前依据需求、架构、风险与测试证据审查已完成的代码
+  边界：用于完整任务或重要功能实现后的代码审查，不用于需求澄清或方案设计
+- **wl-subagent-driven-development**（自研·已验证 2026-09-01）— 按已批准计划逐任务调度隔离 Worker，以测试优先、规格审查和质量审查完成开发
+  边界：仅在方案已批准后使用；子 Agent 未获授权或不可用时必须在本地执行同等闸门
+- **wl-writing-plans**（自研·已验证 2026-09-01）— 将已批准规格或稳定需求转换为详细、测试优先的实施计划
+  边界：仅用于多步骤工程任务；需求或架构尚未确定时不得使用
+- **wl_design-doc**（自研·已验证 2026-08-31）— 方案设计——需求批准后产出可批准的《方案设计文档》（映射/契约/复用分析/多方案/附证据审查/最小验证）
+  边界：前置 wl_req-confirm 已批准；只出方案不写实现代码，不替用户拍板选方案
+- **wl_req-confirm**（自研·已验证 2026-08-31）— 需求确认——把模糊诉求变成人审批准的《需求确认文档》（重定义需求/用户故事/Out of Scope/验收）
+  边界：只回答要什么/为什么/怎么算完成，不回答怎么做（方案设计归 wl_design-doc）
+- **wl_ticket-run**（自研·已验证 2026-08-31）— 工单执行——方案批准后拆垂直切片工单（G/W/T 验收），/list 并行调度、/goal 审计执行到验收
+  边界：前置 wl_design-doc 已批准；管执行纪律（台账/熔断/停机），不做需求与方案决策
 
 ## 效率
 - **agent-dag-reporting**（自研·已验证 2026-08-24）— 将多步骤任务的计划、状态、产物和检查点按 agent-dag/v1 上报到 Personal Workbench
@@ -111,16 +121,28 @@
   边界：聚焦服务端运行时，不负责 React 前端组件；优先采用 fetch-native handler 而非旧适配器
 - **setup-ts-deep-modules**（第三方·mattpocock/skills·已验证 2026-08-23）— 接入 dependency-cruiser，强制 TS 包深模块化、隐藏内部实现
   边界：仅 TS monorepo
+- **wl-plan-eng-review**（自研·已验证 2026-09-01）— 从架构、影响域、接口、数据、安全、性能、迁移、回滚和测试等维度审查实施计划
+  边界：只做编码前的工程方案审查，不直接实施计划或替代代码审查
 
 ## 测试
 - **migrate-to-shoehorn**（第三方·mattpocock/skills·已验证 2026-08-23）— 把测试文件里的 as 类型断言迁移到 @total-typescript/shoehorn
   边界：仅 TS 测试数据场景
 - **tdd**（第三方·mattpocock/skills·已验证 2026-08-23）— 测试驱动开发：red-green-refactor，集成测试优先
   边界：需要项目已有测试基建
+- **wl-browse**（自研·已验证 2026-09-01）— 通过真实浏览器完成页面导航、DOM 快照、表单交互、截图、响应式检查和端到端验证
+  边界：仅负责浏览器自动化与视觉验证；使用自带 CLI，不依赖 gstack
+- **wl-investigate**（自研·已验证 2026-09-01）— 以证据优先和根因分析方式独立复现、定位并修复缺陷或回归
+  边界：仅用于缺陷诊断与修复；修复前必须有失败复现，修复后必须验证
+- **wl-subagent-driven-development**（自研·已验证 2026-09-01）— 按已批准计划逐任务调度隔离 Worker，以测试优先、规格审查和质量审查完成开发
+  边界：仅在方案已批准后使用；子 Agent 未获授权或不可用时必须在本地执行同等闸门
+- **wl-writing-plans**（自研·已验证 2026-09-01）— 将已批准规格或稳定需求转换为详细、测试优先的实施计划
+  边界：仅用于多步骤工程任务；需求或架构尚未确定时不得使用
+
+## 浏览器
+- **wl-browse**（自研·已验证 2026-09-01）— 通过真实浏览器完成页面导航、DOM 快照、表单交互、截图、响应式检查和端到端验证
+  边界：仅负责浏览器自动化与视觉验证；使用自带 CLI，不依赖 gstack
 
 ## 研究
-- **baoyu-url-to-markdown**（第三方·jimliu/baoyu-skills·已验证 2026-08-23）— 抓任意 URL 转 markdown，内置 X/YouTube 字幕/Hacker News 等站点适配器
-  边界：依赖 baoyu-fetch CLI 和 Chrome CDP
 - **deepagents-docs**（自研·已验证 2026-08-21）— 查询并核验 DeepAgents 官方文档、API、版本差异和长尾问题
   边界：不替代入门、执行环境、上下文记忆或子 Agent 的稳定决策规则
 - **framework-skill-author**（自研·已验证 2026-08-21）— 基于框架官方文档、API、版本记录和源码创建、刷新或审计可追溯的中文 Skill Pack
@@ -188,9 +210,9 @@
 - **tdd**（第三方·mattpocock/skills·已验证 2026-08-23）— 测试驱动开发：red-green-refactor，集成测试优先
   边界：需要项目已有测试基建
 
-## 翻译
-- **baoyu-translate**（第三方·jimliu/baoyu-skills·已验证 2026-08-23）— 中英互译、精翻、本地化与译后校对
-  边界：只翻译润色，不做内容创作
+## 自动化
+- **wl-browse**（自研·已验证 2026-09-01）— 通过真实浏览器完成页面导航、DOM 快照、表单交互、截图、响应式检查和端到端验证
+  边界：仅负责浏览器自动化与视觉验证；使用自带 CLI，不依赖 gstack
 
 ## 规划
 - **agent-dag-reporting**（自研·已验证 2026-08-24）— 将多步骤任务的计划、状态、产物和检查点按 agent-dag/v1 上报到 Personal Workbench
@@ -211,10 +233,18 @@
   边界：需要先配置 issue tracker
 - **wayfinder**（第三方·mattpocock/skills·已验证 2026-08-23）— 把超过单个会话的大工程拆成 decision ticket 地图，逐个解决直到路径清晰
   边界：小任务用它杀鸡用牛刀
+- **wl-plan-eng-review**（自研·已验证 2026-09-01）— 从架构、影响域、接口、数据、安全、性能、迁移、回滚和测试等维度审查实施计划
+  边界：只做编码前的工程方案审查，不直接实施计划或替代代码审查
+- **wl-writing-plans**（自研·已验证 2026-09-01）— 将已批准规格或稳定需求转换为详细、测试优先的实施计划
+  边界：仅用于多步骤工程任务；需求或架构尚未确定时不得使用
 
 ## 设计
 - **prototype**（第三方·mattpocock/skills·已验证 2026-08-23）— 快速搭一次性原型，验证状态模型逻辑或 UI 感觉
   边界：是 throwaway 代码，别当正式实现
+- **wl-brainstorming**（自研·已验证 2026-09-01）— 将模糊的软件想法或行为变更澄清为经确认、可测试的设计
+  边界：用于新功能或显著行为变更的需求与设计定稿，不执行已经批准的实现方案
+- **wl-plan-design-review**（自研·已验证 2026-09-01）— 在编码前审查并完善 UI/UX 实施计划，使交互和视觉决策达到可实施状态
+  边界：只审查前端体验与设计计划，不替代工程架构评审或代码实现
 
 ## 调试
 - **copilotkit-agui**（第三方·CopilotKit/CopilotKit·**待验证（未安装）**）— 实现和调试 AG-UI 协议、自定义 Agent 后端、SSE 事件流、状态同步与人机协同
@@ -223,6 +253,12 @@
   边界：聚焦故障定位，不负责首次接入、功能开发或 v1 到 v2 迁移
 - **diagnosing-bugs**（第三方·mattpocock/skills·已验证 2026-08-23）— 疑难 bug 和性能回退的结构化诊断循环
   边界：针对难治问题；简单 bug 不必动用
+- **wl-investigate**（自研·已验证 2026-09-01）— 以证据优先和根因分析方式独立复现、定位并修复缺陷或回归
+  边界：仅用于缺陷诊断与修复；修复前必须有失败复现，修复后必须验证
+
+## 质量
+- **wl-requesting-code-review**（自研·已验证 2026-09-01）— 在交付前依据需求、架构、风险与测试证据审查已完成的代码
+  边界：用于完整任务或重要功能实现后的代码审查，不用于需求澄清或方案设计
 
 ## 运维
 - **copilotkit-self-update**（第三方·CopilotKit/CopilotKit·**待验证（未安装）**）— 刷新或重装 CopilotKit 官方 Agent Skills，使本地知识与最新 API 保持同步
@@ -237,3 +273,7 @@
   边界：仅 JS/TS 仓库
 - **wizard**（第三方·mattpocock/skills·已验证 2026-08-23）— 生成交互式 bash 向导，引导人完成只有人能做的步骤：配密钥、CI secrets、第三方后台
   边界：agent 自己能干的活别用它
+
+## 需求分析
+- **wl-brainstorming**（自研·已验证 2026-09-01）— 将模糊的软件想法或行为变更澄清为经确认、可测试的设计
+  边界：用于新功能或显著行为变更的需求与设计定稿，不执行已经批准的实现方案

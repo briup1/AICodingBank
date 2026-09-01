@@ -1,4 +1,6 @@
 vendor/
+.pi-glla/
 
 skills.local.yaml
 __pycache__/
+.wl-ai-skills/
