@@ -1,6 +1,6 @@
 # Skill 总目录（install.py 自动生成，勿手改）
 
-共 69 个 · 已验证 53 · 待验证 16
+共 70 个 · 已验证 54 · 待验证 16
 
 想看深度使用经验 → wiki entity 页；想改行为 → SKILL.md；本目录只回答“它能干什么、边界在哪”。
 
@@ -35,6 +35,8 @@
   边界：仅面向 CopilotKit/CopilotKit 上游贡献，不是业务项目的通用 Git 工作流
 - **handoff**（第三方·mattpocock/skills·已验证 2026-08-23）— 把当前对话压缩成交接文档，供另一个 agent 接手
   边界：产出文档；要即时交接用 claude-handoff
+- **herdr**（第三方·herdrdev/herdr@v0.8.2·已验证 2026-09-01）— 在 Herdr 管理的终端会话内检查和控制 workspace、tab、pane、命令与编码 Agent
+  边界：仅在用户明确提及 Herdr 且 HERDR_ENV=1 时使用；依赖本机 herdr CLI，不替代通用终端或子 Agent 调度
 - **setup-slack-channel**（第三方·CopilotKit/CopilotKit·**待验证（未安装）**）— 完成 CopilotKit Channels 的 Slack Provider 侧首次配置、Token、托管 Channel 绑定与连通性验证
   边界：只覆盖首次 Slack Provider 配置，且主要适配 OpenTag 或 channels-sdk 示例约定；Channel 代码定制用 copilotkit-channels
 - **triage**（第三方·mattpocock/skills·已验证 2026-08-23）— issue 和外部 PR 的分诊状态机：分类、验证、追问，产出 agent 可直接执行的简报
@@ -85,6 +87,8 @@
   边界：不处理一般 backend 权限或单 Agent 入门
 - **goal-coach**（自研·已验证 2026-08-23）— 判断任务是否适合 /goal，并生成完整中文 /goal prompt（完成标准/边界/停止规则）
   边界：只服务 Claude Code 的 /goal 命令场景
+- **herdr**（第三方·herdrdev/herdr@v0.8.2·已验证 2026-09-01）— 在 Herdr 管理的终端会话内检查和控制 workspace、tab、pane、命令与编码 Agent
+  边界：仅在用户明确提及 Herdr 且 HERDR_ENV=1 时使用；依赖本机 herdr CLI，不替代通用终端或子 Agent 调度
 
 ## 教学
 - **deepagents-getting-started**（自研·已验证 2026-08-21）— 提供 DeepAgents 0.7.8 的最小闭环、总体架构和核心组件选型规则
@@ -267,6 +271,8 @@
   边界：不负责总体入门、长期记忆建模或子 Agent 拆分
 - **git-guardrails-claude-code**（第三方·mattpocock/skills·已验证 2026-08-23）— 给 Claude Code 配 git 安全 hook，拦截 push/reset --hard/clean 等危险命令
   边界：只防 git 危险操作，不管其他命令
+- **herdr**（第三方·herdrdev/herdr@v0.8.2·已验证 2026-09-01）— 在 Herdr 管理的终端会话内检查和控制 workspace、tab、pane、命令与编码 Agent
+  边界：仅在用户明确提及 Herdr 且 HERDR_ENV=1 时使用；依赖本机 herdr CLI，不替代通用终端或子 Agent 调度
 - **setup-matt-pocock-skills**（第三方·mattpocock/skills·已验证 2026-08-23）— 首次使用 mattpocock 工程 skill 前的仓库初始化：issue tracker、标签词表、文档布局
   边界：每个仓库只需跑一次
 - **setup-pre-commit**（第三方·mattpocock/skills·已验证 2026-08-23）— 配置 Husky pre-commit：lint-staged、Prettier、类型检查、测试

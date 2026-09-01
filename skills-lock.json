@@ -617,6 +617,21 @@
         "架构"
       ],
       "verified": ""
+    },
+    "herdr": {
+      "source": "herdrdev/herdr",
+      "sourceType": "github",
+      "ref": "v0.8.2",
+      "skillPath": "skills/herdr/SKILL.md",
+      "computedHash": "237ad2ab2d8123e2bb37956d3a41eed141f2d22a7c36e415b7876c0397679099",
+      "capability": "在 Herdr 管理的终端会话内检查和控制 workspace、tab、pane、命令与编码 Agent",
+      "boundary": "仅在用户明确提及 Herdr 且 HERDR_ENV=1 时使用；依赖本机 herdr CLI，不替代通用终端或子 Agent 调度",
+      "tags": [
+        "协作",
+        "效率",
+        "运维"
+      ],
+      "verified": "2026-09-01"
     }
   }
 }

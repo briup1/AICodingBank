@@ -78,6 +78,7 @@ skills/<framework>-pack/
 "some-skill": {
   "source": "owner/repo",
   "sourceType": "github",
+  "ref": "v1.2.3",
   "skillPath": "path/to/SKILL.md",
   "computedHash": "",
   "capability": "它能干什么，一句话，用你自己的语言",
@@ -86,6 +87,8 @@ skills/<framework>-pack/
   "verified": ""
 }
 ```
+
+`ref` 可选；填写分支或标签时安装器会固定到该版本，不填写则继续跟随仓库默认分支。
 
 然后 `python3 install.py` 会自动 clone 上游到 `vendor/`。
 
@@ -104,7 +107,7 @@ skills/<framework>-pack/
 ### 更新第三方 skill
 
 ```bash
-python3 install.py   # 重跑即 pull 所有上游到最新
+python3 install.py   # 默认分支拉取最新；带 ref 的登记固定并刷新到该版本
 ```
 
 上游删除了某个 skill 时，`install.py` 会报 `源目录不存在`——从 lock 里删掉对应条目即可。

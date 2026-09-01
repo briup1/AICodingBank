@@ -59,6 +59,41 @@ def unlink_disabled(targets, name, report):
             report.append(f"!! 无法停用 {name} -> {dst}: 存在真实目录，请手动迁移")
 
 
+def vendor_dir_name(repo, ref=None):
+    """为同一仓库的默认分支与固定 ref 生成互不冲突的缓存目录名。"""
+    name = repo.replace("/", "__")
+    if ref:
+        safe_ref = "".join(
+            char if char.isalnum() or char in ".-_" else "__" for char in ref
+        )
+        name += f"__ref__{safe_ref}"
+    return name
+
+
+def sync_github_repo(repo, ref, vendor_dir):
+    """同步 GitHub 仓库；指定 ref 时固定到该分支或标签。"""
+    url = f"https://github.com/{repo}.git"
+    if os.path.isdir(os.path.join(vendor_dir, ".git")):
+        if not ref:
+            return subprocess.run(
+                ["git", "-C", vendor_dir, "pull", "-q"]
+            ).returncode == 0
+        fetched = subprocess.run(
+            ["git", "-C", vendor_dir, "fetch", "-q", "--depth", "1", "origin", ref]
+        )
+        if fetched.returncode != 0:
+            return False
+        return subprocess.run(
+            ["git", "-C", vendor_dir, "checkout", "-q", "--detach", "FETCH_HEAD"]
+        ).returncode == 0
+
+    command = ["git", "clone", "-q", "--depth", "1"]
+    if ref:
+        command.extend(["--branch", ref])
+    command.extend([url, vendor_dir])
+    return subprocess.run(command).returncode == 0
+
+
 def write_catalog(entries, path):
     by_tag = defaultdict(list)
     for entry in entries:
@@ -127,26 +162,24 @@ def main():
     # 第三方：clone/pull 上游仓库到 vendor/，按 lock 逐个软链
     repos = defaultdict(list)
     for name, meta in lock.items():
-        entry = dict(meta, name=name, origin=f"第三方·{meta['source']}")
+        ref = meta.get("ref")
+        origin = f"第三方·{meta['source']}" + (f"@{ref}" if ref else "")
+        entry = dict(meta, name=name, origin=origin)
         entries.append(entry)
         if name in disabled:
             unlink_disabled(targets, name, report)
         if meta.get("sourceType") != "github":
             report.append(f"!! 跳过 {name}: 未知 sourceType {meta.get('sourceType')}")
             continue
-        repos[meta["source"]].append(entry)
+        repos[(meta["source"], ref)].append(entry)
 
     os.makedirs(VENDOR, exist_ok=True)
-    for repo, metas in repos.items():
-        vendor_dir = os.path.join(VENDOR, repo.replace("/", "__"))
-        if os.path.isdir(os.path.join(vendor_dir, ".git")):
-            subprocess.run(["git", "-C", vendor_dir, "pull", "-q"], check=False)
-        else:
-            url = f"https://github.com/{repo}.git"
-            result = subprocess.run(["git", "clone", "-q", "--depth", "1", url, vendor_dir])
-            if result.returncode != 0:
-                report.append(f"!! clone 失败 {repo}，跳过其 {len(metas)} 个 skill")
-                continue
+    for (repo, ref), metas in repos.items():
+        vendor_dir = os.path.join(VENDOR, vendor_dir_name(repo, ref))
+        if not sync_github_repo(repo, ref, vendor_dir):
+            source = f"{repo}@{ref}" if ref else repo
+            report.append(f"!! 同步失败 {source}，跳过其 {len(metas)} 个 skill")
+            continue
         for meta in metas:
             if meta["name"] not in disabled and meta.get("verified"):
                 link(

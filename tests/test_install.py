@@ -6,6 +6,7 @@ import os
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 import yaml
 
@@ -105,6 +106,110 @@ class LocalDisableTests(unittest.TestCase):
                 self.assertEqual((target / "demo").resolve(), skill.resolve())
             finally:
                 installer.ROOT, installer.VENDOR = old_root, old_vendor
+
+
+class ThirdPartyRefTests(unittest.TestCase):
+    def test_vendor_dir_name_distinguishes_pinned_ref(self):
+        self.assertEqual(
+            installer.vendor_dir_name("herdrdev/herdr", "v0.8.2"),
+            "herdrdev__herdr__ref__v0.8.2",
+        )
+        self.assertEqual(
+            installer.vendor_dir_name("herdrdev/herdr", "release/v0.8.2"),
+            "herdrdev__herdr__ref__release__v0.8.2",
+        )
+        self.assertEqual(
+            installer.vendor_dir_name("herdrdev/herdr"),
+            "herdrdev__herdr",
+        )
+
+    def test_sync_github_repo_clones_requested_ref(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            vendor_dir = str(Path(tmp) / "herdrdev__herdr__ref__v0.8.2")
+            completed = mock.Mock(returncode=0)
+            with mock.patch.object(installer.subprocess, "run", return_value=completed) as run:
+                self.assertTrue(
+                    installer.sync_github_repo(
+                        "herdrdev/herdr", "v0.8.2", vendor_dir
+                    )
+                )
+
+            run.assert_called_once_with(
+                [
+                    "git",
+                    "clone",
+                    "-q",
+                    "--depth",
+                    "1",
+                    "--branch",
+                    "v0.8.2",
+                    "https://github.com/herdrdev/herdr.git",
+                    vendor_dir,
+                ]
+            )
+
+    def test_sync_github_repo_refreshes_existing_pinned_ref(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            vendor_dir = Path(tmp) / "herdrdev__herdr__ref__v0.8.2"
+            (vendor_dir / ".git").mkdir(parents=True)
+            completed = mock.Mock(returncode=0)
+            with mock.patch.object(
+                installer.subprocess, "run", side_effect=[completed, completed]
+            ) as run:
+                self.assertTrue(
+                    installer.sync_github_repo(
+                        "herdrdev/herdr", "v0.8.2", str(vendor_dir)
+                    )
+                )
+
+            self.assertEqual(
+                run.call_args_list,
+                [
+                    mock.call(
+                        [
+                            "git",
+                            "-C",
+                            str(vendor_dir),
+                            "fetch",
+                            "-q",
+                            "--depth",
+                            "1",
+                            "origin",
+                            "v0.8.2",
+                        ]
+                    ),
+                    mock.call(
+                        [
+                            "git",
+                            "-C",
+                            str(vendor_dir),
+                            "checkout",
+                            "-q",
+                            "--detach",
+                            "FETCH_HEAD",
+                        ]
+                    ),
+                ],
+            )
+
+    def test_sync_github_repo_keeps_default_branch_behavior(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            vendor_dir = str(Path(tmp) / "owner__repo")
+            completed = mock.Mock(returncode=0)
+            with mock.patch.object(installer.subprocess, "run", return_value=completed) as run:
+                self.assertTrue(installer.sync_github_repo("owner/repo", None, vendor_dir))
+
+            run.assert_called_once_with(
+                [
+                    "git",
+                    "clone",
+                    "-q",
+                    "--depth",
+                    "1",
+                    "https://github.com/owner/repo.git",
+                    vendor_dir,
+                ]
+            )
 
 
 if __name__ == "__main__":
