@@ -618,6 +618,42 @@
       ],
       "verified": ""
     },
+    "high-end-visual-design": {
+      "source": "Leonxlnx/taste-skill",
+      "sourceType": "github",
+      "skillPath": "skills/soft-skill/SKILL.md",
+      "computedHash": "e1e32f5e2d420872c6c7332b53d5ff7721946766b78c4822b424c2d512c8fdbc",
+      "capability": "为现有或新建网站应用高端设计规范，统一字体、间距、阴影、卡片和动效质感",
+      "boundary": "只提供视觉设计约束与实现指导，不负责业务逻辑、品牌资产授权或可用性研究",
+      "tags": [
+        "编程"
+      ],
+      "verified": "2026-08-14"
+    },
+    "redesign-existing-projects": {
+      "source": "Leonxlnx/taste-skill",
+      "sourceType": "github",
+      "skillPath": "skills/redesign-skill/SKILL.md",
+      "computedHash": "98ad3e5b051bfb71b2795f7e8a6aa0d32b51ee095606c098a4b2822ac07926c9",
+      "capability": "审查并重设计现有网站或应用，在不破坏功能的前提下提升视觉品质",
+      "boundary": "用于已有前端的视觉改造，不替代需求分析、业务重构或完整产品设计流程",
+      "tags": [
+        "编程"
+      ],
+      "verified": "2026-08-14"
+    },
+    "minimalist-ui": {
+      "source": "Leonxlnx/taste-skill",
+      "sourceType": "github",
+      "skillPath": "skills/minimalist-skill/SKILL.md",
+      "computedHash": "36bc7328f085405f43b476938e62460fa573bf7e984e949e072bcf014831a44c",
+      "capability": "生成暖色单色、编辑排版、扁平 Bento 网格和低饱和点缀的极简界面",
+      "boundary": "是特定审美风格规范，不适用于需要强品牌色、渐变、重动效或高密度后台的场景",
+      "tags": [
+        "编程"
+      ],
+      "verified": "2026-08-14"
+    },
     "herdr": {
       "source": "herdrdev/herdr",
       "sourceType": "github",

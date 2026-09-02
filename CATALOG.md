@@ -1,6 +1,6 @@
 # Skill 总目录（install.py 自动生成，勿手改）
 
-共 70 个 · 已验证 54 · 待验证 16
+共 73 个 · 已验证 57 · 待验证 16
 
 想看深度使用经验 → wiki entity 页；想改行为 → SKILL.md；本目录只回答“它能干什么、边界在哪”。
 
@@ -191,16 +191,22 @@
   边界：不用于普通文档摘要，也不接受非官方资料作为核心依据
 - **git-guardrails-claude-code**（第三方·mattpocock/skills·已验证 2026-08-23）— 给 Claude Code 配 git 安全 hook，拦截 push/reset --hard/clean 等危险命令
   边界：只防 git 危险操作，不管其他命令
+- **high-end-visual-design**（第三方·Leonxlnx/taste-skill·已验证 2026-08-14）— 为现有或新建网站应用高端设计规范，统一字体、间距、阴影、卡片和动效质感
+  边界：只提供视觉设计约束与实现指导，不负责业务逻辑、品牌资产授权或可用性研究
 - **implement**（第三方·mattpocock/skills·已验证 2026-08-23）— 按 spec 或 ticket 实现具体工作
   边界：需要已有 spec/ticket，不做需求澄清
 - **inspector-docs**（第三方·CopilotKit/CopilotKit·**待验证（未安装）**）— 维护 CopilotKit Inspector 文档与已发布 Pane、Tab、Overlay 行为的一致性
   边界：仅服务 CopilotKit 上游 Inspector 文档维护，不用于 Inspector UI 润色或未发布功能设计
 - **migrate-to-shoehorn**（第三方·mattpocock/skills·已验证 2026-08-23）— 把测试文件里的 as 类型断言迁移到 @total-typescript/shoehorn
   边界：仅 TS 测试数据场景
+- **minimalist-ui**（第三方·Leonxlnx/taste-skill·已验证 2026-08-14）— 生成暖色单色、编辑排版、扁平 Bento 网格和低饱和点缀的极简界面
+  边界：是特定审美风格规范，不适用于需要强品牌色、渐变、重动效或高密度后台的场景
 - **prototype**（第三方·mattpocock/skills·已验证 2026-08-23）— 快速搭一次性原型，验证状态模型逻辑或 UI 感觉
   边界：是 throwaway 代码，别当正式实现
 - **react-core**（第三方·CopilotKit/CopilotKit·**待验证（未安装）**）— 使用 @copilotkit/react-core/v2 接入 Provider、聊天组件、Agent、线程、工具、附件与渲染器
   边界：只覆盖 React 前端核心 API，不处理服务端 CopilotRuntime 或外部 Agent 框架集成
+- **redesign-existing-projects**（第三方·Leonxlnx/taste-skill·已验证 2026-08-14）— 审查并重设计现有网站或应用，在不破坏功能的前提下提升视觉品质
+  边界：用于已有前端的视觉改造，不替代需求分析、业务重构或完整产品设计流程
 - **resolving-merge-conflicts**（第三方·mattpocock/skills·已验证 2026-08-23）— 解决进行中的 git merge/rebase 冲突
   边界：只管冲突解决这一步
 - **runtime**（第三方·CopilotKit/CopilotKit·**待验证（未安装）**）— 使用 @copilotkit/runtime 搭建服务端 CopilotRuntime、AgentRunner、工具、Intelligence 与语音转录
