@@ -1,0 +1,4 @@
+interface:
+  display_name: "HGJ 伏羲诊断"
+  short_description: "安全执行公司伏羲服务查询、日志检索和 Arthas 诊断"
+  default_prompt: "Use $hgj-fuxi to diagnose a service in an allowed non-production environment."

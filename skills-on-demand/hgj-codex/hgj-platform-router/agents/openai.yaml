@@ -1,0 +1,4 @@
+interface:
+  display_name: "HGJ 内部平台路由"
+  short_description: "识别公司内部平台任务并按需加载对应的安全操作技能与规则"
+  default_prompt: "Use $hgj-platform-router to choose the correct HGJ internal platform skill."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "HGJ TAPD"
+  short_description: "安全查询和维护公司 TAPD 需求、缺陷、任务、迭代与工时"
+  default_prompt: "Use $hgj-tapd to handle this TAPD request safely."

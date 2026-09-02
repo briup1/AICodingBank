@@ -1,0 +1,4 @@
+interface:
+  display_name: "HGJ 凭证规范"
+  short_description: "处理公司内部平台登录、SSO、Cookie、Token 与凭证安全"
+  default_prompt: "Use $hgj-auth to resolve this internal-platform authentication requirement safely."

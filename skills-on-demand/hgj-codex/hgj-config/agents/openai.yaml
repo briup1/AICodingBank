@@ -1,0 +1,4 @@
+interface:
+  display_name: "HGJ 配置查询"
+  short_description: "通过 agent-tools 安全只读查询公司 Apollo 与 Nacos 配置"
+  default_prompt: "Use $hgj-config to inspect the relevant Apollo or Nacos configuration safely."
