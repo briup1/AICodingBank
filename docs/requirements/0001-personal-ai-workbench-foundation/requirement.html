@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>需求 0001：个人 AI 工作台最小骨架</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --paper:#f7f6f3; --surface:#fff; --text:#2f3437; --muted:#787774; --faint:#a8a49c; --line:#eae7e0; --accent:#9f2f2d; --accent-soft:#fdebec; --info:#1f6c9f; --info-soft:#e1f3fe; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--paper); color:var(--text); font:15px/1.7 'Plus Jakarta Sans','PingFang SC','Microsoft YaHei',sans-serif; }
+    .layout { display:grid; grid-template-columns:290px minmax(0,820px); gap:56px; max-width:1220px; margin:auto; padding:48px 32px; }
+    aside { position:sticky; top:32px; align-self:start; }
+    .eyebrow,.section-count,.meta,.nav-number,th { font-family:'JetBrains Mono',ui-monospace,monospace; }
+    .eyebrow { color:var(--accent); font-size:11px; font-weight:600; letter-spacing:.15em; text-transform:uppercase; }
+    h1,h2 { font-family:'Instrument Serif','Songti SC','SimSun',serif; font-weight:400; letter-spacing:-.02em; }
+    h1 { margin:14px 0 20px; font-size:38px; line-height:1.1; }
+    h2 { margin:8px 0 6px; font-size:34px; line-height:1.2; }
+    .meta { display:flex; flex-wrap:wrap; gap:7px; margin-bottom:32px; }
+    .chip { padding:3px 9px; border-radius:999px; background:var(--surface); border:1px solid var(--line); color:var(--muted); font-size:10px; letter-spacing:.04em; }
+    .chip.status { color:var(--info); background:var(--info-soft); border-color:transparent; }
+    nav { border-top:1px solid var(--line); }
+    nav button { width:100%; display:grid; grid-template-columns:34px 1fr; gap:8px; padding:13px 12px; border:0; border-bottom:1px solid var(--line); background:transparent; color:var(--muted); text-align:left; cursor:pointer; font:inherit; }
+    nav button:hover { background:#fbfaf7; }
+    nav button.active { background:var(--accent-soft); color:var(--text); box-shadow:inset 2px 0 var(--accent); }
+    .nav-number { color:var(--faint); font-size:11px; }
+    main { min-width:0; }
+    section { display:none; animation:fade-up 500ms cubic-bezier(.16,1,.3,1); }
+    section.active { display:block; }
+    @keyframes fade-up { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:none; } }
+    .section-count { color:var(--muted); font-size:11px; letter-spacing:.09em; }
+    .section-count::before { content:''; display:inline-block; width:7px; height:7px; margin-right:9px; border-radius:50%; background:var(--accent); }
+    .subtitle { margin:0 0 28px; color:var(--muted); }
+    dl { margin:0; background:var(--surface); border:1px solid var(--line); border-radius:8px; }
+    .pair { display:grid; grid-template-columns:130px 1fr; gap:20px; padding:18px 20px; border-bottom:1px solid var(--line); }
+    .pair:last-child { border-bottom:0; }
+    dt { font-weight:700; }
+    dd { margin:0; }
+    ul { margin:0; padding-left:20px; }
+    .story,.scope-item { margin-bottom:10px; padding:15px 17px; background:var(--surface); }
+    .story { border-left:2px solid var(--accent); }
+    .story b { color:var(--accent); }
+    .scope-item { border:1px solid var(--line); border-radius:6px; }
+    .scope-item::before { content:'—'; margin-right:10px; color:var(--accent); }
+    table { width:100%; border-collapse:collapse; background:var(--surface); }
+    th,td { padding:13px 14px; border:1px solid var(--line); text-align:left; vertical-align:top; }
+    th { background:#fbfaf7; color:var(--muted); font-size:10px; letter-spacing:.08em; text-transform:uppercase; }
+    .pager { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:34px; padding-top:18px; border-top:1px solid var(--line); }
+    .pager button { min-height:58px; padding:10px 14px; border:1px solid var(--line); border-radius:6px; background:var(--surface); color:var(--text); text-align:left; cursor:pointer; font:inherit; }
+    .pager button:last-child { text-align:right; }
+    .pager button:disabled { opacity:.35; cursor:default; }
+    @media (max-width:860px) { .layout { display:block; padding:28px 20px; } aside { position:static; margin-bottom:40px; } h1 { font-size:34px; } .pair { grid-template-columns:1fr; gap:5px; } }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside>
+      <div class="eyebrow">Requirement document</div>
+      <h1>个人 AI 工作台<br>最小骨架</h1>
+      <div class="meta">
+        <span class="chip">0001</span><span class="chip status">DONE</span><span class="chip">2026-09-03</span>
+      </div>
+      <nav aria-label="章节导航">
+        <button class="active" data-index="0"><span class="nav-number">01</span><span>需求重定义</span></button>
+        <button data-index="1"><span class="nav-number">02</span><span>用户故事</span></button>
+        <button data-index="2"><span class="nav-number">03</span><span>不做什么</span></button>
+        <button data-index="3"><span class="nav-number">04</span><span>验证方案</span></button>
+      </nav>
+    </aside>
+    <main>
+      <section class="active" id="需求重定义">
+        <div class="section-count">SEC 01 / 04</div>
+        <h2>需求重定义</h2>
+        <p class="subtitle">不复制别人的工作台，先把自己的现有资产连成最小闭环。</p>
+        <dl>
+          <div class="pair"><dt>原始诉求</dt><dd>参考 Brayness 中有启发的能力，将当前项目发展为个人 AI 工作台。</dd></div>
+          <div class="pair"><dt>最终目标</dt><dd>让能力仓库、项目、个人偏好、知识和任务机制不再彼此孤立；每次工作都能明确工作台是什么、当前阶段、目标项目和下一类能力。</dd></div>
+          <div class="pair"><dt>异议</dt><dd>不应复制 Brayness 的目录和完整运行时。当前系统真正缺少的是统一入口和清晰路由，首期应先验证最小骨架。</dd></div>
+          <div class="pair"><dt>约束</dt><dd><ul><li>升级当前仓库，不另建平行工作台。</li><li>首期只采用文档，不新增程序、服务、数据库或依赖。</li><li>私人信息不进入共享版本库。</li><li>Skill 管理行为保持不变。</li><li>不夹带工作区其他未提交改动。</li></ul></dd></div>
+          <div class="pair"><dt>确认后的需求</dt><dd>建立最小且可读的控制骨架，统一系统边界、工作阶段、项目入口和个人上下文，让现有组件沿同一条工作路径协作。</dd></div>
+        </dl>
+        <div class="pager"><button disabled>上一节</button><button data-go="1">下一节<br>用户故事</button></div>
+      </section>
+      <section id="用户故事">
+        <div class="section-count">SEC 02 / 04</div>
+        <h2>用户故事</h2>
+        <p class="subtitle">每项能力都对应一个明确的使用价值。</p>
+        <div class="story">As a <b>工作台使用者</b>, I want <b>从统一入口看懂定位、组成和边界</b>, so that <b>不必猜测每个组件的职责</b>。</div>
+        <div class="story">As a <b>任务发起者</b>, I want <b>判断当前阶段及下一步</b>, so that <b>不会跳过必要的确认和验证</b>。</div>
+        <div class="story">As an <b>Agent</b>, I want <b>获得明确且不重叠的阶段路由</b>, so that <b>优先复用现有能力</b>。</div>
+        <div class="story">As a <b>跨项目开发者</b>, I want <b>找到项目位置、用途、知识和工作入口</b>, so that <b>快速进入正确上下文</b>。</div>
+        <div class="story">As a <b>个人用户</b>, I want <b>在本地保存稳定偏好和私人资料</b>, so that <b>Agent 理解我而共享仓库不泄露隐私</b>。</div>
+        <div class="story">As a <b>Skill 维护者</b>, I want <b>保留能力控制面的现有规则</b>, so that <b>工作台升级不破坏 Skill 供应链</b>。</div>
+        <div class="pager"><button data-go="0">上一节<br>需求重定义</button><button data-go="2">下一节<br>不做什么</button></div>
+      </section>
+      <section id="不做什么">
+        <div class="section-count">SEC 03 / 04</div>
+        <h2>不做什么</h2>
+        <p class="subtitle">首期只建立骨架，不把未来可能性提前做成负担。</p>
+        <div class="scope-item">不复制 Brayness 的目录、命名、脚本或完整 Harness。</div>
+        <div class="scope-item">不迁移现有项目，也不改变各项目的 Git 边界。</div>
+        <div class="scope-item">不统一 Pi 会话、模型配置、凭证及运行状态。</div>
+        <div class="scope-item">不开发 Web UI、任务看板后端、数据库或项目扫描服务。</div>
+        <div class="scope-item">不新增阶段 Skill，只组织和路由已有能力。</div>
+        <div class="scope-item">不重构安装器、登记格式、验证门禁或第三方依赖管理。</div>
+        <div class="scope-item">不自动批准完整开发流程或高风险操作。</div>
+        <div class="scope-item">不处理当前工作区已有的其他未提交内容。</div>
+        <div class="pager"><button data-go="1">上一节<br>用户故事</button><button data-go="3">下一节<br>验证方案</button></div>
+      </section>
+      <section id="验证方案">
+        <div class="section-count">SEC 04 / 04</div>
+        <h2>验证方案</h2>
+        <p class="subtitle">只接受可以从外部观察和复核的结果。</p>
+        <table>
+          <thead><tr><th>维度</th><th>可观察的验收结果</th></tr></thead>
+          <tbody>
+            <tr><td>统一入口</td><td>两次跳转内找到定位、组成、路由、项目索引和个人上下文说明。</td></tr>
+            <tr><td>阶段路由</td><td>六类典型请求均得到唯一当前阶段和明确下一步。</td></tr>
+            <tr><td>项目索引</td><td>可找到项目路径、用途、知识入口和常用入口，并以项目真实文件为准。</td></tr>
+            <tr><td>个人上下文</td><td>本地 Agent 可用，私人信息不出现在 Git 待提交内容中。</td></tr>
+            <tr><td>兼容性</td><td>Skill 登记、安装、验证门禁和按需加载行为不变，原有检查通过。</td></tr>
+            <tr><td>可读性</td><td>核心说明只有一个入口，详细能力继续按需读取。</td></tr>
+            <tr><td>工作区保护</td><td>验收差异不包含本需求范围外的既有修改。</td></tr>
+          </tbody>
+        </table>
+        <div class="pager"><button data-go="2">上一节<br>不做什么</button><button disabled>下一节</button></div>
+      </section>
+    </main>
+  </div>
+  <script>
+    const sections = [...document.querySelectorAll('main section')]
+    const nav = [...document.querySelectorAll('nav button')]
+    function show(index) {
+      sections.forEach((section, i) => section.classList.toggle('active', i === index))
+      nav.forEach((button, i) => button.classList.toggle('active', i === index))
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+    nav.forEach(button => button.addEventListener('click', () => show(Number(button.dataset.index))))
+    document.querySelectorAll('[data-go]').forEach(button => button.addEventListener('click', () => show(Number(button.dataset.go))))
+    document.addEventListener('keydown', event => {
+      const current = sections.findIndex(section => section.classList.contains('active'))
+      if (event.key === 'ArrowDown' && current < sections.length - 1) show(current + 1)
+      if (event.key === 'ArrowUp' && current > 0) show(current - 1)
+    })
+  </script>
+</body>
+</html>

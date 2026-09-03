@@ -1,12 +1,16 @@
 # AICodingBank
 
-AI Coding 兵工厂：统一管理**自研 skill、第三方 skill 登记、prompt 模板包**，一键同步到任意机器的 agent 加载位置。
+个人 AI 工作台的控制入口，也是 AI Coding 兵工厂：统一连接个人上下文、项目入口、任务阶段与长期知识，并管理**自研 skill、第三方 skill 登记、prompt 模板包**。
 
-与知识库（weilan-knowledge-wiki）的分工：**这里管"能不能装上、能不能跑"，wiki 管"是什么、好不好用"**。skill 文件永不进 wiki；wiki 只为值得长期使用的 skill 建 entity 页记录使用经验。
+开始工作先读 [WORKBENCH.md](WORKBENCH.md)；本机存在 `WORKBENCH.local.md` 时，再从其中的个人偏好和项目索引进入目标项目。
+
+AICodingBank 在工作台中承担能力控制面职责。与知识库（weilan-knowledge-wiki）的分工：**这里管“能不能装上、能不能跑”，wiki 管“是什么、好不好用”**。skill 文件永不进 wiki；wiki 只为值得长期使用的 skill 建 entity 页记录使用经验。
 
 ## 目录结构
 
 ```
+├── WORKBENCH.md         # 工作台总地图、阶段路由与组件职责
+├── WORKBENCH.local.example.md  # 本机个人上下文与项目索引模板
 ├── skills/              # 自研 skill 本体与生成式 Skill Pack（git 跟踪，你是上游）
 ├── skills.yaml          # 总登记表：加载位置 + 自研清单 + lock 指针
 ├── skills-lock.json     # 第三方 skill 登记（只登记上游地址，不复制文件）

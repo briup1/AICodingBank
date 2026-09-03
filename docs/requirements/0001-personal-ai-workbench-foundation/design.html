@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>方案设计：个人 AI 工作台最小骨架</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--paper:#f7f6f3;--surface:#fff;--text:#2f3437;--muted:#787774;--faint:#a8a49c;--line:#eae7e0;--accent:#9f2f2d;--accent-soft:#fdebec;--ok:#346538;--ok-soft:#edf3ec;--warn:#956400;--warn-soft:#fbf3db;--code:#26221e;--code-text:#ede8e0}
+    *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--text);font:15px/1.7 'Plus Jakarta Sans','PingFang SC','Microsoft YaHei',sans-serif}.layout{display:grid;grid-template-columns:290px minmax(0,860px);gap:56px;max-width:1260px;margin:auto;padding:48px 32px}aside{position:sticky;top:32px;align-self:start}.eyebrow,.count,.meta,.nav-number,th,.badge{font-family:'JetBrains Mono',ui-monospace,monospace}.eyebrow{color:var(--accent);font-size:11px;font-weight:600;letter-spacing:.15em;text-transform:uppercase}h1,h2,h3{font-family:'Instrument Serif','Songti SC','SimSun',serif;font-weight:400;letter-spacing:-.02em}h1{margin:14px 0 20px;font-size:38px;line-height:1.1}h2{margin:8px 0 6px;font-size:34px;line-height:1.2}h3{margin:28px 0 10px;font-size:23px}.meta{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:32px}.chip,.badge{padding:3px 9px;border-radius:999px;font-size:10px;letter-spacing:.04em}.chip{background:var(--surface);border:1px solid var(--line);color:var(--muted)}.chip.status{color:var(--warn);background:var(--warn-soft);border-color:transparent}.badge.ok{color:var(--ok);background:var(--ok-soft)}nav{border-top:1px solid var(--line)}nav button{width:100%;display:grid;grid-template-columns:34px 1fr;gap:8px;padding:12px;border:0;border-bottom:1px solid var(--line);background:transparent;color:var(--muted);text-align:left;cursor:pointer;font:inherit}nav button:hover{background:#fbfaf7}nav button.active{background:var(--accent-soft);color:var(--text);box-shadow:inset 2px 0 var(--accent)}.nav-number{color:var(--faint);font-size:11px}main{min-width:0}section{display:none;animation:fade-up 500ms cubic-bezier(.16,1,.3,1)}section.active{display:block}@keyframes fade-up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}.count{color:var(--muted);font-size:11px;letter-spacing:.09em}.count:before{content:'';display:inline-block;width:7px;height:7px;margin-right:9px;border-radius:50%;background:var(--accent)}.subtitle{margin:0 0 28px;color:var(--muted)}table{width:100%;border-collapse:collapse;background:var(--surface);font-size:14px}th,td{padding:12px 13px;border:1px solid var(--line);text-align:left;vertical-align:top}th{background:#fbfaf7;color:var(--muted);font-size:10px;letter-spacing:.07em;text-transform:uppercase}.compare{display:grid;grid-template-columns:1fr 1fr;gap:14px}.card{padding:18px;background:var(--surface);border:1px solid var(--line);border-radius:7px}.card.after,.card.recommended{border-color:var(--accent);background:var(--accent-soft)}.label{font:600 10px 'JetBrains Mono',monospace;letter-spacing:.12em;color:var(--muted)}pre{overflow:auto;margin:12px 0;padding:18px;border-radius:6px;background:var(--code);color:var(--code-text);font:12px/1.7 'JetBrains Mono',monospace}details{margin:14px 0;background:var(--surface);border:1px solid var(--line);border-radius:7px}summary{padding:13px 16px;cursor:pointer;font-weight:600}details>div{padding:0 16px 16px}.rules{padding-left:20px}.rules li{margin-bottom:7px}.pager{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:34px;padding-top:18px;border-top:1px solid var(--line)}.pager button{min-height:58px;padding:10px 14px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--text);text-align:left;cursor:pointer;font:inherit}.pager button:last-child{text-align:right}.pager button:disabled{opacity:.35;cursor:default}.decision{margin:20px 0;padding:17px;border-left:2px solid var(--accent);background:var(--surface)}code{font-family:'JetBrains Mono',monospace;font-size:.9em}@media(max-width:860px){.layout{display:block;padding:28px 20px}aside{position:static;margin-bottom:40px}.compare{grid-template-columns:1fr}h1{font-size:34px}}
+  </style>
+</head>
+<body>
+<div class="layout">
+  <aside>
+    <div class="eyebrow">Design document</div>
+    <h1>个人 AI 工作台<br>最小骨架</h1>
+    <div class="meta"><span class="chip">0001</span><span class="chip status">APPROVED · A</span><span class="chip">2026-09-03</span></div>
+    <nav aria-label="章节导航">
+      <button class="active" data-index="0"><span class="nav-number">01</span><span>需求映射</span></button>
+      <button data-index="1"><span class="nav-number">02</span><span>前后对比</span></button>
+      <button data-index="2"><span class="nav-number">03</span><span>接口与契约</span></button>
+      <button data-index="3"><span class="nav-number">04</span><span>复用分析</span></button>
+      <button data-index="4"><span class="nav-number">05</span><span>方案选择</span></button>
+      <button data-index="5"><span class="nav-number">06</span><span>审查结论</span></button>
+      <button data-index="6"><span class="nav-number">07</span><span>最小验证</span></button>
+    </nav>
+  </aside>
+  <main>
+    <section class="active" id="需求映射">
+      <div class="count">SEC 01 / 07</div><h2>需求↔方案映射</h2><p class="subtitle">每项已批准需求都有唯一、可追溯的落点。</p>
+      <table><thead><tr><th>需求</th><th>方案落点</th><th>覆盖</th></tr></thead><tbody>
+        <tr><td>统一理解工作台</td><td><code>README.md</code> 提供入口；<code>WORKBENCH.md</code> 是定义的唯一事实来源</td><td><span class="badge ok">是</span></td></tr>
+        <tr><td>判断任务阶段</td><td><code>WORKBENCH.md</code> 定义六阶段路由、进入条件和退出证据</td><td><span class="badge ok">是</span></td></tr>
+        <tr><td>Agent 使用唯一路由</td><td><code>AGENTS.md</code>、<code>CLAUDE.md</code> 只保存入口指针</td><td><span class="badge ok">是</span></td></tr>
+        <tr><td>查找项目上下文</td><td><code>WORKBENCH.local.md</code> 保存项目指针，真实项目文件仍是事实来源</td><td><span class="badge ok">是</span></td></tr>
+        <tr><td>保护个人上下文</td><td>Git 忽略真实本地文件；共享仓库只保存无隐私模板</td><td><span class="badge ok">是</span></td></tr>
+        <tr><td>保持 Skill 供应链</td><td>登记、安装、验证和目录生成接口不变</td><td><span class="badge ok">是</span></td></tr>
+      </tbody></table>
+      <div class="pager"><button disabled>上一节</button><button data-go="1">下一节<br>前后对比</button></div>
+    </section>
+    <section id="前后对比">
+      <div class="count">SEC 02 / 07</div><h2>前后对比</h2><p class="subtitle">新增控制骨架，不搬迁任何下层系统。</p>
+      <div class="compare"><div class="card"><div class="label">BEFORE</div><p>分别记忆 Skill 仓库、知识库、Goal、Personal Workbench 和项目的用途；面对多个 Skill 自行判断顺序。</p></div><div class="card after"><div class="label">AFTER</div><p>从统一入口查看总地图，按阶段进入现有能力，并从本地项目指针进入真实项目。</p></div></div>
+      <details><summary>系统链路</summary><div><pre>README ------------------------------+
+                                     |
+AGENTS.md / CLAUDE.md ---------------+--> [NEW] WORKBENCH.md
+                                                |
+                      +-------------------------+--------------------+
+                      |                         |                    |
+              能力控制面                 任务与验证              知识系统
+        skills.yaml / CATALOG       Goal / DAG / Review       Knowledge Base
+                      |
+                      +--> [LOCAL] WORKBENCH.local.md --> 项目真实目录</pre></div></details>
+      <div class="pager"><button data-go="0">上一节<br>需求映射</button><button data-go="2">下一节<br>接口与契约</button></div>
+    </section>
+    <section id="接口与契约">
+      <div class="count">SEC 03 / 07</div><h2>接口与契约设计</h2><p class="subtitle">调用者只需学习一个工作台入口，下层能力保持自治。</p>
+      <h3>文件接口</h3>
+      <table><thead><tr><th>文件</th><th>职责</th><th>不承担</th></tr></thead><tbody>
+        <tr><td><code>README.md</code></td><td>人类入口和工作台链接</td><td>不复制阶段路由</td></tr>
+        <tr><td><code>WORKBENCH.md</code></td><td>边界、系统地图、路由和组件职责</td><td>不保存私人路径，不执行任务</td></tr>
+        <tr><td><code>WORKBENCH.local.example.md</code></td><td>本地上下文字段模板</td><td>不含真实资料</td></tr>
+        <tr><td><code>WORKBENCH.local.md</code></td><td>本机偏好、项目指针和知识入口</td><td>不保存密钥、转录、临时进度</td></tr>
+        <tr><td><code>AGENTS.md</code> / <code>CLAUDE.md</code></td><td>加载工作台和可选本地上下文</td><td>不复制工作台正文</td></tr>
+      </tbody></table>
+      <h3>阶段路由</h3>
+      <pre>理解事实？ --------> Observe / 观察
+确认目标？ --------> Confirm / 确认
+决定做法？ --------> Design / 设计
+产生改动？ --------> Execute / 执行
+证明正确？ --------> Verify / 验证
+保存经验？ --------> Learn / 沉淀</pre>
+      <table><thead><tr><th>阶段</th><th>进入条件</th><th>退出证据</th></tr></thead><tbody>
+        <tr><td>Observe</td><td>只要求理解现状</td><td>基于真实文件、命令或来源的事实</td></tr>
+        <tr><td>Confirm</td><td>目标、边界或验收未确认</td><td>获批准需求或清晰小任务边界</td></tr>
+        <tr><td>Design</td><td>目标稳定，做法未定</td><td>获批准方案或获准最小方法</td></tr>
+        <tr><td>Execute</td><td>方案和修改边界稳定</td><td>实际改动与执行证据</td></tr>
+        <tr><td>Verify</td><td>已有待检查产物</td><td>实际测试、审查和验收证据</td></tr>
+        <tr><td>Learn</td><td>已验证结论可跨会话复用</td><td>写入适当记忆、知识库或项目文档</td></tr>
+      </tbody></table>
+      <div class="decision">阶段不是流水线强制关卡。只读问题可在 Observe 结束；边界明确的操作可直接进入 Execute；任何阶段都不能伪造退出证据。</div>
+      <h3>项目与隐私契约</h3>
+      <ul class="rules"><li>项目索引只保存路径、稳定用途、知识入口和真实文件入口。</li><li>允许保存稳定沟通偏好；禁止保存密钥、会话原文、客户数据和临时任务状态。</li><li>项目实现和命令始终以项目真实文件为准。</li></ul>
+      <div class="pager"><button data-go="1">上一节<br>前后对比</button><button data-go="3">下一节<br>复用分析</button></div>
+    </section>
+    <section id="复用分析">
+      <div class="count">SEC 04 / 07</div><h2>历史资产复用分析</h2><p class="subtitle">复用是默认，从零需要理由。</p>
+      <table><thead><tr><th>现有资产</th><th>复用方式</th><th>证据</th></tr></thead><tbody>
+        <tr><td>能力控制面</td><td>原样保留登记、验证、安装和目录生成</td><td><code>skills.yaml</code>、<code>install.py</code>、<code>CATALOG.md</code></td></tr>
+        <tr><td>人类与 Agent 入口</td><td>扩展 README；AGENTS 和 CLAUDE 只加指针</td><td>三个文件均已存在</td></tr>
+        <tr><td>交付流程</td><td>路由到现有 <code>wl-*</code> Skill</td><td>需求、设计、执行和审查 Skill 已覆盖</td></tr>
+        <tr><td>持续任务</td><td>作为 Execute 阶段执行机制</td><td>Pi Goal 与 <code>goal-coach</code></td></tr>
+        <tr><td>任务可观测性</td><td>继续使用计划、状态、产物和检查点上报</td><td><code>agent-dag-reporting</code></td></tr>
+        <tr><td>长期知识</td><td>保持独立，工作台只保存入口</td><td>知识库 <code>_index.md</code></td></tr>
+        <tr><td>本机覆盖</td><td>延续共享配置加 Git 忽略本地覆盖</td><td><code>skills.local.yaml</code> 既有约定</td></tr>
+      </tbody></table>
+      <div class="pager"><button data-go="2">上一节<br>接口与契约</button><button data-go="4">下一节<br>方案选择</button></div>
+    </section>
+    <section id="方案选择">
+      <div class="count">SEC 05 / 07</div><h2>多方案并列</h2><p class="subtitle">选择影响信息是否保持单一事实来源。</p>
+      <div class="compare">
+        <div class="card recommended"><div class="label">方案 A · 推荐</div><h3>独立控制文档</h3><p>新增 <code>WORKBENCH.md</code> 与本地模板，其他入口只保存短指针。</p><p><b>收益：</b>路由只有一份；常驻上下文短；人和 Agent 使用同一地图。</p><p><b>代价：</b>新增一个顶层文档。</p></div>
+        <div class="card"><div class="label">方案 B</div><h3>入口文件内嵌</h3><p>README、AGENTS 和 CLAUDE 分别保存面向各自读者的路由。</p><p><b>收益：</b>少一个顶层文件。</p><p><b>代价：</b>路由重复三份、容易漂移，并增加常驻上下文。</p></div>
+      </div>
+      <div class="decision"><b>推荐 A：</b>删除该文档会迫使相同复杂度重新散回三个调用点，因此它提供了真实的局部性和复用价值。</div>
+      <div class="pager"><button data-go="3">上一节<br>复用分析</button><button data-go="5">下一节<br>审查结论</button></div>
+    </section>
+    <section id="审查结论">
+      <div class="count">SEC 06 / 07</div><h2>审查结论</h2><p class="subtitle">结论均来自实际文件和命令，不以意图代替证据。</p>
+      <table><thead><tr><th>维度</th><th>状态</th><th>证据</th></tr></thead><tbody>
+        <tr><td>可行性</td><td><span class="badge ok">通过</span></td><td>三个入口均存在；三个候选文件均无命名冲突。</td></tr>
+        <tr><td>路由唯一性</td><td><span class="badge ok">通过</span></td><td>六类典型请求映射到六个唯一阶段。</td></tr>
+        <tr><td>复用性</td><td><span class="badge ok">通过</span></td><td>读取现有 Skill 后确认已覆盖需求、设计、执行与验证。</td></tr>
+        <tr><td>规范性</td><td><span class="badge ok">通过</span></td><td>已读取仓库规则和通用工程规范；无新增依赖或接口变更。</td></tr>
+        <tr><td>兼容性</td><td><span class="badge ok">通过</span></td><td><code>python3 -m unittest tests/test_install.py</code>：8 tests OK。</td></tr>
+        <tr><td>隐私</td><td><span class="badge ok">通过</span></td><td>仓库已有 Git 忽略本地覆盖的成熟约定。</td></tr>
+        <tr><td>工作区保护</td><td><span class="badge ok">通过</span></td><td>设计前状态仅有本需求新增文档。</td></tr>
+      </tbody></table>
+      <div class="pager"><button data-go="4">上一节<br>方案选择</button><button data-go="6">下一节<br>最小验证</button></div>
+    </section>
+    <section id="最小验证">
+      <div class="count">SEC 07 / 07</div><h2>最小验证</h2><p class="subtitle">先证明文档路由足够，再考虑任何自动化。</p>
+      <h3>最悬假设</h3><p>只靠文档入口，能否让六类典型请求稳定落到唯一阶段，而不增加路由程序。</p>
+      <h3>实际输出</h3><pre>six canonical requests -> six unique stages: OK
+了解现状: Observe
+确认需求: Confirm
+设计方案: Design
+开始实现: Execute
+检查结果: Verify
+记录经验: Learn
+
+AGENTS.md: present
+CLAUDE.md: present
+README.md: present
+
+Ran 8 tests in 0.004s
+OK</pre>
+      <div class="decision"><b>结论：可行。</b>一个共享控制文档加三个既有入口即可承载首期阶段判断。实现后使用 Pi 临时只读新会话验收，实际读取共享和本地工作台文件，六类请求全部正确映射。</div>
+      <div class="pager"><button data-go="5">上一节<br>审查结论</button><button disabled>下一节</button></div>
+    </section>
+  </main>
+</div>
+<script>
+  const sections=[...document.querySelectorAll('main section')]
+  const nav=[...document.querySelectorAll('nav button')]
+  function show(index){sections.forEach((section,i)=>section.classList.toggle('active',i===index));nav.forEach((button,i)=>button.classList.toggle('active',i===index));window.scrollTo({top:0,behavior:'smooth'})}
+  nav.forEach(button=>button.addEventListener('click',()=>show(Number(button.dataset.index))))
+  document.querySelectorAll('[data-go]').forEach(button=>button.addEventListener('click',()=>show(Number(button.dataset.go))))
+  document.addEventListener('keydown',event=>{const current=sections.findIndex(section=>section.classList.contains('active'));if(event.key==='ArrowDown'&&current<sections.length-1)show(current+1);if(event.key==='ArrowUp'&&current>0)show(current-1)})
+</script>
+</body>
+</html>
