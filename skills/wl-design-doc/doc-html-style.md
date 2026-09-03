@@ -1,6 +1,6 @@
 # 文档 HTML 生成规范 · S1 编辑出版（暖纸）
 
-wl_req-confirm 和 wl_design-doc 的 HTML 产出统一遵守本文件。生成 HTML 前必读。
+wl-req-confirm 和 wl-design-doc 的 HTML 产出统一遵守本文件。生成 HTML 前必读。
 
 ## 布局：侧边导航式
 
