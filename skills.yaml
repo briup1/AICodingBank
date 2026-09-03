@@ -137,6 +137,15 @@ self:
   - 规划
   - 审查
   verified: '2026-09-01'
+- name: wl-design-reachability-review
+  path: skills/wl-design-reachability-review
+  capability: 从已实现的真实原点沿方案流程、状态和契约逐跳思维实验，证明需求终点是否可达
+  boundary: 只发现设计 Gap、对接断点及不成立假设，不做泛化工程评审、不实现代码或扩大需求
+  tags:
+  - 架构
+  - 规划
+  - 审查
+  verified: ''
 - name: wl-requesting-code-review
   path: skills/wl-requesting-code-review
   capability: 在交付前依据需求、架构、风险与测试证据审查已完成的代码
