@@ -6,6 +6,7 @@
 闸门：只有带 verified 日期且未被本机禁用的 Skill 会被软链。
 本机配置：可在被 Git 忽略的 skills.local.yaml 中通过 disabled 列表停用 Skill。
 """
+import hashlib
 import json
 import os
 import subprocess
@@ -49,7 +50,7 @@ def link(src, targets, name, report):
         os.symlink(src, dst)
 
 
-def unlink_disabled(targets, name, report):
+def unlink_skill(targets, name, report):
     """只移除加载位置中的软链接，绝不自动删除真实目录。"""
     for target in targets:
         dst = os.path.join(target, name)
@@ -57,6 +58,12 @@ def unlink_disabled(targets, name, report):
             os.remove(dst)
         elif os.path.exists(dst):
             report.append(f"!! 无法停用 {name} -> {dst}: 存在真实目录，请手动迁移")
+
+
+def hash_file(path):
+    """计算第三方 Skill 入口文件的 SHA-256。"""
+    with open(path, "rb") as f:
+        return hashlib.file_digest(f, "sha256").hexdigest()
 
 
 def vendor_dir_name(repo, ref=None):
@@ -154,9 +161,9 @@ def main():
     for skill in self_entries:
         entry = dict(skill, origin="自研")
         entries.append(entry)
-        if skill["name"] in disabled:
-            unlink_disabled(targets, skill["name"], report)
-        elif entry.get("verified"):
+        if skill["name"] in disabled or not entry.get("verified"):
+            unlink_skill(targets, skill["name"], report)
+        else:
             link(os.path.join(ROOT, skill["path"]), targets, skill["name"], report)
 
     # 第三方：clone/pull 上游仓库到 vendor/，按 lock 逐个软链
@@ -166,8 +173,8 @@ def main():
         origin = f"第三方·{meta['source']}" + (f"@{ref}" if ref else "")
         entry = dict(meta, name=name, origin=origin)
         entries.append(entry)
-        if name in disabled:
-            unlink_disabled(targets, name, report)
+        if name in disabled or not meta.get("verified"):
+            unlink_skill(targets, name, report)
         if meta.get("sourceType") != "github":
             report.append(f"!! 跳过 {name}: 未知 sourceType {meta.get('sourceType')}")
             continue
@@ -178,16 +185,37 @@ def main():
         vendor_dir = os.path.join(VENDOR, vendor_dir_name(repo, ref))
         if not sync_github_repo(repo, ref, vendor_dir):
             source = f"{repo}@{ref}" if ref else repo
-            report.append(f"!! 同步失败 {source}，跳过其 {len(metas)} 个 skill")
-            continue
+            if not ref or not os.path.isdir(vendor_dir):
+                report.append(f"!! 同步失败 {source}，跳过其 {len(metas)} 个 skill")
+                continue
+            report.append(f"!! 同步失败 {source}，检查固定版本本地缓存")
         for meta in metas:
-            if meta["name"] not in disabled and meta.get("verified"):
-                link(
-                    os.path.join(vendor_dir, os.path.dirname(meta["skillPath"])),
-                    targets,
-                    meta["name"],
-                    report,
+            if meta["name"] in disabled or not meta.get("verified"):
+                continue
+            skill_file = os.path.join(vendor_dir, meta["skillPath"])
+            expected_hash = meta.get("computedHash")
+            if meta.get("ref") and not expected_hash:
+                unlink_skill(targets, meta["name"], report)
+                report.append(f"!! 拒绝安装 {meta['name']}: 固定版本缺少 computedHash")
+                continue
+            if not os.path.isfile(skill_file):
+                unlink_skill(targets, meta["name"], report)
+                report.append(f"!! 拒绝安装 {meta['name']}: Skill 入口不存在 {skill_file}")
+                continue
+            actual_hash = hash_file(skill_file)
+            if meta.get("ref") and actual_hash != expected_hash:
+                unlink_skill(targets, meta["name"], report)
+                report.append(
+                    f"!! 拒绝安装 {meta['name']}: 哈希不匹配 "
+                    f"expected={expected_hash} actual={actual_hash}"
                 )
+                continue
+            link(
+                os.path.dirname(skill_file),
+                targets,
+                meta["name"],
+                report,
+            )
 
     write_catalog(entries, os.path.join(ROOT, "CATALOG.md"))
 

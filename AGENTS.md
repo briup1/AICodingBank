@@ -1,8 +1,12 @@
 # AGENTS.md
 
-本仓库是个人 AI 工作台的控制入口，也是 AI Coding 兵工厂。开始任务先读 [WORKBENCH.md](WORKBENCH.md)；若 `WORKBENCH.local.md` 存在，再读取其中的个人上下文和项目索引。按工作台路由确定唯一当前阶段后，才按需加载 Skill 和进入目标项目。
+本仓库是个人 AI 工作台的控制入口，也是 AI Coding 兵工厂。接到请求后直接判断主意图，无需让用户选择入口：
 
-能力控制面保持原有规则：自研 skill 在 `skills/`，第三方 skill 只登记在 `skills-lock.json`，总入口是 `skills.yaml`，安装靠 `python3 install.py`（幂等，改了登记就重跑）。详细管理与使用规范见 [README.md](README.md)。维护红线：
+- **使用工作台**：用户要了解、规划、开发、调试、测试、审查、部署或沉淀当前工作时，读 [WORKBENCH.md](WORKBENCH.md)；若 `WORKBENCH.local.md` 存在，再读取个人上下文和项目索引，定位目标项目并按阶段选用能力。
+- **拓展工作台**：用户要新增、纠正或长期保留规则、知识、Skill、偏好、项目入口或工作流时，读 [EXTENDING.md](EXTENDING.md)，自动分类并更新唯一事实来源。
+- **两者兼有**：先完成并验证当前工作，再按拓展入口沉淀已经验证的信息。
+
+能力控制面保持原有规则：自研 skill 在 `skills/`，第三方 skill 只登记在 `skills-lock.json`，总入口是 `skills.yaml`，安装靠 `python3 install.py`（幂等，改了登记就重跑）。详细管理规范见 [README.md](README.md)。维护红线：
 
 1. skill 文件只能存在于 `skills/`（自研）或 `vendor/`（第三方，自动管理），不要在其他位置创建副本。
 2. 新增第三方 skill 只改 `skills-lock.json`，禁止把文件拷进仓库；登记时必须当场写 capability / boundary / tags 三行人话。

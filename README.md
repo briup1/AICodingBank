@@ -2,14 +2,27 @@
 
 个人 AI 工作台的控制入口，也是 AI Coding 兵工厂：统一连接个人上下文、项目入口、任务阶段与长期知识，并管理**自研 skill、第三方 skill 登记、prompt 模板包**。
 
-开始工作先读 [WORKBENCH.md](WORKBENCH.md)；本机存在 `WORKBENCH.local.md` 时，再从其中的个人偏好和项目索引进入目标项目。
+## 两种使用意图
+
+用户只需在本目录描述目标，不需要说明该读哪个文件或把信息存到哪里。Agent 从 `AGENTS.md` / `CLAUDE.md` 自动分流：
+
+```text
+用户请求
+  ├─ 使用工作台 -> WORKBENCH.md -> 定位项目、选择阶段和能力、执行验证
+  └─ 拓展工作台 -> EXTENDING.md -> 分类规则/知识/Skill/偏好并更新唯一归宿
+```
+
+- **[WORKBENCH.md](WORKBENCH.md)**：介绍工作台能提供哪些帮助，以及 Agent 如何获取并使用这些帮助。
+- **[EXTENDING.md](EXTENDING.md)**：介绍如何持续增加规则、知识、Skill、偏好、项目入口和工作流。
+- **`WORKBENCH.local.md`**：本机个人上下文和项目索引；存在时由使用流程按需读取。
 
 AICodingBank 在工作台中承担能力控制面职责。与知识库（weilan-knowledge-wiki）的分工：**这里管“能不能装上、能不能跑”，wiki 管“是什么、好不好用”**。skill 文件永不进 wiki；wiki 只为值得长期使用的 skill 建 entity 页记录使用经验。
 
 ## 目录结构
 
 ```
-├── WORKBENCH.md         # 工作台总地图、阶段路由与组件职责
+├── WORKBENCH.md         # 使用入口：能力地图、项目定位与阶段路由
+├── EXTENDING.md         # 拓展入口：规则、知识、Skill 与偏好的归档方法
 ├── WORKBENCH.local.example.md  # 本机个人上下文与项目索引模板
 ├── skills/              # 自研 skill 本体与生成式 Skill Pack（git 跟踪，你是上游）
 ├── skills.yaml          # 总登记表：加载位置 + 自研清单 + lock 指针
@@ -96,7 +109,9 @@ skills/<framework>-pack/
 
 然后 `python3 install.py` 会自动 clone 上游到 `vendor/`。
 
-**verified 闸门**：`verified` 为空的 skill 只登记、只进目录，**不会被软链到加载位置——agent 根本看不到它**。你在实际项目里用过一次确认靠谱，填上日期（如 `"2026-08-23"`），重跑 `install.py`，它才进入 agent 的视野。agent 的可选集合 = 你的信任集合。
+**verified 闸门**：`verified` 为空的 skill 只登记、只进目录，安装器会移除已有软链接，**agent 根本看不到它**。你在实际项目里用过一次确认靠谱，填上日期（如 `"2026-08-23"`），重跑 `install.py`，它才进入 agent 的视野。固定 `ref` 的 Skill 还必须通过 `computedHash` 校验。agent 的可选集合 = 你的信任集合。
+
+个性化第三方 Skill 时不要修改 `vendor/`，而应新增自研策略 Skill 与之组合。升级时先清空 `verified`，更新 `ref` 和哈希，兼容验证通过后再恢复安装。定时检查只报告候选版本，不自动启用。
 
 **tags 用扁平小词表**：写作/图像/图表/编程/调试/测试/架构/规划/研究/运维/协作/教学/翻译/抓取/效率。不搞树状分类——层级会腐烂，标签不会。
 

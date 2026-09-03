@@ -29,7 +29,7 @@ class LocalDisableTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "disabled"):
                 installer.load_disabled(path)
 
-    def test_unlink_disabled_only_removes_symlink(self):
+    def test_unlink_skill_only_removes_symlink(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             target = root / "target"
@@ -42,8 +42,8 @@ class LocalDisableTests(unittest.TestCase):
             real.mkdir()
             report = []
 
-            installer.unlink_disabled([str(target)], "linked", report)
-            installer.unlink_disabled([str(target)], "real", report)
+            installer.unlink_skill([str(target)], "linked", report)
+            installer.unlink_skill([str(target)], "real", report)
 
             self.assertFalse(link.exists())
             self.assertTrue(real.is_dir())
@@ -104,6 +104,145 @@ class LocalDisableTests(unittest.TestCase):
                 self.assertEqual(exit_info.exception.code, 0)
                 self.assertTrue((target / "demo").is_symlink())
                 self.assertEqual((target / "demo").resolve(), skill.resolve())
+
+                config = yaml.safe_load((root / "skills.yaml").read_text(encoding="utf-8"))
+                config["self"][0]["verified"] = ""
+                (root / "skills.yaml").write_text(
+                    yaml.safe_dump(config, allow_unicode=True, sort_keys=False),
+                    encoding="utf-8",
+                )
+                with contextlib.redirect_stdout(io.StringIO()):
+                    with self.assertRaises(SystemExit) as exit_info:
+                        installer.main()
+                self.assertEqual(exit_info.exception.code, 0)
+                self.assertFalse(os.path.lexists(target / "demo"))
+            finally:
+                installer.ROOT, installer.VENDOR = old_root, old_vendor
+
+
+class ThirdPartyIntegrityTests(unittest.TestCase):
+    def test_verified_skill_with_matching_hash_is_installed(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            target = root / "loaded"
+            target.mkdir()
+            vendor = root / "vendor" / installer.vendor_dir_name("owner/repo", "v1")
+            skill = vendor / "skills" / "demo"
+            skill.mkdir(parents=True)
+            skill_file = skill / "SKILL.md"
+            skill_file.write_text("---\nname: demo\n---\n", encoding="utf-8")
+            digest = installer.hash_file(skill_file)
+
+            (root / "skills.yaml").write_text(
+                yaml.safe_dump(
+                    {
+                        "targets": [str(target)],
+                        "self": [],
+                        "third_party": {"lock": "skills-lock.json"},
+                    },
+                    sort_keys=False,
+                ),
+                encoding="utf-8",
+            )
+            (root / "skills-lock.json").write_text(
+                json.dumps(
+                    {
+                        "version": 1,
+                        "skills": {
+                            "demo": {
+                                "source": "owner/repo",
+                                "sourceType": "github",
+                                "ref": "v1",
+                                "skillPath": "skills/demo/SKILL.md",
+                                "computedHash": digest,
+                                "verified": "2026-09-03",
+                            }
+                        },
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            old_root, old_vendor = installer.ROOT, installer.VENDOR
+            installer.ROOT, installer.VENDOR = str(root), str(root / "vendor")
+            try:
+                with mock.patch.object(installer, "sync_github_repo", return_value=True):
+                    with contextlib.redirect_stdout(io.StringIO()):
+                        with self.assertRaises(SystemExit) as exit_info:
+                            installer.main()
+                self.assertEqual(exit_info.exception.code, 0)
+                self.assertEqual((target / "demo").resolve(), skill.resolve())
+
+                lock = json.loads((root / "skills-lock.json").read_text(encoding="utf-8"))
+                lock["skills"]["demo"].pop("ref")
+                lock["skills"]["demo"]["computedHash"] = "0" * 64
+                (root / "skills-lock.json").write_text(json.dumps(lock), encoding="utf-8")
+                (target / "demo").unlink()
+                unpinned_vendor = root / "vendor" / installer.vendor_dir_name("owner/repo")
+                unpinned_skill = unpinned_vendor / "skills" / "demo"
+                unpinned_skill.mkdir(parents=True)
+                (unpinned_skill / "SKILL.md").write_text("floating upstream\n", encoding="utf-8")
+                with mock.patch.object(installer, "sync_github_repo", return_value=True):
+                    with contextlib.redirect_stdout(io.StringIO()):
+                        with self.assertRaises(SystemExit) as exit_info:
+                            installer.main()
+                self.assertEqual(exit_info.exception.code, 0)
+                self.assertEqual((target / "demo").resolve(), unpinned_skill.resolve())
+            finally:
+                installer.ROOT, installer.VENDOR = old_root, old_vendor
+
+    def test_hash_mismatch_removes_existing_link_and_fails(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            target = root / "loaded"
+            target.mkdir()
+            vendor = root / "vendor" / installer.vendor_dir_name("owner/repo", "v1")
+            skill = vendor / "skills" / "demo"
+            skill.mkdir(parents=True)
+            (skill / "SKILL.md").write_text("changed upstream\n", encoding="utf-8")
+            (target / "demo").symlink_to(skill, target_is_directory=True)
+
+            (root / "skills.yaml").write_text(
+                yaml.safe_dump(
+                    {
+                        "targets": [str(target)],
+                        "self": [],
+                        "third_party": {"lock": "skills-lock.json"},
+                    },
+                    sort_keys=False,
+                ),
+                encoding="utf-8",
+            )
+            (root / "skills-lock.json").write_text(
+                json.dumps(
+                    {
+                        "version": 1,
+                        "skills": {
+                            "demo": {
+                                "source": "owner/repo",
+                                "sourceType": "github",
+                                "ref": "v1",
+                                "skillPath": "skills/demo/SKILL.md",
+                                "computedHash": "0" * 64,
+                                "verified": "2026-09-03",
+                            }
+                        },
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            old_root, old_vendor = installer.ROOT, installer.VENDOR
+            installer.ROOT, installer.VENDOR = str(root), str(root / "vendor")
+            try:
+                with mock.patch.object(installer, "sync_github_repo", return_value=False):
+                    with contextlib.redirect_stdout(io.StringIO()) as output:
+                        with self.assertRaises(SystemExit) as exit_info:
+                            installer.main()
+                self.assertEqual(exit_info.exception.code, 1)
+                self.assertFalse(os.path.lexists(target / "demo"))
+                self.assertIn("同步失败", output.getvalue())
+                self.assertIn("哈希不匹配", output.getvalue())
             finally:
                 installer.ROOT, installer.VENDOR = old_root, old_vendor
 

@@ -1,6 +1,6 @@
 # Skill 总目录（install.py 自动生成，勿手改）
 
-共 74 个 · 已验证 57 · 待验证 17
+共 75 个 · 已验证 57 · 待验证 18
 
 想看深度使用经验 → wiki entity 页；想改行为 → SKILL.md；本目录只回答“它能干什么、边界在哪”。
 
@@ -37,6 +37,8 @@
   边界：产出文档；要即时交接用 claude-handoff
 - **herdr**（第三方·herdrdev/herdr@v0.8.2·已验证 2026-09-01）— 在 Herdr 管理的终端会话内检查和控制 workspace、tab、pane、命令与编码 Agent
   边界：仅在用户明确提及 Herdr 且 HERDR_ENV=1 时使用；依赖本机 herdr CLI，不替代通用终端或子 Agent 调度
+- **herdr-workbench**（自研·**待验证（未安装）**）— 在 Herdr 开发任务中自动判断子 Agent 拆分，并以受边界约束的 YOLO 模式启动和验收子 Agent
+  边界：只定义个人编排策略；依赖 HERDR_ENV=1、上游 herdr Skill 与当前 CLI，不允许绕过生产、凭证、发布或破坏性操作授权
 - **setup-slack-channel**（第三方·CopilotKit/CopilotKit·**待验证（未安装）**）— 完成 CopilotKit Channels 的 Slack Provider 侧首次配置、Token、托管 Channel 绑定与连通性验证
   边界：只覆盖首次 Slack Provider 配置，且主要适配 OpenTag 或 channels-sdk 示例约定；Channel 代码定制用 copilotkit-channels
 - **triage**（第三方·mattpocock/skills·已验证 2026-08-23）— issue 和外部 PR 的分诊状态机：分类、验证、追问，产出 agent 可直接执行的简报
@@ -61,6 +63,8 @@
   边界：只做编码前的工程方案审查，不直接实施计划或替代代码审查
 
 ## 开发流程
+- **herdr-workbench**（自研·**待验证（未安装）**）— 在 Herdr 开发任务中自动判断子 Agent 拆分，并以受边界约束的 YOLO 模式启动和验收子 Agent
+  边界：只定义个人编排策略；依赖 HERDR_ENV=1、上游 herdr Skill 与当前 CLI，不允许绕过生产、凭证、发布或破坏性操作授权
 - **wl-brainstorming**（自研·已验证 2026-09-01）— 将模糊的软件想法或行为变更澄清为经确认、可测试的设计
   边界：用于新功能或显著行为变更的需求与设计定稿，不执行已经批准的实现方案
 - **wl-design-doc**（自研·已验证 2026-08-31）— 方案设计——需求批准后产出可批准的《方案设计文档》（映射/契约/复用分析/多方案/附证据审查/最小验证）
@@ -91,6 +95,8 @@
   边界：只服务 Claude Code 的 /goal 命令场景
 - **herdr**（第三方·herdrdev/herdr@v0.8.2·已验证 2026-09-01）— 在 Herdr 管理的终端会话内检查和控制 workspace、tab、pane、命令与编码 Agent
   边界：仅在用户明确提及 Herdr 且 HERDR_ENV=1 时使用；依赖本机 herdr CLI，不替代通用终端或子 Agent 调度
+- **herdr-workbench**（自研·**待验证（未安装）**）— 在 Herdr 开发任务中自动判断子 Agent 拆分，并以受边界约束的 YOLO 模式启动和验收子 Agent
+  边界：只定义个人编排策略；依赖 HERDR_ENV=1、上游 herdr Skill 与当前 CLI，不允许绕过生产、凭证、发布或破坏性操作授权
 
 ## 教学
 - **deepagents-getting-started**（自研·已验证 2026-08-21）— 提供 DeepAgents 0.7.8 的最小闭环、总体架构和核心组件选型规则

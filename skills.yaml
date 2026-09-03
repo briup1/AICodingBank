@@ -19,6 +19,15 @@ self:
   - 协作
   - 效率
   verified: '2026-08-24'
+- name: herdr-workbench
+  path: skills/herdr-workbench
+  capability: 在 Herdr 开发任务中自动判断子 Agent 拆分，并以受边界约束的 YOLO 模式启动和验收子 Agent
+  boundary: 只定义个人编排策略；依赖 HERDR_ENV=1、上游 herdr Skill 与当前 CLI，不允许绕过生产、凭证、发布或破坏性操作授权
+  tags:
+  - 协作
+  - 效率
+  - 开发流程
+  verified: ''
 - name: framework-skill-author
   path: skills/framework-skill-author
   capability: 基于框架官方文档、API、版本记录和源码创建、刷新或审计可追溯的中文 Skill Pack
