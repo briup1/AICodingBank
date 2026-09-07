@@ -182,5 +182,31 @@ self:
   - 测试
   - 开发流程
   verified: '2026-09-01'
+- name: harness-bootstrap-legacy
+  path: skills/harness-pack/skills/harness-bootstrap-legacy
+  capability: 从老项目代码库逆向探查（支持多目标子 Agent 并发），生成 docs/harness/ 规范体系 + 项目根 CLAUDE.md 宪法草案（已有则融合不覆盖），人工双确认后启用
+  boundary: 只读探查且只写 docs/harness/（宪法确认前不动项目根）；不修改业务代码；红线只能来自代码证据或用户提议
+  tags:
+  - 编程
+  - 架构
+  - 开发流程
+  verified: '2026-09-06'
+- name: harness-bootstrap-greenfield
+  path: skills/harness-pack/skills/harness-bootstrap-greenfield
+  capability: 从原始需求出发分层提问确认决策，为新项目正向生成 docs/harness/ 规范体系 + 项目根 CLAUDE.md 宪法草案，人工双确认后启用
+  boundary: 只生成规范体系不生成业务代码；红线必须用户点头；项目已有代码时改走 legacy 入口
+  tags:
+  - 编程
+  - 架构
+  - 规划
+  verified: '2026-09-06'
+- name: harness-sync
+  path: skills/harness-pack/skills/harness-sync
+  capability: 子需求开发后把新约定/术语/协议结构变更以增量补丁反补回 docs/harness/ 与项目根 CLAUDE.md 宪法区，人工确认后应用并记录 changes
+  boundary: 只提增量补丁不重写全文；规则被代码突破时呈现冲突由用户裁决；不修改业务代码
+  tags:
+  - 开发流程
+  - 效率
+  verified: '2026-09-06'
 third_party:
   lock: skills-lock.json
