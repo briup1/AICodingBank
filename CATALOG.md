@@ -63,10 +63,10 @@
   边界：只做编码前的工程方案审查，不直接实施计划或替代代码审查
 
 ## 开发流程
-- **harness-bootstrap-legacy**（自研·已验证 2026-09-06）— 从老项目代码库逆向探查（支持多目标子 Agent 并发），生成 docs/harness/ 规范体系 + 项目根 CLAUDE.md 宪法草案（已有则融合不覆盖），人工双确认后启用
-  边界：只读探查且只写 docs/harness/（宪法确认前不动项目根）；不修改业务代码；红线只能来自代码证据或用户提议
-- **harness-sync**（自研·已验证 2026-09-06）— 子需求开发后把新约定/术语/协议结构变更以增量补丁反补回 docs/harness/ 与项目根 CLAUDE.md 宪法区，人工确认后应用并记录 changes
-  边界：只提增量补丁不重写全文；规则被代码突破时呈现冲突由用户裁决；不修改业务代码
+- **harness-bootstrap-legacy**（自研·已验证 2026-09-06）— 从已有项目全量提取模块与实际接口、归纳分范围默认实践，生成可定位代码、指导实现和查询完整契约的 docs/harness/ 工程手册
+  边界：只读探查且只写 docs/harness/（入口确认前不动项目根）；不修改业务代码；有限契约全量覆盖，已确认规范不得仅由代码频率推定
+- **harness-sync**（自研·已验证 2026-09-06）— 在模块、默认实践、接口、状态或规则变化后同步权威来源及 Harness 派生视图，并重跑契约计数和任务推演
+  边界：只提增量文档补丁；不修改业务代码；规则冲突由用户裁决，接口变化不得只更新索引
 - **herdr-workbench**（自研·**待验证（未安装）**）— 在 Herdr 开发任务中自动判断子 Agent 拆分，并以受边界约束的 YOLO 模式启动和验收子 Agent
   边界：只定义个人编排策略；依赖 HERDR_ENV=1、上游 herdr Skill 与当前 CLI，不允许绕过生产、凭证、发布或破坏性操作授权
 - **wl-brainstorming**（自研·已验证 2026-09-01）— 将模糊的软件想法或行为变更澄清为经确认、可测试的设计
@@ -97,8 +97,8 @@
   边界：不处理一般 backend 权限或单 Agent 入门
 - **goal-coach**（自研·已验证 2026-08-23）— 判断任务是否适合 /goal，并生成完整中文 /goal prompt（完成标准/边界/停止规则）
   边界：只服务 Claude Code 的 /goal 命令场景
-- **harness-sync**（自研·已验证 2026-09-06）— 子需求开发后把新约定/术语/协议结构变更以增量补丁反补回 docs/harness/ 与项目根 CLAUDE.md 宪法区，人工确认后应用并记录 changes
-  边界：只提增量补丁不重写全文；规则被代码突破时呈现冲突由用户裁决；不修改业务代码
+- **harness-sync**（自研·已验证 2026-09-06）— 在模块、默认实践、接口、状态或规则变化后同步权威来源及 Harness 派生视图，并重跑契约计数和任务推演
+  边界：只提增量文档补丁；不修改业务代码；规则冲突由用户裁决，接口变化不得只更新索引
 - **herdr**（第三方·herdrdev/herdr@v0.8.2·已验证 2026-09-01）— 在 Herdr 管理的终端会话内检查和控制 workspace、tab、pane、命令与编码 Agent
   边界：仅在用户明确提及 Herdr 且 HERDR_ENV=1 时使用；依赖本机 herdr CLI，不替代通用终端或子 Agent 调度
 - **herdr-workbench**（自研·**待验证（未安装）**）— 在 Herdr 开发任务中自动判断子 Agent 拆分，并以受边界约束的 YOLO 模式启动和验收子 Agent
@@ -133,10 +133,10 @@
   边界：跟随 FastAPI master 分支的最新模式；用于较旧固定版本时需先核对 API 兼容性，不替代具体业务架构设计
 - **framework-skill-author**（自研·已验证 2026-08-21）— 基于框架官方文档、API、版本记录和源码创建、刷新或审计可追溯的中文 Skill Pack
   边界：不用于普通文档摘要，也不接受非官方资料作为核心依据
-- **harness-bootstrap-greenfield**（自研·已验证 2026-09-06）— 从原始需求出发分层提问确认决策，为新项目正向生成 docs/harness/ 规范体系 + 项目根 CLAUDE.md 宪法草案，人工双确认后启用
-  边界：只生成规范体系不生成业务代码；红线必须用户点头；项目已有代码时改走 legacy 入口
-- **harness-bootstrap-legacy**（自研·已验证 2026-09-06）— 从老项目代码库逆向探查（支持多目标子 Agent 并发），生成 docs/harness/ 规范体系 + 项目根 CLAUDE.md 宪法草案（已有则融合不覆盖），人工双确认后启用
-  边界：只读探查且只写 docs/harness/（宪法确认前不动项目根）；不修改业务代码；红线只能来自代码证据或用户提议
+- **harness-bootstrap-greenfield**（自研·已验证 2026-09-06）— 从原始需求分层确认模块协作、编码方式、接口和状态契约，生成可直接指导实现的 docs/harness/ 工程手册
+  边界：只生成工程手册不生成业务代码；目标设计须由用户确认且标 proposed；项目已有代码时改走 legacy 入口
+- **harness-bootstrap-legacy**（自研·已验证 2026-09-06）— 从已有项目全量提取模块与实际接口、归纳分范围默认实践，生成可定位代码、指导实现和查询完整契约的 docs/harness/ 工程手册
+  边界：只读探查且只写 docs/harness/（入口确认前不动项目根）；不修改业务代码；有限契约全量覆盖，已确认规范不得仅由代码频率推定
 - **improve-codebase-architecture**（第三方·mattpocock/skills·已验证 2026-08-23）— 扫描代码库找架构深化机会，生成可视化 HTML 报告并逐项追问
   边界：偏 TS/JS 项目语境
 - **runtime**（第三方·CopilotKit/CopilotKit·**待验证（未安装）**）— 使用 @copilotkit/runtime 搭建服务端 CopilotRuntime、AgentRunner、工具、Intelligence 与语音转录
@@ -211,10 +211,10 @@
   边界：不用于普通文档摘要，也不接受非官方资料作为核心依据
 - **git-guardrails-claude-code**（第三方·mattpocock/skills·已验证 2026-08-23）— 给 Claude Code 配 git 安全 hook，拦截 push/reset --hard/clean 等危险命令
   边界：只防 git 危险操作，不管其他命令
-- **harness-bootstrap-greenfield**（自研·已验证 2026-09-06）— 从原始需求出发分层提问确认决策，为新项目正向生成 docs/harness/ 规范体系 + 项目根 CLAUDE.md 宪法草案，人工双确认后启用
-  边界：只生成规范体系不生成业务代码；红线必须用户点头；项目已有代码时改走 legacy 入口
-- **harness-bootstrap-legacy**（自研·已验证 2026-09-06）— 从老项目代码库逆向探查（支持多目标子 Agent 并发），生成 docs/harness/ 规范体系 + 项目根 CLAUDE.md 宪法草案（已有则融合不覆盖），人工双确认后启用
-  边界：只读探查且只写 docs/harness/（宪法确认前不动项目根）；不修改业务代码；红线只能来自代码证据或用户提议
+- **harness-bootstrap-greenfield**（自研·已验证 2026-09-06）— 从原始需求分层确认模块协作、编码方式、接口和状态契约，生成可直接指导实现的 docs/harness/ 工程手册
+  边界：只生成工程手册不生成业务代码；目标设计须由用户确认且标 proposed；项目已有代码时改走 legacy 入口
+- **harness-bootstrap-legacy**（自研·已验证 2026-09-06）— 从已有项目全量提取模块与实际接口、归纳分范围默认实践，生成可定位代码、指导实现和查询完整契约的 docs/harness/ 工程手册
+  边界：只读探查且只写 docs/harness/（入口确认前不动项目根）；不修改业务代码；有限契约全量覆盖，已确认规范不得仅由代码频率推定
 - **high-end-visual-design**（第三方·Leonxlnx/taste-skill·已验证 2026-08-14）— 为现有或新建网站应用高端设计规范，统一字体、间距、阴影、卡片和动效质感
   边界：只提供视觉设计约束与实现指导，不负责业务逻辑、品牌资产授权或可用性研究
 - **implement**（第三方·mattpocock/skills·已验证 2026-08-23）— 按 spec 或 ticket 实现具体工作
@@ -259,8 +259,8 @@
   边界：grill-me 的带文档产出版
 - **grilling**（第三方·mattpocock/skills·已验证 2026-08-23）— 压力测试你的想法、决策或计划
   边界：偏触发词路由，与 grill-me 同族
-- **harness-bootstrap-greenfield**（自研·已验证 2026-09-06）— 从原始需求出发分层提问确认决策，为新项目正向生成 docs/harness/ 规范体系 + 项目根 CLAUDE.md 宪法草案，人工双确认后启用
-  边界：只生成规范体系不生成业务代码；红线必须用户点头；项目已有代码时改走 legacy 入口
+- **harness-bootstrap-greenfield**（自研·已验证 2026-09-06）— 从原始需求分层确认模块协作、编码方式、接口和状态契约，生成可直接指导实现的 docs/harness/ 工程手册
+  边界：只生成工程手册不生成业务代码；目标设计须由用户确认且标 proposed；项目已有代码时改走 legacy 入口
 - **loop-me**（第三方·mattpocock/skills·已验证 2026-08-23）— 在本工作区内追问你想构建的 workflow 的 spec
   边界：限当前 workspace
 - **to-spec**（第三方·mattpocock/skills·已验证 2026-08-23）— 把当前对话直接综合成 spec 并发布到 issue tracker

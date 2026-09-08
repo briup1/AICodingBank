@@ -1,33 +1,38 @@
-# 技术栈变体参考（技能步骤适配用）
+# 技术栈探查提示（不是规范答案）
 
-模板技能（尤其 `skills/编码实现/SKILL.md`）中的分层名与步骤顺序是 **Java/Spring 视角** 的默认值。生成草案时**按目标技术栈选用本节对应变体替换**，方法论顺序不变（模型 → 数据访问 → 业务 → 消息 → 入口），名词跟着项目实际分层走。项目栈不在下表时，按同样思路自拟并标 ❓。
+本文件只帮助寻找不同技术栈的证据，不提供默认分层、响应结构、事务策略或实现顺序。生成草案时必须回到目标项目的目录、import、运行入口、配置、测试和用户决策；未观察到的内容不写。
 
-## Java / Spring Boot（模板默认，无需替换）
+## 通用问题
 
-- 分层：`Model(entity/dto/vo) → Repository → Service(+impl) → MQ(producer/consumer) → Controller`
-- 依赖注入：构造器注入，禁字段注入
-- 事务：`@Transactional` 显式 `rollbackFor`
-- 响应：统一 `{code, message, data}`
+1. 真实入口、模块和包边界在哪里？
+2. import 与运行时调用方向是什么？是否有自动约束测试？
+3. 输入校验、错误映射、数据访问和事务实际由谁负责？
+4. 有哪些工厂、注册表、Hook、插件或框架原生扩展点？
+5. 测试、格式化、构建和 CI 的真实命令是什么？
+6. 哪些模块不符合主流惯例或彼此不同？保留反证和作用范围。
 
-## Python / FastAPI（不用 Django）
+## Java / JVM 项目可查信号
 
-- 分层：`schemas(Pydantic) → repository → service → MQ(如适用) → router(APIRouter)`
-- 依赖注入：FastAPI `Depends`，禁全局单例里藏请求状态
-- 事务：service 层显式管理（session commit/rollback 边界清晰），禁路由函数里直接写库
-- 响应：统一响应模型（Pydantic BaseModel 包裹 code/message/data）
-- 异步：路由/服务可 async，但**阻塞 IO 必须丢线程池**（`run_in_threadpool`），禁在 event loop 里直接调阻塞客户端
-- 类型：全量类型标注，禁裸 `dict` 传业务数据（用 Pydantic 模型）
+- 构建文件、模块声明、包依赖与架构测试。
+- Web、事务、持久化和依赖注入注解的实际使用位置。
+- 响应与异常结构以控制器、过滤器和测试为证，不默认 Spring 四层或统一包装。
 
-## TypeScript / Next.js 全栈（或 Node 后端）
+## Python 项目可查信号
 
-- 前端分层：`types → api 封装层 → composables/stores → components/views`
-- 后端分层（如项目含 Node 后端）：`types(zod) → repository → service → router(路由处理器)`
-- 类型：全量严格模式，未知结构用 `unknown` + 收窄，禁 `any` 逃逸
-- 数据校验：边界处用 zod（或等价库）校验外部输入，禁信任前端传来的结构
-- 响应：统一 `{code, message, data}`，前端 api 层统一解包与错误处理
+- `pyproject.toml`、包目录、应用入口、路由注册和依赖注入方式。
+- 同步/异步边界、数据模型、持久化与迁移的实际实现。
+- 不因使用 FastAPI 就假设 repository/service 层、Pydantic 响应包装或全量 async。
 
-## 适配规则
+## TypeScript / JavaScript 项目可查信号
 
-1. bootstrap 生成草案时，只把**目标栈对应的一套**写入项目技能文件，其余栈内容不复制进项目（保持生成物精简）。
-2. 步骤名替换后通读一遍该技能，删除栈不适用的小节（如纯前端项目删除后端步骤、无 MQ 的项目删 MQ 步）。
-3. 混合栈（如 Next.js + Python 后端）：前后端分别适配，技能里前后段落各取对应变体。
+- workspace、构建脚本、tsconfig、路由与组件入口。
+- API 客户端、状态管理、校验库和服务端代码是否真实存在。
+- 不因使用 TypeScript 就假设固定目录、统一响应包、zod、store 或全栈分层。
+
+## 其他项目
+
+Go、Rust、Ruby、Django、Rails、CLI、库、事件驱动、GraphQL、移动端或基础设施项目使用同一组通用问题。技术栈不在示例中不代表需要“自拟标准”；证据不足时写“待确认”或删除不适用章节。
+
+## 输出要求
+
+每个结论记录：已确认规范/默认实践/事实/提议/债务、证据、反证、作用范围、置信度和验证方式。技术栈名称只能帮助定位证据，不能自动产生规则。

@@ -1,49 +1,35 @@
-# {项目名} AI 编码约束
+# {项目名} Agent 工作入口
 
-> 本文件是项目的"宪法"，AI 参与编码前必须首先读取并严格遵守。
-> 位置：**项目根目录 `CLAUDE.md`**（草案期暂存于 docs/harness/，启用时融合到项目根，已有根 CLAUDE.md 则融合不覆盖）。
 > 状态：草案（待人工确认）
-> 生成：harness-bootstrap | 维护：harness-sync（变更见 docs/harness/changes/）
+> 本文件只作为目标宿主的最薄入口；项目事实和规则优先引用已有唯一来源。
 
-## 技术栈
+<!-- harness-pack:begin -->
+## 项目索引
 
-| 层级 | 技术 |
-|------|------|
-| 前端 | {待填} |
-| 后端 | {待填} |
-| 存储/中间件 | {待填} |
+| 内容 | 唯一事实源 | 适用范围 | 验证方式 |
+|------|------------|----------|----------|
+| 项目概述与技术栈 | {已有 AGENTS/README/配置路径} | {范围} | {配置/构建证据} |
+| 架构与依赖约束 | `docs/harness/rules/工程结构.md` 或已有架构文档 | {范围} | {测试/lint/人工} |
+| 编码规范 | `docs/harness/rules/编码规范.md` 或已有配置 | {范围} | {formatter/lint/test} |
+| 开发流程 | `docs/harness/rules/开发流程规范.md` | {范围} | 人工/已验证自动化 |
 
-## 红线（不可违反）
+## 已确认强约束
 
-> 标注：✅ 项目已遵守 | ⚠️ 现状违反（技术债）| ❓ 新提议。确认后标注保留。
+| 规则 ID | 要求 | 作用范围 | 来源 | 验证方式 |
+|---------|------|----------|------|----------|
+| {RULE-ID} | {仅填写已确认规范} | {目录/模块} | {项目指令/用户决策} | {测试/CI/人工} |
 
-1. {示例：金额字段禁止使用浮点数，使用整数最小单位} 🔴 — {理由}（来源：❓）
-2. {示例：缓存 Key 必须统一前缀 `{前缀}:`} 🔴 — {理由}（来源：❓）
-3. {示例：消息队列消费者必须幂等} 🔴 — {理由}（来源：❓）
-4. {示例：异常必须封装为业务异常体系，禁止底层异常透出到 API 层} 🔴 — {理由}（来源：❓）
-5. {示例：禁止字段注入，必须使用构造器注入} 🔴 — {理由}（来源：❓）
-6. {示例：事务必须显式声明回滚范围} 🔴 — {理由}（来源：❓）
-7. {示例：前端必须使用项目选定语法} 🔴 — {理由}（来源：❓）
-8. {示例：API 响应必须统一结构 `{code, message, data}`} 🔴 — {理由}（来源：❓）
+> 事实、技术债和提议不混入强约束；分别在其唯一事实源记录。提议不参与门禁，存量债务只阻断新增或扩大。
 
-## 文件索引
+## 按需上下文
 
-| 文件 | 用途 |
-|------|------|
-| `CLAUDE.md`（本文件，**项目根**） | 宪法：技术栈、红线、文件索引 |
-| `docs/harness/agents/owner.md` | 应用 Owner Agent 定义 |
-| `docs/harness/rules/工程结构.md` | 项目目录结构与分层规范 |
-| `docs/harness/rules/编码规范.md` | 编码标准与约定 |
-| `docs/harness/rules/开发流程规范.md` | 开发流水线与流程 |
-| `docs/harness/skills/需求分析/SKILL.md` | 需求分析技能 |
-| `docs/harness/skills/编码实现/SKILL.md` | 编码实现技能 |
-| `docs/harness/skills/代码审查/SKILL.md` | 代码审查技能 |
-| `docs/harness/skills/专家评审/SKILL.md` | 专家评审技能 |
-| `docs/harness/skills/单元测试编写/SKILL.md` | 单元测试编写技能 |
-| `docs/harness/skills/单元测试CI/SKILL.md` | 单元测试 CI 质量门禁技能 |
-| `docs/harness/skills/部署验证/SKILL.md` | 部署验证技能 |
-| `docs/harness/wiki/业务模型.md` | 业务模型与领域划分 |
-| `docs/harness/wiki/接口协议.md` | API 接口协议定义 |
-| `docs/harness/wiki/数据模型.md` | 数据库 Schema 与缓存结构 |
-| `docs/harness/wiki/领域术语.md` | 领域术语表（统一语言） |
-| `docs/harness/changes/` | 变更追踪 |
+| 任务类型 | 读取入口 |
+|----------|----------|
+| 需求与影响分析 | `docs/harness/skills/需求分析/SKILL.md` |
+| 编码实现 | `docs/harness/skills/编码实现/SKILL.md` |
+| 代码/高风险评审 | `docs/harness/skills/代码审查/SKILL.md`、`专家评审/SKILL.md` |
+| 测试与验证 | 相关测试 playbook 和项目真实命令 |
+| Harness 同步 | `harness-sync`（仅在有规范增量时） |
+
+> `docs/harness/skills/` 默认是人工 playbook；只有记录了真实 Router、Hook 或 CI/CD 证据的步骤才属于自动化。
+<!-- harness-pack:end -->

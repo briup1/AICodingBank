@@ -184,8 +184,8 @@ self:
   verified: '2026-09-01'
 - name: harness-bootstrap-legacy
   path: skills/harness-pack/skills/harness-bootstrap-legacy
-  capability: 从老项目代码库逆向探查（支持多目标子 Agent 并发），生成 docs/harness/ 规范体系 + 项目根 CLAUDE.md 宪法草案（已有则融合不覆盖），人工双确认后启用
-  boundary: 只读探查且只写 docs/harness/（宪法确认前不动项目根）；不修改业务代码；红线只能来自代码证据或用户提议
+  capability: 从已有项目全量提取模块与实际接口、归纳分范围默认实践，生成可定位代码、指导实现和查询完整契约的 docs/harness/ 工程手册
+  boundary: 只读探查且只写 docs/harness/（入口确认前不动项目根）；不修改业务代码；有限契约全量覆盖，已确认规范不得仅由代码频率推定
   tags:
   - 编程
   - 架构
@@ -193,8 +193,8 @@ self:
   verified: '2026-09-06'
 - name: harness-bootstrap-greenfield
   path: skills/harness-pack/skills/harness-bootstrap-greenfield
-  capability: 从原始需求出发分层提问确认决策，为新项目正向生成 docs/harness/ 规范体系 + 项目根 CLAUDE.md 宪法草案，人工双确认后启用
-  boundary: 只生成规范体系不生成业务代码；红线必须用户点头；项目已有代码时改走 legacy 入口
+  capability: 从原始需求分层确认模块协作、编码方式、接口和状态契约，生成可直接指导实现的 docs/harness/ 工程手册
+  boundary: 只生成工程手册不生成业务代码；目标设计须由用户确认且标 proposed；项目已有代码时改走 legacy 入口
   tags:
   - 编程
   - 架构
@@ -202,8 +202,8 @@ self:
   verified: '2026-09-06'
 - name: harness-sync
   path: skills/harness-pack/skills/harness-sync
-  capability: 子需求开发后把新约定/术语/协议结构变更以增量补丁反补回 docs/harness/ 与项目根 CLAUDE.md 宪法区，人工确认后应用并记录 changes
-  boundary: 只提增量补丁不重写全文；规则被代码突破时呈现冲突由用户裁决；不修改业务代码
+  capability: 在模块、默认实践、接口、状态或规则变化后同步权威来源及 Harness 派生视图，并重跑契约计数和任务推演
+  boundary: 只提增量文档补丁；不修改业务代码；规则冲突由用户裁决，接口变化不得只更新索引
   tags:
   - 开发流程
   - 效率
