@@ -18,6 +18,8 @@ description: 在项目已有 docs/harness/ 且本次变更产生稳定事实、�
 
 没有规范增量时输出“无需同步”并结束，不创建空 changes 记录。项目尚无 `docs/harness/` 时提示使用 bootstrap。
 
+**续跑护栏**：`<项目根>/docs/harness/STATE.md` 存在，或最新 changes 记录仍为草案状态时，停止并提示用户先完成草案启用或作废——不在未启用草案上直接增量同步，否则基线与待办会纠缠不清。
+
 ## Step 1：确定可复现基准
 
 1. 只读检查 Git 状态，记录当前分支、`base_ref`、`head_ref` 和未提交文件清单。
@@ -67,7 +69,7 @@ description: 在项目已有 docs/harness/ 且本次变更产生稳定事实、�
 ## Step 5：应用、验证与记录
 
 1. 保存所有待改文件的前置内容哈希；应用批准的文档补丁和 changes 记录。
-2. 校验引用、规则 ID 唯一性、状态、模板残留、托管边界和 Markdown 格式；再按 content-standard 重跑受影响任务推演与有限契约计数。
+2. 校验引用、规则 ID 唯一性、状态、模板残留、托管边界、`skills/` 与 `agents/` 的 YAML frontmatter 和 Markdown 格式；再按 content-standard 重跑受影响任务推演与有限契约计数。
 3. 校验通过后记录：`base_ref`、`head_ref`、dirty diff hash、变更文件、批准/拒绝项、验证命令与结果、残余风险。
 4. 校验失败时只撤销本次同步写入；若文件已被并发修改则停止并报告，不使用 `git reset`、`checkout` 或覆盖用户改动。
 
