@@ -1,6 +1,7 @@
 targets:
 - ~/.agents/skills
 - ~/.claude/skills
+- ~/.hermes/skills
 self:
 - name: goal-coach
   path: skills/goal-coach
@@ -19,14 +20,23 @@ self:
   - 协作
   - 效率
   verified: '2026-08-24'
-- name: herdr-workbench
-  path: skills/herdr-workbench
+- name: herdrs
+  path: skills/herdrs
   capability: 在 Herdr 开发任务中自动判断子 Agent 拆分，并以受边界约束的 YOLO 模式启动和验收子 Agent
   boundary: 只定义个人编排策略；依赖 HERDR_ENV=1、上游 herdr Skill 与当前 CLI，不允许绕过生产、凭证、发布或破坏性操作授权
   tags:
   - 协作
   - 效率
   - 开发流程
+  verified: ''
+- name: visual-artifact-workbench
+  path: skills/visual-artifact-workbench
+  capability: 统一跨项目可视文档的分类、原文证据、审核版本和本机分享处理方案
+  boundary: 提供策略与白名单只读分享脚本，无通用发布CLI、认证或多人审核后台；不替代业务确认，不自动开放局域网
+  tags:
+  - 图表
+  - 协作
+  - 效率
   verified: ''
 - name: framework-skill-author
   path: skills/framework-skill-author
@@ -182,6 +192,14 @@ self:
   - 测试
   - 开发流程
   verified: '2026-09-01'
+- name: wl-phase-routing
+  path: skills/wl-phase-routing
+  capability: 为复杂或多步骤工作判断唯一当前阶段（观察/确认/设计/执行/验证/沉淀）并选择最小能力组合
+  boundary: 只做阶段判断与能力选择，不替代各阶段内的具体 Skill；范围明确的简单任务不触发
+  tags:
+  - 规划
+  - 开发流程
+  verified: ''
 - name: harness-bootstrap-legacy
   path: skills/harness-pack/skills/harness-bootstrap-legacy
   capability: 从已有项目全量提取模块与实际接口、归纳分范围默认实践，生成可定位代码、指导实现和查询完整契约的 docs/harness/ 工程手册
