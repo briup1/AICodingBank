@@ -121,8 +121,10 @@ def write_catalog(entries, path):
             verified_at = entry.get("verified")
             status = f"已验证 {verified_at}" if verified_at else "**待验证（未安装）**"
             lines.append(
-                f"- **{entry['name']}**（{entry['origin']}·{status}）— "
-                f"{entry.get('capability', '')}"
+                (
+                    f"- **{entry['name']}**（{entry['origin']}·{status}）— "
+                    f"{entry.get('capability', '')}"
+                ).rstrip()
             )
             if entry.get("boundary"):
                 lines.append(f"  边界：{entry['boundary']}")
