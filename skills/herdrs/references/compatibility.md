@@ -1,4 +1,4 @@
-# Herdr Workbench 兼容记录
+# herdrs 兼容记录
 
 只记录个人策略依赖的版本契约，不复制上游手册。升级 Herdr 或编码 Agent 后，重新读取 CLI help 并更新本表。
 

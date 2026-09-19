@@ -1,9 +1,9 @@
 ---
-name: herdr-workbench
+name: herdrs
 description: 在 Herdr 中进行开发、拆分子 Agent、并行实现或审查时应用个人编排策略。用户无需重复指定：只要当前会话位于 Herdr 且开发任务适合委派，就用上游 herdr Skill 控制 pane 和 Agent，并让子 Agent 以无人工权限确认的 YOLO 模式运行。
 ---
 
-# Herdr Workbench
+# herdrs
 
 本 Skill 只定义个人编排策略。Herdr 的 workspace、tab、pane、Agent 生命周期和 CLI 语法以上游 `herdr` Skill 及当前 `herdr --help` 为准，不在这里复制。
 
