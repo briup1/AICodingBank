@@ -1,0 +1,1194 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Git 需求开发看板</title>
+  <style>
+    :root {
+      --ink: #172332;
+      --ink-soft: #506173;
+      --paper: #f5f7f8;
+      --surface: #ffffff;
+      --line: #d7dee3;
+      --line-strong: #a9b7c2;
+      --navy: #17324d;
+      --navy-deep: #0d2236;
+      --blue: #2c6e9e;
+      --blue-soft: #e5f1f8;
+      --green: #2d7657;
+      --green-soft: #e4f2ea;
+      --amber: #996515;
+      --amber-soft: #fbf0d5;
+      --red: #a13c3c;
+      --red-soft: #fae8e7;
+      --violet: #6d5695;
+      --violet-soft: #eee9f6;
+      --shadow: 0 12px 30px rgba(13, 34, 54, .08);
+      --radius: 10px;
+      --sidebar: 270px;
+      font-family: "Avenir Next", "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { min-width: 320px; background: var(--paper); }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background:
+        linear-gradient(90deg, rgba(23, 50, 77, .035) 1px, transparent 1px) 0 0 / 24px 24px,
+        var(--paper);
+    }
+
+    button, input, select { font: inherit; }
+
+    button, select, input[type="search"] {
+      border: 1px solid var(--line-strong);
+      border-radius: 7px;
+      background: var(--surface);
+      color: var(--ink);
+    }
+
+    button { cursor: pointer; }
+
+    :focus-visible {
+      outline: 3px solid #e69b27;
+      outline-offset: 2px;
+    }
+
+    .shell { min-height: 100vh; }
+
+    .masthead {
+      position: relative;
+      overflow: hidden;
+      padding: 30px clamp(20px, 4vw, 56px) 26px;
+      color: #f7fbff;
+      background: var(--navy-deep);
+      border-bottom: 4px solid #e3a63b;
+    }
+
+    .masthead::after {
+      content: "";
+      position: absolute;
+      right: -44px;
+      top: -68px;
+      width: 260px;
+      height: 260px;
+      border: 44px solid rgba(255, 255, 255, .055);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .masthead-row {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: space-between;
+      gap: 28px;
+      align-items: flex-end;
+      max-width: 1680px;
+      margin: 0 auto;
+    }
+
+    .brand { max-width: 720px; }
+
+    .brand-mark {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 10px;
+      color: #bfd3e4;
+      font-size: 13px;
+      font-weight: 650;
+    }
+
+    .brand-mark::before {
+      content: "";
+      width: 28px;
+      height: 3px;
+      background: #e3a63b;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(28px, 4vw, 46px);
+      line-height: 1.05;
+      letter-spacing: -.035em;
+      font-weight: 720;
+    }
+
+    .lede {
+      max-width: 66ch;
+      margin: 11px 0 0;
+      color: #c8d6e2;
+      line-height: 1.65;
+      font-size: 14px;
+    }
+
+    .freshness {
+      min-width: 250px;
+      padding: 12px 14px;
+      border: 1px solid rgba(255, 255, 255, .22);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .06);
+    }
+
+    .freshness-head { display: flex; justify-content: space-between; gap: 12px; align-items: center; }
+    .freshness-label { color: #9fb6c8; font-size: 12px; }
+    .freshness-time { margin-top: 3px; font-weight: 680; font-variant-numeric: tabular-nums; }
+    .freshness-note { margin-top: 5px; color: #bfd0dd; font-size: 12px; line-height: 1.45; }
+
+    .mode-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      min-height: 26px;
+      padding: 4px 9px;
+      border: 1px solid rgba(255, 255, 255, .24);
+      border-radius: 999px;
+      color: #dce9f2;
+      background: rgba(255, 255, 255, .08);
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .mode-indicator::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #e3a63b; }
+    .mode-indicator[data-mode="live"]::before { background: #68cf9a; box-shadow: 0 0 0 3px rgba(104, 207, 154, .15); }
+
+    .refresh-controls { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; margin-top: 13px; }
+    .refresh-button, .auto-refresh-select { min-height: 36px; border-color: rgba(255, 255, 255, .28); }
+    .refresh-button { padding: 7px 12px; color: var(--navy-deep); background: #f7fbff; font-weight: 720; }
+    .refresh-button:hover:not(:disabled) { background: #e6f0f6; }
+    .refresh-button:disabled { cursor: wait; opacity: .68; }
+    .auto-refresh-wrap { display: grid; grid-template-columns: auto 92px; gap: 7px; align-items: center; color: #bfd0dd; font-size: 11px; }
+    .auto-refresh-select { width: 92px; padding: 6px 8px; background: #f7fbff; }
+    .refresh-status { grid-column: 1 / -1; min-height: 18px; color: #bfd0dd; font-size: 11px; line-height: 1.45; }
+    .refresh-status[data-state="loading"] { color: #f4cf85; }
+    .refresh-status[data-state="success"] { color: #91dcb2; }
+    .refresh-status[data-state="error"] { color: #ffaaa4; }
+
+    .summary-strip {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(110px, 1fr));
+      max-width: 1680px;
+      margin: 0 auto;
+      padding: 0 clamp(20px, 4vw, 56px);
+      background: var(--surface);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .metric {
+      min-width: 0;
+      padding: 18px 14px 17px;
+      border-right: 1px solid var(--line);
+    }
+
+    .metric:first-child { border-left: 1px solid var(--line); }
+    .metric-value { font-size: 28px; line-height: 1; font-weight: 740; font-variant-numeric: tabular-nums; }
+    .metric-label { margin-top: 7px; color: var(--ink-soft); font-size: 12px; }
+    .metric.attention .metric-value { color: var(--red); }
+    .metric.online .metric-value { color: var(--green); }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: var(--sidebar) minmax(0, 1fr);
+      gap: 24px;
+      align-items: start;
+      max-width: 1680px;
+      margin: 0 auto;
+      padding: 24px clamp(20px, 4vw, 56px) 48px;
+    }
+
+    .filters {
+      position: sticky;
+      top: 16px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-top: 4px solid var(--navy);
+      background: rgba(255, 255, 255, .94);
+      box-shadow: var(--shadow);
+      border-radius: 4px 4px var(--radius) var(--radius);
+    }
+
+    .filters h2, .content-heading h2, .error-panel h2 {
+      margin: 0;
+      font-size: 17px;
+      letter-spacing: -.015em;
+    }
+
+    .filter-group { margin-top: 17px; }
+    .filter-label { display: block; margin-bottom: 7px; font-size: 12px; font-weight: 700; color: var(--ink-soft); }
+    .filter-control { width: 100%; min-height: 40px; padding: 8px 10px; }
+
+    .search-wrap { position: relative; }
+    .search-wrap::before {
+      content: "⌕";
+      position: absolute;
+      left: 10px;
+      top: 7px;
+      color: var(--ink-soft);
+      font-size: 20px;
+      pointer-events: none;
+    }
+    .search-wrap input { padding-left: 34px; }
+
+    .filter-actions { display: flex; margin-top: 18px; }
+    .reset-button { width: 100%; min-height: 38px; background: #eef2f4; font-weight: 650; }
+    .reset-button:hover { background: #e2e9ed; }
+
+    .legend {
+      margin: 19px 0 0;
+      padding: 15px 0 0;
+      border-top: 1px solid var(--line);
+      list-style: none;
+      font-size: 12px;
+      color: var(--ink-soft);
+    }
+    .legend li { display: flex; gap: 8px; align-items: center; margin-top: 8px; }
+    .legend-swatch { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+
+    .main { min-width: 0; }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .visibility-tabs, .view-switch {
+      display: inline-flex;
+      padding: 3px;
+      gap: 3px;
+      border: 1px solid var(--line-strong);
+      border-radius: 9px;
+      background: #e9eef1;
+    }
+
+    .tab-button, .view-button {
+      min-height: 36px;
+      padding: 7px 12px;
+      border: 0;
+      background: transparent;
+      color: var(--ink-soft);
+      font-size: 13px;
+      font-weight: 650;
+    }
+
+    .tab-button[aria-selected="true"], .view-button[aria-pressed="true"] {
+      color: var(--navy-deep);
+      background: var(--surface);
+      box-shadow: 0 1px 5px rgba(13, 34, 54, .14);
+    }
+
+    .content-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      margin: 0 0 12px;
+    }
+
+    .result-count { color: var(--ink-soft); font-size: 13px; }
+
+    .error-panel {
+      margin-bottom: 18px;
+      padding: 16px 18px;
+      border: 1px solid #e1b9b5;
+      border-left: 5px solid var(--red);
+      border-radius: 5px var(--radius) var(--radius) 5px;
+      background: var(--red-soft);
+    }
+    .error-panel[hidden] { display: none; }
+    .error-panel h2 { color: #7f2d2d; }
+    .error-list { margin: 9px 0 0; padding-left: 20px; color: #6f3838; line-height: 1.6; font-size: 13px; }
+
+    .kanban {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(245px, 1fr));
+      gap: 13px;
+      overflow-x: auto;
+      padding: 1px 1px 14px;
+      scroll-snap-type: x proximity;
+    }
+
+    .kanban-column {
+      min-height: 260px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-top: 4px solid var(--column-color, var(--blue));
+      border-radius: 4px 4px var(--radius) var(--radius);
+      background: #edf1f3;
+      scroll-snap-align: start;
+    }
+
+    .column-head { display: flex; justify-content: space-between; gap: 8px; align-items: center; margin-bottom: 11px; }
+    .column-title { margin: 0; font-size: 14px; }
+    .column-count { min-width: 25px; padding: 3px 7px; border-radius: 20px; text-align: center; color: var(--ink-soft); background: #dce4e8; font-size: 12px; font-weight: 700; }
+    .column-empty { margin: 28px 6px; color: #71808d; font-size: 12px; line-height: 1.55; text-align: center; }
+
+    .requirement-card {
+      position: relative;
+      margin-bottom: 10px;
+      padding: 14px;
+      border: 1px solid #cbd5dc;
+      border-left: 4px solid var(--status-color, var(--blue));
+      border-radius: 6px;
+      background: var(--surface);
+      box-shadow: 0 3px 10px rgba(13, 34, 54, .055);
+    }
+    .requirement-card:last-child { margin-bottom: 0; }
+    .requirement-card.has-anomaly { border-color: #dbb7b0; border-left-color: var(--red); }
+    .card-project { color: var(--ink-soft); font-size: 11px; font-weight: 700; overflow-wrap: anywhere; }
+    .card-title { margin: 5px 0 0; font-size: 15px; line-height: 1.38; overflow-wrap: anywhere; }
+    .card-id { display: inline; color: var(--blue); }
+    .card-topic { margin-top: 4px; font-size: 15px; font-weight: 750; line-height: 1.42; }
+    .card-branch { margin-top: 9px; color: #405363; font-family: ui-monospace, "SFMono-Regular", Consolas, monospace; font-size: 11px; line-height: 1.45; overflow-wrap: anywhere; }
+    .branch-details { margin-top: 10px; padding-top: 8px; border-top: 1px solid #dce4ea; font-size: 11px; }
+    .branch-details summary { cursor: pointer; color: var(--blue); font-weight: 700; }
+    .branch-item { margin-top: 7px; padding-left: 9px; border-left: 2px solid #c7d4de; }
+    .branch-item strong { display: block; overflow-wrap: anywhere; }
+    .branch-item span { color: var(--ink-soft); }
+
+    .badge-row { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
+    .badge { display: inline-flex; align-items: center; min-height: 22px; padding: 3px 7px; border-radius: 4px; background: var(--blue-soft); color: #245575; font-size: 10px; font-weight: 700; line-height: 1.2; }
+    .badge.anomaly { background: var(--red-soft); color: #8c3030; }
+    .badge.validation { background: var(--violet-soft); color: #59467d; }
+    .badge.sync { background: var(--amber-soft); color: #775113; }
+
+    .card-meta { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 5px 8px; margin: 12px 0 0; font-size: 11px; line-height: 1.45; }
+    .card-meta dt { color: #72808b; }
+    .card-meta dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+    .sha { font-family: ui-monospace, "SFMono-Regular", Consolas, monospace; }
+    .next-step { margin: 12px -14px -14px; padding: 10px 14px; border-top: 1px solid var(--line); background: #f8fafb; color: #405363; font-size: 11px; line-height: 1.5; }
+    .next-step strong { color: var(--ink); }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+    .table-wrap[hidden], .kanban[hidden] { display: none; }
+    table { width: 100%; min-width: 1120px; border-collapse: collapse; font-size: 12px; }
+    th, td { padding: 11px 12px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    th { position: sticky; top: 0; z-index: 1; color: #eaf2f8; background: var(--navy); font-size: 11px; font-weight: 700; }
+    tbody tr:last-child td { border-bottom: 0; }
+    tbody tr:hover { background: #f3f7f9; }
+    td { line-height: 1.45; overflow-wrap: anywhere; }
+    .table-title { min-width: 190px; font-weight: 700; }
+    .table-muted { color: var(--ink-soft); }
+    .table-badges { display: flex; flex-wrap: wrap; gap: 4px; min-width: 130px; }
+
+    .empty-state {
+      padding: 54px 24px;
+      border: 1px dashed var(--line-strong);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, .7);
+      text-align: center;
+    }
+    .empty-state[hidden] { display: none; }
+    .empty-glyph { display: grid; place-items: center; width: 52px; height: 52px; margin: 0 auto 14px; border: 2px solid var(--line-strong); border-radius: 50%; color: var(--navy); font-size: 24px; font-weight: 700; }
+    .empty-state h3 { margin: 0; font-size: 18px; }
+    .empty-state p { max-width: 52ch; margin: 8px auto 0; color: var(--ink-soft); line-height: 1.6; font-size: 13px; }
+
+    .noscript {
+      margin: 20px;
+      padding: 16px;
+      border: 1px solid #e1b9b5;
+      background: var(--red-soft);
+      color: #7f2d2d;
+    }
+
+    @media (max-width: 1080px) {
+      .summary-strip { grid-template-columns: repeat(3, 1fr); }
+      .metric:nth-child(3) { border-right: 1px solid var(--line); }
+      .workspace { grid-template-columns: 1fr; }
+      .filters { position: static; display: grid; grid-template-columns: repeat(4, minmax(140px, 1fr)); gap: 12px; align-items: end; }
+      .filters h2, .legend { grid-column: 1 / -1; }
+      .filter-group, .filter-actions { margin-top: 0; }
+    }
+
+    @media (max-width: 720px) {
+      .masthead { padding-top: 24px; }
+      .masthead-row { align-items: stretch; flex-direction: column; }
+      .freshness { min-width: 0; }
+      .freshness-head { align-items: flex-start; }
+      .refresh-controls { grid-template-columns: 1fr; }
+      .auto-refresh-wrap { grid-template-columns: 1fr; }
+      .auto-refresh-select { width: 100%; }
+      .summary-strip { grid-template-columns: repeat(2, 1fr); }
+      .metric:nth-child(2n) { border-right: 1px solid var(--line); }
+      .workspace { padding-top: 18px; }
+      .filters { grid-template-columns: 1fr; }
+      .filters h2, .legend { grid-column: auto; }
+      .toolbar, .content-heading { align-items: stretch; flex-direction: column; }
+      .visibility-tabs, .view-switch { display: grid; grid-template-columns: repeat(3, 1fr); width: 100%; }
+      .view-switch { grid-template-columns: repeat(2, 1fr); }
+      .kanban { grid-template-columns: repeat(6, minmax(82vw, 1fr)); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+    }
+
+    @media print {
+      body { background: white; }
+      .filters, .toolbar { display: none; }
+      .workspace { display: block; padding: 18px; }
+      .masthead { padding: 20px; }
+      .summary-strip { padding: 0; }
+      .kanban { display: none !important; }
+      .table-wrap { display: block !important; box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="masthead">
+      <div class="masthead-row">
+        <div class="brand">
+          <div class="brand-mark">本机 Git 需求流</div>
+          <h1>需求开发看板</h1>
+          <p class="lede">聚合已登记项目的分支、Worktree、测试与发布状态。页面只展示扫描结果，不执行任何 Git 操作。</p>
+        </div>
+        <div class="freshness" aria-label="数据刷新与生成信息">
+          <div class="freshness-head">
+            <div class="freshness-label">数据生成时间</div>
+            <span class="mode-indicator" id="dashboardMode" data-mode="static">静态快照</span>
+          </div>
+          <div class="freshness-time" id="generatedAt">{{GENERATED_AT}}</div>
+          <div class="freshness-note" id="freshnessNote">静态快照；重新加载只读取已有数据。实时扫描请使用 dashboard serve --open。</div>
+          <div class="refresh-controls">
+            <button class="refresh-button" id="refreshDashboard" type="button">刷新状态</button>
+            <label class="auto-refresh-wrap" for="autoRefresh">
+              <span>自动刷新</span>
+              <select class="auto-refresh-select" id="autoRefresh">
+                <option value="0" selected>关闭</option>
+                <option value="15">15 秒</option>
+                <option value="30">30 秒</option>
+                <option value="60">60 秒</option>
+              </select>
+            </label>
+            <div class="refresh-status" id="refreshStatus" data-state="idle" aria-live="polite">静态模式不会重新扫描 Git。</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section class="summary-strip" aria-label="需求概览" id="summaryStrip"></section>
+
+    <div class="workspace">
+      <aside class="filters" aria-labelledby="filtersTitle">
+        <h2 id="filtersTitle">筛选范围</h2>
+
+        <div class="filter-group">
+          <label class="filter-label" for="searchInput">搜索</label>
+          <div class="search-wrap">
+            <input class="filter-control" id="searchInput" type="search" placeholder="编号、标题、分支、路径" autocomplete="off">
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label" for="projectFilter">项目</label>
+          <select class="filter-control" id="projectFilter"><option value="">全部项目</option></select>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label" for="statusFilter">状态</label>
+          <select class="filter-control" id="statusFilter"><option value="">全部状态</option></select>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label" for="anomalyFilter">异常</label>
+          <select class="filter-control" id="anomalyFilter"><option value="">全部异常情况</option><option value="__any__">仅有异常</option><option value="__none__">仅无异常</option></select>
+        </div>
+
+        <div class="filter-actions">
+          <button class="reset-button" id="resetFilters" type="button">清除筛选</button>
+        </div>
+
+        <ul class="legend" aria-label="颜色说明">
+          <li><span class="legend-swatch" style="background:#2c6e9e"></span>开发与待验证</li>
+          <li><span class="legend-swatch" style="background:#6d5695"></span>Dev / Beta 验证</li>
+          <li><span class="legend-swatch" style="background:#2d7657"></span>合入或上线</li>
+          <li><span class="legend-swatch" style="background:#a13c3c"></span>需要关注的异常</li>
+        </ul>
+      </aside>
+
+      <main class="main">
+        <div class="toolbar">
+          <div class="visibility-tabs" role="tablist" aria-label="需求可见范围">
+            <button class="tab-button" type="button" role="tab" data-visibility="active" aria-selected="true">活跃</button>
+            <button class="tab-button" type="button" role="tab" data-visibility="recently-online" aria-selected="false">最近上线</button>
+            <button class="tab-button" type="button" role="tab" data-visibility="archived" aria-selected="false">归档</button>
+          </div>
+          <div class="view-switch" aria-label="视图切换">
+            <button class="view-button" id="kanbanViewButton" type="button" aria-pressed="true">Kanban</button>
+            <button class="view-button" id="tableViewButton" type="button" aria-pressed="false">表格</button>
+          </div>
+        </div>
+
+        <section class="error-panel" id="errorPanel" aria-labelledby="errorTitle" hidden>
+          <h2 id="errorTitle">需要关注</h2>
+          <ul class="error-list" id="errorList"></ul>
+        </section>
+
+        <div class="content-heading">
+          <h2 id="viewTitle">活跃需求</h2>
+          <div class="result-count" id="resultCount" aria-live="polite"></div>
+        </div>
+
+        <section class="kanban" id="kanbanView" aria-label="Kanban 视图"></section>
+
+        <section class="table-wrap" id="tableView" aria-label="表格视图" hidden>
+          <table>
+            <thead>
+              <tr>
+                <th>需求</th>
+                <th>项目</th>
+                <th>代码阶段</th>
+                <th>验证</th>
+                <th>分支 / Worktree</th>
+                <th>Git 同步</th>
+                <th>当前 SHA</th>
+                <th>异常</th>
+                <th>下一步</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+          </table>
+        </section>
+
+        <section class="empty-state" id="emptyState" hidden>
+          <div class="empty-glyph" aria-hidden="true">✓</div>
+          <h3 id="emptyTitle">当前范围没有需求</h3>
+          <p id="emptyMessage">切换范围或清除筛选后再查看。</p>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <noscript><div class="noscript">此看板需要浏览器启用 JavaScript 才能读取内嵌数据。</div></noscript>
+
+  <script id="dashboardData" type="application/json">{{DATA_JSON}}</script>
+  <script>
+    (() => {
+      "use strict";
+
+      const text = (value, fallback = "") => {
+        if (value === null || value === undefined) return fallback;
+        if (typeof value === "string") return value;
+        if (typeof value === "number" || typeof value === "boolean") return String(value);
+        return fallback;
+      };
+
+      const first = (object, keys, fallback = "") => {
+        if (!object || typeof object !== "object") return fallback;
+        for (const key of keys) {
+          if (object[key] !== undefined && object[key] !== null && object[key] !== "") return object[key];
+        }
+        return fallback;
+      };
+
+      const asArray = (value) => {
+        if (Array.isArray(value)) return value;
+        if (value && typeof value === "object") return Object.entries(value).map(([key, item]) => {
+          if (item && typeof item === "object" && !Array.isArray(item)) return { key, ...item };
+          return { key, value: item };
+        });
+        if (value === null || value === undefined || value === "") return [];
+        return [value];
+      };
+
+      const slug = (value) => text(value).trim().toLowerCase().replace(/[\s_]+/g, "-");
+      const unique = (values) => [...new Set(values.filter(Boolean))];
+      const shortSha = (value) => text(value, "—").slice(0, 12);
+
+      const labels = {
+        "active": "开发中",
+        "paused": "已暂停",
+        "ready-dev": "待 Dev",
+        "dev-testing": "Dev 测试中",
+        "dev-failed": "Dev 未通过",
+        "dev-passed": "Dev 已通过",
+        "beta-testing": "Beta 测试中",
+        "beta-passed": "Beta 已通过",
+        "merged-master": "已合主干",
+        "pending-online": "待上线",
+        "online": "已上线",
+        "recently-online": "最近上线",
+        "archived": "已归档",
+        "cleaned": "已清理",
+        "missing": "记录缺失",
+        "dirty": "工作区未提交",
+        "unpushed": "提交未推送",
+        "ahead": "领先上游",
+        "behind": "落后上游",
+        "detached": "游离 HEAD",
+        "temporary-path": "临时目录",
+        "stale-test": "测试结果已过期",
+        "missing-repository": "仓库不可达",
+        "duplicate-worktree": "重复 Worktree"
+      };
+
+      const labelFor = (value) => labels[slug(value)] || text(value, "未知");
+      let liveCandidate = window.__WL_DASHBOARD_LIVE__;
+      const embeddedLiveConfig = document.getElementById("wlDashboardLiveConfig");
+      if ((!liveCandidate || typeof liveCandidate !== "object") && embeddedLiveConfig) {
+        try { liveCandidate = JSON.parse(embeddedLiveConfig.textContent || "{}"); }
+        catch (error) { liveCandidate = null; }
+      }
+      const liveConfig = liveCandidate && typeof liveCandidate === "object" ? {
+        mode: liveCandidate.mode,
+        token: liveCandidate.token,
+        origin: liveCandidate.origin || window.location.origin,
+        refreshPath: liveCandidate.refreshPath || (liveCandidate.api && liveCandidate.api.refresh),
+        statePath: liveCandidate.statePath || (liveCandidate.api && liveCandidate.api.state),
+        healthPath: liveCandidate.healthPath || (liveCandidate.api && liveCandidate.api.health)
+      } : null;
+      const isLiveMode = Boolean(liveConfig && liveConfig.mode === "live");
+
+      let source = {};
+      try {
+        source = JSON.parse(document.getElementById("dashboardData").textContent || "{}");
+      } catch (error) {
+        source = { errors: ["内嵌数据不是有效 JSON：" + error.message] };
+      }
+      if (!source || typeof source !== "object" || Array.isArray(source)) source = { errors: ["内嵌数据必须是 JSON 对象。"] };
+
+      let projectRecords = [];
+      let projectByKey = new Map();
+      let globalAnomalies = [];
+      let anomalyMap = new Map();
+      let requirements = [];
+
+      const normalizeAnomaly = (item) => {
+        if (typeof item === "string") return { code: slug(item), label: labelFor(item) };
+        if (!item || typeof item !== "object") return null;
+        const code = slug(first(item, ["code", "type", "name", "id", "key"], "anomaly"));
+        return { code, label: text(first(item, ["label", "message", "title", "name"], labelFor(code))) };
+      };
+
+      const normalizeRequirement = (raw, index) => {
+        raw = raw && typeof raw === "object" ? raw : {};
+        const id = text(first(raw, ["requirementId", "requirement_id", "id", "key", "storyId"], "R-" + (index + 1)));
+        const branch = text(first(raw, ["branch", "sourceBranch", "requirementBranch", "ref"]));
+        const projectRef = text(first(raw, ["projectId", "project_id", "project", "repo", "repository", "repoPath"]));
+        const embeddedProject = raw.project && typeof raw.project === "object" ? text(first(raw.project, ["name", "label", "id", "path"])) : "";
+        const project = embeddedProject || projectByKey.get(projectRef) || projectRef || "未分组项目";
+        const state = slug(first(raw, ["stage", "status", "codeStage", "code_stage", "phase"], "active"));
+        const visibilityRaw = slug(first(raw, ["visibility", "bucket", "scope"], ""));
+        const archived = Boolean(first(raw, ["archived", "isArchived"], false));
+        const onlineAt = text(first(raw, ["onlineAt", "online_at", "releasedAt", "released_at"]));
+        let visibility = visibilityRaw;
+        if (!visibility) visibility = archived ? "archived" : (onlineAt || state === "online" || state === "recently-online" ? "recently-online" : "active");
+        if (["recent", "online", "recentlyonline"].includes(visibility)) visibility = "recently-online";
+        if (!["active", "recently-online", "archived"].includes(visibility)) visibility = "active";
+
+        const ownAnomalies = asArray(first(raw, ["anomalies", "warnings", "issues", "flags"], []));
+        const mapped = anomalyMap.get(id) || anomalyMap.get(branch) || [];
+        const anomalies = [...ownAnomalies, ...mapped].map(normalizeAnomaly).filter(Boolean);
+        const validation = text(first(raw, ["validationStatus", "validation_status", "testStatus", "test_status", "verification", "validation"]));
+        const devStatus = text(first(raw, ["devStatus", "dev_status", "devResult", "dev_result"]));
+        const betaStatus = text(first(raw, ["betaStatus", "beta_status", "betaResult", "beta_result"]));
+        const ahead = Number(first(raw, ["ahead", "aheadCount", "ahead_count"], 0)) || 0;
+        const behind = Number(first(raw, ["behind", "behindCount", "behind_count"], 0)) || 0;
+        const sync = text(first(raw, ["syncStatus", "sync_status", "gitSync", "git_sync", "upstreamStatus"], "")) || (ahead || behind ? `ahead ${ahead} / behind ${behind}` : "—");
+        const worktreeValue = first(raw, ["worktree", "worktreePath", "worktree_path", "path"], "");
+        const worktree = worktreeValue && typeof worktreeValue === "object" ? text(first(worktreeValue, ["path", "root", "location"])) : text(worktreeValue);
+        const branches = asArray(raw.branches).map((item) => ({
+          branch: text(first(item, ["branch", "name"])), primary: Boolean(item.primary),
+          stateLabel: text(first(item, ["stageLabel", "stateLabel", "stage"], "未知")),
+          worktree: text(first(item, ["worktreePath", "worktree", "path"])), sha: text(first(item, ["sha", "head"]))
+        }));
+
+        return {
+          id,
+          title: text(first(raw, ["title", "name", "summary", "description"], id)),
+          fullTitle: text(first(raw, ["fullTitle", "title"], id)),
+          titleSource: text(first(raw, ["titleSource"], "")),
+          project,
+          branch: branch || "—",
+          worktree: worktree || "—",
+          primaryBranch: text(first(raw, ["primaryBranch", "branch"], branch)),
+          branchCount: Number(first(raw, ["branchCount"], branches.length || 1)) || 1,
+          branches,
+          state,
+          stateLabel: text(first(raw, ["stageLabel", "statusLabel", "stateLabel"], labelFor(state))),
+          visibility,
+          validation: validation || [devStatus && `Dev ${labelFor(devStatus)}`, betaStatus && `Beta ${labelFor(betaStatus)}`].filter(Boolean).join(" / ") || "—",
+          devStatus,
+          betaStatus,
+          sync,
+          sha: text(first(raw, ["sha", "currentSha", "current_sha", "head", "commit"]), "—"),
+          nextStep: text(first(raw, ["nextAction", "nextStep", "next_step", "recommendation", "action"], "等待下一次状态更新")),
+          anomalies,
+          onlineAt,
+          updatedAt: text(first(raw, ["updatedAt", "updated_at", "lastSeenAt", "last_seen_at"])),
+          raw
+        };
+      };
+
+      const rebuildDashboardModel = () => {
+        projectRecords = asArray(source.projects);
+        projectByKey = new Map();
+        projectRecords.forEach((project) => {
+          const key = text(first(project, ["id", "key", "path", "repo", "repository", "name"]));
+          const name = text(first(project, ["name", "displayName", "label", "repoName", "key"], key || "未命名项目"));
+          [key, text(project.path), text(project.repo), text(project.repository), name]
+            .filter(Boolean)
+            .forEach((candidate) => projectByKey.set(candidate, name));
+        });
+
+        globalAnomalies = asArray(source.anomalies);
+        anomalyMap = new Map();
+        globalAnomalies.forEach((entry) => {
+          if (!entry || typeof entry !== "object") return;
+          const requirementKey = text(first(entry, ["requirementId", "requirement_id", "id", "branch", "requirement"]));
+          const anomalyValues = asArray(first(entry, ["anomalies", "items", "types", "codes", "anomaly"], []));
+          if (requirementKey) anomalyMap.set(requirementKey, anomalyValues);
+        });
+        requirements = asArray(source.requirements).map(normalizeRequirement);
+      };
+
+      const state = { visibility: "active", view: "kanban", search: "", project: "", status: "", anomaly: "" };
+
+      const stageGroups = [
+        { key: "develop", title: "开发", color: "#2c6e9e", states: ["active", "paused", "missing"] },
+        { key: "dev", title: "Dev", color: "#6d5695", states: ["ready-dev", "dev-testing", "dev-failed", "dev-passed"] },
+        { key: "beta", title: "Beta", color: "#80639f", states: ["beta-testing", "beta-passed"] },
+        { key: "release", title: "主干与上线", color: "#2d7657", states: ["merged-master", "pending-online", "online", "recently-online"] },
+        { key: "cleanup", title: "清理", color: "#657785", states: ["cleaned"] },
+        { key: "other", title: "其他", color: "#996515", states: [] }
+      ];
+
+      const statusColor = (status) => {
+        if (["merged-master", "pending-online", "online", "recently-online", "cleaned"].includes(status)) return "#2d7657";
+        if (["dev-failed", "missing"].includes(status)) return "#a13c3c";
+        if (status.startsWith("dev-") || status.startsWith("beta-")) return "#6d5695";
+        return "#2c6e9e";
+      };
+
+      const el = (tag, className, content) => {
+        const node = document.createElement(tag);
+        if (className) node.className = className;
+        if (content !== undefined) node.textContent = content;
+        return node;
+      };
+
+      const appendBadge = (container, label, className = "") => {
+        if (!label || label === "—") return;
+        container.append(el("span", `badge ${className}`.trim(), label));
+      };
+
+      const counts = () => {
+        const summary = source.summary && typeof source.summary === "object" ? source.summary : {};
+        const value = (keys, calculated) => {
+          const found = first(summary, keys, undefined);
+          const numeric = Number(found);
+          return found !== undefined && Number.isFinite(numeric) ? numeric : calculated;
+        };
+        return [
+          { label: "活跃需求", value: value(["active", "activeCount", "active_count"], requirements.filter((item) => item.visibility === "active").length) },
+          { label: "需要关注", value: value(["attention", "attentionCount", "attention_count", "anomalies"], requirements.filter((item) => item.anomalies.length).length), className: "attention" },
+          { label: "Dev 阶段", value: value(["dev", "devCount", "dev_count"], requirements.filter((item) => item.state.startsWith("dev-") || item.state === "ready-dev").length) },
+          { label: "Beta 阶段", value: value(["beta", "betaCount", "beta_count"], requirements.filter((item) => item.state.startsWith("beta-")).length) },
+          { label: "待上线", value: value(["pendingOnline", "pending_online", "pendingOnlineCount"], requirements.filter((item) => ["merged-master", "pending-online"].includes(item.state)).length) },
+          { label: "最近上线", value: value(["recentlyOnline", "recently_online", "online", "onlineCount"], requirements.filter((item) => item.visibility === "recently-online").length), className: "online" }
+        ];
+      };
+
+      const renderSummary = () => {
+        const strip = document.getElementById("summaryStrip");
+        strip.replaceChildren(...counts().map((metric) => {
+          const box = el("div", `metric ${metric.className || ""}`.trim());
+          box.append(el("div", "metric-value", String(metric.value)), el("div", "metric-label", metric.label));
+          return box;
+        }));
+      };
+
+      const renderErrors = () => {
+        const errors = asArray(source.errors).map((error) => {
+          if (typeof error === "string") return error;
+          return text(first(error, ["message", "error", "detail", "reason"], JSON.stringify(error)));
+        }).filter(Boolean);
+        globalAnomalies.forEach((item) => {
+          if (!item || typeof item !== "object") return;
+          const label = text(first(item, ["label", "message", "title"], labelFor(first(item, ["code", "type"], "anomaly"))));
+          const project = text(first(item, ["projectName", "projectId", "project"]));
+          const branch = text(first(item, ["branch"]));
+          const path = text(first(item, ["path"]));
+          errors.push([project, label, branch || path].filter(Boolean).join(" · "));
+        });
+        const panel = document.getElementById("errorPanel");
+        panel.hidden = errors.length === 0;
+        document.getElementById("errorList").replaceChildren(...errors.map((message) => el("li", "", message)));
+      };
+
+      const optionFor = (value, label) => {
+        const option = el("option", "", label);
+        option.value = value;
+        return option;
+      };
+
+      const preserveMissingOption = (options, value, label) => {
+        if (value && !options.some((option) => option.value === value)) options.push(optionFor(value, label));
+        return options;
+      };
+
+      const populateFilters = () => {
+        const projectOptions = unique([...projectRecords.map((project) => text(first(project, ["name", "displayName", "label", "key"]))), ...requirements.map((item) => item.project)])
+          .sort((a, b) => a.localeCompare(b, "zh-CN"))
+          .map((name) => optionFor(name, name));
+        document.getElementById("projectFilter").replaceChildren(
+          optionFor("", "全部项目"),
+          ...preserveMissingOption(projectOptions, state.project, state.project)
+        );
+
+        const statusOptions = unique(requirements.map((item) => item.state)).sort()
+          .map((status) => optionFor(status, labelFor(status)));
+        document.getElementById("statusFilter").replaceChildren(
+          optionFor("", "全部状态"),
+          ...preserveMissingOption(statusOptions, state.status, labelFor(state.status))
+        );
+
+        const anomalyLabels = new Map();
+        requirements.flatMap((item) => item.anomalies).forEach((item) => anomalyLabels.set(item.code, item.label));
+        const anomalyOptions = [...anomalyLabels.entries()]
+          .sort((a, b) => a[1].localeCompare(b[1], "zh-CN"))
+          .map(([code, label]) => optionFor(code, label));
+        document.getElementById("anomalyFilter").replaceChildren(
+          optionFor("", "全部异常情况"),
+          optionFor("__any__", "仅有异常"),
+          optionFor("__none__", "仅无异常"),
+          ...preserveMissingOption(anomalyOptions, state.anomaly, labelFor(state.anomaly))
+        );
+
+        document.getElementById("projectFilter").value = state.project;
+        document.getElementById("statusFilter").value = state.status;
+        document.getElementById("anomalyFilter").value = state.anomaly;
+      };
+
+      const matches = (item) => {
+        if (item.visibility !== state.visibility) return false;
+        if (state.project && item.project !== state.project) return false;
+        if (state.status && item.state !== state.status) return false;
+        if (state.anomaly === "__any__" && item.anomalies.length === 0) return false;
+        if (state.anomaly === "__none__" && item.anomalies.length > 0) return false;
+        if (state.anomaly && !state.anomaly.startsWith("__") && !item.anomalies.some((anomaly) => anomaly.code === state.anomaly)) return false;
+        if (state.search) {
+          const haystack = [item.id, item.title, item.project, item.branch, item.worktree, item.stateLabel, item.validation, item.sync, item.sha, item.nextStep, ...item.branches.map((branch) => branch.branch), ...item.anomalies.map((anomaly) => anomaly.label)].join(" ").toLocaleLowerCase("zh-CN");
+          if (!haystack.includes(state.search.toLocaleLowerCase("zh-CN"))) return false;
+        }
+        return true;
+      };
+
+      const cardFor = (item) => {
+        const card = el("article", `requirement-card${item.anomalies.length ? " has-anomaly" : ""}`);
+        card.style.setProperty("--status-color", statusColor(item.state));
+        card.append(el("div", "card-project", item.project));
+        const title = el("h3", "card-title");
+        const id = el("span", "card-id", item.id);
+        title.append(id);
+        card.append(title);
+        if (item.title && item.title !== item.id) {
+          const topic = el("div", "card-topic", item.title);
+          if (item.fullTitle && item.fullTitle !== item.title) topic.title = item.fullTitle;
+          card.append(topic);
+        }
+        card.append(el("div", "card-branch", item.primaryBranch || item.branch));
+
+        const badges = el("div", "badge-row");
+        appendBadge(badges, item.stateLabel);
+        appendBadge(badges, item.validation, "validation");
+        if (item.branchCount > 1) appendBadge(badges, `${item.branchCount} 个分支`, "anomaly");
+        if (item.sync !== "—") appendBadge(badges, item.sync, "sync");
+        item.anomalies.forEach((anomaly) => appendBadge(badges, anomaly.label, "anomaly"));
+        card.append(badges);
+
+        const meta = el("dl", "card-meta");
+        [["Worktree", item.worktree], ["SHA", shortSha(item.sha)], ...(item.onlineAt ? [["上线", item.onlineAt]] : []), ...(item.updatedAt ? [["更新", item.updatedAt]] : [])].forEach(([term, value]) => {
+          meta.append(el("dt", "", term), el("dd", term === "SHA" ? "sha" : "", value));
+        });
+        card.append(meta);
+        if (item.branches.length > 1) {
+          const details = el("details", "branch-details");
+          details.dataset.detailKey = `${item.id}::branches`;
+          details.append(el("summary", "", `查看 ${item.branches.length} 个关联分支`));
+          item.branches.forEach((branch) => {
+            const row = el("div", "branch-item");
+            row.append(el("strong", "", `${branch.primary ? "主分支 · " : ""}${branch.branch}`), el("span", "", [branch.stateLabel, branch.worktree].filter(Boolean).join(" · ")));
+            details.append(row);
+          });
+          card.append(details);
+        }
+        const next = el("div", "next-step");
+        next.append(el("strong", "", "下一步："), document.createTextNode(item.nextStep));
+        card.append(next);
+        return card;
+      };
+
+      const groupFor = (status) => stageGroups.find((group) => group.states.includes(status)) || stageGroups[stageGroups.length - 1];
+
+      const renderKanban = (items) => {
+        const board = document.getElementById("kanbanView");
+        board.replaceChildren(...stageGroups.map((group) => {
+          const columnItems = items.filter((item) => groupFor(item.state).key === group.key);
+          const column = el("section", "kanban-column");
+          column.style.setProperty("--column-color", group.color);
+          const head = el("div", "column-head");
+          head.append(el("h3", "column-title", group.title), el("span", "column-count", String(columnItems.length)));
+          column.append(head);
+          if (columnItems.length) column.append(...columnItems.map(cardFor));
+          else column.append(el("p", "column-empty", "此阶段暂无匹配需求"));
+          return column;
+        }));
+      };
+
+      const renderTable = (items) => {
+        const body = document.getElementById("tableBody");
+        body.replaceChildren(...items.map((item) => {
+          const row = document.createElement("tr");
+          const requirement = el("td", "table-title");
+          requirement.append(document.createTextNode(item.id), el("div", "table-muted", item.title === item.id ? "" : item.title));
+          const validation = el("td", "", item.validation);
+          const location = el("td", "");
+          location.append(el("div", "sha", item.primaryBranch || item.branch), el("div", "table-muted", `${item.worktree}${item.branchCount > 1 ? ` · 另有 ${item.branchCount - 1} 个分支` : ""}`));
+          const anomalies = el("td", "");
+          const badges = el("div", "table-badges");
+          if (item.anomalies.length) item.anomalies.forEach((anomaly) => appendBadge(badges, anomaly.label, "anomaly"));
+          else badges.append(el("span", "table-muted", "无"));
+          anomalies.append(badges);
+          row.append(requirement, el("td", "", item.project), el("td", "", item.stateLabel), validation, location, el("td", "", item.sync), el("td", "sha", shortSha(item.sha)), anomalies, el("td", "", item.nextStep));
+          return row;
+        }));
+      };
+
+      const render = () => {
+        const items = requirements.filter(matches);
+        renderKanban(items);
+        renderTable(items);
+
+        const names = { active: "活跃需求", "recently-online": "最近上线", archived: "归档需求" };
+        document.getElementById("viewTitle").textContent = names[state.visibility];
+        document.getElementById("resultCount").textContent = `显示 ${items.length} / ${requirements.filter((item) => item.visibility === state.visibility).length} 项`;
+
+        const noItems = items.length === 0;
+        document.getElementById("emptyState").hidden = !noItems;
+        document.getElementById("kanbanView").hidden = noItems || state.view !== "kanban";
+        document.getElementById("tableView").hidden = noItems || state.view !== "table";
+        document.getElementById("emptyTitle").textContent = requirements.length === 0 ? "尚未发现需求" : "没有符合条件的需求";
+        document.getElementById("emptyMessage").textContent = requirements.length === 0
+          ? "请先登记项目并刷新看板；扫描错误会显示在上方。"
+          : "尝试清除筛选，或切换到其他可见范围。";
+      };
+
+      const captureUiState = () => ({
+        scrollX: window.scrollX,
+        scrollY: window.scrollY,
+        kanbanScrollLeft: document.getElementById("kanbanView").scrollLeft,
+        tableScrollLeft: document.getElementById("tableView").scrollLeft,
+        openDetails: [...document.querySelectorAll("details[data-detail-key][open]")].map((details) => details.dataset.detailKey)
+      });
+
+      const restoreUiState = (snapshot) => {
+        const openDetails = new Set(snapshot.openDetails);
+        document.querySelectorAll("details[data-detail-key]").forEach((details) => {
+          details.open = openDetails.has(details.dataset.detailKey);
+        });
+        document.getElementById("kanbanView").scrollLeft = snapshot.kanbanScrollLeft;
+        document.getElementById("tableView").scrollLeft = snapshot.tableScrollLeft;
+        window.requestAnimationFrame(() => window.scrollTo(snapshot.scrollX, snapshot.scrollY));
+      };
+
+      const applyDashboardData = (data) => {
+        if (!data || typeof data !== "object" || Array.isArray(data)) throw new Error("刷新结果不是有效的看板对象。");
+        const snapshot = captureUiState();
+        source = data;
+        rebuildDashboardModel();
+        const generatedAt = text(first(source, ["generatedAt", "generated_at", "updatedAt", "updated_at"]));
+        if (generatedAt) document.getElementById("generatedAt").textContent = generatedAt;
+        renderSummary();
+        renderErrors();
+        populateFilters();
+        render();
+        restoreUiState(snapshot);
+      };
+
+      const refreshButton = document.getElementById("refreshDashboard");
+      const refreshStatus = document.getElementById("refreshStatus");
+      const autoRefresh = document.getElementById("autoRefresh");
+      const autoRefreshStorageKey = "wl-dashboard-auto-refresh-seconds";
+      let refreshInFlight = false;
+      let autoRefreshTimer = null;
+
+      const setRefreshFeedback = (status, message) => {
+        refreshStatus.dataset.state = status;
+        refreshStatus.textContent = message;
+        refreshButton.disabled = status === "loading";
+        refreshButton.setAttribute("aria-busy", String(status === "loading"));
+      };
+
+      const liveUrlsAreSameOrigin = () => {
+        if (!isLiveMode || !liveConfig.refreshPath || !liveConfig.statePath || !liveConfig.origin) return false;
+        const refreshUrl = new URL(liveConfig.refreshPath, window.location.origin);
+        const stateUrl = new URL(liveConfig.statePath, window.location.origin);
+        return liveConfig.origin === window.location.origin
+          && refreshUrl.origin === window.location.origin
+          && stateUrl.origin === window.location.origin;
+      };
+
+      const refreshLiveData = async () => {
+        if (!isLiveMode || refreshInFlight) return;
+        if (!liveUrlsAreSameOrigin()) {
+          setRefreshFeedback("error", "实时配置不是当前同源服务，已拒绝刷新。");
+          return;
+        }
+
+        refreshInFlight = true;
+        setRefreshFeedback("loading", "正在扫描已登记项目…");
+        try {
+          const response = await fetch(liveConfig.refreshPath, {
+            method: "POST",
+            headers: { "X-WL-Dashboard-Token": liveConfig.token },
+            credentials: "same-origin"
+          });
+          const payload = await response.json();
+          if (!response.ok || !payload || payload.ok !== true || !payload.data) {
+            const structuredError = payload && payload.error && typeof payload.error === "object"
+              ? text(first(payload.error, ["message", "detail", "code"])) : "";
+            throw new Error(structuredError || text(first(payload, ["message", "detail"], `刷新失败（HTTP ${response.status}）`)));
+          }
+          applyDashboardData(payload.data);
+          const duration = Number(payload.durationMs);
+          const durationNote = Number.isFinite(duration) ? `，耗时 ${Math.round(duration)} ms` : "";
+          setRefreshFeedback("success", `刷新成功${durationNote}。`);
+        } catch (error) {
+          setRefreshFeedback("error", `刷新失败：${text(error && error.message, "请稍后重试")}`);
+        } finally {
+          refreshInFlight = false;
+          refreshButton.disabled = false;
+          refreshButton.setAttribute("aria-busy", "false");
+          scheduleAutoRefresh();
+        }
+      };
+
+      const clearAutoRefreshTimer = () => {
+        if (autoRefreshTimer !== null) window.clearTimeout(autoRefreshTimer);
+        autoRefreshTimer = null;
+      };
+
+      const scheduleAutoRefresh = () => {
+        clearAutoRefreshTimer();
+        const seconds = Number(autoRefresh.value);
+        if (!isLiveMode || !seconds || document.hidden || refreshInFlight) return;
+        autoRefreshTimer = window.setTimeout(() => {
+          autoRefreshTimer = null;
+          void refreshLiveData();
+        }, seconds * 1000);
+      };
+
+      const configureRefreshMode = () => {
+        const mode = document.getElementById("dashboardMode");
+        const note = document.getElementById("freshnessNote");
+        if (isLiveMode) {
+          mode.dataset.mode = "live";
+          mode.textContent = "本地实时模式";
+          note.textContent = `服务地址：${liveConfig.origin}。刷新只执行只读扫描。`;
+          setRefreshFeedback("success", "实时服务已连接，可手动刷新。");
+        } else {
+          mode.dataset.mode = "static";
+          mode.textContent = "静态快照";
+          autoRefresh.disabled = true;
+          setRefreshFeedback("error", "静态模式只会重新加载快照；实时扫描请使用 dashboard serve --open。");
+        }
+      };
+
+      refreshButton.addEventListener("click", () => {
+        if (isLiveMode) {
+          clearAutoRefreshTimer();
+          void refreshLiveData();
+          return;
+        }
+        setRefreshFeedback("loading", "正在重新加载静态快照；实时扫描请使用 dashboard serve --open。");
+        window.setTimeout(() => window.location.reload(), 80);
+      });
+
+      autoRefresh.addEventListener("change", () => {
+        try {
+          window.sessionStorage.setItem(autoRefreshStorageKey, autoRefresh.value);
+        } catch (error) {
+          setRefreshFeedback("error", "浏览器未允许保存自动刷新选择，本次页面仍可使用。");
+        }
+        scheduleAutoRefresh();
+      });
+
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) clearAutoRefreshTimer();
+        else scheduleAutoRefresh();
+      });
+
+      document.querySelectorAll("[data-visibility]").forEach((button) => {
+        button.addEventListener("click", () => {
+          state.visibility = button.dataset.visibility;
+          document.querySelectorAll("[data-visibility]").forEach((candidate) => candidate.setAttribute("aria-selected", String(candidate === button)));
+          render();
+        });
+      });
+
+      const setView = (view) => {
+        state.view = view;
+        document.getElementById("kanbanViewButton").setAttribute("aria-pressed", String(view === "kanban"));
+        document.getElementById("tableViewButton").setAttribute("aria-pressed", String(view === "table"));
+        render();
+      };
+      document.getElementById("kanbanViewButton").addEventListener("click", () => setView("kanban"));
+      document.getElementById("tableViewButton").addEventListener("click", () => setView("table"));
+
+      const bindFilter = (id, key, eventName = "change") => {
+        document.getElementById(id).addEventListener(eventName, (event) => { state[key] = event.target.value.trim(); render(); });
+      };
+      bindFilter("searchInput", "search", "input");
+      bindFilter("projectFilter", "project");
+      bindFilter("statusFilter", "status");
+      bindFilter("anomalyFilter", "anomaly");
+
+      document.getElementById("resetFilters").addEventListener("click", () => {
+        state.search = state.project = state.status = state.anomaly = "";
+        ["searchInput", "projectFilter", "statusFilter", "anomalyFilter"].forEach((id) => { document.getElementById(id).value = ""; });
+        document.getElementById("searchInput").focus();
+        render();
+      });
+
+      const generated = document.getElementById("generatedAt").textContent.trim();
+      if (!generated) document.getElementById("generatedAt").textContent = "未提供";
+      rebuildDashboardModel();
+      try {
+        const storedAutoRefresh = window.sessionStorage.getItem(autoRefreshStorageKey);
+        if (["0", "15", "30", "60"].includes(storedAutoRefresh)) autoRefresh.value = storedAutoRefresh;
+      } catch (error) {
+        autoRefresh.value = "0";
+      }
+      configureRefreshMode();
+      renderSummary();
+      renderErrors();
+      populateFilters();
+      render();
+      scheduleAutoRefresh();
+    })();
+  </script>
+</body>
+</html>

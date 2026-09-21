@@ -1,0 +1,46 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>需求 0003：需求开发看板轻量实时刷新</title><style>:root{--ink:#132235;--line:#d9e0e7;--paper:#f4f7f9;--surface:#fff;--accent:#c88721}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.72 -apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif}header{padding:44px max(24px,calc((100vw - 980px)/2));background:#0f2538;color:white;border-bottom:4px solid var(--accent)}main{max-width:980px;margin:32px auto;padding:0 24px 64px}article{background:var(--surface);border:1px solid var(--line);padding:34px 42px}h1{margin:0}h2{margin-top:36px;padding-top:18px;border-top:1px solid var(--line)}p,li{max-width:78ch}code{background:#edf2f5;padding:.15em .35em}pre{overflow:auto;padding:18px;background:#102638;color:#e7f0f7}pre code{background:none}table{width:100%;border-collapse:collapse}th,td{padding:10px 12px;border:1px solid var(--line);text-align:left;vertical-align:top}th{background:#edf2f5}@media(max-width:700px){header{padding:28px 20px}main{padding:0 12px 40px}article{padding:22px 18px}table{display:block;overflow:auto}}</style></head><body><header><h1>需求 0003：需求开发看板轻量实时刷新</h1><p>状态：approved · 2026-09-21 · AICodingBank</p></header><main><article><h1>需求 0003：需求开发看板轻量实时刷新</h1>
+<h2>需求重定义</h2>
+<p><strong>原始诉求</strong>：希望在 HTML 看板中点击按钮即可重新扫描 Git 并看到最新状态，而不需要回终端运行命令再手工刷新浏览器。</p>
+<p><strong>最终目标</strong>：为现有用户级需求开发看板增加仅监听 localhost 的前台服务，使页面可以显式刷新 Git 事实，并可选择临时自动刷新；保持静态 HTML 降级模式，且不把看板扩展成 Agent 启动器、项目管理平台或常驻服务。</p>
+<h2>用户故事</h2>
+<ol>
+<li>As a <strong>并行需求开发者</strong>, I want 点击“刷新状态”后看到最新分支、Worktree 和合并状态, so that 我不需要回终端执行 refresh 和 Command+R。</li>
+<li>As a <strong>看板使用者</strong>, I want 明确知道当前是实时模式还是静态快照, so that 我不会把旧数据误认为实时数据。</li>
+<li>As a <strong>持续观察者</strong>, I want 可选 15/30/60 秒自动刷新且默认关闭, so that 临时监控时省事，正常阅读时不被打断。</li>
+<li>As a <strong>安全敏感用户</strong>, I want 服务只监听本机且只提供只读扫描接口, so that 页面不能执行 merge、push、删除、发布或启动 Agent。</li>
+<li>As a <strong>现有用户</strong>, I want 原来的静态 HTML、refresh/open/watch 命令继续工作, so that新增实时模式不会破坏降级路径。</li>
+</ol>
+<h2>约束</h2>
+<ul>
+<li>服务固定绑定 <code>127.0.0.1</code>，默认使用随机空闲端口。</li>
+<li>服务以前台方式运行，<code>Ctrl+C</code> 停止；不创建守护进程、PID 服务或开机启动。</li>
+<li>页面不启动或控制任何编码 Agent、终端、容器或外部任务。</li>
+<li>刷新接口只执行现有 <code>GIT_OPTIONAL_LOCKS=0</code> 的只读扫描和用户级状态/HTML更新。</li>
+<li>不开放 CORS，不监听 <code>0.0.0.0</code>，不提供局域网或公网分享。</li>
+<li>使用随机会话 Token；刷新仅允许同源 POST，拒绝 GET 和无效 Token。</li>
+<li>自动刷新默认关闭；页面不可见时暂停，已有刷新未完成时不重复请求。</li>
+<li>实时更新不得清空搜索、项目筛选、状态筛选、视图模式、滚动位置和分支展开状态。</li>
+<li>静态 <code>file://</code> 模式不得伪装成实时扫描，只能重新加载已有快照并提示如何进入实时模式。</li>
+<li>使用 Python 标准库，不新增运行时第三方依赖。</li>
+</ul>
+<h2>不做什么</h2>
+<ul>
+<li>不在看板中启动 Claude、Codex、Herdr 或其他 Agent。</li>
+<li>不增加任务下发、Prompt、终端、diff 编辑器或 PR 创建能力。</li>
+<li>不执行 Git 写操作、环境发布或 TAPD 写入。</li>
+<li>不做多人协作、登录系统、数据库、常驻后台服务或网络分享。</li>
+<li>不替代现有 <code>wl-git-requirement-flow</code> 生命周期命令。</li>
+</ul>
+<h2>验收标准</h2>
+<ol>
+<li><code>dashboard serve --open</code> 启动前台 localhost 服务并打开浏览器，<code>Ctrl+C</code> 后端口关闭。</li>
+<li>页面显示“本地实时模式”、服务地址、最后刷新时间和“刷新状态”按钮。</li>
+<li>点击按钮触发一次真实 Git 扫描，页面原地更新，不整页重载。</li>
+<li>刷新过程显示项目数/状态，按钮防重复；成功与失败均给出明确反馈。</li>
+<li>自动刷新默认关闭，可选 15/30/60 秒；隐藏标签页停止自动扫描。</li>
+<li>静态 HTML 显示“静态快照”，按钮仅重新加载页面，并提示使用 <code>dashboard serve --open</code>。</li>
+<li>无 Token、错误 Token、错误 Origin、GET refresh 均不能触发扫描。</li>
+<li>服务只监听 <code>127.0.0.1</code>；无外部资源、CORS 或 Git 写接口。</li>
+<li>页面刷新后保留全部筛选、视图、滚动和 <code>&lt;details&gt;</code> 展开状态。</li>
+<li>现有静态命令和 0002 测试全部继续通过。</li>
+</ol></article></main></body></html>

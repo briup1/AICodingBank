@@ -1,0 +1,130 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>方案设计：需求开发看板轻量实时刷新</title><style>:root{--ink:#132235;--line:#d9e0e7;--paper:#f4f7f9;--surface:#fff;--accent:#c88721}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.72 -apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif}header{padding:44px max(24px,calc((100vw - 980px)/2));background:#0f2538;color:white;border-bottom:4px solid var(--accent)}main{max-width:980px;margin:32px auto;padding:0 24px 64px}article{background:var(--surface);border:1px solid var(--line);padding:34px 42px}h1{margin:0}h2{margin-top:36px;padding-top:18px;border-top:1px solid var(--line)}p,li{max-width:78ch}code{background:#edf2f5;padding:.15em .35em}pre{overflow:auto;padding:18px;background:#102638;color:#e7f0f7}pre code{background:none}table{width:100%;border-collapse:collapse}th,td{padding:10px 12px;border:1px solid var(--line);text-align:left;vertical-align:top}th{background:#edf2f5}@media(max-width:700px){header{padding:28px 20px}main{padding:0 12px 40px}article{padding:22px 18px}table{display:block;overflow:auto}}</style></head><body><header><h1>方案设计：需求开发看板轻量实时刷新</h1><p>状态：approved · 2026-09-21 · AICodingBank</p></header><main><article><h1>方案设计：需求开发看板轻量实时刷新</h1>
+<h2>1. 方案选择</h2>
+<p>采用 <strong>A：Python 标准库前台 localhost 服务 + JSON 刷新接口 + 静态降级</strong>。</p>
+<table>
+<thead>
+<tr>
+<th>方案</th>
+<th>结论</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A. 前台 localhost 服务</td>
+<td>采用</td>
+<td>真正一键扫描，保留页面状态，无常驻进程和额外依赖</td>
+</tr>
+<tr>
+<td>B. 静态 HTML 周期 reload</td>
+<td>拒绝</td>
+<td>不能保证重新扫描 Git，且会打断筛选和阅读</td>
+</tr>
+<tr>
+<td>C. 后台常驻服务</td>
+<td>暂缓</td>
+<td>对个人看板过重，需要 PID、升级和异常恢复机制</td>
+</tr>
+<tr>
+<td>D. 浏览器直接调用 shell</td>
+<td>拒绝</td>
+<td>浏览器安全模型不允许，扩展/自定义协议过度复杂</td>
+</tr>
+</tbody>
+</table>
+<h2>2. 运行结构</h2>
+<pre><code class="language-text">浏览器 http://127.0.0.1:&lt;随机端口&gt;/
+  ├─ GET  /                  实时模式 HTML
+  ├─ GET  /api/state         返回当前内存快照
+  ├─ POST /api/refresh       执行只读 Git 扫描并返回新快照
+  └─ GET  /api/health        服务健康和生成时间
+                 │
+                 ▼
+ThreadingHTTPServer（前台）
+                 │
+                 ▼
+现有 refresh_dashboard()
+  ├─ 已登记项目 Git 只读扫描
+  ├─ XDG state/config 更新
+  └─ 静态 dashboard.html 同步更新
+</code></pre>
+<p>服务不新增业务状态模型，复用 0002 的 config/state/scanner/renderer。</p>
+<h2>3. HTTP 契约</h2>
+<h3>GET <code>/</code></h3>
+<ul>
+<li>返回由现有模板生成的 HTML。</li>
+<li>额外注入仅存在于内存中的 live 配置：<code>mode=live</code>、API 路径、会话 Token、刷新选项。服务使用不可执行的 JSON script 注入；页面同时保留 <code>window.__WL_DASHBOARD_LIVE__</code> 旧对象入口兼容。</li>
+<li>设置 <code>Cache-Control: no-store</code> 和安全响应头。</li>
+</ul>
+<h3>GET <code>/api/state</code></h3>
+<ul>
+<li>返回最近一次成功生成的看板 JSON。</li>
+<li>不触发扫描。</li>
+<li>仅同源页面和正确 Token 可访问。</li>
+</ul>
+<h3>POST <code>/api/refresh</code></h3>
+<ul>
+<li>Body 为空，限制请求体大小。</li>
+<li>验证随机 Token、Origin、Host 和方法。</li>
+<li>获取单实例刷新锁；已有扫描进行时返回 <code>409</code>。</li>
+<li>所有 config/state 读改写再使用用户级 <code>fcntl</code> 跨进程锁，避免实时刷新覆盖并发 CLI 生命周期事件。</li>
+<li>调用现有 <code>refresh_dashboard()</code>。</li>
+<li>成功返回 <code>{ ok, data, durationMs }</code>；失败返回结构化错误，不泄露 traceback。</li>
+</ul>
+<h3>GET <code>/api/health</code></h3>
+<ul>
+<li>返回 <code>{ ok, mode, generatedAt, refreshing }</code>，不扫描 Git。</li>
+</ul>
+<p>其他路径返回 404；refresh 的 GET 返回 405。</p>
+<h2>4. 安全边界</h2>
+<ul>
+<li>服务端构造地址，host 固定为 <code>127.0.0.1</code>，CLI 不提供 <code>--host</code>。</li>
+<li>端口默认 <code>0</code> 由操作系统分配，可用 <code>--port</code> 指定本机端口。</li>
+<li>每次启动使用 <code>secrets.token_urlsafe()</code> 生成 Token，只存在内存和本次 HTML 响应。</li>
+<li>API 要求 <code>X-WL-Dashboard-Token</code>，同时验证 <code>Origin</code> 等于本服务 origin。</li>
+<li>不发送 <code>Access-Control-Allow-Origin</code>。</li>
+<li>响应头至少包含 <code>Content-Security-Policy</code>、<code>X-Content-Type-Options: nosniff</code>、<code>Referrer-Policy: no-referrer</code>、<code>Cache-Control: no-store</code>。</li>
+<li>服务路由白名单中不存在 Git 写、Agent、shell 或任意命令执行接口。</li>
+<li>HTTP 线程锁只控制重复刷新；用户级文件锁统一协调服务进程与其他 CLI 进程。</li>
+</ul>
+<h2>5. 页面状态模型</h2>
+<pre><code class="language-text">static
+  └─ 按钮：重新加载快照
+
+live-idle
+  └─ 按钮：刷新状态
+
+live-refreshing
+  └─ 按钮禁用，显示正在扫描
+
+live-success
+  └─ 原地替换数据并重新 render
+
+live-error
+  └─ 保留旧数据，显示错误和重试按钮
+</code></pre>
+<p>页面筛选和 UI 状态与看板数据分离。刷新只替换 <code>source/requirements/projects/summary/errors</code>，不重建筛选状态对象。</p>
+<p>自动刷新：</p>
+<ul>
+<li>默认 <code>off</code>；选项 15/30/60 秒。</li>
+<li>使用 <code>setTimeout</code>，上次刷新结束后再安排下一次。</li>
+<li><code>document.hidden === true</code> 时跳过。</li>
+<li>选择保存在 <code>sessionStorage</code>，不写入 config/state。</li>
+</ul>
+<h2>6. CLI 契约</h2>
+<pre><code class="language-bash">wl-git-requirement-flow.sh dashboard serve [--port 0] [--open]
+</code></pre>
+<ul>
+<li>默认前台运行并打印 URL、项目数、安全边界和停止方法。</li>
+<li><code>--open</code> 在服务就绪后用默认浏览器打开。</li>
+<li><code>Ctrl+C</code> 调用 <code>shutdown()</code> 并关闭 socket。</li>
+<li><code>dashboard open</code> 继续打开静态模式，不改变原语义。</li>
+<li><code>dashboard watch</code> 保留兼容，但文档将 <code>serve --open</code> 标为推荐交互入口。</li>
+</ul>
+<h2>7. 兼容和回滚</h2>
+<ul>
+<li>静态模板仍可由 <code>refresh_dashboard()</code> 生成并通过 <code>file://</code> 打开。</li>
+<li>live 配置缺失时，模板自动进入 static 模式。</li>
+<li>删除 serve 路由和页面 live 逻辑即可回滚，不影响扫描器、状态文件或 Git 流程。</li>
+<li>服务异常退出不损坏 config/state；下一次 static refresh 或 serve 可恢复。</li>
+</ul></article></main></body></html>

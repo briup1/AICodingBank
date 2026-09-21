@@ -3,6 +3,15 @@ targets:
 - ~/.claude/skills
 - ~/.hermes/skills
 self:
+- name: wl-git-requirement-flow
+  path: skills/wl-git-requirement-flow
+  capability: 从最新 master 安全创建和单向集成需求分支，并以用户级静态/localhost 实时 HTML 看板聚合多项目 Worktree、Git 生命周期与异常
+  boundary: 看板只监控和刷新，不启动 Agent 或执行 Git 写操作；测试和上线结果需真实确认，远端分支仅在最终目标已包含当前 SHA 后删除
+  tags:
+  - Git
+  - 开发流程
+  - 自动化
+  verified: '2026-09-21'
 - name: goal-coach
   path: skills/goal-coach
   capability: 判断任务是否适合 /goal，并生成完整中文 /goal prompt（完成标准/边界/停止规则）
