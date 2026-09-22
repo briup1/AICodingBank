@@ -36,7 +36,7 @@ chosen: A
  dashboard.html（单文件、用户级、本机打开）
 ```
 
-- `wl-git-requirement-flow.sh` 是唯一命令入口。
+- `wl-git-flow.sh` 是唯一命令入口。
 - `dashboard.py` 使用 Python 标准库，不增加运行依赖。
 - Dev/Beta/清理事件以用户级 `state.json` 为权威；旧 `.git/config` 字段只作一次性兼容来源。
 - HTML 内嵌当前 JSON 数据、CSS 和 JavaScript，不依赖 CDN。
@@ -46,9 +46,9 @@ chosen: A
 
 | 类型 | 默认路径 | 权威内容 |
 | --- | --- | --- |
-| 配置 | `~/.config/wl-git-requirement-flow/config.json` | 登记仓库、分支角色、匹配规则、保留期 |
-| 状态 | `~/.local/state/wl-git-requirement-flow/state.json` | 测试/上线证据、首次/最后发现、最后 Git 快照、归档 |
-| HTML | `~/.local/share/wl-git-requirement-flow/dashboard.html` | 当前只读投影，可随时重建 |
+| 配置 | `~/.config/wl-git-flow/config.json` | 登记仓库、分支角色、匹配规则、保留期 |
+| 状态 | `~/.local/state/wl-git-flow/state.json` | 测试/上线证据、首次/最后发现、最后 Git 快照、归档 |
+| HTML | `~/.local/share/wl-git-flow/dashboard.html` | 当前只读投影，可随时重建 |
 
 测试通过 `XDG_CONFIG_HOME`、`XDG_STATE_HOME`、`XDG_DATA_HOME` 隔离。
 

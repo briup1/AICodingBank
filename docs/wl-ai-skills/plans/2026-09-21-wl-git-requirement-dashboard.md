@@ -1,4 +1,4 @@
-# wl-git-requirement-flow 用户级 HTML 看板实施计划
+# wl-git-flow 用户级 HTML 看板实施计划
 
 ## 目标与非目标
 
@@ -8,22 +8,22 @@
 
 ### 工作包 A：状态与扫描引擎
 
-- 新增 `skills/wl-git-requirement-flow/scripts/dashboard.py`
+- 新增 `skills/wl-git-flow/scripts/dashboard.py`
 - 新增 `tests/test_wl_git_requirement_dashboard.py`
 - 数据契约：XDG config/state/data JSON；Git 扫描默认只读、无 fetch。
 
 ### 工作包 B：HTML 视图（可并行）
 
-- 新增 `skills/wl-git-requirement-flow/assets/dashboard-template.html`
+- 新增 `skills/wl-git-flow/assets/dashboard-template.html`
 - 输入契约：`{{DATA_JSON}}` 与 `{{GENERATED_AT}}`
 - 输出契约：单文件、无 CDN、Kanban/表格、筛选、归档、响应式与键盘可达。
 
 ### 工作包 C：命令与生命周期集成
 
-- 修改 `skills/wl-git-requirement-flow/scripts/wl-git-requirement-flow.sh`
-- 修改 `skills/wl-git-requirement-flow/SKILL.md`
-- 新增 `skills/wl-git-requirement-flow/references/dashboard-model.md`
-- 修改 `skills/wl-git-requirement-flow/agents/openai.yaml`
+- 修改 `skills/wl-git-flow/scripts/wl-git-flow.sh`
+- 修改 `skills/wl-git-flow/SKILL.md`
+- 新增 `skills/wl-git-flow/references/dashboard-model.md`
+- 修改 `skills/wl-git-flow/agents/openai.yaml`
 
 ### 工作包 D：需求文档与验证
 
@@ -50,8 +50,8 @@ B HTML 视图 ────┘
 
 ## 完成证据
 
-- `quick_validate.py skills/wl-git-requirement-flow`
-- `bash -n skills/wl-git-requirement-flow/scripts/wl-git-requirement-flow.sh`
+- `quick_validate.py skills/wl-git-flow`
+- `bash -n skills/wl-git-flow/scripts/wl-git-flow.sh`
 - `pytest -q tests/test_wl_git_requirement_dashboard.py tests/test_wl_git_requirement_flow.py tests/test_install.py`
 - `pytest -q tests`，既有无关失败单独说明
 - 浏览器打开生成 HTML，无控制台错误；桌面和窄屏可读

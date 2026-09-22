@@ -42,7 +42,7 @@
  dashboard.html（单文件、用户级、本机打开）
 </code></pre>
 <ul>
-<li><code>wl-git-requirement-flow.sh</code> 是唯一命令入口。</li>
+<li><code>wl-git-flow.sh</code> 是唯一命令入口。</li>
 <li><code>dashboard.py</code> 使用 Python 标准库，不增加运行依赖。</li>
 <li>Dev/Beta/清理事件以用户级 <code>state.json</code> 为权威；旧 <code>.git/config</code> 字段只作一次性兼容来源。</li>
 <li>HTML 内嵌当前 JSON 数据、CSS 和 JavaScript，不依赖 CDN。</li>
@@ -60,17 +60,17 @@
 <tbody>
 <tr>
 <td>配置</td>
-<td><code>~/.config/wl-git-requirement-flow/config.json</code></td>
+<td><code>~/.config/wl-git-flow/config.json</code></td>
 <td>登记仓库、分支角色、匹配规则、保留期</td>
 </tr>
 <tr>
 <td>状态</td>
-<td><code>~/.local/state/wl-git-requirement-flow/state.json</code></td>
+<td><code>~/.local/state/wl-git-flow/state.json</code></td>
 <td>测试/上线证据、首次/最后发现、最后 Git 快照、归档</td>
 </tr>
 <tr>
 <td>HTML</td>
-<td><code>~/.local/share/wl-git-requirement-flow/dashboard.html</code></td>
+<td><code>~/.local/share/wl-git-flow/dashboard.html</code></td>
 <td>当前只读投影，可随时重建</td>
 </tr>
 </tbody>

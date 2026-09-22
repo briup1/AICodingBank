@@ -8,7 +8,7 @@ import pytest
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SCRIPT = ROOT / "skills/wl-git-requirement-flow/scripts/wl-git-requirement-flow.sh"
+SCRIPT = ROOT / "skills/wl-git-flow/scripts/wl-git-flow.sh"
 
 
 def run(*args: str | Path, cwd: Path | None = None, check: bool = True) -> subprocess.CompletedProcess[str]:
@@ -190,7 +190,7 @@ def test_requirement_flow_and_final_retirement(
     git(repo, "push", "origin", "master")
     git(repo, "fetch", "origin")
     final_plan = run(SCRIPT, "cleanup-plan", "--repo", repo, "--branch", branch).stdout
-    assert "recommendation=ASK_FINAL_RETIRE" in final_plan
+    assert "recommendation=ASK_REMOVE_WORKTREE_KEEP_BRANCH" in final_plan
 
     retired = run(
         SCRIPT,
@@ -210,7 +210,7 @@ def test_requirement_flow_and_final_retirement(
     assert not worktree.exists()
     assert git(repo, "show-ref", "--verify", f"refs/heads/{branch}", check=False).returncode != 0
     assert run("git", "ls-remote", "--exit-code", "--heads", origin, branch, check=False).returncode != 0
-    state_path = tmp_path / "state/wl-git-requirement-flow/state.json"
+    state_path = tmp_path / "state/wl-git-flow/state.json"
     state = json.loads(state_path.read_text(encoding="utf-8"))
     entry = next(item for item in state["requirements"].values() if item["branch"] == branch)
     assert entry["stage"] == "cleaned"
@@ -264,8 +264,8 @@ def test_start_auto_registers_and_refreshes_dashboard(
         "--worktree-root",
         tmp_path / "worktrees",
     )
-    config = tmp_path / "config/wl-git-requirement-flow/config.json"
-    html = tmp_path / "data/wl-git-requirement-flow/dashboard.html"
+    config = tmp_path / "config/wl-git-flow/config.json"
+    html = tmp_path / "data/wl-git-flow/dashboard.html"
     assert config.exists()
     assert html.exists()
     assert "feature/story/44973445_1073308" in html.read_text(encoding="utf-8")
@@ -298,7 +298,7 @@ def test_soft_cleanup_then_retire_branch_without_recreating_worktree(
     git(repo, "fetch", "origin")
 
     run(SCRIPT, "remove-worktree", "--repo", repo, "--worktree", worktree, "--confirm")
-    state_path = tmp_path / "state/wl-git-requirement-flow/state.json"
+    state_path = tmp_path / "state/wl-git-flow/state.json"
     state = json.loads(state_path.read_text(encoding="utf-8"))
     entry = next(item for item in state["requirements"].values() if item["branch"] == branch)
     assert "cleanedAt" not in entry

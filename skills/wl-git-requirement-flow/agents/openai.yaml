@@ -1,4 +1,0 @@
-interface:
-  display_name: "WL Git Requirement Flow"
-  short_description: "安全管理需求分支、Worktree 生命周期与本地实时 HTML 看板"
-  default_prompt: "使用 $wl-git-requirement-flow 安全管理需求分支和 Worktree；需要交互查看时以前台 localhost 实时模式打开看板。"

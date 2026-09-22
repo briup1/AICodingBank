@@ -1,5 +1,7 @@
 # 用户级需求开发看板模型
 
+归属 SKILL.md 第 2 层。本文件只规定看板存什么、显示什么。合并方向和“只删目录”以 SKILL.md 第 1 层、[worktree-lifecycle.md](worktree-lifecycle.md) 为准；改显示不得改那些规则。
+
 ## 事实分层
 
 - Git 事实：分支、Worktree、dirty、upstream、ahead/behind、SHA、Dev/Beta/master 祖先关系。
@@ -19,9 +21,9 @@ HTML 只展示派生结果，不成为事实来源。
 ## 默认路径
 
 ```text
-~/.config/wl-git-requirement-flow/config.json
-~/.local/state/wl-git-requirement-flow/state.json
-~/.local/share/wl-git-requirement-flow/dashboard.html
+~/.config/wl-git-flow/config.json
+~/.local/state/wl-git-flow/state.json
+~/.local/share/wl-git-flow/dashboard.html
 ```
 
 测试和临时运行应使用 XDG 环境变量隔离。

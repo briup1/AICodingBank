@@ -14,7 +14,7 @@ import pytest
 
 
 ROOT = Path(__file__).resolve().parents[1]
-MODULE_PATH = ROOT / "skills/wl-git-requirement-flow/scripts/dashboard.py"
+MODULE_PATH = ROOT / "skills/wl-git-flow/scripts/dashboard.py"
 SPEC = importlib.util.spec_from_file_location("wl_git_requirement_dashboard", MODULE_PATH)
 assert SPEC and SPEC.loader
 DASHBOARD = importlib.util.module_from_spec(SPEC)

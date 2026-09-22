@@ -112,7 +112,7 @@ live-error
 ## 6. CLI 契约
 
 ```bash
-wl-git-requirement-flow.sh dashboard serve [--port 0] [--open]
+wl-git-flow.sh dashboard serve [--port 0] [--open]
 ```
 
 - 默认前台运行并打印 URL、项目数、安全边界和停止方法。

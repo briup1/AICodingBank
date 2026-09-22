@@ -23,7 +23,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Iterable
 
-APP = "wl-git-requirement-flow"
+APP = "wl-git-flow"
 VERSION = 1
 DEFAULT_PATTERNS = [
     r"^feature/story/[a-z0-9][a-z0-9._-]*$",

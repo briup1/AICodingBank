@@ -8,20 +8,20 @@ DASHBOARD_SCRIPT="$SCRIPT_DIR/dashboard.py"
 usage() {
   cat <<'USAGE'
 Usage:
-  wl-git-requirement-flow.sh start --repo PATH --id REQUIREMENT_ID [--worktree-root PATH] [--branch NAME]
+  wl-git-flow.sh start --repo PATH --id REQUIREMENT_ID [--worktree-root PATH] [--branch NAME]
       REQUIREMENT_ID: TAPD PROJECT_STORY (数字_数字) 或私人项目 slug (如 login-redesign)
-  wl-git-requirement-flow.sh integrate-dev --repo PATH --source BRANCH --target BRANCH --target-worktree PATH [--push-source] [--push-target]
-  wl-git-requirement-flow.sh promote --repo PATH --source BRANCH --target BRANCH --target-worktree PATH [--push-target] [--base origin/master] [--dev origin/feature/dev]
-  wl-git-requirement-flow.sh mark-dev-result --repo PATH --branch BRANCH --result passed|failed
-  wl-git-requirement-flow.sh mark-stage --repo PATH --branch BRANCH --stage paused|beta-testing|beta-passed|released
-  wl-git-requirement-flow.sh audit --repo PATH --branch BRANCH [--base origin/master] [--dev origin/feature/dev]
-  wl-git-requirement-flow.sh cleanup-plan --repo PATH --branch BRANCH [--dev feature/dev] [--beta BRANCH] [--base origin/master]
-  wl-git-requirement-flow.sh remove-worktree --repo PATH --worktree PATH --confirm [--delete-local-branch] [--delete-remote-branch] [--final-target REF]
-  wl-git-requirement-flow.sh retire-branch --repo PATH --branch BRANCH --confirm --final-target REF
-  wl-git-requirement-flow.sh dashboard register|refresh|open|serve|watch|mark-online|archive|show-path [OPTIONS]
-  wl-git-requirement-flow.sh dashboard serve [--port 0] [--open]
+  wl-git-flow.sh integrate-dev --repo PATH --source BRANCH --target BRANCH --target-worktree PATH [--push-source] [--push-target]
+  wl-git-flow.sh promote --repo PATH --source BRANCH --target BRANCH --target-worktree PATH [--push-target] [--base origin/master] [--dev origin/feature/dev]
+  wl-git-flow.sh mark-dev-result --repo PATH --branch BRANCH --result passed|failed
+  wl-git-flow.sh mark-stage --repo PATH --branch BRANCH --stage paused|beta-testing|beta-passed|released
+  wl-git-flow.sh audit --repo PATH --branch BRANCH [--base origin/master] [--dev origin/feature/dev]
+  wl-git-flow.sh cleanup-plan --repo PATH --branch BRANCH [--dev feature/dev] [--beta BRANCH] [--base origin/master]
+  wl-git-flow.sh remove-worktree --repo PATH --worktree PATH --confirm [--delete-local-branch] [--delete-remote-branch] [--final-target REF]
+  wl-git-flow.sh retire-branch --repo PATH --branch BRANCH --confirm --final-target REF
+  wl-git-flow.sh dashboard register|refresh|open|serve|watch|mark-online|archive|show-path [OPTIONS]
+  wl-git-flow.sh dashboard serve [--port 0] [--open]
 
-The script never force-pushes. Remote branch deletion requires final-target ancestry and explicit --confirm.
+The script never force-pushes. Normal cleanup removes only the Worktree directory and keeps branches.
 USAGE
 }
 
@@ -406,8 +406,8 @@ cmd_cleanup_plan() {
     return
   fi
   if git -C "$repo" rev-parse --verify --quiet "$base^{commit}" >/dev/null && git -C "$repo" merge-base --is-ancestor "$current_sha" "$base"; then
-    note "recommendation=ASK_FINAL_RETIRE"
-    note "reason=current requirement SHA is contained in $base"
+    note "recommendation=ASK_REMOVE_WORKTREE_KEEP_BRANCH"
+    note "reason=current requirement SHA is contained in $base; remove the worktree directory only and keep local and remote branches"
     return
   fi
   if [[ -n "$beta" ]] && git -C "$repo" rev-parse --verify --quiet "$beta^{commit}" >/dev/null && git -C "$repo" merge-base --is-ancestor "$current_sha" "$beta"; then

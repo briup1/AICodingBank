@@ -6,7 +6,7 @@
 
 ## 结论摘要
 
-GitHub 上已经出现一批“AI 编码 Agent + Kanban/控制台 + Worktree”的开源项目。最接近当前 `wl-git-requirement-flow` 的是 **Vibe Kanban、Agent Console、Agent Taskboard 和 Kangentic**；但截至 2026-09-21，没有一个项目同时覆盖我们的全部约束：
+GitHub 上已经出现一批“AI 编码 Agent + Kanban/控制台 + Worktree”的开源项目。最接近当前 `wl-git-flow` 的是 **Vibe Kanban、Agent Console、Agent Taskboard 和 Kangentic**；但截至 2026-09-21，没有一个项目同时覆盖我们的全部约束：
 
 - 以“需求”而不是 Agent 会话为主实体；
 - 同需求多分支聚合和主分支选择；
@@ -17,7 +17,7 @@ GitHub 上已经出现一批“AI 编码 Agent + Kanban/控制台 + Worktree”�
 - TAPD 标题缓存；
 - 只读 Git 扫描和个人本机数据边界。
 
-因此不建议直接替换当前实现。最佳策略是：**保留 `wl-git-requirement-flow` 的领域模型，借鉴 Agent Console/Agent Taskboard/Kangentic 的实时控制台和任务详情交互，参考 Vibe Kanban 的产品模型，但不要以正在 sunset 的 Vibe Kanban 作为长期底座。**
+因此不建议直接替换当前实现。最佳策略是：**保留 `wl-git-flow` 的领域模型，借鉴 Agent Console/Agent Taskboard/Kangentic 的实时控制台和任务详情交互，参考 Vibe Kanban 的产品模型，但不要以正在 sunset 的 Vibe Kanban 作为长期底座。**
 
 ## 项目对比
 
@@ -56,7 +56,7 @@ Agent Console 把自己定位为运行在浏览器中的本地编码 Agent 控�
 - 不绑定单一 Agent provider；
 - 本地运行并使用 SQLite。
 
-与我们相比，它更偏“启动和控制 Agent”，而 `wl-git-requirement-flow` 更偏“需求、分支血缘、环境验证和清理生命周期”。
+与我们相比，它更偏“启动和控制 Agent”，而 `wl-git-flow` 更偏“需求、分支血缘、环境验证和清理生命周期”。
 
 结论：**最适合借鉴未来 `dashboard serve`、实时刷新、任务详情页和终端/diff 接口。**
 
@@ -113,7 +113,7 @@ Agent Worktrees 以“一个 Worktree 对应一个 Agent 会话”为核心，�
 
 Herdr 是面向编码 Agent 的终端工作区和 Agent 控制工具，提供 pane、workspace、Agent 生命周期和 Worktree 管理。它不是 Kanban，也不负责需求主题、Dev/Beta 测试或上线归档。
 
-结论：**继续作为执行和并行编排层，与 `wl-git-requirement-flow` 看板互补。**
+结论：**继续作为执行和并行编排层，与 `wl-git-flow` 看板互补。**
 
 ## 与当前实现的差距
 
@@ -167,7 +167,7 @@ TAPD 需求
 
 目前没有一个成熟、持续维护且能直接满足需求的开源项目。最合理的路径是：
 
-- 继续开发轻量的 `wl-git-requirement-flow`；
+- 继续开发轻量的 `wl-git-flow`；
 - 不复制完整 Agent 编排平台；
 - 下一阶段只借鉴 Agent Console 的本地实时服务和 Agent Taskboard 的 Worktree 卡片体验；
 - 保留当前独特的需求聚合、分支安全、验证 SHA、上线和清理模型；

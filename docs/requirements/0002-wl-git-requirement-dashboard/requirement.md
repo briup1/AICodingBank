@@ -16,7 +16,7 @@ source: 用户确认的多项目 Worktree 与需求生命周期管理诉求
 
 **约束**：
 
-- 能力继续归属 `wl-git-requirement-flow`，不新增第二个 Skill。
+- 能力继续归属 `wl-git-flow`，不新增第二个 Skill。
 - 源码位于 AICodingBank；不向业务仓库写入看板、状态或配置。
 - 运行数据位于用户级 XDG 目录，默认不共享、不上传、不监听网络端口。
 - HTML 是只读投影，不直接执行 Git 操作。
