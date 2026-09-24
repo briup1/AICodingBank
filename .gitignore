@@ -5,3 +5,4 @@ skills.local.yaml
 WORKBENCH.local.md
 __pycache__/
 .wl-ai-skills/
+node_modules/

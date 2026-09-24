@@ -1,12 +1,18 @@
 # Skill 总目录（install.py 自动生成，勿手改）
 
-共 82 个 · 已验证 61 · 待验证 21
+共 84 个 · 已验证 63 · 待验证 21
 
 想看深度使用经验 → wiki entity 页；想改行为 → SKILL.md；本目录只回答“它能干什么、边界在哪”。
 
 ## Git
+- **hgj-git-connect**（自研·已验证 2026-09-24）— 诊断并切换公司 GitLab 的直连与 SSH 跳板路由，优先用只读检查确认当前可用链路
+  边界：仅处理本机 GitLab SSH 连接与路由，不替代需求分支、合并、评审、发布或权限申请；不自动修改 known_hosts、不自动执行 pull/push
 - **wl-git-flow**（自研·已验证 2026-09-22）— 从最新 master 安全创建和单向集成需求分支，并以用户级静态/localhost 实时 HTML 看板聚合多项目 Worktree、Git 生命周期与异常
   边界：看板只监控和刷新，不启动 Agent 或执行 Git 写操作；测试和上线结果需真实确认；清理只删除 Worktree 目录，不删除本地或远端分支；Dev 和 Beta 只接收需求分支；上线走 release/yyyymmdd，发布成功后由 CI/CD 合进 master
+
+## SSH
+- **hgj-git-connect**（自研·已验证 2026-09-24）— 诊断并切换公司 GitLab 的直连与 SSH 跳板路由，优先用只读检查确认当前可用链路
+  边界：仅处理本机 GitLab SSH 连接与路由，不替代需求分支、合并、评审、发布或权限申请；不自动修改 known_hosts、不自动执行 pull/push
 
 ## 代码审查
 - **wl-requesting-code-review**（自研·已验证 2026-09-01）— 在交付前依据需求、架构、风险与测试证据审查已完成的代码
@@ -87,6 +93,8 @@
   边界：仅用于缺陷诊断与修复；修复前必须有失败复现，修复后必须验证
 - **wl-phase-routing**（自研·**待验证（未安装）**）— 为复杂或多步骤工作判断唯一当前阶段（观察/确认/设计/执行/验证/沉淀）并选择最小能力组合
   边界：只做阶段判断与能力选择，不替代各阶段内的具体 Skill；范围明确的简单任务不触发
+- **wl-prod-db**（自研·已验证 2026-09-23）— 查询海管家生产 MySQL 和生产 Mongo。MySQL 走 opencli yearning，Mongo 走 opencli archery
+  边界：不查 dev/beta 日志，不替代 agent-tools fuxi；MySQL 只收带 LIMIT 的 SELECT，Mongo 只收 prd-mongo 上的 find 一类只读语句，返回行数 1 到 1000
 - **wl-req-confirm**（自研·已验证 2026-08-31）— 需求确认——把模糊诉求变成人审批准的《需求确认文档》（重定义需求/用户故事/Out of Scope/验收）
   边界：只回答要什么/为什么/怎么算完成，不回答怎么做（方案设计归 wl-design-doc）
 - **wl-requesting-code-review**（自研·已验证 2026-09-01）— 在交付前依据需求、架构、风险与测试证据审查已完成的代码
@@ -126,8 +134,16 @@
 - **teach**（第三方·mattpocock/skills·已验证 2026-08-23）— 在工作区内教会你一个技能或概念
   边界：教学对话，不产出工程代码
 
+## 数据库
+- **wl-prod-db**（自研·已验证 2026-09-23）— 查询海管家生产 MySQL 和生产 Mongo。MySQL 走 opencli yearning，Mongo 走 opencli archery
+  边界：不查 dev/beta 日志，不替代 agent-tools fuxi；MySQL 只收带 LIMIT 的 SELECT，Mongo 只收 prd-mongo 上的 find 一类只读语句，返回行数 1 到 1000
+
 ## 未分类
 - **langfuse**（第三方·langfuse/skills·**待验证（未安装）**）—
+
+## 本机工具
+- **hgj-git-connect**（自研·已验证 2026-09-24）— 诊断并切换公司 GitLab 的直连与 SSH 跳板路由，优先用只读检查确认当前可用链路
+  边界：仅处理本机 GitLab SSH 连接与路由，不替代需求分支、合并、评审、发布或权限申请；不自动修改 known_hosts、不自动执行 pull/push
 
 ## 架构
 - **codebase-design**（第三方·mattpocock/skills·已验证 2026-08-23）— 深模块设计方法论：设计模块接口、找深化机会、定接缝位置

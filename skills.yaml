@@ -3,6 +3,15 @@ targets:
 - ~/.claude/skills
 - ~/.hermes/skills
 self:
+- name: hgj-git-connect
+  path: skills/hgj-git-connect
+  capability: 诊断并切换公司 GitLab 的直连与 SSH 跳板路由，优先用只读检查确认当前可用链路
+  boundary: 仅处理本机 GitLab SSH 连接与路由，不替代需求分支、合并、评审、发布或权限申请；不自动修改 known_hosts、不自动执行 pull/push
+  tags:
+  - Git
+  - SSH
+  - 本机工具
+  verified: '2026-09-24'
 - name: wl-git-flow
   path: skills/wl-git-flow
   capability: 从最新 master 安全创建和单向集成需求分支，并以用户级静态/localhost 实时 HTML 看板聚合多项目 Worktree、Git 生命周期与异常
@@ -235,5 +244,13 @@ self:
   - 开发流程
   - 效率
   verified: '2026-09-06'
+- name: wl-prod-db
+  path: skills/wl-prod-db
+  capability: 查询海管家生产 MySQL 和生产 Mongo。MySQL 走 opencli yearning，Mongo 走 opencli archery
+  boundary: 不查 dev/beta 日志，不替代 agent-tools fuxi；MySQL 只收带 LIMIT 的 SELECT，Mongo 只收 prd-mongo 上的 find 一类只读语句，返回行数 1 到 1000
+  tags:
+  - 数据库
+  - 开发流程
+  verified: '2026-09-23'
 third_party:
   lock: skills-lock.json
