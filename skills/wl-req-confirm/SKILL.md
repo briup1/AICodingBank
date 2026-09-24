@@ -64,6 +64,8 @@ docs/requirements/NNNN-slug/
 ```
 
 - **HTML 生成规范见 `doc-html-style.md`**（S1 编辑出版·暖纸风 + 侧边导航布局），生成前必读
+
+HTML 交付前必须执行 `doc-html-style.md` 的“HTML 可读性检查”，尤其要展开代码块检查文字与背景；HTML 解析成功不能代替浏览器渲染验证。无法执行时如实标注，不宣称视觉验收通过。
 - 编号 NNNN 从 0001 起递增；slug 为英文短横线命名
 - frontmatter：`id / slug / status / created / source`
 - 状态机：`draft → reviewing → approved → designing → implementing → done`
