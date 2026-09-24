@@ -1,0 +1,4 @@
+interface:
+  display_name: "HGJ Git Connect"
+  short_description: "诊断并切换公司 GitLab 的直连/跳板 SSH 路由"
+  default_prompt: "处理公司 GitLab 的 pull、push、SSH 连接异常或直连/跳板路由切换。默认优先直连，先做只读连通性验证。"
