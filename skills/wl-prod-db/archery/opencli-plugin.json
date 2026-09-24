@@ -1,0 +1,6 @@
+{
+  "name": "archery",
+  "version": "0.1.0",
+  "description": "在已登录的 Archery 上查询生产 Mongo",
+  "opencli": ">=1.8.7"
+}

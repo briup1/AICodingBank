@@ -1,0 +1,6 @@
+{
+  "name": "yearning",
+  "version": "0.1.0",
+  "description": "在已登录的 Yearning 上申请查询时限，并执行只读 SELECT",
+  "opencli": ">=1.8.7"
+}
