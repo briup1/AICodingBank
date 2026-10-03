@@ -1,6 +1,19 @@
 {
   "version": 1,
   "skills": {
+    "answer-me-with-html": {
+      "source": "QingYunA/answer-me-with-html",
+      "sourceType": "github",
+      "skillPath": "skills/answer-me-with-html/SKILL.md",
+      "computedHash": "",
+      "capability": "把复杂问题的回答做成一页可视化 HTML：模型只写扩展 Markdown 稿，自带 CLI 负责模板、图表自动布局和 STE 写作检查",
+      "boundary": "短问答、命令和纯代码修改不出页面；依赖 Node.js 20+，产物是 ~/.answer-me-with-html/pages/ 下的单文件 HTML，不改业务代码",
+      "tags": [
+        "图表",
+        "效率"
+      ],
+      "verified": "2026-10-03"
+    },
     "a2ui-renderer": {
       "source": "CopilotKit/CopilotKit",
       "sourceType": "github",

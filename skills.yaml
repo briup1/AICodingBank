@@ -252,5 +252,14 @@ self:
   - 数据库
   - 开发流程
   verified: '2026-09-23'
+- name: wl-docker-port-registry
+  path: skills/wl-docker-port-registry
+  capability: 用 lsof/docker ps/curl 三板斧查明本机端口占用真身，并按 3000-3099 段 10 位槽位规则为新服务分配宿主端口、登记本机台账并显式写入项目 .env
+  boundary: 只管宿主端口查询、分配与登记；不管理容器生命周期、不改在跑服务端口、不执行清理操作；台账只记分配决策，实时占用以查询为准
+  tags:
+  - Docker
+  - 本机工具
+  - 端口管理
+  verified: '2026-10-03'
 third_party:
   lock: skills-lock.json

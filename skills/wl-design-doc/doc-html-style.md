@@ -105,3 +105,12 @@ pre > code,
 5. 保存展开代码块的截图作为可读性验证证据。浏览器不可用时标注“视觉验证未执行”，说明原因；静态检查或 HTML 解析成功不能代替浏览器渲染验证。
 
 修复此类问题时应更新生成模板/样式来源并重新生成 HTML，保留 Markdown 为内容事实来源，避免只修一次生成物而下次复发。
+
+## 生成物身份检查（与可读性检查分别执行）
+
+1. 新产物成对使用 `requirement.wl-req-confirm.{md,html}` 或 `design.wl-design-doc.{md,html}`，不另建旧名正文副本。
+2. Markdown frontmatter 的 `skill` 必须与文件名对应，`artifact_schema_version` 为 `1`。
+3. HTML `<head>` 中保留同值的 `meta[name="generator"]` 和 `meta[name="artifact-schema-version"]`；侧栏顶部可见相同 Skill 名与“产物规范：1”。这些值从 Markdown 读取，不独立猜测。
+4. 校验文件名、Markdown、HTML meta 和可见来源标签一致；章节链接指向实际存在的文档和锚点。缺字段、错值、重复且矛盾的 meta、断链均需修复再交付。
+5. frontmatter 渲染为标签，Markdown 标题和表格渲染为对应 HTML 元素；禁止把整篇 Markdown 放进单个 `<pre>` 冒充完成 HTML 生成。
+6. 历史旧名文件按 SKILL.md 的兼容规则处理，缺来源时显示“来源未确认”；不得为通过检查伪造历史身份，也不得仅凭标识宣称内容验收通过或用户已批准。

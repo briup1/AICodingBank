@@ -7,7 +7,15 @@ description: 工单执行——方案批准后，将需求拆成可验收 Ticket
 
 开发流程的第三阶段。目标是在保留需求追踪和验收边界的同时，减少重复读取上下文、重复测试和重复审查，自动执行到验收。
 
-**前置条件**：`design.md` 状态为 `approved`；多方案场景下已有选定方案（`chosen`）。
+**前置条件**：`design.wl-design-doc.md`（兼容历史 `design.md`）状态为 `approved`；多方案场景下已有选定方案（`chosen`）。
+
+## 上游文档查找与身份核对
+
+- 同一需求目录优先读取 `requirement.wl-req-confirm.md`、`design.wl-design-doc.md`，不存在时兼容历史 `requirement.md`、`design.md`；所有追踪链接使用实际文件名。
+- 新命名文档必须含匹配的 `skill: wl-req-confirm` / `skill: wl-design-doc` 与 `artifact_schema_version: 1`；名称与身份不符或缺失时要求修复，不当作已确认来源。
+- 新旧同阶段文件并存时，先核实正文与批准版本；无法确定权威文件则停止并询问，不凭新名称或修改时间选择。
+- 历史文件无来源标识仅记“来源未确认”，不补造、不自动重命名；是否能进入工单阶段仍以实际需求/设计内容及用户批准证据为准。
+- 文件名或来源标识不代表用户批准，必须单独核对 `status: approved` 和多方案的 `chosen`。
 
 ## 核心模型
 

@@ -1,8 +1,12 @@
 # Skill 总目录（install.py 自动生成，勿手改）
 
-共 84 个 · 已验证 63 · 待验证 21
+共 86 个 · 已验证 64 · 待验证 22
 
 想看深度使用经验 → wiki entity 页；想改行为 → SKILL.md；本目录只回答“它能干什么、边界在哪”。
+
+## Docker
+- **wl-docker-port-registry**（自研·**待验证（未安装）**）— 用 lsof/docker ps/curl 三板斧查明本机端口占用真身，并按 3000-3099 段 10 位槽位规则为新服务分配宿主端口、登记本机台账并显式写入项目 .env
+  边界：只管宿主端口查询、分配与登记；不管理容器生命周期、不改在跑服务端口、不执行清理操作；台账只记分配决策，实时占用以查询为准
 
 ## Git
 - **hgj-git-connect**（自研·已验证 2026-09-24）— 诊断并切换公司 GitLab 的直连与 SSH 跳板路由，优先用只读检查确认当前可用链路
@@ -57,6 +61,8 @@
   边界：提供策略与白名单只读分享脚本，无通用发布CLI、认证或多人审核后台；不替代业务确认，不自动开放局域网
 
 ## 图表
+- **answer-me-with-html**（第三方·QingYunA/answer-me-with-html·已验证 2026-10-03）— 把复杂问题的回答做成一页可视化 HTML：模型只写扩展 Markdown 稿，自带 CLI 负责模板、图表自动布局和 STE 写作检查
+  边界：短问答、命令和纯代码修改不出页面；依赖 Node.js 20+，产物是 ~/.answer-me-with-html/pages/ 下的单文件 HTML，不改业务代码
 - **diagram**（第三方·312362115/claude·已验证 2026-08-23）— 生成 29 种专业 PNG 图表：流程/时序/架构/ER/甘特 + 柱线饼雷等统计图，统一设计规范
   边界：HTML/SVG+JS 渲染输出 PNG，非矢量源文件
 - **excalidraw-diagram-generator**（第三方·p-rp/excalidraw-diagram-generator·已验证 2026-08-23）— 自然语言生成 Excalidraw 图：流程图、架构图、思维导图、关系图
@@ -109,6 +115,8 @@
 ## 效率
 - **agent-dag-reporting**（自研·已验证 2026-08-24）— 将多步骤任务的计划、状态、产物和检查点按 agent-dag/v1 上报到 Personal Workbench
   边界：仅负责可观测性上报，不改变任务执行方式；依赖宿主提供对应 MCP 上报工具
+- **answer-me-with-html**（第三方·QingYunA/answer-me-with-html·已验证 2026-10-03）— 把复杂问题的回答做成一页可视化 HTML：模型只写扩展 Markdown 稿，自带 CLI 负责模板、图表自动布局和 STE 写作检查
+  边界：短问答、命令和纯代码修改不出页面；依赖 Node.js 20+，产物是 ~/.answer-me-with-html/pages/ 下的单文件 HTML，不改业务代码
 - **ask-matt**（第三方·mattpocock/skills·已验证 2026-08-23）— 在 mattpocock 全家桶里帮你选合适的 skill 或流程
   边界：只是路由器，本身不执行具体工作
 - **copilotkit-self-update**（第三方·CopilotKit/CopilotKit·**待验证（未安装）**）— 刷新或重装 CopilotKit 官方 Agent Skills，使本地知识与最新 API 保持同步
@@ -144,6 +152,8 @@
 ## 本机工具
 - **hgj-git-connect**（自研·已验证 2026-09-24）— 诊断并切换公司 GitLab 的直连与 SSH 跳板路由，优先用只读检查确认当前可用链路
   边界：仅处理本机 GitLab SSH 连接与路由，不替代需求分支、合并、评审、发布或权限申请；不自动修改 known_hosts、不自动执行 pull/push
+- **wl-docker-port-registry**（自研·**待验证（未安装）**）— 用 lsof/docker ps/curl 三板斧查明本机端口占用真身，并按 3000-3099 段 10 位槽位规则为新服务分配宿主端口、登记本机台账并显式写入项目 .env
+  边界：只管宿主端口查询、分配与登记；不管理容器生命周期、不改在跑服务端口、不执行清理操作；台账只记分配决策，实时占用以查询为准
 
 ## 架构
 - **codebase-design**（第三方·mattpocock/skills·已验证 2026-08-23）— 深模块设计方法论：设计模块接口、找深化机会、定接缝位置
@@ -206,6 +216,10 @@
   边界：不用于普通文档摘要，也不接受非官方资料作为核心依据
 - **research**（第三方·mattpocock/skills·已验证 2026-08-23）— 对着高可信一手资料做调研，结论落盘为 repo 里的 markdown
   边界：需要网络访问；不做观点创作
+
+## 端口管理
+- **wl-docker-port-registry**（自研·**待验证（未安装）**）— 用 lsof/docker ps/curl 三板斧查明本机端口占用真身，并按 3000-3099 段 10 位槽位规则为新服务分配宿主端口、登记本机台账并显式写入项目 .env
+  边界：只管宿主端口查询、分配与登记；不管理容器生命周期、不改在跑服务端口、不执行清理操作；台账只记分配决策，实时占用以查询为准
 
 ## 编程
 - **a2ui-renderer**（第三方·CopilotKit/CopilotKit·**待验证（未安装）**）— 在 CopilotKit v2 中接入和渲染 A2UI 声明式界面，覆盖运行时、Provider、主题与动作桥接

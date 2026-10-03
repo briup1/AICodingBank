@@ -1,6 +1,6 @@
 ---
 name: wl-design-doc
-description: '方案设计——需求确认文档被批准（status: approved）之后、写任何实现代码之前使用。把需求转化为《方案设计文档》（design.md + HTML）：需求↔方案映射、前后对比、接口契约、复用分析、多方案并列、附证据的审查结论、最小验证。看到"设计一下方案""出个技术方案""这个怎么做"时也必须走本 skill。'
+description: '方案设计——需求确认文档被批准（status: approved）之后、写任何实现代码之前使用。把需求转化为《方案设计文档》（design.wl-design-doc.md + HTML）：需求↔方案映射、前后对比、接口契约、复用分析、多方案并列、附证据的审查结论、最小验证。看到"设计一下方案""出个技术方案""这个怎么做"时也必须走本 skill。'
 ---
 
 # 方案设计（wl-design-doc）
@@ -9,16 +9,46 @@ description: '方案设计——需求确认文档被批准（status: approved�
 
 **为什么**：实施期的混乱几乎都源于设计期欠的债——接口没定清、复用没盘点、风险没暴露。本 skill 把债前置：最小验证不通过的方案，根本没资格进入开发。
 
-**前置条件**：`requirement.md` 状态为 `approved`。否则先走 wl-req-confirm。
+**前置条件**：`requirement.wl-req-confirm.md`（兼容历史 `requirement.md`）状态为 `approved`。否则先走 wl-req-confirm。
 **出口条件**：用户批准方案（若有多个方案，用户已明确选定其一，记入 frontmatter `chosen`）。
+
+## 生成物身份与文件名（强制）
+
+- 新建文档固定命名 `design.wl-design-doc.md` 与 `design.wl-design-doc.html`；不另存一份旧名正文。项目可覆盖归档目录，不省略文件名中的 Skill 名。
+- Markdown frontmatter 必须包含 `skill: wl-design-doc` 和 `artifact_schema_version: 1`；这里的版本是生成物身份协议版本，不冒充 Skill 源码版本。`source` 继续表示业务材料来源。
+- HTML 必须从 Markdown 同步身份字段：`<meta name="generator" content="wl-design-doc">`、`<meta name="artifact-schema-version" content="1">`。侧栏顶部显示 `wl-design-doc` 标签及“产物规范：1”；不能只写在 HTML 注释中。
+- 文件名、Markdown 字段、HTML meta 和可见标签必须一致。按 `doc-html-style.md` 完成身份检查和可读性检查后才能交付；仅有标识不代表内容合规、用户批准或真实执行记录。
+
+### 历史兼容与阶段交接
+
+- 同一需求目录先找新命名，再兼容 `requirement.md` / `design.md` 及配套 HTML；引用与锚点指向实际找到的文件名，不硬编码不存在的新名。
+- 新旧同阶段文件同时存在时，先核实是否同一正文及批准版本；不能直接选新文件覆盖旧批准，无法确定则停下询问。
+- 已有历史文件原位维护，不批量改名、不复制双份正文；缺少身份字段时标记“来源未确认”，不从标题、布局或目录推断来源。只有在明确授权的重新生成中，才为新生成产物写入当前 Skill 身份，不追溯声称历史来源。
+- 文件名和来源标识不改变 `status` / `chosen`，下游仍需核对用户明确批准的证据。
 
 ## 产出
 
-`docs/requirements/NNNN-slug/design.md`（+ 生成的 HTML）。Markdown 是唯一事实来源。
+`docs/requirements/NNNN-slug/design.wl-design-doc.md`（+ 生成的 HTML）。Markdown 是唯一事实来源。
 
 **HTML 生成规范见 `doc-html-style.md`**（S1 编辑出版·暖纸风 + 侧边导航布局），生成前必读。
 
 HTML 交付前必须执行 `doc-html-style.md` 的“HTML 可读性检查”，尤其要展开代码块检查文字与背景；HTML 解析成功不能代替浏览器渲染验证。无法执行时如实标注，不宣称视觉验收通过。
+
+### 新建设计文档的 frontmatter
+
+```yaml
+---
+id: <需求编号>
+status: draft
+created: <YYYY-MM-DD>
+source_requirement: <实际已批准的需求 Markdown 相对路径>
+skill: wl-design-doc
+artifact_schema_version: 1
+chosen: null
+---
+```
+
+`chosen` 仅在用户明确选择后填写，来源标识不代替批准。
 
 ## 设计原则：最小完整方案 + 演进压力测试
 
@@ -52,7 +82,7 @@ HTML 交付前必须执行 `doc-html-style.md` 的“HTML 可读性检查”，�
 ## 文档结构（7 节，固定顺序）
 
 ### 1. 需求↔方案映射
-表格：每个需求子项 → 实现它的方案模块 → 是否覆盖。方案与需求**不必一一对应**（可以一个模块覆盖多个子项），但**不得有遗漏**，且对应关系必须可追溯。HTML 中需求子项链接回 requirement.html 对应锚点，双向可跳转。
+表格：每个需求子项 → 实现它的方案模块 → 是否覆盖。方案与需求**不必一一对应**（可以一个模块覆盖多个子项），但**不得有遗漏**，且对应关系必须可追溯。HTML 中需求子项链接回 requirement.wl-req-confirm.html 对应锚点，双向可跳转。
 
 ### 2. 前后对比
 分两层，都要：

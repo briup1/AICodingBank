@@ -80,7 +80,7 @@
 - 需要独立维护操作手册
 - 希望所有已安装该 Skill 的 Agent 自动发现
 
-先搜索 `skills/`、`skills-lock.json` 和 `CATALOG.md`，存在相近能力时扩展原能力。自研 Skill 放在 `skills/<skill-name>/`，并在 `skills.yaml` 的 `self` 下登记：
+先搜索 `skills/`、`skills-lock.json` 和 `CATALOG.md`，存在相近能力时扩展原能力。新建自研 Skill 时，先向用户提问是否使用 `wl-` 前缀命名，按用户回答确定 Skill 名与目录名，不默认取名。自研 Skill 放在 `skills/<skill-name>/`，并在 `skills.yaml` 的 `self` 下登记：
 
 ```yaml
 - name: <skill-name>
