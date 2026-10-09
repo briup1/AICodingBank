@@ -8,7 +8,7 @@ DASHBOARD_SCRIPT="$SCRIPT_DIR/dashboard.py"
 usage() {
   cat <<'USAGE'
 Usage:
-  wl-git-flow.sh start --repo PATH --id REQUIREMENT_ID [--worktree-root PATH] [--branch NAME]
+  wl-git-flow.sh start --repo PATH --id REQUIREMENT_ID [--worktree-root PATH] [--branch NAME] [--bootstrap]
       REQUIREMENT_ID: TAPD PROJECT_STORY (数字_数字) 或私人项目 slug (如 login-redesign)
   wl-git-flow.sh integrate-dev --repo PATH --source BRANCH --target BRANCH --target-worktree PATH [--push-source] [--push-target]
   wl-git-flow.sh promote --repo PATH --source BRANCH --target BRANCH --target-worktree PATH [--push-target] [--base origin/master] [--dev origin/feature/dev]
@@ -97,14 +97,62 @@ fetch_branch_if_remote_exists() {
   return 1
 }
 
+bootstrap_worktree() {
+  local src=$1 dst=$2 d f rel
+  # 索引/工具状态：只报告，不复制（索引常绑定绝对路径，拷过去会指回主目录）
+  for d in .codegraph .serena .cursor .claude .idea .vscode; do
+    if [[ -e "$src/$d" && ! -e "$dst/$d" ]]; then
+      note "bootstrap: $d exists in main worktree; NOT copied (may bind absolute paths) - rebuild or reconfigure inside the new worktree"
+    fi
+  done
+  # 依赖目录：按 lockfile 提示安装命令
+  if [[ -d "$src/node_modules" && ! -d "$dst/node_modules" ]]; then
+    if [[ -f "$src/pnpm-lock.yaml" ]]; then note "bootstrap: node_modules missing - run: pnpm install"
+    elif [[ -f "$src/package-lock.json" || -f "$src/npm-shrinkwrap.json" ]]; then note "bootstrap: node_modules missing - run: npm ci"
+    elif [[ -f "$src/yarn.lock" ]]; then note "bootstrap: node_modules missing - run: yarn install --frozen-lockfile"
+    else note "bootstrap: node_modules missing - reinstall dependencies per project docs"; fi
+  fi
+  if [[ -d "$src/.venv" && ! -d "$dst/.venv" ]]; then
+    if [[ -f "$src/uv.lock" ]]; then note "bootstrap: .venv missing - run: uv sync"
+    elif [[ -f "$src/requirements.txt" ]]; then note "bootstrap: .venv missing - run: python3 -m venv .venv && .venv/bin/pip install -r requirements.txt"
+    else note "bootstrap: .venv missing - recreate the virtualenv per project docs"; fi
+  fi
+  # 密钥/本地配置：默认只提示，不复制
+  for f in "$src"/.env "$src"/.env.*; do
+    [[ -e "$f" ]] || continue
+    [[ -e "$dst/${f##*/}" ]] || note "bootstrap: ${f##*/} exists in main worktree; NOT copied (secret) - copy manually only if this requirement needs it"
+  done
+  # 白名单复制：仓库根 .wl-git-flow-bootstrap 每行一个相对路径
+  local list="$src/.wl-git-flow-bootstrap"
+  if [[ -f "$list" ]]; then
+    while IFS= read -r rel || [[ -n "$rel" ]]; do
+      rel=${rel%%#*}; rel=${rel//[[:space:]]/}
+      [[ -n "$rel" ]] || continue
+      case "$rel" in
+        /*|*..*) note "bootstrap: SKIP $rel (unsafe path)"; continue ;;
+        .env|.env.*|*.pem|*.key|*.p12|*.pfx|*secret*|*credential*) note "bootstrap: SKIP $rel (secret pattern, copy manually if really needed)"; continue ;;
+      esac
+      if [[ ! -e "$src/$rel" ]]; then note "bootstrap: SKIP $rel (not present in main worktree)"; continue; fi
+      if [[ -e "$dst/$rel" ]]; then note "bootstrap: SKIP $rel (already exists in worktree)"; continue; fi
+      mkdir -p "$dst/$(dirname "$rel")"
+      if cp -Rc "$src/$rel" "$dst/$rel" 2>/dev/null || cp -R "$src/$rel" "$dst/$rel"; then
+        note "bootstrap: copied $rel"
+      else
+        note "bootstrap: SKIP $rel (copy failed)"
+      fi
+    done < "$list"
+  fi
+}
+
 cmd_start() {
-  local id="" root="${GIT_REQUIREMENT_WORKTREE_ROOT:-$HOME/workdir/worktrees}" branch=""
+  local id="" root="${GIT_REQUIREMENT_WORKTREE_ROOT:-$HOME/workdir/worktrees}" branch="" bootstrap=0
   while (($#)); do
     case "$1" in
       --repo) repo=$2; shift 2 ;;
       --id) id=$2; shift 2 ;;
       --worktree-root) root=$2; shift 2 ;;
       --branch) branch=$2; shift 2 ;;
+      --bootstrap) bootstrap=1; shift ;;
       *) fail "unknown start argument: $1" ;;
     esac
   done
@@ -131,6 +179,7 @@ cmd_start() {
   note "worktree=$path"
   note "base=origin/master"
   note "base_sha=$base_sha"
+  if ((bootstrap)); then bootstrap_worktree "$repo" "$path"; fi
   dashboard_sync_repo "$repo"
 }
 

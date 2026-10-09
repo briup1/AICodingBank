@@ -99,6 +99,8 @@ skills/wl-git-flow/scripts/wl-git-flow.sh start \
   --id login-redesign
 ```
 
+需要脚本扫描并补齐本地状态时加 `--bootstrap`（规则见下文"建窗口后的本地状态补齐"）。
+
 私人项目会使用同一 Worktree 根目录，例如：
 
 ```text
@@ -107,6 +109,17 @@ Worktree：$HOME/workdir/worktrees/private-repo/story-login-redesign
 ```
 
 脚本不会要求私人项目提供 TAPD。看板上的标题从哪来，见第 2 层。
+
+### 建窗口后的本地状态补齐（bootstrap）
+
+`git worktree add` 只带被 Git 跟踪的文件。索引、依赖、本地配置不进 Git，新窗口里都没有。`start` 加 `--bootstrap` 时，脚本在建完窗口后扫描主窗口，按下面的规则处理；不加则只建窗口，这些状态需要自己留意。
+
+- **索引/工具状态**（`.codegraph`、`.serena`、`.cursor`、`.claude`、`.idea`、`.vscode`）：只报告，不复制。索引常绑定绝对路径，拷过去会指回主目录的文件，比没有更危险；在新窗口里重建。AGENTS.md 约定"有 `.codegraph` 先用 CodeGraph"，缺索引会让 Agent 静默退化成 grep 扫库。
+- **依赖目录**（`node_modules`、`.venv`）：不复制，按 lockfile 提示安装命令，在新窗口里重装。
+- **密钥/本地配置**（`.env`、`.env.*`、证书、密钥文件）：默认只提示，不复制；这个需求确需时手工拷，用完随窗口一起删。
+- **固定要复制的本地文件**：在仓库根放 `.wl-git-flow-bootstrap`，每行一个相对路径（可带 `#` 注释）。脚本逐行复制，但拒绝 `.env`、密钥、证书、含 `..` 或绝对路径的条目。
+
+bootstrap 补进窗口的都是未跟踪文件，之后会让 cleanup 判定为"不干净"——删窗口前确认这些本地状态可以丢弃。
 
 ### 90% 检查点与 Dev 集成
 
@@ -172,6 +185,7 @@ scripts/wl-git-flow.sh cleanup-plan \
 开发完成后可以删目录，前提是目录干净、提交已在远端、没有进行中的 Git 操作。下面任一成立就留着目录：
 
 - 有未提交内容，或本地还有没推送的提交，或远端落后/领先。
+- bootstrap 补进来的未跟踪文件（索引、依赖、`.env`）还在，且不能确认可以随目录一起丢弃。
 - 正在 merge、rebase 或 cherry-pick。
 - 正在 Dev 测试、测试失败，或通过之后又有新提交还没重测。
 - 用户还要在这个目录里继续改。
