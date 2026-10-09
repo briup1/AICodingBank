@@ -1,0 +1,35 @@
+# compass 本地自测 · RocketMQ（wl-compass-local-test）
+# 首次: docker compose -f docker-compose.mq.yml --profile init run --rm conf-init   # 写 broker.conf 进 volume
+#      docker compose -f docker-compose.mq.yml up -d
+# 日常: docker compose -f docker-compose.mq.yml start
+# 注意: 本机 Docker Desktop 单文件 bind 挂载不可用，broker.conf 必须走 named volume（见 conf-init）
+name: wl-compass-local-test
+services:
+  namesrv:
+    image: apache/rocketmq:5.3.0
+    container_name: wl-rocketmq-namesrv
+    ports:
+      - "19876:9876"
+    command: sh mqnamesrv
+  broker:
+    image: apache/rocketmq:5.3.0
+    container_name: wl-rocketmq-broker
+    depends_on: [namesrv]
+    ports:
+      - "10911:10911"
+      - "10909:10909"
+    environment:
+      JAVA_OPT_EXT: "-Xms1g -Xmx1g -Xmn512m"
+    volumes:
+      - wl-rmq-conf:/home/rocketmq/conf
+    command: sh mqbroker -n host.docker.internal:19876 -c /home/rocketmq/conf/broker.conf
+  conf-init:
+    # 仅首次执行（--profile init）：把 broker.conf 写入 named volume
+    image: alpine
+    profiles: ["init"]
+    volumes:
+      - wl-rmq-conf:/conf
+    command: >
+      sh -c "printf 'brokerClusterName = DefaultCluster\nbrokerName = broker-wl\nbrokerId = 0\ndeleteWhen = 04\nfileReservedTime = 48\nbrokerRole = ASYNC_MASTER\nflushDiskType = ASYNC_FLUSH\nautoCreateTopicEnable = true\nautoCreateSubscriptionGroup = true\nbrokerIP1 = 127.0.0.1\nlistenPort = 10911\n' > /conf/broker.conf && cat /conf/broker.conf"
+volumes:
+  wl-rmq-conf:

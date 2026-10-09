@@ -138,6 +138,15 @@ self:
   - 需求分析
   - 设计
   verified: '2026-09-01'
+- name: wl-compass-local-test
+  path: skills/wl-compass-local-test
+  capability: compass-platform 本地自测环境一站式搭建与验证——本地 jar 起后端、vite 起前端、本地 RocketMQ 隔离 dev MQ，连 dev 库与外部依赖，含鉴权配方与全部已知坑解法
+  boundary: 仅覆盖 compass-platform 后端/前端/Bot 的本地进程+dev 数据自测模式；不替代 dev 部署验收、小程序真机验证、SPOT 实时创建（IP 白名单受限）；dev 库写入只走业务 API
+  tags:
+  - compass-platform
+  - 本地测试
+  - 联调
+  verified: '2026-10-09'
 - name: wl-browse
   path: skills/wl-browse
   capability: 通过真实浏览器完成页面导航、DOM 快照、表单交互、截图、响应式检查和端到端验证
