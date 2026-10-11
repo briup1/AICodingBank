@@ -7,15 +7,15 @@ description: 工单执行——方案批准后，将需求拆成可验收 Ticket
 
 开发流程的第三阶段。目标是在保留需求追踪和验收边界的同时，减少重复读取上下文、重复测试和重复审查，自动执行到验收。
 
-**前置条件**：`design.wl-design-doc.md`（兼容历史 `design.md`）状态为 `approved`；多方案场景下已有选定方案（`chosen`）。
+**前置条件**：已核对本版方案正文、`status: approved` 及用户明确批准的证据和范围。新方案读取 `design.wl-design-doc.html`，兼容历史 Markdown；多方案场景下已有用户选定方案（`chosen`），且无阻断性验证缺口。
 
 ## 上游文档查找与身份核对
 
-- 同一需求目录优先读取 `requirement.wl-req-confirm.md`、`design.wl-design-doc.md`，不存在时兼容历史 `requirement.md`、`design.md`；所有追踪链接使用实际文件名。
-- 新命名文档必须含匹配的 `skill: wl-req-confirm` / `skill: wl-design-doc` 与 `artifact_schema_version: 1`；名称与身份不符或缺失时要求修复，不当作已确认来源。
-- 新旧同阶段文件并存时，先核实正文与批准版本；无法确定权威文件则停止并询问，不凭新名称或修改时间选择。
-- 历史文件无来源标识仅记“来源未确认”，不补造、不自动重命名；是否能进入工单阶段仍以实际需求/设计内容及用户批准证据为准。
-- 文件名或来源标识不代表用户批准，必须单独核对 `status: approved` 和多方案的 `chosen`。
+- 需求读取 `requirement.wl-req-confirm.md`，不存在时兼容历史 `requirement.md`；设计读取 `design.wl-design-doc.html`，不存在时兼容历史 `design.wl-design-doc.md` / `design.md`。所有追踪链接指向实际文件和锚点，不要求补造 Markdown。
+- 新 HTML 核对 `meta[name="generator"]=wl-design-doc`、`meta[name="artifact-schema-version"]=1`，从 `script#wl-design-meta` 按 JSON 数据读取状态、来源需求、选型和批准证据；不能只抓取正文中的“approved”字样或把脚本作为代码执行。元信息与可见正文/标签冲突、来源不符或字段缺失时先修复，不当作已确认来源。
+- 历史 Markdown 从 frontmatter 读取 `status`、`chosen` 及来源；新命名 Markdown 的 `skill` / `artifact_schema_version` 须匹配。历史文件缺来源或批准证据时，查实际用户记录；查不到则停止确认，不伪造元信息、不自动重命名，也不因格式旧而自动拒绝已有真实批准。
+- 新旧文件并存时，先核实正文和批准版本；无法确定权威版本则停止询问，不凭新名称、文件格式或修改时间选择，不覆盖旧批准稿。
+- `status: approved`、文件标识和 `chosen` 都不能代替本版用户批准。批准范围未包含的契约/业务变化须回到设计确认；关键验证失败或关键假设无证据时不得拆票实施。非阻断的延期验证须有原因、时点及用户接受的风险，作为后续 Gate 保留。
 
 ## 核心模型
 
