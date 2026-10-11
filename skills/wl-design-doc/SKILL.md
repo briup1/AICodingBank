@@ -1,6 +1,6 @@
 ---
 name: wl-design-doc
-description: '方案设计——需求确认文档被批准（status: approved）之后、写任何实现代码之前使用。把需求转化为《方案设计文档》（design.wl-design-doc.md + HTML）：需求↔方案映射、基于最新代码证据的架构/关键函数新旧对比、接口契约、复用分析、多方案并列、附证据的审查结论、最小验证。看到"设计一下方案""出个技术方案""这个怎么做"时也必须走本 skill。'
+description: '方案设计——需求确认文档被批准（status: approved）之后、写任何实现代码之前使用。把需求转化为唯一的美观 HTML 方案设计文档：需求↔方案映射、流程链路、模块职责、接口契约、复用分析、按需方案取舍、风险与验收。看到"设计一下方案""出个技术方案""这个怎么做"时也必须走本 skill。'
 ---
 
 # 方案设计（wl-design-doc）
@@ -9,44 +9,42 @@ description: '方案设计——需求确认文档被批准（status: approved�
 
 **为什么**：实施期的混乱几乎都源于设计期欠的债——接口没定清、复用没盘点、风险没暴露。本 skill 把债前置：最小验证不通过的方案，根本没资格进入开发。
 
-**前置条件**：`requirement.wl-req-confirm.md`（兼容历史 `requirement.md`）状态为 `approved`。否则先走 wl-req-confirm。
-**出口条件**：用户批准方案（若有多个方案，用户已明确选定其一，记入 frontmatter `chosen`）。
+**前置条件**：需求确认文档（兼容历史 `requirement.md`）状态为 `approved`。否则先走 wl-req-confirm。
+**出口条件**：用户批准方案（若有多个方案，用户已明确选定其一，记录在 HTML 元信息中的 `chosen`）。
 
-## 生成物身份与文件名（强制）
+## 最终产物与文件名（强制）
 
-- 新建文档固定命名 `design.wl-design-doc.md` 与 `design.wl-design-doc.html`；不另存一份旧名正文。项目可覆盖归档目录，不省略文件名中的 Skill 名。
-- Markdown frontmatter 必须包含 `skill: wl-design-doc` 和 `artifact_schema_version: 1`；这里的版本是生成物身份协议版本，不冒充 Skill 源码版本。`source` 继续表示业务材料来源。
-- HTML 必须从 Markdown 同步身份字段：`<meta name="generator" content="wl-design-doc">`、`<meta name="artifact-schema-version" content="1">`。侧栏顶部显示 `wl-design-doc` 标签及“产物规范：1”；不能只写在 HTML 注释中。
-- 文件名、Markdown 字段、HTML meta 和可见标签必须一致。按 `doc-html-style.md` 完成身份检查和可读性检查后才能交付；仅有标识不代表内容合规、用户批准或真实执行记录。
+- 新建文档固定命名 `design.wl-design-doc.html`；最终只交付这一份 HTML，不生成、不保留 Markdown 正文、证据报告或独立图文件。
+- HTML 必须是可脱离工作区独立打开的单文件，样式、脚本和图形资源默认内嵌。
+- HTML `<head>` 必须包含 `<meta name="generator" content="wl-design-doc">` 与 `<meta name="artifact-schema-version" content="1">`；页面顶部显示方案状态、来源需求和更新时间。
+- 文件名、HTML meta 和可见标签必须一致。按 `doc-html-style.md` 完成 HTML 可读性检查后才能交付；仅有标识不代表内容合规、用户批准或真实执行结果。
 
 ### 历史兼容与阶段交接
 
-- 同一需求目录先找新命名，再兼容 `requirement.md` / `design.md` 及配套 HTML；引用与锚点指向实际找到的文件名，不硬编码不存在的新名。
-- 新旧同阶段文件同时存在时，先核实是否同一正文及批准版本；不能直接选新文件覆盖旧批准，无法确定则停下询问。
-- 已有历史文件原位维护，不批量改名、不复制双份正文；缺少身份字段时标记“来源未确认”，不从标题、布局或目录推断来源。只有在明确授权的重新生成中，才为新生成产物写入当前 Skill 身份，不追溯声称历史来源。
+- 同一需求目录先找现有 HTML，再兼容历史 `design.md`、`design.wl-design-doc.md` 及配套 HTML；引用与锚点指向实际找到的文件名，不硬编码不存在的新名。
+- 新旧同阶段文件同时存在时，先核实是否同一正文及批准版本；不能直接覆盖旧批准版本，无法确定则停下询问。
+- 历史 Markdown 只作为读取和迁移输入，不作为本次最终产物；迁移后不再生成新的 Markdown 副本。
 - 文件名和来源标识不改变 `status` / `chosen`，下游仍需核对用户明确批准的证据。
 
 ## 产出
 
-`docs/requirements/NNNN-slug/design.wl-design-doc.md`（+ 生成的 HTML）。Markdown 是唯一事实来源。
+`docs/requirements/NNNN-slug/design.wl-design-doc.html`。HTML 是唯一最终事实来源和唯一用户交付物。
 
 **HTML 生成规范见 `doc-html-style.md`**（S1 编辑出版·暖纸风 + 侧边导航布局），生成前必读。
 
 HTML 交付前必须执行 `doc-html-style.md` 的“HTML 可读性检查”，尤其要展开代码块检查文字与背景；HTML 解析成功不能代替浏览器渲染验证。无法执行时如实标注，不宣称视觉验收通过。
 
-### 新建设计文档的 frontmatter
+### HTML 元信息
 
-```yaml
----
-id: <需求编号>
-status: draft
-created: <YYYY-MM-DD>
-source_requirement: <实际已批准的需求 Markdown 相对路径>
-skill: wl-design-doc
-artifact_schema_version: 1
-chosen: null
----
-```
+将以下信息以内嵌元数据或页面可见信息表达：
+
+- 需求编号
+- `status: draft | reviewing | approved | implementing | done`
+- 创建时间、更新时间
+- 已批准需求的实际路径或标识
+- `chosen`（无多方案时为 `null`）
+- `skill: wl-design-doc`
+- `artifact_schema_version: 1`
 
 `chosen` 仅在用户明确选择后填写，来源标识不代替批准。
 
@@ -54,7 +52,7 @@ chosen: null
 
 新建设计或修改方案事实时，现状调用链、模块边界和关键函数关系必须来自当前代码证据，不能凭目录名、历史方案、旧截图或 CodeGraph 旧索引推断。**CodeGraph 是定位和关系检索工具，不是天然最新的事实来源。**
 
-纯展示重生成不重新批准方案、不扩展业务范围：复核已有 Markdown、批准状态、来源和基线，保留历史证据的身份与缺口；不强制重建索引，也不把历史流程改称当前实现。若要新增或改变代码事实，必须回到下列取证步骤。
+纯展示重生成不重新批准方案、不扩展业务范围：复核已有 HTML、批准状态、来源和基线，保留历史证据的身份与缺口；不强制重建索引，也不把历史流程改称当前实现。若要新增或改变代码事实，必须回到下列取证步骤。
 
 新建设计或刷新代码事实时，以及在切换分支、拉取代码、发生较大修改后，按以下固定步骤执行；不要跳步：
 
@@ -165,7 +163,7 @@ chosen: null
 
 #### 2.3 统一纵向字符流程图
 
-Markdown 是唯一事实来源；HTML 原样展示同一份完整纵向字符图，保留等宽字体、空格和换行。默认不生成 SVG/PNG、不使用 Mermaid、不引入绘图库或 nodes/edges 布局；只有用户明确要求其他格式时才例外。frontmatter 使用 `diagram_layout: vertical-ascii`，不改变业务 `chosen`、`status` 或批准范围。
+HTML 是唯一最终事实来源；纵向字符图直接以内嵌 HTML 文本展示，保留等宽字体、空格和换行。默认不生成 SVG/PNG、不使用 Mermaid、不引入绘图库或 nodes/edges 布局；只有用户明确要求其他格式时才例外。页面元信息使用 `diagram_layout: vertical-ascii`，不改变业务 `chosen`、`status` 或批准范围。
 
 ```text
 以前：
@@ -224,7 +222,7 @@ Markdown 是唯一事实来源；HTML 原样展示同一份完整纵向字符图
 **复用是默认，从零需要理由。**先对需求定性，再逐项盘点可复用/可扩展复用的资产，每项给出真实路径作为证据。确需从零开发的项，写出理由。
 
 ### 5. 多方案并列（有多个可行方案时必须有）
-表格对比各方案的取舍，给出推荐及理由，然后**停下来让用户选择**——agent 不替用户拍板。选定结果记入 frontmatter `chosen`。
+表格对比各方案的取舍，给出推荐及理由，然后**停下来让用户选择**——agent 不替用户拍板。选定结果记录在 HTML 元信息 `chosen` 中。
 
 比较不仅看当前开发成本，还看可信变化下的改动范围、兼容/迁移成本及提前预留成本；不将“最短”或“最通用”自动等同于推荐方案。
 
