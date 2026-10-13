@@ -114,4 +114,15 @@ DEV_GUARD_PI_ROOT=/absolute/path/to/pi-coding-agent \
 
 用临时仓库、bare origin、隔离 HOME/配置测试普通需求、直接/间接污染、SHA/refspec、worktree、Dev重建、缺失标记、配置合并与卸载恢复、原 Hook stdin转交。测试结束删除自己的临时目录。末尾输出实际耗时采样，不用时间阈值伪装性能保证。
 
+## 无破坏可视化实验
+
+```bash
+node skills/wl-git-flow/scripts/dev-guard/demo.mjs
+# 输出本机证据 HTML/JSON 的绝对路径；可以用 --output PATH 指定证据目录
+```
+
+实验只创建临时仓库和本机 bare origin，所有远端操作限制为 file 协议，不访问业务仓库或网络远端。使用已安装 pre-push（没有安装时仅在临时目录接入），临时配置/登记与真实配置完全分离。五个场景：正常需求进入 Beta、三适配层前置拒绝、直接污染推送拒绝、转手污染推送拒绝、无 Hook 对照分支确实进入 Dev 内容。污染候选通过可快进断言，避免借 Git 自身非快进拒绝冒充 Hook 生效。结束后删除临时仓库，并核对真实配置/入口文件指纹没有改变。
+
+默认产物在 `~/.local/state/dev-guard/demo/`：`index.html` 内嵌真实结果，离线可打开；`evidence.json` 包含原始命令/返回码/前后 SHA/文件列表。HTML 只提供场景切换和证据回放，不执行 Git、不启动服务；要重新做真实实验需重新运行脚本。示例数据中 `dev-only.txt` 代表不应进入 Beta 的 Dev 专属内容。
+
 适配层协议测试不是完整宿主端到端：Codex/OpenCode 的真实加载、信任、完整会话仍需单独授权验收。工具不能防用户禁用 Hook、修改配置、`--no-verify`（Agent 明确写法会拒绝，人工仍可绕过）或抹掉血缘的内容复制；团队强制保障需服务端。源码/配置与 Agent同权限，不是安全边界。
