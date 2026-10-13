@@ -201,6 +201,12 @@ scripts/wl-git-flow.sh remove-worktree \
 
 目录删掉后，用原来的分支名 `git worktree add` 可以再打开。
 
+### 可选自动保护：Dev Guard
+
+工具源码在 `scripts/dev-guard/`，安装、标记管理与限制见 [references/dev-guard.md](references/dev-guard.md)。它为 Pi/Codex/OpenCode 提供共用的执行前检查，并为已有 Git `pre-push` 增加最终 SHA 血缘检查；只对显式登记且初始化标记的仓库启用，不因加载本 Skill 自动安装或写入 Git 历史。
+
+`start`、`integrate-dev`、`promote`、`audit` 在 Dev Guard 配置存在时也调用同一个引用检查。Dev 重建必须登记新标记并保留旧标记；标记前的历史、不保留血缘的内容复制、未同步的新标记不保证识别。安装和初始化标记分别需要明确授权，源码与隔离测试通过不等于三个宿主真实启用。
+
 ### Beta 前污染审计
 
 ```bash

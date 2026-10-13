@@ -28,6 +28,13 @@ USAGE
 fail() { printf 'ERROR: %s\n' "$*" >&2; exit 1; }
 note() { printf '%s\n' "$*"; }
 
+dev_guard_ref() {
+  local guard_config="${DEV_GUARD_CONFIG:-${XDG_CONFIG_HOME:-$HOME/.config}/dev-guard/config.json}"
+  [[ -e "$guard_config" ]] || return 0
+  command -v node >/dev/null 2>&1 || fail "Node.js 22+ is required for configured Dev Guard"
+  node "$SCRIPT_DIR/dev-guard/cli.mjs" check-ref --repo "$1" --target "$2" --source "$3" >/dev/null || fail "Dev Guard rejected source=$3 target=$2; run dev-guard/cli.mjs check-ref for details"
+}
+
 run_dashboard() {
   command -v uv >/dev/null 2>&1 || fail "uv is required for the dashboard (Python 3.12.9)"
   uv run --no-project --python 3.12.9 python "$DASHBOARD_SCRIPT" "$@"
@@ -167,6 +174,7 @@ cmd_start() {
   [[ ! -e "$path" ]] || fail "worktree path already exists: $path"
   git -C "$repo" show-ref --verify --quiet "refs/heads/$branch" && fail "local branch already exists: $branch"
   git -C "$repo" fetch --prune origin master
+  dev_guard_ref "$repo" "$branch" origin/master
   git -C "$repo" show-ref --verify --quiet "refs/remotes/origin/$branch" && fail "remote branch already exists: origin/$branch"
   mkdir -p "$(dirname "$path")"
   git -C "$repo" worktree add -b "$branch" "$path" origin/master
@@ -219,6 +227,8 @@ cmd_integrate_dev() {
   fetch_branch_if_remote_exists "$source" || fail "source is not present on origin; rerun with --push-source"
   [[ "$(git -C "$repo" rev-parse "$source")" == "$(git -C "$repo" rev-parse "origin/$source")" ]] || fail "source differs from origin/$source; push or reconcile it first"
 
+  dev_guard_ref "$target_wt" "$target" "origin/$target"
+  dev_guard_ref "$target_wt" "$target" "$source"
   git -C "$target_wt" merge --ff-only "origin/$target"
   git -C "$target_wt" merge --no-ff --no-edit "$source"
 
@@ -273,6 +283,8 @@ cmd_promote() {
   operation_in_progress "$target_wt" && fail "target worktree has an in-progress Git operation"
   git -C "$repo" fetch --prune origin "+refs/heads/$target:refs/remotes/origin/$target"
   source_sha=$(git -C "$repo" rev-parse "$source")
+  dev_guard_ref "$target_wt" "$target" "origin/$target"
+  dev_guard_ref "$target_wt" "$target" "$source"
   git -C "$target_wt" merge --ff-only "origin/$target"
   git -C "$target_wt" merge --no-ff --no-edit "$source"
   [[ "$(git -C "$repo" rev-parse "$source")" == "$source_sha" ]] || fail "source SHA changed during promotion"
@@ -367,6 +379,7 @@ cmd_audit() {
   require_ref "$branch"; require_ref "$base"
   local failed=0 merge parents parent passed_sha current_sha
   current_sha=$(git -C "$repo" rev-parse "$branch")
+  dev_guard_ref "$repo" "$branch" "$branch"
   note "branch=$branch"
   note "branch_sha=$current_sha"
   note "base=$base"
