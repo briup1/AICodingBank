@@ -3,6 +3,13 @@ targets:
 - ~/.claude/skills
 - ~/.hermes/skills
 self:
+- name: wl-qa-test-planner
+  path: skills/wl-qa-test-planner
+  capability: 根据需求、用户故事和验收标准生成带优先级、测试数据、逐步预期与需求追踪的测试用例
+  boundary: 仅生成用例与覆盖缺口；不做排期、Bug 报告、Figma 校验、自动化执行或脚本调用；上游模板按需读取，真实业务验证待完成
+  tags:
+  - 测试
+  verified: ''
 - name: hgj-git-connect
   path: skills/hgj-git-connect
   capability: 诊断并切换公司 GitLab 的直连与 SSH 跳板路由，优先用只读检查确认当前可用链路

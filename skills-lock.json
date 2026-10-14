@@ -1,6 +1,16 @@
 {
   "version": 1,
   "skills": {
+    "qa-test-planner": {
+      "source": "softaworks/agent-toolkit",
+      "sourceType": "github",
+      "skillPath": "skills/qa-test-planner/SKILL.md",
+      "computedHash": "",
+      "capability": "为 wl-qa-test-planner 提供上游测试用例模板与设计参考",
+      "boundary": "仅作为按需来源缓存，不全局安装；个人入口只读取测试用例模板，不启用 Bug 报告、Figma、排期或脚本",
+      "tags": ["测试"],
+      "verified": ""
+    },
     "a2ui-renderer": {
       "source": "CopilotKit/CopilotKit",
       "sourceType": "github",
