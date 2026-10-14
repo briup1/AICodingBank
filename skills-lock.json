@@ -1,19 +1,6 @@
 {
   "version": 1,
   "skills": {
-    "answer-me-with-html": {
-      "source": "QingYunA/answer-me-with-html",
-      "sourceType": "github",
-      "skillPath": "skills/answer-me-with-html/SKILL.md",
-      "computedHash": "",
-      "capability": "把复杂问题的回答做成一页可视化 HTML：模型只写扩展 Markdown 稿，自带 CLI 负责模板、图表自动布局和 STE 写作检查",
-      "boundary": "短问答、命令和纯代码修改不出页面；依赖 Node.js 20+，产物是 ~/.answer-me-with-html/pages/ 下的单文件 HTML，不改业务代码",
-      "tags": [
-        "图表",
-        "效率"
-      ],
-      "verified": "2026-10-03"
-    },
     "a2ui-renderer": {
       "source": "CopilotKit/CopilotKit",
       "sourceType": "github",
@@ -405,19 +392,6 @@
       ],
       "verified": "2026-08-23"
     },
-    "migrate-to-shoehorn": {
-      "source": "mattpocock/skills",
-      "sourceType": "github",
-      "skillPath": "skills/misc/migrate-to-shoehorn/SKILL.md",
-      "computedHash": "8f1a623a019abca0ab5e22e8deaae375829368cc1344016010201cf650331d33",
-      "capability": "把测试文件里的 as 类型断言迁移到 @total-typescript/shoehorn",
-      "boundary": "仅 TS 测试数据场景",
-      "tags": [
-        "测试",
-        "编程"
-      ],
-      "verified": "2026-08-23"
-    },
     "minimalist-ui": {
       "source": "Leonxlnx/taste-skill",
       "sourceType": "github",
@@ -649,42 +623,6 @@
       "boundary": "agent 自己能干的活别用它",
       "tags": [
         "运维"
-      ],
-      "verified": "2026-08-23"
-    },
-    "writing-beats": {
-      "source": "mattpocock/skills",
-      "sourceType": "github",
-      "skillPath": "skills/in-progress/writing-beats/SKILL.md",
-      "computedHash": "b2bb74a1e15fcac1fec9aac4fa4c8244e8ed7c4eef1f9096ea3b52b7eb091943",
-      "capability": "写作·exploit：把素材组装成节拍化叙事，先立术语再用",
-      "boundary": "只管结构节奏，不挖素材",
-      "tags": [
-        "写作"
-      ],
-      "verified": "2026-08-23"
-    },
-    "writing-fragments": {
-      "source": "mattpocock/skills",
-      "sourceType": "github",
-      "skillPath": "skills/in-progress/writing-fragments/SKILL.md",
-      "computedHash": "394bc75401f55d242ecebb548e9932a211b84423ca25ebe7bbfdebde4f6066ce",
-      "capability": "写作·explore：挖掘原始碎片素材，尚无结构",
-      "boundary": "早期探索阶段，不出成稿",
-      "tags": [
-        "写作"
-      ],
-      "verified": "2026-08-23"
-    },
-    "writing-shape": {
-      "source": "mattpocock/skills",
-      "sourceType": "github",
-      "skillPath": "skills/in-progress/writing-shape/SKILL.md",
-      "computedHash": "77007511510c05b602835acdb91a88f435ce5a08a9dbf95ade148f02e4b09548",
-      "capability": "写作·exploit：逐段把素材塑形成文章",
-      "boundary": "偏成稿阶段，需要已有素材",
-      "tags": [
-        "写作"
       ],
       "verified": "2026-08-23"
     }

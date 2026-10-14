@@ -1,11 +1,11 @@
 # Skill 总目录（install.py 自动生成，勿手改）
 
-共 86 个 · 已验证 65 · 待验证 21
+共 82 个 · 已验证 62 · 待验证 20
 
 想看深度使用经验 → wiki entity 页；想改行为 → SKILL.md；本目录只回答“它能干什么、边界在哪”。
 
 ## Docker
-- **wl-docker-port-registry**（自研·**待验证（未安装）**）— 用 lsof/docker ps/curl 三板斧查明本机端口占用真身，并按 3000-3099 段 10 位槽位规则为新服务分配宿主端口、登记本机台账并显式写入项目 .env
+- **wl-docker-port-registry**（自研·已验证 2026-10-03）— 用 lsof/docker ps/curl 三板斧查明本机端口占用真身，并按 3000-3099 段 10 位槽位规则为新服务分配宿主端口、登记本机台账并显式写入项目 .env
   边界：只管宿主端口查询、分配与登记；不管理容器生命周期、不改在跑服务端口、不执行清理操作；台账只记分配决策，实时占用以查询为准
 
 ## Git
@@ -18,6 +18,10 @@
 - **hgj-git-connect**（自研·已验证 2026-09-24）— 诊断并切换公司 GitLab 的直连与 SSH 跳板路由，优先用只读检查确认当前可用链路
   边界：仅处理本机 GitLab SSH 连接与路由，不替代需求分支、合并、评审、发布或权限申请；不自动修改 known_hosts、不自动执行 pull/push
 
+## compass-platform
+- **wl-compass-local-test**（自研·已验证 2026-10-09）— compass-platform 本地自测环境一站式搭建与验证——本地 jar 起后端、vite 起前端、本地 RocketMQ 隔离 dev MQ，连 dev 库与外部依赖，含鉴权配方与全部已知坑解法
+  边界：仅覆盖 compass-platform 后端/前端/Bot 的本地进程+dev 数据自测模式；不替代 dev 部署验收、小程序真机验证、SPOT 实时创建（IP 白名单受限）；dev 库写入只走业务 API
+
 ## 代码审查
 - **wl-requesting-code-review**（自研·已验证 2026-09-01）— 在交付前依据需求、架构、风险与测试证据审查已完成的代码
   边界：用于完整任务或重要功能实现后的代码审查，不用于需求澄清或方案设计
@@ -25,12 +29,6 @@
 ## 写作
 - **inspector-docs**（第三方·CopilotKit/CopilotKit·**待验证（未安装）**）— 维护 CopilotKit Inspector 文档与已发布 Pane、Tab、Overlay 行为的一致性
   边界：仅服务 CopilotKit 上游 Inspector 文档维护，不用于 Inspector UI 润色或未发布功能设计
-- **writing-beats**（第三方·mattpocock/skills·已验证 2026-08-23）— 写作·exploit：把素材组装成节拍化叙事，先立术语再用
-  边界：只管结构节奏，不挖素材
-- **writing-fragments**（第三方·mattpocock/skills·已验证 2026-08-23）— 写作·explore：挖掘原始碎片素材，尚无结构
-  边界：早期探索阶段，不出成稿
-- **writing-shape**（第三方·mattpocock/skills·已验证 2026-08-23）— 写作·exploit：逐段把素材塑形成文章
-  边界：偏成稿阶段，需要已有素材
 
 ## 前端
 - **wl-plan-design-review**（自研·已验证 2026-09-01）— 在编码前审查并完善 UI/UX 实施计划，使交互和视觉决策达到可实施状态
@@ -51,18 +49,16 @@
   边界：产出文档；要即时交接用 claude-handoff
 - **herdr**（第三方·herdrdev/herdr@v0.8.2·已验证 2026-09-01）— 在 Herdr 管理的终端会话内检查和控制 workspace、tab、pane、命令与编码 Agent
   边界：仅在用户明确提及 Herdr 且 HERDR_ENV=1 时使用；依赖本机 herdr CLI，不替代通用终端或子 Agent 调度
-- **wl-herdrs**（自研·已验证 2026-10-10）— 在 Herdr 开发任务中自动判断子 Agent 拆分，并以受边界约束的 YOLO 模式启动和验收子 Agent
-  边界：只定义个人编排策略；依赖 HERDR_ENV=1、上游 herdr Skill 与当前 CLI，不允许绕过生产、凭证、发布或破坏性操作授权
 - **setup-slack-channel**（第三方·CopilotKit/CopilotKit·**待验证（未安装）**）— 完成 CopilotKit Channels 的 Slack Provider 侧首次配置、Token、托管 Channel 绑定与连通性验证
   边界：只覆盖首次 Slack Provider 配置，且主要适配 OpenTag 或 channels-sdk 示例约定；Channel 代码定制用 copilotkit-channels
 - **triage**（第三方·mattpocock/skills·已验证 2026-08-23）— issue 和外部 PR 的分诊状态机：分类、验证、追问，产出 agent 可直接执行的简报
   边界：面向开源仓库维护场景
 - **visual-artifact-workbench**（自研·**待验证（未安装）**）— 统一跨项目可视文档的分类、原文证据、审核版本和本机分享处理方案
   边界：提供策略与白名单只读分享脚本，无通用发布CLI、认证或多人审核后台；不替代业务确认，不自动开放局域网
+- **wl-herdrs**（自研·已验证 2026-10-10）— 在 Herdr 开发任务中自动判断子 Agent 拆分，并以受边界约束的 YOLO 模式启动和验收子 Agent
+  边界：只定义个人编排策略；依赖 HERDR_ENV=1、上游 herdr Skill 与当前 CLI，不允许绕过生产、凭证、发布或破坏性操作授权
 
 ## 图表
-- **answer-me-with-html**（第三方·QingYunA/answer-me-with-html·已验证 2026-10-03）— 把复杂问题的回答做成一页可视化 HTML：模型只写扩展 Markdown 稿，自带 CLI 负责模板、图表自动布局和 STE 写作检查
-  边界：短问答、命令和纯代码修改不出页面；依赖 Node.js 20+，产物是 ~/.answer-me-with-html/pages/ 下的单文件 HTML，不改业务代码
 - **diagram**（第三方·312362115/claude·已验证 2026-08-23）— 生成 29 种专业 PNG 图表：流程/时序/架构/ER/甘特 + 柱线饼雷等统计图，统一设计规范
   边界：HTML/SVG+JS 渲染输出 PNG，非矢量源文件
 - **excalidraw-diagram-generator**（第三方·p-rp/excalidraw-diagram-generator·已验证 2026-08-23）— 自然语言生成 Excalidraw 图：流程图、架构图、思维导图、关系图
@@ -87,14 +83,14 @@
   边界：只读探查且只写 docs/harness/（入口确认前不动项目根）；不修改业务代码；有限契约全量覆盖，已确认规范不得仅由代码频率推定
 - **harness-sync**（自研·已验证 2026-09-06）— 在模块、默认实践、接口、状态或规则变化后同步权威来源及 Harness 派生视图，并重跑契约计数和任务推演
   边界：只提增量文档补丁；不修改业务代码；规则冲突由用户裁决，接口变化不得只更新索引
-- **wl-herdrs**（自研·已验证 2026-10-10）— 在 Herdr 开发任务中自动判断子 Agent 拆分，并以受边界约束的 YOLO 模式启动和验收子 Agent
-  边界：只定义个人编排策略；依赖 HERDR_ENV=1、上游 herdr Skill 与当前 CLI，不允许绕过生产、凭证、发布或破坏性操作授权
 - **wl-brainstorming**（自研·已验证 2026-09-01）— 将模糊的软件想法或行为变更澄清为经确认、可测试的设计
   边界：用于新功能或显著行为变更的需求与设计定稿，不执行已经批准的实现方案
 - **wl-design-doc**（自研·已验证 2026-08-31）— 方案设计——需求批准后产出可批准的《方案设计文档》（映射/契约/复用分析/多方案/附证据审查/最小验证）
   边界：前置 wl-req-confirm 已批准；只出方案不写实现代码，不替用户拍板选方案
 - **wl-git-flow**（自研·已验证 2026-09-22）— 从最新 master 安全创建和单向集成需求分支，并以用户级静态/localhost 实时 HTML 看板聚合多项目 Worktree、Git 生命周期与异常
   边界：看板只监控和刷新，不启动 Agent 或执行 Git 写操作；测试和上线结果需真实确认；清理只删除 Worktree 目录，不删除本地或远端分支；Dev 和 Beta 只接收需求分支；上线走 release/yyyymmdd，发布成功后由 CI/CD 合进 master
+- **wl-herdrs**（自研·已验证 2026-10-10）— 在 Herdr 开发任务中自动判断子 Agent 拆分，并以受边界约束的 YOLO 模式启动和验收子 Agent
+  边界：只定义个人编排策略；依赖 HERDR_ENV=1、上游 herdr Skill 与当前 CLI，不允许绕过生产、凭证、发布或破坏性操作授权
 - **wl-investigate**（自研·已验证 2026-09-01）— 以证据优先和根因分析方式独立复现、定位并修复缺陷或回归
   边界：仅用于缺陷诊断与修复；修复前必须有失败复现，修复后必须验证
 - **wl-phase-routing**（自研·**待验证（未安装）**）— 为复杂或多步骤工作判断唯一当前阶段（观察/确认/设计/执行/验证/沉淀）并选择最小能力组合
@@ -115,8 +111,6 @@
 ## 效率
 - **agent-dag-reporting**（自研·已验证 2026-08-24）— 将多步骤任务的计划、状态、产物和检查点按 agent-dag/v1 上报到 Personal Workbench
   边界：仅负责可观测性上报，不改变任务执行方式；依赖宿主提供对应 MCP 上报工具
-- **answer-me-with-html**（第三方·QingYunA/answer-me-with-html·已验证 2026-10-03）— 把复杂问题的回答做成一页可视化 HTML：模型只写扩展 Markdown 稿，自带 CLI 负责模板、图表自动布局和 STE 写作检查
-  边界：短问答、命令和纯代码修改不出页面；依赖 Node.js 20+，产物是 ~/.answer-me-with-html/pages/ 下的单文件 HTML，不改业务代码
 - **ask-matt**（第三方·mattpocock/skills·已验证 2026-08-23）— 在 mattpocock 全家桶里帮你选合适的 skill 或流程
   边界：只是路由器，本身不执行具体工作
 - **copilotkit-self-update**（第三方·CopilotKit/CopilotKit·**待验证（未安装）**）— 刷新或重装 CopilotKit 官方 Agent Skills，使本地知识与最新 API 保持同步
@@ -129,10 +123,10 @@
   边界：只提增量文档补丁；不修改业务代码；规则冲突由用户裁决，接口变化不得只更新索引
 - **herdr**（第三方·herdrdev/herdr@v0.8.2·已验证 2026-09-01）— 在 Herdr 管理的终端会话内检查和控制 workspace、tab、pane、命令与编码 Agent
   边界：仅在用户明确提及 Herdr 且 HERDR_ENV=1 时使用；依赖本机 herdr CLI，不替代通用终端或子 Agent 调度
-- **wl-herdrs**（自研·已验证 2026-10-10）— 在 Herdr 开发任务中自动判断子 Agent 拆分，并以受边界约束的 YOLO 模式启动和验收子 Agent
-  边界：只定义个人编排策略；依赖 HERDR_ENV=1、上游 herdr Skill 与当前 CLI，不允许绕过生产、凭证、发布或破坏性操作授权
 - **visual-artifact-workbench**（自研·**待验证（未安装）**）— 统一跨项目可视文档的分类、原文证据、审核版本和本机分享处理方案
   边界：提供策略与白名单只读分享脚本，无通用发布CLI、认证或多人审核后台；不替代业务确认，不自动开放局域网
+- **wl-herdrs**（自研·已验证 2026-10-10）— 在 Herdr 开发任务中自动判断子 Agent 拆分，并以受边界约束的 YOLO 模式启动和验收子 Agent
+  边界：只定义个人编排策略；依赖 HERDR_ENV=1、上游 herdr Skill 与当前 CLI，不允许绕过生产、凭证、发布或破坏性操作授权
 
 ## 教学
 - **deepagents-getting-started**（自研·已验证 2026-08-21）— 提供 DeepAgents 0.7.8 的最小闭环、总体架构和核心组件选型规则
@@ -149,10 +143,14 @@
 ## 未分类
 - **langfuse**（第三方·langfuse/skills·**待验证（未安装）**）—
 
+## 本地测试
+- **wl-compass-local-test**（自研·已验证 2026-10-09）— compass-platform 本地自测环境一站式搭建与验证——本地 jar 起后端、vite 起前端、本地 RocketMQ 隔离 dev MQ，连 dev 库与外部依赖，含鉴权配方与全部已知坑解法
+  边界：仅覆盖 compass-platform 后端/前端/Bot 的本地进程+dev 数据自测模式；不替代 dev 部署验收、小程序真机验证、SPOT 实时创建（IP 白名单受限）；dev 库写入只走业务 API
+
 ## 本机工具
 - **hgj-git-connect**（自研·已验证 2026-09-24）— 诊断并切换公司 GitLab 的直连与 SSH 跳板路由，优先用只读检查确认当前可用链路
   边界：仅处理本机 GitLab SSH 连接与路由，不替代需求分支、合并、评审、发布或权限申请；不自动修改 known_hosts、不自动执行 pull/push
-- **wl-docker-port-registry**（自研·**待验证（未安装）**）— 用 lsof/docker ps/curl 三板斧查明本机端口占用真身，并按 3000-3099 段 10 位槽位规则为新服务分配宿主端口、登记本机台账并显式写入项目 .env
+- **wl-docker-port-registry**（自研·已验证 2026-10-03）— 用 lsof/docker ps/curl 三板斧查明本机端口占用真身，并按 3000-3099 段 10 位槽位规则为新服务分配宿主端口、登记本机台账并显式写入项目 .env
   边界：只管宿主端口查询、分配与登记；不管理容器生命周期、不改在跑服务端口、不执行清理操作；台账只记分配决策，实时占用以查询为准
 
 ## 架构
@@ -192,8 +190,6 @@
   边界：只做编码前的工程方案审查，不直接实施计划或替代代码审查
 
 ## 测试
-- **migrate-to-shoehorn**（第三方·mattpocock/skills·已验证 2026-08-23）— 把测试文件里的 as 类型断言迁移到 @total-typescript/shoehorn
-  边界：仅 TS 测试数据场景
 - **tdd**（第三方·mattpocock/skills·已验证 2026-08-23）— 测试驱动开发：red-green-refactor，集成测试优先
   边界：需要项目已有测试基建
 - **wl-browse**（自研·已验证 2026-09-01）— 通过真实浏览器完成页面导航、DOM 快照、表单交互、截图、响应式检查和端到端验证
@@ -218,7 +214,7 @@
   边界：需要网络访问；不做观点创作
 
 ## 端口管理
-- **wl-docker-port-registry**（自研·**待验证（未安装）**）— 用 lsof/docker ps/curl 三板斧查明本机端口占用真身，并按 3000-3099 段 10 位槽位规则为新服务分配宿主端口、登记本机台账并显式写入项目 .env
+- **wl-docker-port-registry**（自研·已验证 2026-10-03）— 用 lsof/docker ps/curl 三板斧查明本机端口占用真身，并按 3000-3099 段 10 位槽位规则为新服务分配宿主端口、登记本机台账并显式写入项目 .env
   边界：只管宿主端口查询、分配与登记；不管理容器生命周期、不改在跑服务端口、不执行清理操作；台账只记分配决策，实时占用以查询为准
 
 ## 编程
@@ -268,8 +264,6 @@
   边界：需要已有 spec/ticket，不做需求澄清
 - **inspector-docs**（第三方·CopilotKit/CopilotKit·**待验证（未安装）**）— 维护 CopilotKit Inspector 文档与已发布 Pane、Tab、Overlay 行为的一致性
   边界：仅服务 CopilotKit 上游 Inspector 文档维护，不用于 Inspector UI 润色或未发布功能设计
-- **migrate-to-shoehorn**（第三方·mattpocock/skills·已验证 2026-08-23）— 把测试文件里的 as 类型断言迁移到 @total-typescript/shoehorn
-  边界：仅 TS 测试数据场景
 - **minimalist-ui**（第三方·Leonxlnx/taste-skill·已验证 2026-08-14）— 生成暖色单色、编辑排版、扁平 Bento 网格和低饱和点缀的极简界面
   边界：是特定审美风格规范，不适用于需要强品牌色、渐变、重动效或高密度后台的场景
 - **prototype**（第三方·mattpocock/skills·已验证 2026-08-23）— 快速搭一次性原型，验证状态模型逻辑或 UI 感觉
@@ -290,6 +284,10 @@
   边界：仅 TS monorepo
 - **tdd**（第三方·mattpocock/skills·已验证 2026-08-23）— 测试驱动开发：red-green-refactor，集成测试优先
   边界：需要项目已有测试基建
+
+## 联调
+- **wl-compass-local-test**（自研·已验证 2026-10-09）— compass-platform 本地自测环境一站式搭建与验证——本地 jar 起后端、vite 起前端、本地 RocketMQ 隔离 dev MQ，连 dev 库与外部依赖，含鉴权配方与全部已知坑解法
+  边界：仅覆盖 compass-platform 后端/前端/Bot 的本地进程+dev 数据自测模式；不替代 dev 部署验收、小程序真机验证、SPOT 实时创建（IP 白名单受限）；dev 库写入只走业务 API
 
 ## 自动化
 - **wl-browse**（自研·已验证 2026-09-01）— 通过真实浏览器完成页面导航、DOM 快照、表单交互、截图、响应式检查和端到端验证

@@ -2,7 +2,14 @@
 
 只收录这个项目运行代码会读写的表，以及只在迁移或历史脚本里出现的表。库名来自项目配置，都是 `compass-freight`。
 
-MySQL 主机取自 `assist-bot/.env.prod` 的 `MYSQL_URL`。Mongo 主机取自同文件的 `MONGO_URI`。这两个主机都不是技能里已经核实过的 Yearning 源或 `prd-mongo` 实例，所以查询入口未核实，本对照不据此去查生产。
+MySQL 主机取自 `assist-bot/.env.prod` 的 `MYSQL_URL`。Mongo 主机取自同文件的 `MONGO_URI`。
+
+## 查询入口核实记录（2026-10-10 实测）
+
+- MySQL：走 `opencli yearning query`，源 `mysql|奇点-ro`、库 `compass-freight` 可用（yearning.hgj.net 需本机 IOA/登录态）。会话与消息在 `conversations` / `messages` 表，按 `conversations.thread_id` = 小程序/仟询 sessionId 关联，`messages.metadata` JSON 里有工具调用名与 freight block。
+- Mongo：`compass-freight` 在 Archery 实例 `prd-mongo6` 上存在，但该实例查询账号对它 not authorized（listCollections 即拒绝），全集合都查不了；`prd-mongo6` 上的 `eyun-assist`（旧 Bot 库）可查且仍在写入。compass 新库暂无 Archery 权限，需要找 DBA 给 prd-mongo6 查询账号开 compass-freight 只读授权。
+- 仟询/小程序会话只读 API（不走库）：`GET /compass-backend-service/agents/api/v1/chat/sessions/{sessionId}/messages`，header `access-token`（cookie `hgj-access-token`），assistant 消息的 `blocks` 里有 freight-list 全量条目与 freight_task_data trace。
+- 实测时 prod 未部署 `free-time-query` 端点（404）。
 
 ## 运行代码会读写
 
