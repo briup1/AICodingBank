@@ -1,6 +1,6 @@
 ---
 name: wl-browse
-description: Drive a real browser from the terminal for website navigation, screenshots, DOM snapshots, form interaction, responsive checks, and browser-based end-to-end verification. Use when browser automation or visual QA is required. Bundles its own browser CLI and has no gstack dependency.
+description: Legacy bundled-browser CLI workflow. Use only when the user explicitly requests wl-browse or its bin/browse driver; new link-based webpage tasks, form filling, parallel queries and verification use ws-web-auto with opencli instead. Does not depend on gstack.
 ---
 
 # Browse — Standalone

@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="zh-CN"><meta charset="utf-8"><title>网页操作能力试验页</title>
+<style>body{font:18px sans-serif;max-width:760px;margin:40px auto}label{display:block;margin:20px 0}input,select,button{font:inherit;padding:8px}td{padding:12px;border:1px solid #aaa}pre{white-space:pre-wrap}</style>
+<h1>本地表单试验（无网络、无业务写入）</h1>
+<form id="form">
+<label>任务标记 <input id="task" required></label>
+<label>起点 <input id="origin" required></label>
+<label>异步目的地 <select id="destination" required disabled><option value="">等待输入起点</option></select></label>
+<table><tr><th>箱型</th><th>价格（点击编辑，失焦保存）</th></tr><tr><td>40HQ</td><td id="price" tabindex="0">0</td></tr></table>
+<p><button id="submit">提交本地回执</button></p></form><pre id="receipt" aria-live="polite"></pre>
+<script>
+const task=document.querySelector('#task'), origin=document.querySelector('#origin'), destination=document.querySelector('#destination'), price=document.querySelector('#price');
+let version=0, savedPrice='0', submissions=0;
+origin.addEventListener('input',()=>{const token=++version, value=origin.value;destination.disabled=true;destination.replaceChildren(new Option('加载中',''));setTimeout(()=>{if(token!==version)return;destination.replaceChildren(new Option('请选择',''),new Option(value+'-A',value+'-a'),new Option(value+'-B',value+'-b'));destination.disabled=false},300)});
+price.addEventListener('click',()=>{if(price.querySelector('input'))return;const input=document.createElement('input');input.id='price-editor';input.type='number';input.min='0';input.value=savedPrice;price.replaceChildren(input);input.focus();input.addEventListener('blur',()=>{savedPrice=input.value;price.textContent=savedPrice},{once:true})});
+document.querySelector('#form').addEventListener('submit',event=>{event.preventDefault();document.querySelector('#receipt').textContent=JSON.stringify({task:task.value,origin:origin.value,destination:destination.value,price:savedPrice,submissions:++submissions},null,2)});
+</script></html>

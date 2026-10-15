@@ -1,11 +1,11 @@
 ---
 name: hgj-git-connect
-description: Diagnose and operate the local SSH routes used for HGJ GitLab. Use when a repository uses git.hgj.net, or when git pull/push reports SSH, ProxyJump, host-key, or UNKNOWN port 65535 errors.
+description: Diagnose and operate the local SSH routes used for HGJ GitLab. Use only when git fetch, pull, or push reports SSH, ProxyJump, host-key, port, or UNKNOWN port 65535 errors, or when the user explicitly asks to diagnose or switch the Git route. Do not use for ordinary status, log, diff, merge-base, rev-list, merge-tree, or branch comparison.
 ---
 
 # HGJ Git Connect
 
-Use this skill for the user's local company GitLab connectivity, not for repository branching, merging, review, or release workflow.
+Use this skill for the user's local company GitLab connectivity, not for repository branching, merging, review, or release workflow. A company Git remote alone is not a trigger; load this workflow only for connection errors or an explicit route diagnosis/switch request. Normal fetch/pull/push operations do not require an extra connectivity probe.
 
 ## Route model
 

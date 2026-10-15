@@ -9,7 +9,16 @@ self:
   boundary: 仅生成用例与覆盖缺口；不做排期、Bug 报告、Figma 校验、自动化执行或脚本调用；上游模板按需读取，真实业务验证待完成
   tags:
   - 测试
-  verified: ''
+  verified: '2026-10-15'
+- name: ws-web-auto
+  path: skills/ws-web-auto
+  capability: 使用opencli执行网页探索、查询、填表和核验，最多3任务并发，按执行或核验模式管理结果与截图
+  boundary: 不使用wl-browse；不提供定时调度或发布授权；焦点型表格并发及真实业务并发提交未验证，写操作需明确授权
+  tags:
+  - 浏览器
+  - 自动化
+  - 测试
+  verified: '2026-10-14'
 - name: hgj-git-connect
   path: skills/hgj-git-connect
   capability: 诊断并切换公司 GitLab 的直连与 SSH 跳板路由，优先用只读检查确认当前可用链路
@@ -124,7 +133,7 @@ self:
   verified: '2026-08-31'
 - name: wl-design-doc
   path: skills/wl-design-doc
-  capability: 方案设计——需求批准后产出可批准的《方案设计文档》（映射/契约/复用分析/多方案/附证据审查/最小验证）
+  capability: 方案设计——按业务场景组织目标、现状事实、最小例子、业务流程、技术承接、专项适用性与验收，生成可批准的单文件HTML
   boundary: 前置 wl-req-confirm 已批准；只出方案不写实现代码，不替用户拍板选方案
   tags:
   - 开发流程

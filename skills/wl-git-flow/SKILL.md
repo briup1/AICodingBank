@@ -1,13 +1,19 @@
 ---
 name: wl-git-flow
-description: 安全创建、推送、集成和清理需求分支及 Git Worktree，并用用户级 HTML 看板聚合多个项目的需求生命周期。用户提到从 master 建需求分支、合入 Dev/Beta、检查污染、测试反馈、Worktree 回收、查看并行需求或打开需求看板时使用；同时兼容 TAPD 项目和没有 TAPD 的私人项目；不用于普通提交、代码评审或无需求分支语义的临时 Git 操作。
+description: 安全创建、推送、集成和清理需求分支及 Git Worktree，并用用户级 HTML 看板聚合多个项目的需求生命周期。仅在创建需求分支、合入 Dev/Beta、检查污染、记录测试反馈、回收 Worktree、查看并行需求或操作看板时使用；同时兼容 TAPD 项目和没有 TAPD 的私人项目。不用于普通 status、log、diff、merge-base、rev-list、merge-tree、只读分支比较、代码 Review 或无需求分支语义的临时 Git 操作。
 ---
 
 # WL Git Flow
 
+## 加载边界
+
+- 只读分支事实、提交差异和文本冲突分析不加载完整生命周期；实际合入、污染审计、测试反馈和清理仍执行本 Skill，不因其中使用只读 Git 命令而跳过。
+- “评估合并”不自动等于代码 Review。先明确源、目标和 Git 事实；用户要求行为、兼容性或回归风险时，才补读对应代码与直接契约，不默认加载全仓规范和历史报告。
+- 已在上下文提供的项目入口不重复读取。reference 只按当前操作加载：清理读 worktree-lifecycle，页面/看板读 dashboard-model，Dev Guard 安装或诊断读 dev-guard；链接不是必读清单。
+
 两层分开维护，互不改写对方的规则。
 
-1. **Git 原则**：需求分支怎么建、怎么合、目录什么时候删。合并、推送、清理只读这一层，以及 [references/worktree-lifecycle.md](references/worktree-lifecycle.md)。
+1. **Git 原则**：需求分支怎么建、怎么合、目录什么时候删。合并、推送读取这一层的对应操作；需要清理或判断目录生命周期时再读 [references/worktree-lifecycle.md](references/worktree-lifecycle.md)。
 2. **看板**：把第 1 层已经发生的状态画出来。用户要看进度、登记项目或打开页面时再读这一层，以及 [references/dashboard-model.md](references/dashboard-model.md)。
 
 看板不新增 Git 规则，也不代替第 1 层做决定。
