@@ -10,8 +10,8 @@ self:
   tags:
   - 测试
   verified: '2026-10-15'
-- name: ws-web-auto
-  path: skills/ws-web-auto
+- name: wl-web-auto
+  path: skills/wl-web-auto
   capability: 使用opencli执行网页探索、查询、填表和核验，最多3任务并发，按执行或核验模式管理结果与截图
   boundary: 不使用wl-browse；不提供定时调度或发布授权；焦点型表格并发及真实业务并发提交未验证，写操作需明确授权
   tags:
@@ -235,10 +235,10 @@ self:
   - 测试
   - 开发流程
   verified: '2026-09-01'
-- name: wl-phase-routing
-  path: skills/wl-phase-routing
-  capability: 为复杂或多步骤工作判断唯一当前阶段（观察/确认/设计/执行/验证/沉淀）并选择最小能力组合
-  boundary: 只做阶段判断与能力选择，不替代各阶段内的具体 Skill；范围明确的简单任务不触发
+- name: wl-auto-delivery
+  path: skills/wl-auto-delivery
+  capability: 按需选择当前阶段，串起需求、业务分组用例、独立审查、方案决策、开发、聚焦Review与目标环境验收
+  boundary: 不强制只读或简单任务走完整流水线；各环节可独立使用，委托不替代高风险授权，静态检查不等于真实交付验证
   tags:
   - 规划
   - 开发流程

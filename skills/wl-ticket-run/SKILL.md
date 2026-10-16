@@ -1,13 +1,13 @@
 ---
 name: wl-ticket-run
-description: 工单执行——方案批准后，将需求拆成可验收 Ticket，并按耦合关系组合为执行工作包，由持续实现 Agent 开发，统一测试、审查和验收。用于“拆工单”“开始实现”“按方案开发”，也用于已有细粒度 Ticket 的合并执行。
+description: 工单执行——方案经人工批准或明确委托后采用推荐，将需求拆成引用既有用例的可验收 Ticket，按耦合关系组合工作包，持续开发、聚焦测试、Review和目标环境验收。用于“拆工单”“开始实现”“按方案开发”，也用于已有细粒度 Ticket 的合并执行。
 ---
 
 # 工单执行（wl-ticket-run）
 
 开发流程的第三阶段。目标是在保留需求追踪和验收边界的同时，减少重复读取上下文、重复测试和重复审查，自动执行到验收。
 
-**前置条件**：已核对本版方案正文、`status: approved` 及用户明确批准的证据和范围。新方案读取 `design.wl-design-doc.html`，兼容历史 Markdown；多方案场景下已有用户选定方案（`chosen`），且无阻断性验证缺口。
+**前置条件**：已核对本版方案正文和可执行决策：默认 manual 为 `status: approved` + 本版真实 `approval_evidence`；显式 delegated 为 `status: adopted` + 真实 `delegation_evidence`，`chosen` 与推荐一致，`approval_evidence: null`。需求/用例已人确认，无关键验证缺口；新方案读取 `design.wl-design-doc.html`，兼容旧合法批准 Markdown。候选方案不可拆票。
 
 ## 上游文档查找与身份核对
 
@@ -15,25 +15,26 @@ description: 工单执行——方案批准后，将需求拆成可验收 Ticket
 - 新 HTML 核对 `meta[name="generator"]=wl-design-doc`、`meta[name="artifact-schema-version"]=1`，从 `script#wl-design-meta` 按 JSON 数据读取状态、来源需求、选型和批准证据；不能只抓取正文中的“approved”字样或把脚本作为代码执行。元信息与可见正文/标签冲突、来源不符或字段缺失时先修复，不当作已确认来源。
 - 历史 Markdown 从 frontmatter 读取 `status`、`chosen` 及来源；新命名 Markdown 的 `skill` / `artifact_schema_version` 须匹配。历史文件缺来源或批准证据时，查实际用户记录；查不到则停止确认，不伪造元信息、不自动重命名，也不因格式旧而自动拒绝已有真实批准。
 - 新旧文件并存时，先核实正文和批准版本；无法确定权威版本则停止询问，不凭新名称、文件格式或修改时间选择，不覆盖旧批准稿。
-- `status: approved`、文件标识和 `chosen` 都不能代替本版用户批准。批准范围未包含的契约/业务变化须回到设计确认；关键验证失败或关键假设无证据时不得拆票实施。非阻断的延期验证须有原因、时点及用户接受的风险，作为后续 Gate 保留。
+- 对新 HTML 先运行 wl-design-doc 的 `scripts/check_design_doc.py <实际HTML> --require-executable`，再人工读真实证据，脚本不证明授权真实性。新决策字段与设计契约一致：非空 `requirement_version` / `design_version`、`source_test_cases: {path, version}`、`recommendation` / `recommendation_reason`、`critical_validation: {status: verified, evidence}`。adopted 还须 `delegation_evidence: {record, requirement_version, design_version, scope, data_boundary, cost_boundary, operation_boundary}`，两版号匹配本版，范围及各授权边界实际覆盖本次操作；不得把委托写为 approved。旧稿无 decision_mode 按 manual 兼容，缺真实批准仍停止。
+- `status`、文件标识、`chosen` 都不代替本版决策证据。越过契约/业务/数据/成本/操作边界或重大不可逆变化须回到确认；关键验证失败或假设无证据不得实施。非阻断延期须有原因、时点与风险接受依据，委托只能在明确覆盖的边界内采用，保留后续 Gate。
 
 ## 核心模型
 
 不要把 Ticket、Agent 和执行生命周期绑定为一对一：
 
-- **Ticket**：一个可观察、可验收的需求结果，负责追踪范围和 G/W/T。
+- **Ticket**：一个可观察、可验收的需求结果，负责追踪范围和已有用例 ID/版本；没有既有用例才补齐并确认，不复制一套业务预期。
 - **执行工作包（execution group）**：一组高耦合 Ticket，是 Agent 分配、`/goal`、统一测试和 Review 的基本单位。
 - **内部步骤**：工作包内的实现顺序，没有独立业务结果时不单独建 Ticket、不分配新 Agent。
 - **Gate**：统一测试、Code Review、Beta/生产验证、发布审批等门禁，不作为普通编码 Ticket。
 
 ```text
-approved design
+executable design (manual approved / delegated adopted)
   → 影响域与耦合分析
   → 拆分可验收 Ticket
   → 合并为执行工作包
   → 工作包内串行开发
   → 工作包级统一测试 + Review
-  → 全局回归与外部验证 Gate
+  → 约定目标环境逐条用例验收与外部授权 Gate
 ```
 
 ## 第一步：分析影响域
@@ -75,15 +76,15 @@ approved design
 - 业务结果和范围；
 - blocking edges；
 - 明确的 Out of Scope；
-- 可验证的 G/W/T 验收标准；
+- 既有用例整体链接、版本及本 Ticket 的用例 ID（包含前置/步骤/预期引用）；
 - 预计影响文件或模块；
 - 风险和必要的外部 Gate。
 
 ```text
-- [ ] Given <前置状态>, When <动作>, Then <可观察结果>
+- [ ] 用例 <实际路径>#TC-001，版本 <基线版本>；业务预期沿原文，不复制。
 ```
 
-需求约束也必须写成验收项。Ticket 的大小以“边界清晰、可验收、可追踪”为准，不以“必须对应一个新 Agent 或一个上下文窗口”为准。
+需求约束通过用例引用验收，历史 G/W/T 原位读取，不强制迁移。Ticket 的大小以“边界清晰、可验收、可追踪”为准，不以“必须对应一个新 Agent 或一个上下文窗口”为准。
 
 ## 第三步：组合执行工作包
 
@@ -128,14 +129,14 @@ approved design
 
 ## 第四步：分配与执行
 
-- 一个执行工作包只分配一个持续实现 Agent，并使用一个 `/goal`；goal 聚合组内全部 Ticket 的 G/W/T。
+- 默认由一个持续负责人完成工作包；`/goal`、`/list` 可选，不依赖宿主命令存在。只有可信验证/专业判断缺口才委派，通过 Herdr Pi thinking=high；不可用则说明阻塞，不伪称独立完成。goal 如使用则聚合用例引用及必要技术检查。
 - 工作包内按依赖串行开发，不在每张 Ticket 后重启完整测试和 Review 生命周期。
 - 低耦合工作包才可进入 `/list` 并行；存在共享写集或不稳定契约时必须串行。
 - 同形状的小改动合并为一次派发，不创建多个 Agent。
 - 实现中发现问题，交回原实现 Agent 修复；不要新建替代实现 Agent 重新读取上下文。
-- 测试和审查 Agent 只在统一门禁阶段介入；多个独立审查视角可以并行。
+- 测试/审查按实际独立验证缺口进入，不强制凑齐多个角色；本流程的正式用例审查独立性要求仍须满足。
 
-如果项目或需求要求 TDD，在工作包开始时先建立覆盖整个工作包的测试矩阵并写出失败测试，再串行完成组内实现；不要为每张细 Ticket 重复创建“失败测试 → 实现 → 全量回归 → Review”的独立生命周期。
+TDD 按行为小步推进：选一个已确认用例/行为 → 写最小失败测试并见 RED → 实现到 GREEN → 必要整理 → 下个行为。可先列覆盖矩阵，但不一次写完所有测试代码再统一实现；每步跑直接反馈测试，不每条重复完整 Review/全量回归。
 
 ### 执行纪律
 
@@ -150,13 +151,13 @@ approved design
 测试和 Review 的门禁粒度是执行工作包，不是单张 Ticket：
 
 1. 组内所有 Ticket 的实现串行完成；开发期间只运行必要的快速反馈测试。
-2. 一次性运行工作包聚焦测试和相关回归，并逐条审计聚合后的 G/W/T。
-3. 启动统一 Code Review；测试与独立审查可并行。
-4. 问题全部交回原实现 Agent 集中修复，再统一复测和复审受影响部分。
-5. 所有工作包稳定后，运行需求级全量回归、端到端场景和边界测试。
-6. Beta、生产、发布或真实外部写入只进入相应 Gate，按授权执行；不能执行时给出可操作的人工验证路径。
+2. 运行工作包聚焦测试和必要直接回归，逐条审计用例引用与实际结果。
+3. 业务验收前显式调用 wl-requesting-code-review 的 `focused-delivery` 模式：只报本版 diff 及必要直接依赖上的设计偏离和具体交付阻断问题；建议可省略，不做泛化改进审查。证据不足明确不能判定，不无限扩审。只有实际委派才称独立 Review。
+4. 问题交回原实现者修复，只复测/复审受影响部分。
+5. 按需求+用例确认时约定的目标环境逐条执行：核对 URL、角色、前后端版本、数据和写授权；本地不替代 Dev/Beta，不静默切环境，不默认生产。只做本次用例与最小直接回归，不默认全库测试。
+6. 运行结果按新 run 追加，通过/失败/阻塞/未执行/不适用均保留原因与证据；失败→缺陷→修复→新轮复测链接旧轮，不覆盖失败或改预期凑通过。Beta/生产/发布/外部写入另经授权；无法执行则标未覆盖/阻塞并给人工路径。
 
-声称完成前必须提供实际命令和结果，不得使用“应该通过”。全部验收完成后再将需求状态置为 `done` 并回写总览。
+声称完成前必须提供实际命令和结果，不得使用“应该通过”。约定目标环境所有适用用例通过、有依据的不适用已记录后，才将新需求 `execution_phase` 置为 `done` 并回写摘要；失败/阻塞/未执行不算完成，不由 Agent 自行接受，目标环境通过也不等于发布。不覆盖批准 status；旧混合状态原位兼容。证据放用户级持久目录或明确目录，Worktree 回收前保存必要记录，不自动删除。
 
 ## 切分与分组的目的
 

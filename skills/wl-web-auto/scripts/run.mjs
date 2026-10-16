@@ -4,11 +4,15 @@ import path from 'node:path';
 import os from 'node:os';
 import { execFileSync } from 'node:child_process';
 
-export function initRun({ task, mode, project, stateHome = process.env.XDG_STATE_HOME || path.join(os.homedir(), '.local/state') }) {
+export function initRun({ task, mode, project, runRoot, stateHome = process.env.XDG_STATE_HOME || path.join(os.homedir(), '.local/state') }) {
   if (!/^[a-z0-9][a-z0-9_-]{0,79}$/.test(task || '')) throw new Error('task must be a lowercase slug');
   if (!['execute', 'verify', 'mixed'].includes(mode)) throw new Error('invalid mode');
   let root;
-  if (project) {
+  if (runRoot !== undefined) {
+    if (!path.isAbsolute(runRoot)) throw new Error('run root must be absolute');
+    if (project) throw new Error('choose run root or project, not both');
+    root = runRoot;
+  } else if (project) {
     if (!path.isAbsolute(project)) throw new Error('project must be absolute');
     root = fs.realpathSync(project);
     const gitRoot = fs.realpathSync(execFileSync('git', ['-C', root, 'rev-parse', '--show-toplevel'], { encoding: 'utf8' }).trim());
@@ -31,12 +35,12 @@ export function initRun({ task, mode, project, stateHome = process.env.XDG_STATE
 
 if (process.argv[1] && path.resolve(process.argv[1]) === path.resolve(new URL(import.meta.url).pathname)) {
   try {
-    if (process.argv[2] !== 'init') throw new Error('usage: run.mjs init --task slug --mode execute|verify|mixed [--project /absolute/root]');
+    if (process.argv[2] !== 'init') throw new Error('usage: run.mjs init --task slug --mode execute|verify|mixed [--project /absolute/root | --run-root /absolute/root]');
     const opts = {};
     for (let i = 3; i < process.argv.length; i += 2) {
       const key = process.argv[i];
-      if (!['--task', '--mode', '--project'].includes(key) || !process.argv[i + 1]) throw new Error('invalid argument');
-      opts[key.slice(2)] = process.argv[i + 1];
+      if (!['--task', '--mode', '--project', '--run-root'].includes(key) || !process.argv[i + 1]) throw new Error('invalid argument');
+      opts[key === '--run-root' ? 'runRoot' : key.slice(2)] = process.argv[i + 1];
     }
     console.log(initRun(opts));
   } catch (error) { console.error(error.message); process.exitCode = 1; }

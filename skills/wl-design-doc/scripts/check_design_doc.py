@@ -49,9 +49,57 @@ def fail(message: str) -> None:
     raise SystemExit(1)
 
 
+def check_decision(meta: object, require_executable: bool = False) -> str:
+    """Validate decision shape, not the truth of user records or technical evidence."""
+    if not isinstance(meta, dict):
+        fail("wl-design-meta must be an object")
+    for key in ("requirement_id", "status", "created", "updated", "chosen", "approval_evidence"):
+        if key not in meta:
+            fail(f"missing metadata key: {key}")
+    mode = meta.get("decision_mode", "manual")  # Legacy human-approved documents.
+    status = meta["status"]
+    if mode not in {"manual", "delegated"}:
+        fail("invalid decision_mode")
+    if status not in {"draft", "reviewing", "approved", "adopted"}:
+        fail("invalid design status")
+    if mode == "delegated" and (status == "approved" or meta["approval_evidence"] is not None):
+        fail("delegation is not human approval; use adopted and null approval_evidence")
+    if status == "adopted" and mode != "delegated":
+        fail("adopted requires delegated decision_mode")
+    if status == "approved" and not meta["approval_evidence"]:
+        fail("approved document has no approval_evidence")
+    executable = status in {"approved", "adopted"}
+    if require_executable and not executable:
+        fail("candidate document is not executable")
+    # New decision metadata is stricter; old approved artifacts remain readable.
+    if executable and ("decision_mode" in meta or "critical_validation" in meta):
+        validation = meta.get("critical_validation")
+        if not isinstance(validation, dict) or validation.get("status") != "verified" or not validation.get("evidence"):
+            fail("executable design requires verified critical_validation evidence")
+    if executable and "decision_mode" in meta:
+        for key in ("requirement_version", "design_version", "recommendation", "recommendation_reason"):
+            if not isinstance(meta.get(key), str) or not meta[key].strip():
+                fail(f"missing decision field: {key}")
+        cases = meta.get("source_test_cases")
+        if not isinstance(cases, dict) or not all(isinstance(cases.get(k), str) and cases[k].strip() for k in ("path", "version")):
+            fail("missing source_test_cases path/version")
+    if status == "adopted":
+        if meta.get("chosen") != meta.get("recommendation"):
+            fail("adopted chosen must match recommendation")
+        evidence = meta.get("delegation_evidence")
+        keys = ("record", "requirement_version", "design_version", "scope", "data_boundary", "cost_boundary", "operation_boundary")
+        if not isinstance(evidence, dict) or not all(isinstance(evidence.get(k), str) and evidence[k].strip() for k in keys):
+            fail("missing delegation_evidence record/version/boundaries")
+        for key in ("requirement_version", "design_version"):
+            if evidence[key] != meta[key]:
+                fail(f"delegation_evidence {key} does not match this version")
+    return f"{mode}/{status}"
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("html", type=Path)
+    parser.add_argument("--require-executable", action="store_true", help="reject undecided candidates at ticket handoff")
     args = parser.parse_args()
     html_path = args.html.resolve()
     if not html_path.is_file():
@@ -67,11 +115,7 @@ def main() -> int:
         meta = json.loads("".join(p.meta_text))
     except json.JSONDecodeError as exc:
         fail(f"invalid wl-design-meta JSON: {exc}")
-    for key in ("requirement_id", "status", "created", "updated", "chosen", "approval_evidence"):
-        if key not in meta:
-            fail(f"missing metadata key: {key}")
-    if meta["status"] == "approved" and not meta["approval_evidence"]:
-        fail("approved document has no approval_evidence")
+    decision = check_decision(meta, args.require_executable)
     for tag, resource in p.embedded_resources:
         if resource.startswith(("http://", "https://", "//")):
             fail(f"external embedded resource: <{tag}> {resource}")
@@ -83,7 +127,7 @@ def main() -> int:
         if not target.exists():
             fail(f"missing local link target: {href}")
     print(
-        f"PASS: {html_path} | meta=draft-safe | ids={len(p.ids)} "
+        f"PASS: {html_path} | meta={decision} (structure only) | ids={len(p.ids)} "
         f"links={len(p.links)} embedded={len(p.embedded_resources)}"
     )
     return 0

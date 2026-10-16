@@ -7,7 +7,7 @@ import { execFileSync } from 'node:child_process';
 import { initRun } from './run.mjs';
 import { runBatch } from './batch.mjs';
 
-const root = fs.mkdtempSync(path.join(os.tmpdir(), 'ws-web-auto-test-'));
+const root = fs.mkdtempSync(path.join(os.tmpdir(), 'wl-web-auto-test-'));
 process.on('exit', () => fs.rmSync(root, { recursive: true, force: true }));
 
 test('run paths isolate tasks, execute does not create screenshots, invalid paths rejected', () => {
@@ -17,6 +17,22 @@ test('run paths isolate tasks, execute does not create screenshots, invalid path
   assert.ok(fs.existsSync(path.join(initRun({ task: 'example', mode: 'verify', stateHome: root }), 'screenshots')));
   assert.throws(() => initRun({ task: '../escape', mode: 'verify', stateHome: root }));
   assert.throws(() => initRun({ task: 'example', mode: 'verify', project: 'relative' }));
+});
+
+test('explicit external run root appends unique runs and supports CLI', () => {
+  const runRoot = path.join(root, 'delivery/project');
+  const first = initRun({ task: 'requirement', mode: 'verify', runRoot, stateHome: root });
+  const second = initRun({ task: 'requirement', mode: 'verify', runRoot, stateHome: root });
+  assert.ok(first.startsWith(path.join(runRoot, 'requirement/')));
+  assert.notEqual(first, second);
+  assert.ok(fs.existsSync(path.join(first, 'run.json')));
+  assert.ok(fs.existsSync(path.join(first, 'screenshots')));
+  assert.throws(() => initRun({ task: 'requirement', mode: 'verify', runRoot: 'relative', stateHome: root }));
+  assert.throws(() => initRun({ task: 'requirement', mode: 'verify', runRoot, project: root, stateHome: root }));
+  const cli = execFileSync(process.execPath, [new URL('./run.mjs', import.meta.url).pathname,
+    'init', '--task', 'requirement', '--mode', 'verify', '--run-root', runRoot],
+    { encoding: 'utf8', env: { ...process.env, XDG_STATE_HOME: root } }).trim();
+  assert.ok(cli.startsWith(path.join(runRoot, 'requirement/')));
 });
 
 test('project evidence requires an ignored repository-root directory', () => {

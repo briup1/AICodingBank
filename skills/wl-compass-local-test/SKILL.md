@@ -50,7 +50,7 @@ description: compass-platform 本地自测环境一站式搭建与验证——�
 
 ## 生成物位置约定（可控 + 定点清理）
 
-所有本地自测产出只落一个根目录，不散落 worktree / /tmp：
+本地进程日志与临时产出只落一个根目录，不散落 worktree / /tmp；用于交付验收的必要证据另存用户级 `state/wl-auto-delivery/<project>/<requirement>/<run>/` 或用户明确目录，长期项目摘要与原始证据分离，不随 Worktree 回收丢失：
 
 ```text
 ${COMPASS_LOCAL_TEST_HOME:-~/.local/state/compass-local-test}/<worktree-slug>/
@@ -59,10 +59,9 @@ ${COMPASS_LOCAL_TEST_HOME:-~/.local/state/compass-local-test}/<worktree-slug>/
 ```
 
 - 根目录可用环境变量 `COMPASS_LOCAL_TEST_HOME` 改指到别处（如外接盘）。
-- 用完执行 `scripts/local-test-down.sh [slug]` 定点清理：停本需求进程（按端口+命令行特征匹配，
-  不误杀别的任务）→ 停 MQ 容器 → 删除该需求生成物根目录（默认把最新一份后端日志
-  备份到 `<base>/_last_logs/<slug>/` 再删）。
-- `--purge` 额外删除共享 MQ 容器和 volume（下次要按步骤 1 重建）；正常不要 purge，volume 留着复用。
+- 用完执行 `scripts/local-test-down.sh [slug]`：仅停匹配端口、命令行特征且 cwd 或绝对命令路径含需求 slug 路径段的进程；无法证明归属则跳过并提示。**默认保留全部日志/产物，不停止共享 MQ**。
+- 只有独立显式授权 `--delete-artifacts` 才删除本 slug 产物；拒绝路径穿越、BASE/目标/内部符号链接，不能指向其他需求。先确认必要证据已保存在持久目录；保留期 7/30 天仅建议，不自动启用，不对真实证据默认删除。
+- 共享 MQ 停止须 `--stop-shared-mq --confirm-shared-unused`，先确认其他使用者均不受影响；删除容器/volume 再另加 `--purge`。只有 `--purge` 不够授权且不隐含证据删除；外部运行证据目录不受这些参数影响。
 - 不属于"本需求生成物"的：~/.m2（依赖仓库）、pnpm store、wl-rocketmq 镜像——都是复用物，不动。
 
 ## 一键启动（推荐）
@@ -79,6 +78,8 @@ ${COMPASS_LOCAL_TEST_HOME:-~/.local/state/compass-local-test}/<worktree-slug>/
 ## 启动流程（手动等价版，按序执行）
 
 ### 0. 前置检查（每次）
+
+先核对约定的目标环境、URL、角色、前后端版本和数据/写授权。本地进程连接 dev 数据仍是真实 dev 写入，不因本地自测或总流程自动决策就获准；须有具体操作授权。单独调用可沿已确认项目设置或用户输入，不依赖总流程文件。公司业务无设置时推荐 Dev（私人项目本地），需确认；生产永不默认。环境阻塞不静默切换，本地通过不能标作 Dev/Beta 已验收。
 
 ```bash
 # dev 网络五连（全通才能继续）
@@ -235,7 +236,10 @@ curl -s -X POST localhost:18080/api/v1/freight/search $H -d '{"channel":"web","l
 
 ```bash
 ~/.agents/skills/wl-compass-local-test/scripts/local-test-down.sh [worktree-slug]
-# 或彻底连 MQ 一起删（下次需重建）: local-test-down.sh --purge
+# 默认保留全部证据且不动共享 MQ。
+# 独立授权删本 slug 产物：local-test-down.sh <slug> --delete-artifacts
+# 确认其他使用者后停共享 MQ：local-test-down.sh <slug> --stop-shared-mq --confirm-shared-unused
+# 如另获容器/volume删除授权，再加 --purge（仍保留证据）。
 ```
 
 ## 故障速查表
