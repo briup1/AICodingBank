@@ -26,6 +26,7 @@ from typing import Any, Iterable
 APP = "wl-git-flow"
 VERSION = 1
 DEFAULT_PATTERNS = [
+    r"^feature/R-[0-9]{8}-(?:[A-Z][0-9]+|[a-z0-9]+(?:-[a-z0-9]+)*)$",
     r"^feature/story/[a-z0-9][a-z0-9._-]*$",
     r"^feature/bug/[a-z0-9][a-z0-9._-]*$",
 ]
@@ -660,8 +661,8 @@ def compute_requirement(
         else:
             git_stage = "active"
 
-    if git_stage == "merged-master" and (branch_worktrees or local_ref or remote_ref):
-        add_anomaly(anomalies, "pending-cleanup", "已合主干但需求分支或 Worktree 尚未清理")
+    if git_stage == "merged-master" and branch_worktrees:
+        add_anomaly(anomalies, "pending-cleanup", "已合主干，Worktree 可评估回收；分支保留")
 
     verification = "未测试"
     if metadata.get("stage") == "dev-failed" and metadata.get("lastDevSha") == tip:
@@ -690,7 +691,7 @@ def compute_requirement(
         "dev-passed": "执行 Beta 前污染审计并晋级",
         "beta-testing": "等待 Beta 实测结果",
         "beta-passed": "按发布流程合入主干",
-        "merged-master": "等待上线确认；完成后最终清理",
+        "merged-master": "等待上线确认；按需回收 Worktree，保留分支",
         "cleaned": "等待上线确认",
         "online": "核对清理状态，最近上线期结束后归档",
         "archived": "无需处理",
@@ -820,6 +821,8 @@ def scan_repository(
 
     try:
         patterns = validate_patterns(project.get("requirementPatterns") or DEFAULT_PATTERNS)
+        if patterns == DEFAULT_PATTERNS[1:]:
+            patterns = list(DEFAULT_PATTERNS)
     except DashboardError as exc:
         errors.append({"projectId": project["id"], "message": str(exc)})
         return stale_requirements_for_project(project, state, str(exc)), global_anomalies, errors
@@ -946,6 +949,7 @@ def select_primary_branch(
         return max(with_worktree, key=lambda item: item.get("lastCommitAt") or "")
     requirement_id = branches[0]["requirementId"]
     exact_names = {
+        f"feature/{requirement_id}",
         f"feature/story/{requirement_id}",
         f"feature/bug/{requirement_id}",
     }

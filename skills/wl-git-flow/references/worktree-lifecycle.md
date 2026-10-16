@@ -64,7 +64,10 @@ dev-testing ──失败──> dev-failed ──修改/推送/再合入 Dev─�
 - 开发已完成，或用户明确说清理、暂停；
 - Worktree 干净；
 - 本地提交全部存在于同名远端分支；
-- 没有进行中的 Git 操作。
+- 没有进行中的 Git 操作；
+- 用户已确认 Agent 和本地服务不再使用目录，必要的本地产物已保存。被 Git 忽略的文件不能仅凭 `git status` 干净就认定可丢弃。
+
+执行删除前重新 fetch，确认本地与同名 origin 分支一致；无法确认就保留，不强制删除。
 
 Dev 已通过、已进入 Beta，或当前 SHA 已进入 `origin/master`，都适用同一动作。
 
@@ -72,9 +75,9 @@ Dev 已通过、已进入 Beta，或当前 SHA 已进入 `origin/master`，都�
 
 - 删除工作目录；
 - 保留本地分支和远端分支；
-- 后续用原来的分支名 `git worktree add <path> <branch>` 恢复。
+- 后续用同一需求编号运行 `start` 从原分支恢复目录，不重新编号。
 
-不要提议删除分支，也不要给 `remove-worktree` 加上删除分支的参数。
+不要提议删除分支。`remove-worktree` 不提供删除分支能力，旧删除参数和 `retire-branch` 会明确拒绝。
 
 ## 不应删除目录的时机
 

@@ -78,8 +78,158 @@ def test_private_project_slug_uses_shared_worktree_root(
         worktree_root,
     ).stdout
     worktree = Path(next(line.split("=", 1)[1] for line in output.splitlines() if line.startswith("worktree=")))
+    assert "codegraph=not-enabled" in output
+    assert not (worktree / ".codegraph").exists()
     assert worktree == worktree_root / repo.name / "story-login-redesign"
     assert git(worktree, "branch", "--show-current").stdout == "feature/story/login-redesign\n"
+
+
+@pytest.mark.parametrize("requirement", ["R-20260910-F001", "R-20260910-F001.md", "R-20261016-login-fix"])
+def test_start_reuses_restores_and_tracks_remote_requirement(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, requirement: str
+) -> None:
+    configure_dashboard_env(tmp_path, monkeypatch)
+    origin, repo, dev_worktree, _ = init_fixture(tmp_path)
+    root = tmp_path / "worktrees"
+    requirement_id = requirement.removesuffix(".md")
+    branch = f"feature/{requirement_id}"
+    worktree = root / repo.name / branch
+    args = (SCRIPT, "start", "--repo", repo, "--id", requirement, "--worktree-root", root)
+    created = run(*args).stdout
+    assert "status=created" in created and "ready=true" in created
+    assert f"worktree={worktree}" in created
+    assert git(worktree, "branch", "--show-current").stdout.strip() == branch
+    assert git(worktree, "rev-parse", "HEAD").stdout == git(repo, "rev-parse", "origin/master").stdout
+    assert not (worktree / f"{requirement_id}.md").exists()
+
+    # Reuse must preserve uncommitted work and the recorded test result.
+    (worktree / "local.txt").write_text("keep me")
+    reused = run(*args).stdout
+    assert "status=reused" in reused
+    assert (worktree / "local.txt").read_text() == "keep me"
+    git(worktree, "add", "local.txt")
+    git(worktree, "commit", "-m", "feat: requirement")
+    sha = git(worktree, "rev-parse", "HEAD").stdout.strip()
+    run(SCRIPT, "integrate-dev", "--repo", repo, "--source", branch,
+        "--target", "feature/dev", "--target-worktree", dev_worktree,
+        "--push-source", "--push-target")
+    run(SCRIPT, "mark-dev-result", "--repo", repo, "--branch", branch, "--result", "passed")
+    run(*args)
+    state = json.loads((tmp_path / "state/wl-git-flow/state.json").read_text())
+    entry = next(item for item in state["requirements"].values() if item["branch"] == branch)
+    assert entry["stage"] == "dev-passed" and entry["devPassedSha"] == sha
+
+    run(SCRIPT, "remove-worktree", "--repo", repo, "--worktree", worktree, "--confirm")
+    assert not worktree.exists()
+    assert git(repo, "rev-parse", branch).stdout.strip() == sha
+    assert sha in run("git", "ls-remote", "--heads", origin, branch).stdout
+    restored = run(*args).stdout
+    assert "status=restored" in restored
+    assert git(worktree, "rev-parse", "HEAD").stdout.strip() == sha
+
+    # Another clone has only the remote branch; start must not reset it to master.
+    clone = tmp_path / "other-repo"
+    run("git", "clone", origin, clone)
+    remote_restored = run(SCRIPT, "start", "--repo", clone, "--id", requirement,
+                          "--worktree-root", root).stdout
+    assert "status=restored" in remote_restored
+    assert git(clone, "rev-parse", branch).stdout.strip() == sha
+    assert git(clone, "for-each-ref", "--format=%(upstream:short)", f"refs/heads/{branch}").stdout.strip() == f"origin/{branch}"
+
+
+@pytest.mark.parametrize("case", ["occupied", "mismatch", "invalid"])
+def test_start_rejects_requirement_conflicts(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, case: str
+) -> None:
+    configure_dashboard_env(tmp_path, monkeypatch)
+    _, repo, _, _ = init_fixture(tmp_path)
+    root = tmp_path / "worktrees"
+    requirement = "R-20261016-login-fix"
+    extra = []
+    if case == "occupied":
+        (root / repo.name / f"feature/{requirement}").mkdir(parents=True)
+    elif case == "mismatch":
+        extra = ["--branch", "feature/R-20261016-other"]
+    else:
+        requirement = "R-20261016-../escape"
+    result = run(SCRIPT, "start", "--repo", repo, "--id", requirement,
+                 "--worktree-root", root, *extra, check=False)
+    assert result.returncode != 0
+    assert git(repo, "show-ref", "--verify", "refs/heads/feature/R-20261016-login-fix", check=False).returncode != 0
+
+
+@pytest.mark.parametrize("mode", ["ready", "build-failed", "partial", "wrong-root", "not-initialized"])
+@pytest.mark.parametrize("bootstrap", [False, True])
+def test_start_builds_independent_codegraph(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, mode: str, bootstrap: bool
+) -> None:
+    import os
+
+    configure_dashboard_env(tmp_path, monkeypatch)
+    _, repo, _, _ = init_fixture(tmp_path)
+    (repo / ".codegraph").mkdir()
+    (repo / ".codegraph/source-only").write_text("never copy")
+    (repo / ".wl-git-flow-bootstrap").write_text(".codegraph\n")
+    hooks = Path(git(repo, "rev-parse", "--git-common-dir").stdout.strip())
+    if not hooks.is_absolute():
+        hooks = repo / hooks
+    hook_files = {p.name: p.read_bytes() for p in (hooks / "hooks").iterdir()}
+    bin_dir = tmp_path / "bin"
+    bin_dir.mkdir()
+    fake = bin_dir / "codegraph"
+    fake.write_text('''#!/usr/bin/env python3
+import json, os, pathlib, subprocess, sys
+cmd = sys.argv[1]
+p = pathlib.Path(sys.argv[-1])
+assert os.environ["CODEGRAPH_DIR"] == ".codegraph"
+if cmd == "init":
+    assert sys.argv[2] == "--yes"
+    assert pathlib.Path.cwd() == p
+    hook = subprocess.check_output(["git", "config", "core.hooksPath"], text=True).strip()
+    assert hook == str(p / ".codegraph/git-hooks")
+    assert not (p / ".codegraph/source-only").exists()
+    (p / ".codegraph").mkdir(exist_ok=True)
+    (p / ".codegraph/built-here").write_text(str(p))
+    sys.exit(1 if os.environ["CG_TEST_MODE"] == "build-failed" else 0)
+assert cmd == "status"
+mode = os.environ["CG_TEST_MODE"]
+print(json.dumps({"initialized": mode != "not-initialized", "projectPath": str(p.parent if mode == "wrong-root" else p),
+    "indexPath": str(p / ".codegraph"), "lastIndexed": "now", "pendingChanges": {},
+    "index": {"state": "partial" if mode == "partial" else "complete", "pendingRefs": 0}}))
+''')
+    fake.chmod(0o755)
+    monkeypatch.setenv("PATH", f"{bin_dir}{os.pathsep}{os.environ['PATH']}")
+    monkeypatch.setenv("CG_TEST_MODE", mode)
+    result = run(SCRIPT, "start", "--repo", repo, "--id", "cg-test",
+                 "--worktree-root", tmp_path / "worktrees",
+                 *(["--bootstrap"] if bootstrap else []), check=False)
+    worktree = tmp_path / "worktrees/repo/story-cg-test"
+    assert worktree.is_dir()
+    assert (repo / ".codegraph/source-only").read_text() == "never copy"
+    assert (worktree / ".codegraph/built-here").read_text() == str(worktree)
+    assert not (worktree / ".codegraph/source-only").exists()
+    assert git(worktree, "branch", "--show-current").stdout.strip() == "feature/story/cg-test"
+    assert {p.name: p.read_bytes() for p in (hooks / "hooks").iterdir()} == hook_files
+    assert git(repo, "config", "--local", "--get", "core.hooksPath", check=False).returncode != 0
+    assert (tmp_path / "data/wl-git-flow/dashboard.html").exists()
+    if mode == "ready":
+        assert result.returncode == 0, result.stdout
+        assert "codegraph=ready" in result.stdout
+        marker = worktree / ".codegraph/built-here"
+        before = marker.stat().st_mtime_ns
+        reused = run(SCRIPT, "start", "--repo", repo, "--id", "cg-test",
+                     "--worktree-root", tmp_path / "worktrees", "--bootstrap")
+        assert "status=reused" in reused.stdout and "ready=true" in reused.stdout
+        assert marker.stat().st_mtime_ns == before
+        monkeypatch.setenv("CG_TEST_MODE", "partial")
+        blocked = run(SCRIPT, "start", "--repo", repo, "--id", "cg-test",
+                      "--worktree-root", tmp_path / "worktrees", check=False)
+        assert blocked.returncode != 0 and "ready=false" in blocked.stdout
+        assert marker.stat().st_mtime_ns == before
+    else:
+        assert result.returncode != 0
+        assert "codegraph=not-ready" in result.stdout
+        assert "Do not rerun start" in result.stdout
 
 
 def test_private_requirement_is_not_a_tapd_title_sync_error(
@@ -100,7 +250,7 @@ def test_private_requirement_is_not_a_tapd_title_sync_error(
     synced = run(SCRIPT, "dashboard", "sync-titles", "--repo", repo).stdout
     assert "WARNING:" not in synced
 
-def test_requirement_flow_and_final_retirement(
+def test_requirement_flow_and_cleanup_keeps_branches(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     configure_dashboard_env(tmp_path, monkeypatch)
@@ -165,7 +315,7 @@ def test_requirement_flow_and_final_retirement(
         check=False,
     )
     assert premature_retirement.returncode != 0
-    assert "not contained in final target" in premature_retirement.stdout
+    assert "branch deletion is not supported" in premature_retirement.stdout
     assert worktree.exists()
     assert run("git", "ls-remote", "--exit-code", "--heads", origin, branch).returncode == 0
 
@@ -200,24 +350,21 @@ def test_requirement_flow_and_final_retirement(
         "--worktree",
         worktree,
         "--confirm",
-        "--delete-local-branch",
-        "--delete-remote-branch",
-        "--final-target",
-        "origin/master",
     ).stdout
-    assert "local_branch_deleted=true" in retired
-    assert "remote_branch_deleted=true" in retired
+    assert "local_branch_deleted=false" in retired
+    assert "remote_branch_deleted=false" in retired
     assert not worktree.exists()
-    assert git(repo, "show-ref", "--verify", f"refs/heads/{branch}", check=False).returncode != 0
-    assert run("git", "ls-remote", "--exit-code", "--heads", origin, branch, check=False).returncode != 0
+    assert git(repo, "show-ref", "--verify", f"refs/heads/{branch}").returncode == 0
+    assert run("git", "ls-remote", "--exit-code", "--heads", origin, branch).returncode == 0
     state_path = tmp_path / "state/wl-git-flow/state.json"
     state = json.loads(state_path.read_text(encoding="utf-8"))
     entry = next(item for item in state["requirements"].values() if item["branch"] == branch)
-    assert entry["stage"] == "cleaned"
+    assert entry["stage"] == "beta-testing"
+    assert "cleanedAt" not in entry
     assert entry["cleanup"] == {
         "worktreeRemoved": True,
-        "localBranchDeleted": True,
-        "remoteBranchDeleted": True,
+        "localBranchDeleted": False,
+        "remoteBranchDeleted": False,
     }
 
 
@@ -271,7 +418,39 @@ def test_start_auto_registers_and_refreshes_dashboard(
     assert "feature/story/44973445_1073308" in html.read_text(encoding="utf-8")
 
 
-def test_soft_cleanup_then_retire_branch_without_recreating_worktree(
+@pytest.mark.parametrize("unsafe", ["dirty", "remote-ahead", "remote-missing"])
+def test_cleanup_rechecks_local_and_remote_state(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, unsafe: str
+) -> None:
+    configure_dashboard_env(tmp_path, monkeypatch)
+    origin, repo, _, _ = init_fixture(tmp_path)
+    branch = "feature/R-20261016-login-fix"
+    root = tmp_path / "worktrees"
+    worktree = root / repo.name / branch
+    run(SCRIPT, "start", "--repo", repo, "--id", "R-20261016-login-fix", "--worktree-root", root)
+    git(worktree, "push", "-u", "origin", branch)
+    if unsafe == "dirty":
+        (worktree / "unsaved.txt").write_text("keep")
+    elif unsafe == "remote-missing":
+        run("git", "--git-dir", origin, "update-ref", "-d", f"refs/heads/{branch}")
+    else:
+        writer = tmp_path / "writer"
+        run("git", "clone", origin, writer)
+        git(writer, "config", "user.name", "Test")
+        git(writer, "config", "user.email", "test@example.com")
+        git(writer, "switch", branch)
+        (writer / "new.txt").write_text("remote update")
+        git(writer, "add", "new.txt")
+        git(writer, "commit", "-m", "fix: remote update")
+        git(writer, "push", "origin", branch)
+    rejected = run(SCRIPT, "remove-worktree", "--repo", repo,
+                   "--worktree", worktree, "--confirm", check=False)
+    assert rejected.returncode != 0
+    assert worktree.exists()
+    assert git(repo, "show-ref", "--verify", f"refs/heads/{branch}").returncode == 0
+
+
+def test_cleanup_rejects_branch_retirement(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     origin, repo, _, _ = init_fixture(tmp_path)
@@ -314,9 +493,9 @@ def test_soft_cleanup_then_retire_branch_without_recreating_worktree(
         "--confirm",
         "--final-target",
         "origin/master",
-    ).stdout
-    assert "status=retired" in retired
-    assert run("git", "ls-remote", "--exit-code", "--heads", origin, branch, check=False).returncode != 0
-    state = json.loads(state_path.read_text(encoding="utf-8"))
-    entry = next(item for item in state["requirements"].values() if item["branch"] == branch)
-    assert entry["stage"] == "cleaned"
+        check=False,
+    )
+    assert retired.returncode != 0
+    assert "branch deletion is not supported" in retired.stdout
+    assert git(repo, "show-ref", "--verify", f"refs/heads/{branch}").returncode == 0
+    assert run("git", "ls-remote", "--exit-code", "--heads", origin, branch).returncode == 0

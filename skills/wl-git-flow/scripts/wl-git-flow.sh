@@ -9,15 +9,14 @@ usage() {
   cat <<'USAGE'
 Usage:
   wl-git-flow.sh start --repo PATH --id REQUIREMENT_ID [--worktree-root PATH] [--branch NAME] [--bootstrap]
-      REQUIREMENT_ID: TAPD PROJECT_STORY (数字_数字) 或私人项目 slug (如 login-redesign)
+      REQUIREMENT_ID: R-YYYYMMDD-F001 或 R-YYYYMMDD-login-fix；兼容旧 TAPD ID/slug。已有窗口复用，已有分支恢复。
   wl-git-flow.sh integrate-dev --repo PATH --source BRANCH --target BRANCH --target-worktree PATH [--push-source] [--push-target]
   wl-git-flow.sh promote --repo PATH --source BRANCH --target BRANCH --target-worktree PATH [--push-target] [--base origin/master] [--dev origin/feature/dev]
   wl-git-flow.sh mark-dev-result --repo PATH --branch BRANCH --result passed|failed
   wl-git-flow.sh mark-stage --repo PATH --branch BRANCH --stage paused|beta-testing|beta-passed|released
   wl-git-flow.sh audit --repo PATH --branch BRANCH [--base origin/master] [--dev origin/feature/dev]
   wl-git-flow.sh cleanup-plan --repo PATH --branch BRANCH [--dev feature/dev] [--beta BRANCH] [--base origin/master]
-  wl-git-flow.sh remove-worktree --repo PATH --worktree PATH --confirm [--delete-local-branch] [--delete-remote-branch] [--final-target REF]
-  wl-git-flow.sh retire-branch --repo PATH --branch BRANCH --confirm --final-target REF
+  wl-git-flow.sh remove-worktree --repo PATH --worktree PATH --confirm
   wl-git-flow.sh dashboard register|refresh|open|serve|watch|mark-online|archive|show-path [OPTIONS]
   wl-git-flow.sh dashboard serve [--port 0] [--open]
 
@@ -62,7 +61,8 @@ require_ref() {
 }
 
 require_story_branch() {
-  [[ "$1" =~ ^feature/story/[a-z0-9][a-z0-9._-]*$ ]] || fail "invalid story branch: $1 (expected feature/story/<requirement-id>)"
+  [[ "$1" =~ ^feature/R-[0-9]{8}-([A-Z][0-9]+|[a-z0-9]+(-[a-z0-9]+)*)$ || "$1" =~ ^feature/story/[a-z0-9][a-z0-9._-]*$ ]] || fail "invalid story branch: $1 (expected feature/R-YYYYMMDD-<name> or legacy feature/story/<id>)"
+  git check-ref-format "refs/heads/$1" >/dev/null || fail "invalid Git branch: $1"
 }
 
 operation_in_progress() {
@@ -104,10 +104,58 @@ fetch_branch_if_remote_exists() {
   return 1
 }
 
+prepare_codegraph() {
+  local src=$1 dst=$2 status
+  if [[ ! -d "$src/.codegraph" ]]; then
+    note "codegraph=not-enabled"
+    return 0
+  fi
+  # Reusing a window must not rebuild its index or overwrite local state.
+  if [[ "${3:-created}" != reused ]]; then note "codegraph=building"; fi
+  # Keep init's optional hook installation out of the shared repository hooks.
+  if [[ "${3:-created}" != reused ]] && ! (
+    local count=${GIT_CONFIG_COUNT:-0}
+    export "GIT_CONFIG_KEY_${count}=core.hooksPath"
+    export "GIT_CONFIG_VALUE_${count}=$dst/.codegraph/git-hooks"
+    export GIT_CONFIG_COUNT=$((count + 1))
+    export CODEGRAPH_DIR=.codegraph
+    cd "$dst" || exit 1
+    if [[ -f "$dst/.codegraph/codegraph.db" ]]; then
+      codegraph index --quiet "$dst" </dev/null
+    else
+      codegraph init --yes "$dst" </dev/null
+    fi
+  ); then
+    note "codegraph=not-ready"
+    printf 'ERROR: Worktree kept at %s; CodeGraph build failed. Fix the cause, then run codegraph index --quiet %q (init first if missing). Do not rerun start.\n' "$dst" "$dst" >&2
+    return 1
+  fi
+  if ! status=$(CODEGRAPH_DIR=.codegraph codegraph status --json "$dst") ||
+    ! python3 -c '
+import json, pathlib, sys
+s = json.load(sys.stdin)
+p = pathlib.Path(sys.argv[1]).resolve()
+assert s.get("initialized") is True
+assert pathlib.Path(s["projectPath"]).resolve() == p
+assert pathlib.Path(s["indexPath"]).resolve() == p / ".codegraph"
+assert not s.get("worktreeMismatch")
+assert s.get("lastIndexed")
+assert s.get("index", {}).get("state") == "complete"
+assert not s["index"].get("pendingRefs")
+assert not s["index"].get("reindexRecommended")
+assert not any(s.get("pendingChanges", {}).values())
+' "$dst" <<< "$status"; then
+    note "codegraph=not-ready"
+    printf 'ERROR: Worktree kept at %s; CodeGraph status is not ready. Inspect codegraph status --json %q before source analysis. Do not rerun start.\n' "$dst" "$dst" >&2
+    return 1
+  fi
+  note "codegraph=ready"
+}
+
 bootstrap_worktree() {
   local src=$1 dst=$2 d f rel
   # 索引/工具状态：只报告，不复制（索引常绑定绝对路径，拷过去会指回主目录）
-  for d in .codegraph .serena .cursor .claude .idea .vscode; do
+  for d in .serena .cursor .claude .idea .vscode; do
     if [[ -e "$src/$d" && ! -e "$dst/$d" ]]; then
       note "bootstrap: $d exists in main worktree; NOT copied (may bind absolute paths) - rebuild or reconfigure inside the new worktree"
     fi
@@ -136,6 +184,7 @@ bootstrap_worktree() {
       rel=${rel%%#*}; rel=${rel//[[:space:]]/}
       [[ -n "$rel" ]] || continue
       case "$rel" in
+        .codegraph|.codegraph/*) note "bootstrap: SKIP $rel (index must be rebuilt, not copied)"; continue ;;
         /*|*..*) note "bootstrap: SKIP $rel (unsafe path)"; continue ;;
         .env|.env.*|*.pem|*.key|*.p12|*.pfx|*secret*|*credential*) note "bootstrap: SKIP $rel (secret pattern, copy manually if really needed)"; continue ;;
       esac
@@ -165,30 +214,60 @@ cmd_start() {
   done
   require_repo
   run_dashboard preflight --repo "$repo" >/dev/null
-  [[ "$id" =~ ^[a-z0-9][a-z0-9._-]*$ ]] || fail "--id must contain only lowercase letters, numbers, dot, underscore, or hyphen"
-  branch=${branch:-feature/story/$id}
-  require_story_branch "$branch"
-  local repo_name path
+  local repo_name path action=created existing base_sha
   repo_name=$(basename "$(git -C "$repo" rev-parse --show-toplevel)")
-  path="$root/$repo_name/story-$id"
-  [[ ! -e "$path" ]] || fail "worktree path already exists: $path"
-  git -C "$repo" show-ref --verify --quiet "refs/heads/$branch" && fail "local branch already exists: $branch"
-  git -C "$repo" fetch --prune origin master
-  dev_guard_ref "$repo" "$branch" origin/master
-  git -C "$repo" show-ref --verify --quiet "refs/remotes/origin/$branch" && fail "remote branch already exists: origin/$branch"
-  mkdir -p "$(dirname "$path")"
-  git -C "$repo" worktree add -b "$branch" "$path" origin/master
+  if [[ "$id" == R-* ]]; then
+    id=${id%.md}
+    [[ "$id" =~ ^R-[0-9]{8}-([A-Z][0-9]+|[a-z0-9]+(-[a-z0-9]+)*)$ ]] || fail "--id must be R-YYYYMMDD-F001 or R-YYYYMMDD-login-fix"
+    [[ -z "$branch" || "$branch" == "feature/$id" ]] || fail "branch does not match requirement: $id"
+    branch="feature/$id"
+    path="$root/$repo_name/$branch"
+  else
+    [[ "$id" =~ ^[a-z0-9][a-z0-9._-]*$ ]] || fail "invalid legacy requirement ID: $id"
+    branch=${branch:-feature/story/$id}
+    path="$root/$repo_name/story-$id"
+  fi
+  require_story_branch "$branch"
+  git -C "$repo" fetch --prune origin
+  existing=$(worktree_for_branch "$branch" || true)
+  if [[ -n "$existing" ]]; then
+    [[ -d "$existing" ]] || fail "registered worktree is missing: $existing; inspect it before restoring"
+    path=$existing
+    action=reused
+  else
+    [[ ! -e "$path" && ! -L "$path" ]] || fail "worktree path already exists: $path"
+    mkdir -p "$(dirname "$path")"
+    if git -C "$repo" show-ref --verify --quiet "refs/heads/$branch"; then
+      dev_guard_ref "$repo" "$branch" "$branch"
+      git -C "$repo" worktree add "$path" "$branch"
+      action=restored
+    elif git -C "$repo" show-ref --verify --quiet "refs/remotes/origin/$branch"; then
+      dev_guard_ref "$repo" "$branch" "origin/$branch"
+      git -C "$repo" worktree add --track -b "$branch" "$path" "origin/$branch"
+      action=restored
+    else
+      dev_guard_ref "$repo" "$branch" origin/master
+      git -C "$repo" worktree add -b "$branch" "$path" origin/master
+      base_sha=$(git -C "$repo" rev-parse origin/master)
+      run_dashboard record --repo "$repo" --branch "$branch" --event start --base-sha "$base_sha" --worktree "$path" >/dev/null
+    fi
+  fi
   path=$(git -C "$path" rev-parse --show-toplevel)
-  local base_sha
-  base_sha=$(git -C "$repo" rev-parse origin/master)
-  run_dashboard record --repo "$repo" --branch "$branch" --event start --base-sha "$base_sha" --worktree "$path" >/dev/null
-  note "status=created"
+  [[ "$(git -C "$path" symbolic-ref --quiet --short HEAD)" == "$branch" ]] || fail "worktree branch does not match: $path"
+  note "status=$action"
+  note "requirement=$id"
   note "branch=$branch"
   note "worktree=$path"
-  note "base=origin/master"
-  note "base_sha=$base_sha"
-  if ((bootstrap)); then bootstrap_worktree "$repo" "$path"; fi
+  if [[ "$action" == created ]]; then
+    note "base=origin/master"
+    note "base_sha=$base_sha"
+  fi
+  if ((bootstrap)) && [[ "$action" != reused ]]; then bootstrap_worktree "$repo" "$path"; fi
+  local codegraph_result=0
+  prepare_codegraph "$repo" "$path" "$action" || codegraph_result=$?
+  note "ready=$([[ $codegraph_result -eq 0 ]] && echo true || echo false)"
   dashboard_sync_repo "$repo"
+  return "$codegraph_result"
 }
 
 cmd_integrate_dev() {
@@ -507,15 +586,13 @@ cmd_cleanup_plan() {
 }
 
 cmd_remove_worktree() {
-  local wt="" confirm=0 delete_local=0 delete_remote=0 final_target=""
+  local wt="" confirm=0
   while (($#)); do
     case "$1" in
       --repo) repo=$2; shift 2 ;;
       --worktree) wt=$2; shift 2 ;;
       --confirm) confirm=1; shift ;;
-      --delete-local-branch) delete_local=1; shift ;;
-      --delete-remote-branch) delete_remote=1; shift ;;
-      --final-target) final_target=$2; shift 2 ;;
+      --delete-local-branch|--delete-remote-branch|--final-target) fail "branch deletion is not supported; cleanup keeps all branches" ;;
       *) fail "unknown remove-worktree argument: $1" ;;
     esac
   done
@@ -535,84 +612,28 @@ cmd_remove_worktree() {
   operation_in_progress "$wt" && fail "worktree has an in-progress Git operation"
   local upstream counts ahead behind
   upstream=$(git -C "$repo" for-each-ref --format='%(upstream:short)' "refs/heads/$branch")
-  [[ -n "$upstream" ]] || fail "branch has no upstream; refusing cleanup"
+  [[ "$upstream" == "origin/$branch" ]] || fail "cleanup requires the same-name origin upstream"
+  git -C "$repo" fetch --prune origin
+  require_ref "$upstream"
   counts=$(git -C "$repo" rev-list --left-right --count "$upstream...$branch")
   behind=${counts%%[[:space:]]*}; ahead=${counts##*[[:space:]]}
   [[ "$ahead" == 0 && "$behind" == 0 ]] || fail "branch is not synchronized with upstream: ahead=$ahead behind=$behind"
-
-  if ((delete_local || delete_remote)); then
-    [[ -n "$final_target" ]] || fail "--final-target is required when deleting a branch"
-    require_ref "$final_target"
-    git -C "$repo" merge-base --is-ancestor "$branch" "$final_target" || fail "branch tip is not contained in final target: $final_target"
-  fi
-  if ((delete_remote)); then
-    [[ "$upstream" == "origin/$branch" ]] || fail "remote deletion requires the same-name origin upstream"
-    git -C "$repo" ls-remote --exit-code --heads origin "$branch" >/dev/null 2>&1 || fail "remote branch not found: origin/$branch"
-  fi
 
   run_dashboard sync-repo --repo "$repo" >/dev/null
   local final_sha
   final_sha=$(git -C "$repo" rev-parse "$branch")
   local pending_args=(record --repo "$repo" --branch "$branch" --event cleanup-pending --sha "$final_sha" --worktree-removed)
-  if ((delete_local)); then pending_args+=(--local-branch-deleted); fi
-  if ((delete_remote)); then pending_args+=(--remote-branch-deleted); fi
   run_dashboard "${pending_args[@]}" >/dev/null
 
   git -C "$repo" worktree remove "$wt"
   git -C "$repo" worktree prune
-  if ((delete_remote)); then git -C "$repo" push origin --delete "$branch"; fi
-  if ((delete_local)); then git -C "$repo" branch -d "$branch"; fi
   local cleanup_args=(record --repo "$repo" --branch "$branch" --event cleanup --sha "$final_sha" --worktree-removed)
-  if ((delete_local)); then cleanup_args+=(--local-branch-deleted); fi
-  if ((delete_remote)); then cleanup_args+=(--remote-branch-deleted); fi
   run_dashboard "${cleanup_args[@]}" >/dev/null
   note "status=removed"
   note "worktree=$wt"
   note "branch=$branch"
-  note "local_branch_deleted=$([[ $delete_local -eq 1 ]] && echo true || echo false)"
-  note "remote_branch_deleted=$([[ $delete_remote -eq 1 ]] && echo true || echo false)"
-  dashboard_sync_repo "$repo"
-}
-
-cmd_retire_branch() {
-  local branch="" confirm=0 final_target=""
-  while (($#)); do
-    case "$1" in
-      --repo) repo=$2; shift 2 ;;
-      --branch) branch=$2; shift 2 ;;
-      --confirm) confirm=1; shift ;;
-      --final-target) final_target=$2; shift 2 ;;
-      *) fail "unknown retire-branch argument: $1" ;;
-    esac
-  done
-  require_repo
-  run_dashboard preflight --repo "$repo" >/dev/null
-  ((confirm)) || fail "--confirm is required after user approval"
-  require_story_branch "$branch"
-  [[ -n "$final_target" ]] || fail "--final-target is required"
-  require_ref "$branch"
-  require_ref "$final_target"
-  if worktree_for_branch "$branch" >/dev/null 2>&1; then
-    fail "branch still has a Worktree; use remove-worktree for final retirement"
-  fi
-  local upstream counts ahead behind final_sha
-  upstream=$(git -C "$repo" for-each-ref --format='%(upstream:short)' "refs/heads/$branch")
-  [[ "$upstream" == "origin/$branch" ]] || fail "branch must track the same-name origin branch"
-  counts=$(git -C "$repo" rev-list --left-right --count "$upstream...$branch")
-  behind=${counts%%[[:space:]]*}; ahead=${counts##*[[:space:]]}
-  [[ "$ahead" == 0 && "$behind" == 0 ]] || fail "branch is not synchronized with upstream: ahead=$ahead behind=$behind"
-  git -C "$repo" merge-base --is-ancestor "$branch" "$final_target" || fail "branch tip is not contained in final target: $final_target"
-  git -C "$repo" ls-remote --exit-code --heads origin "$branch" >/dev/null 2>&1 || fail "remote branch not found: origin/$branch"
-  run_dashboard sync-repo --repo "$repo" >/dev/null
-  final_sha=$(git -C "$repo" rev-parse "$branch")
-  run_dashboard record --repo "$repo" --branch "$branch" --event cleanup-pending --sha "$final_sha" --worktree-removed --local-branch-deleted --remote-branch-deleted >/dev/null
-  git -C "$repo" push origin --delete "$branch"
-  git -C "$repo" branch -d "$branch"
-  run_dashboard record --repo "$repo" --branch "$branch" --event cleanup --sha "$final_sha" --worktree-removed --local-branch-deleted --remote-branch-deleted >/dev/null
-  note "status=retired"
-  note "branch=$branch"
-  note "local_branch_deleted=true"
-  note "remote_branch_deleted=true"
+  note "local_branch_deleted=false"
+  note "remote_branch_deleted=false"
   dashboard_sync_repo "$repo"
 }
 
@@ -627,7 +648,7 @@ case "$command" in
   audit) cmd_audit "$@" ;;
   cleanup-plan) cmd_cleanup_plan "$@" ;;
   remove-worktree) cmd_remove_worktree "$@" ;;
-  retire-branch) cmd_retire_branch "$@" ;;
+  retire-branch) fail "branch deletion is not supported; cleanup keeps all branches" ;;
   dashboard) run_dashboard "$@" ;;
   -h|--help|help) usage ;;
   *) usage >&2; fail "unknown command: $command" ;;

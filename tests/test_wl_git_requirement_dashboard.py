@@ -100,6 +100,35 @@ def file_hash(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+@pytest.mark.parametrize("requirement_id", ["R-20260910-F001", "R-20261016-login-fix"])
+def test_new_requirement_names_are_visible_in_existing_dashboard(
+    tmp_path: Path, xdg: dict[str, Path], requirement_id: str
+) -> None:
+    _, _, repo = init_repo(tmp_path)
+    branch = f"feature/{requirement_id}"
+    worktree = create_story(repo, tmp_path, branch)
+    paths = DASHBOARD.runtime_paths()
+    config = DASHBOARD.default_config()
+    project, _ = DASHBOARD.register_repository(config, repo)
+    # Existing registrations persist the old default patterns.
+    project["requirementPatterns"] = DASHBOARD.DEFAULT_PATTERNS[1:]
+    DASHBOARD.save_json(paths.config_file, config)
+    data = DASHBOARD.refresh_dashboard(paths)
+    requirement = requirement_by_branch(data, branch)
+    assert requirement["requirementId"] == requirement_id
+    assert requirement["primaryBranch"] == branch
+    assert requirement["worktreePath"] == str(worktree)
+    assert branch in paths.html_file.read_text()
+    git(repo, "merge", "--no-ff", "--no-edit", branch)
+    git(repo, "push", "origin", "master")
+    git(repo, "fetch", "origin")
+    git(repo, "worktree", "remove", worktree)
+    after = requirement_by_branch(DASHBOARD.refresh_dashboard(paths), branch)
+    assert after["stage"] == "merged-master"
+    assert "pending-cleanup" not in {item["code"] for item in after["anomalies"]}
+    assert git(repo, "rev-parse", branch) == git(repo, "rev-parse", f"origin/{branch}")
+
+
 def test_register_refresh_and_render_user_level_html(tmp_path: Path, xdg: dict[str, Path]) -> None:
     _, _, repo = init_repo(tmp_path)
     branch = "feature/story/44973445_1073308"

@@ -29,9 +29,9 @@ description: 安全创建、推送、集成和清理需求分支及 Git Worktree
 不要为了「体现到主目录」把正在开发的主目录切走。
 
 ① 切出需求窗口（一个需求只开这一个）
-   从当次 origin/master 建需求分支并打开目录
-   不从本地 master、Dev、Beta 切
-   只在这里改、提交、推送
+   已有需求窗口就复用；目录已回收就从原分支恢复
+   首次才从当次 origin/master 建需求分支，不从本地 master、Dev、Beta 切
+   核对实际目录和分支后，在这里分析、写文档、开发、提交、推送
 
 ② 合 Dev：走到 feature/dev 的共用窗口
    新的 origin/feature/dev 出现后、第一次合需求前，窗口必须已经在
@@ -84,11 +84,12 @@ description: 安全创建、推送、集成和清理需求分支及 Git Worktree
 
 ### 分支和 Worktree 约定
 
-- 默认需求分支：`feature/story/<需求标识>`，使用小写路径。TAPD 项目继续使用 `<项目ID>_<需求ID>`；私人项目可使用可读 slug，例如 `login-redesign`。
-- 创建前立即 fetch，并从当次 `origin/master` 创建；不要从本地 master、Dev、Beta 创建。
-- 默认 Worktree 根目录：`${GIT_REQUIREMENT_WORKTREE_ROOT:-$HOME/workdir/worktrees}`。
-- 路径：`<root>/<repo>/story-<需求标识>`；长期需求 Worktree 不放 `/tmp` 或 `/private/tmp`。
-- 需求标识只能包含小写字母、数字、点、下划线和短横线，且不能以分隔符开头；这同时防止路径穿越和不可预测的分支名。
+- ai-agent 正式需求沿用文档编号，如 `R-20260910-F001`（输入文档文件名时会去掉 `.md`）；分支为 `feature/R-20260910-F001`。需求标识、分支和 Worktree 目录均不带 `.md`，只有需求文档文件保留后缀。
+- 无需求文档的临时需求使用 `R-首次创建日期-需求短名称`，如 `R-20261016-login-fix`；日期为 `YYYYMMDD`，短名称用小写字母、数字和短横线。不创建空文档，继续该需求时沿用原编号，不换日期。
+- 默认 Worktree 根目录：`${GIT_REQUIREMENT_WORKTREE_ROOT:-$HOME/workdir/worktrees}`。新编号路径为 `<root>/<repo>/feature/<需求标识>`。长期目录不放 `/tmp` 或 `/private/tmp`。
+- 旧 TAPD ID、私人 slug 和 `feature/story/<标识>` 保持兼容，路径仍为 `<root>/<repo>/story-<标识>`；不批量重命名或搬动历史目录。
+- `start` 先 fetch：已有对应 Worktree 返回原目录；只有本地分支则恢复目录；只有同名远端分支则建立跟踪分支并恢复；都没有才从当次 `origin/master` 创建。目录被占用或身份冲突时停止，不另建 `-v2`。新编号的 `--branch` 必须与编号对应。
+- 只读定位项目可以先做；写分析文档、方案或代码前必须进入返回的 Worktree，并核对实际仓库、完整目录和分支。脚本不能替已有终端切换目录，也不负责 Herdr 绑定。
 - 一个活跃分支只对应一个 Worktree。一个需求只开自己的那一个。`feature/dev` 和本期 `feature/yyyymmdd` 各留一份共用目录来接收需求分支。`release/yyyymmdd` 只承接从 Beta 切出的上线内容。`master` 不是合入窗口。线换了就换目录，不要按需求复制，也不要把环境目录或 release 目录合并进别的分支。
 
 创建示例：
@@ -98,29 +99,34 @@ skills/wl-git-flow/scripts/wl-git-flow.sh start \
   --repo /path/to/repo \
   --id 44973445_1073308
 
-# 私人项目：不需要 TAPD，使用本地可读 slug
+# ai-agent 正式需求
+skills/wl-git-flow/scripts/wl-git-flow.sh start \
+  --repo /path/to/repo \
+  --id R-20260910-F001
 
+# 临时需求：无文档，首次确定编号，之后复用
 skills/wl-git-flow/scripts/wl-git-flow.sh start \
   --repo /path/to/private-repo \
-  --id login-redesign
+  --id R-20261016-login-fix
 ```
 
-需要脚本扫描并补齐本地状态时加 `--bootstrap`（规则见下文"建窗口后的本地状态补齐"）。
+来源主窗口存在 `.codegraph/` 时，`start` 默认在新 Worktree 独立初始化索引并校验状态，不依赖 `--bootstrap`。其他本地状态需要扫描补齐时加 `--bootstrap`（规则见下文"建窗口后的本地状态补齐"）。
 
 私人项目会使用同一 Worktree 根目录，例如：
 
 ```text
-分支：feature/story/login-redesign
-Worktree：$HOME/workdir/worktrees/private-repo/story-login-redesign
+分支：feature/R-20261016-login-fix
+Worktree：$HOME/workdir/worktrees/private-repo/feature/R-20261016-login-fix
 ```
 
 脚本不会要求私人项目提供 TAPD。看板上的标题从哪来，见第 2 层。
 
 ### 建窗口后的本地状态补齐（bootstrap）
 
-`git worktree add` 只带被 Git 跟踪的文件。索引、依赖、本地配置不进 Git，新窗口里都没有。`start` 加 `--bootstrap` 时，脚本在建完窗口后扫描主窗口，按下面的规则处理；不加则只建窗口，这些状态需要自己留意。
+`git worktree add` 只带被 Git 跟踪的文件；未跟踪的索引、依赖、本地配置不会随之出现。CodeGraph 按下述规则默认独立重建；其他状态仅在 `start --bootstrap` 时扫描主窗口并处理，不加则需要自己留意。
 
-- **索引/工具状态**（`.codegraph`、`.serena`、`.cursor`、`.claude`、`.idea`、`.vscode`）：只报告，不复制。索引常绑定绝对路径，拷过去会指回主目录的文件，比没有更危险；在新窗口里重建。AGENTS.md 约定"有 `.codegraph` 先用 CodeGraph"，缺索引会让 Agent 静默退化成 grep 扫库。
+- **CodeGraph 索引**：主窗口有 `.codegraph/` 时，`start` 无论是否带 `--bootstrap`，都在新窗口运行 `codegraph init --yes`，不移动、复制或共享旧索引；白名单也不能复制 `.codegraph`。复用已有窗口只检查索引状态，不重建索引或覆盖本地文件。初始化的可选 Git Hook 写入被限定在新窗口 `.codegraph/git-hooks/`，不修改共用 Hook 或持久 Git 配置。随后检查 `codegraph status --json`：索引属于新窗口、构建完整、无待处理变更或引用。输出 `codegraph=ready` 才算索引就绪；失败则返回非零、输出 `codegraph=not-ready`，保留已创建的目录和分支，不自动回滚、不重跑 `start`。先检查状态并修复后重建；当前任务需要源码分析时不得静默退化成全库搜索。主窗口未启用则输出 `codegraph=not-enabled`，不引入 CodeGraph。后续代码变化按需运行 `codegraph sync <worktree>`；这里不安装持续同步机制。
+- **其他工具状态**（`.serena`、`.cursor`、`.claude`、`.idea`、`.vscode`）：只报告、不复制，在新窗口按工具要求重新配置。
 - **依赖目录**（`node_modules`、`.venv`）：不复制，按 lockfile 提示安装命令，在新窗口里重装。
 - **密钥/本地配置**（`.env`、`.env.*`、证书、密钥文件）：默认只提示，不复制；这个需求确需时手工拷，用完随窗口一起删。
 - **固定要复制的本地文件**：在仓库根放 `.wl-git-flow-bootstrap`，每行一个相对路径（可带 `#` 注释）。脚本逐行复制，但拒绝 `.env`、密钥、证书、含 `..` 或绝对路径的条目。
@@ -196,7 +202,7 @@ scripts/wl-git-flow.sh cleanup-plan \
 - 正在 Dev 测试、测试失败，或通过之后又有新提交还没重测。
 - 用户还要在这个目录里继续改。
 
-用户同意删目录后执行，不要加删除分支的参数，也不要直接 `rm -rf`：
+用户确认 Agent/本地服务不再使用目录、必要的本地产物已保存后，才执行回收；Git 干净不代表被忽略文件都可丢弃。脚本会重新 fetch 并确认本地与同名远端分支一致。清理命令不支持删除分支，旧删除参数及 `retire-branch` 明确拒绝；不使用 `--force` 或直接 `rm -rf`：
 
 ```bash
 scripts/wl-git-flow.sh remove-worktree \
@@ -205,7 +211,7 @@ scripts/wl-git-flow.sh remove-worktree \
   --confirm
 ```
 
-目录删掉后，用原来的分支名 `git worktree add` 可以再打开。
+目录删掉后，再用同一编号运行 `start` 即可从原分支恢复；不要重新编号或创建第二套分支。
 
 ### 可选自动保护：Dev Guard
 
