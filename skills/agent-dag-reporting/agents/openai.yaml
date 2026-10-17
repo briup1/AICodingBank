@@ -1,0 +1,6 @@
+interface:
+  display_name: "Agent DAG Reporting"
+  short_description: "向 Personal Workbench 上报多步骤计划、进度、产物和卡点"
+  default_prompt: "Use $agent-dag-reporting to report this multi-step task and meaningful progress through agent-dag/v1."
+policy:
+  allow_implicit_invocation: true

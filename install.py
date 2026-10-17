@@ -45,7 +45,7 @@ def link(src, targets, name, report):
         if os.path.islink(dst):
             os.remove(dst)
         elif os.path.exists(dst):
-            report.append(f"!! 跳过 {name} -> {dst}: 已存在真实目录，请手动处理")
+            report.append(f"-- 跳过 {name} -> {dst}: 已存在真实目录，保持不覆盖")
             continue
         os.symlink(src, dst)
 
@@ -57,7 +57,7 @@ def unlink_skill(targets, name, report):
         if os.path.islink(dst):
             os.remove(dst)
         elif os.path.exists(dst):
-            report.append(f"!! 无法停用 {name} -> {dst}: 存在真实目录，请手动迁移")
+            report.append(f"-- 无法停用 {name} -> {dst}: 存在真实目录，保持不删除")
 
 
 def hash_file(path):

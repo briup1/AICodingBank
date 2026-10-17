@@ -3,6 +3,16 @@ targets:
 - ~/.claude/skills
 - ~/.hermes/skills
 self:
+- name: wl-external-enterprise-auth
+  path: skills/wl-external-enterprise-auth
+  capability: 为独立项目接入外部企业账号体系，并把外部身份映射为本地会话、企业归属、执行主体和授权快照
+  boundary: 提供通用接入流程、Provider 契约、安全检查和测试矩阵；不保存凭证，不替代目标项目授权模型，不直接操作外部公司系统
+  tags:
+  - 身份认证
+  - 企业集成
+  - 安全
+  - 跨项目复用
+  verified: '2026-10-17'
 - name: wl-qa-test-planner
   path: skills/wl-qa-test-planner
   capability: 根据需求、用户故事和验收标准生成带优先级、测试数据、逐步预期与需求追踪的测试用例

@@ -26,6 +26,10 @@
 - **wl-requesting-code-review**（自研·已验证 2026-09-01）— 在交付前依据需求、架构、风险与测试证据审查已完成的代码
   边界：用于完整任务或重要功能实现后的代码审查，不用于需求澄清或方案设计
 
+## 企业集成
+- **wl-external-enterprise-auth**（自研·已验证 2026-10-17）— 为独立项目接入外部企业账号体系，并把外部身份映射为本地会话、企业归属、执行主体和授权快照
+  边界：提供通用接入流程、Provider 契约、安全检查和测试矩阵；不保存凭证，不替代目标项目授权模型，不直接操作外部公司系统
+
 ## 写作
 - **inspector-docs**（第三方·CopilotKit/CopilotKit·**待验证（未安装）**）— 维护 CopilotKit Inspector 文档与已发布 Pane、Tab、Overlay 行为的一致性
   边界：仅服务 CopilotKit 上游 Inspector 文档维护，不用于 Inspector UI 润色或未发布功能设计
@@ -69,6 +73,10 @@
 ## 多智能体
 - **wl-subagent-driven-development**（自研·已验证 2026-09-01）— 按已批准计划逐任务调度隔离 Worker，以测试优先、规格审查和质量审查完成开发
   边界：仅在方案已批准后使用；子 Agent 未获授权或不可用时必须在本地执行同等闸门
+
+## 安全
+- **wl-external-enterprise-auth**（自研·已验证 2026-10-17）— 为独立项目接入外部企业账号体系，并把外部身份映射为本地会话、企业归属、执行主体和授权快照
+  边界：提供通用接入流程、Provider 契约、安全检查和测试矩阵；不保存凭证，不替代目标项目授权模型，不直接操作外部公司系统
 
 ## 审查
 - **wl-design-reachability-review**（自研·**待验证（未安装）**）— 从已实现的真实原点沿方案流程、状态和契约逐跳思维实验，证明需求终点是否可达
@@ -280,8 +288,6 @@
   边界：只覆盖 React 前端核心 API，不处理服务端 CopilotRuntime 或外部 Agent 框架集成
 - **redesign-existing-projects**（第三方·Leonxlnx/taste-skill·已验证 2026-08-14）— 审查并重设计现有网站或应用，在不破坏功能的前提下提升视觉品质
   边界：用于已有前端的视觉改造，不替代需求分析、业务重构或完整产品设计流程
-- **resolving-merge-conflicts**（第三方·mattpocock/skills·已验证 2026-08-23）— 解决进行中的 git merge/rebase 冲突
-  边界：只管冲突解决这一步
 - **runtime**（第三方·CopilotKit/CopilotKit·**待验证（未安装）**）— 使用 @copilotkit/runtime 搭建服务端 CopilotRuntime、AgentRunner、工具、Intelligence 与语音转录
   边界：聚焦服务端运行时，不负责 React 前端组件；优先采用 fetch-native handler 而非旧适配器
 - **setup-pre-commit**（第三方·mattpocock/skills·已验证 2026-08-23）— 配置 Husky pre-commit：lint-staged、Prettier、类型检查、测试
@@ -356,6 +362,14 @@
 ## 质量
 - **wl-requesting-code-review**（自研·已验证 2026-09-01）— 在交付前依据需求、架构、风险与测试证据审查已完成的代码
   边界：用于完整任务或重要功能实现后的代码审查，不用于需求澄清或方案设计
+
+## 跨项目复用
+- **wl-external-enterprise-auth**（自研·已验证 2026-10-17）— 为独立项目接入外部企业账号体系，并把外部身份映射为本地会话、企业归属、执行主体和授权快照
+  边界：提供通用接入流程、Provider 契约、安全检查和测试矩阵；不保存凭证，不替代目标项目授权模型，不直接操作外部公司系统
+
+## 身份认证
+- **wl-external-enterprise-auth**（自研·已验证 2026-10-17）— 为独立项目接入外部企业账号体系，并把外部身份映射为本地会话、企业归属、执行主体和授权快照
+  边界：提供通用接入流程、Provider 契约、安全检查和测试矩阵；不保存凭证，不替代目标项目授权模型，不直接操作外部公司系统
 
 ## 运维
 - **copilotkit-self-update**（第三方·CopilotKit/CopilotKit·**待验证（未安装）**）— 刷新或重装 CopilotKit 官方 Agent Skills，使本地知识与最新 API 保持同步
