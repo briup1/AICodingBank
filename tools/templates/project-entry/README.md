@@ -1,4 +1,4 @@
-# CLAUDE.md 场景模板索引
+# 项目入口文件模板索引（CLAUDE.md / AGENTS.md）
 
 快速选择适合你的项目的模板：
 
@@ -15,9 +15,16 @@
 | [数据分析 / Jupyter](template-jupyter.md) | 数据科学、机器学习项目 |
 | [极简通用](template-minimal.md) | 任何项目快速起步 |
 
+## 目录结构
+
+- `template-*.md` — 10 个技术栈模板（历史材料，未在本轮验证）
+- [samples/](samples) — 用户级 / 项目级入口文件样例
+- [rules/](rules) — 按文件路径触发的分层规则样例（`.claude/rules/`）
+- 配套生成提示词与四层 steering 方法见 [best_practices 记录](../../best_practices/2026-06-10-项目入口规则-生成CLAUDE.md与AGENTS.md提示词/README.md)
+
 ## 使用方式
 
 1. 根据项目类型选择对应模板
-2. 复制到项目根目录，重命名为 `CLAUDE.md`
+2. 复制到项目根目录，重命名为 `CLAUDE.md`（或 `AGENTS.md`）
 3. 按需修改技术栈版本号、目录结构等细节
-4. 随着项目发展持续更新
+4. 随着项目发展持续更新；路径专属约束建议下沉到项目的 `.claude/rules/`，样例见本目录 `rules/`

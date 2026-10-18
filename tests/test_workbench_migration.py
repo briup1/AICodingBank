@@ -68,7 +68,7 @@ class WorkbenchMigrationTests(unittest.TestCase):
                          'code-simplifier/agents/code-simplifier.md',
                          'code-simplifier/.claude-plugin/plugin.json'):
             self.assertFalse((base / relative).exists(), relative)
-            self.assertTrue((ROOT / 'claudecode_guide/plugin_guide/plugin_store' / relative).is_file())
+            self.assertTrue((ROOT / 'tools/skills/engineering/legacy-snapshots' / relative).is_file())
         for folder in ('AI2AI', 'ME2AI'):
             self.assertEqual(list((ROOT / 'double_layer_spec' / folder).glob('*.md')), [])
         removed = (
@@ -86,6 +86,26 @@ class WorkbenchMigrationTests(unittest.TestCase):
         review = (ROOT / 'docs/migrations/2026-10-18-cleanup-candidates.md').read_text()
         self.assertIn('本轮删除 7 个文件', review)
         self.assertIn('C04 已按用户要求保留并提炼', review)
+
+    def test_claudecode_guide_content_relocated_to_canonical_homes(self):
+        for relative in (
+                'best_practices/2026-06-16-任务编排-目标驱动的多角色任务提示词/prompt.md',
+                'best_practices/2026-10-09-任务描述-轻量化任务描述模板/prompt.md',
+                'best_practices/2026-06-10-项目入口规则-生成CLAUDE.md与AGENTS.md提示词/生成AGENTS.md提示词-分层优化版.md',
+                'tools/templates/project-entry/template-java-springboot.md',
+                'tools/templates/project-entry/samples/用户级-claude.md',
+                'tools/templates/project-entry/rules',
+                'tools/integrations/插件收录登记.md',
+                'tools/integrations/subagent-配置指南.md',
+                'tools/integrations/examples/opencode/opencode.json',
+                'tools/integrations/examples/claude-code/settings-permissions.json',
+                'candidates/agent-definitions/debugger.md',
+                'docs/reference/skills-cheatsheets/AI Coding 全场景工具地图.md',
+        ):
+            self.assertTrue((ROOT / relative).exists(), relative)
+        self.assertFalse((ROOT / 'claudecode_guide/prompt/100_一个具体的goal任务.md').exists())
+        self.assertFalse((ROOT / 'claudecode_guide/plugin_guide/plugin_store/feature-dev').exists())
+        self.assertTrue((ROOT / 'claudecode_guide/plugin_guide/plugin_store/plugin-dev').is_symlink())
 
     def test_migration_and_cleanup_are_separate(self):
         text = (ROOT / 'docs/migrations/2026-10-18-role-workbench-migration.md').read_text()

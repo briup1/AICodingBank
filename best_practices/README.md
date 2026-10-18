@@ -14,6 +14,9 @@
 | 2026-01-06 | [陌生项目阅读：梳理架构与用户故事](2026-01-06-陌生项目阅读-梳理架构与用户故事/README.md) | historical-unverified |
 | 2026-03-11 | [历史项目探查：按需求逐类分析](2026-03-11-历史项目探查-按需求逐类分析/README.md) | historical-unverified |
 | 2026-03-24 | [项目学习：先建立简要路线图，再按主题深入研究](2026-03-24-历史项目学习-生成系统学习文档/README.md) | historical-unverified |
+| 2026-06-10 | [项目入口文件：生成 CLAUDE.md 与 AGENTS.md 的提示词（含四层 steering）](2026-06-10-项目入口规则-生成CLAUDE.md与AGENTS.md提示词/README.md) | historical-unverified |
+| 2026-06-16 | [任务编排：目标驱动 + 固定团队角色 + 可追溯改动](2026-06-16-任务编排-目标驱动的多角色任务提示词/README.md) | historical-unverified |
+| 2026-10-09 | [任务描述：目标/现场/规则/约束/验收/执行六段模板](2026-10-09-任务描述-轻量化任务描述模板/README.md) | historical-unverified |
 
 原历史重构 Skill 已迁到 [Skill 正文](../tools/skills/engineering/software-architect-restructure/SKILL.md)，本目录不保存它的第二份正文。日期取 Git 首次入库，不是推断的实践日期；迁移细节见 [迁移记录](../docs/migrations/2026-10-18-role-workbench-migration.md)。
 
