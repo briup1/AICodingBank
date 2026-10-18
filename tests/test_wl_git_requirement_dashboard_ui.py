@@ -7,7 +7,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-TEMPLATE = ROOT / "skills/wl-git-flow/assets/dashboard-template.html"
+TEMPLATE = ROOT / "tools/skills/engineering/wl-git-flow/assets/dashboard-template.html"
 
 
 class DashboardMarkupParser(HTMLParser):

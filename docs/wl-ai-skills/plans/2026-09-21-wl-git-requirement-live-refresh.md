@@ -17,8 +17,8 @@
 
 **写入范围**：
 
-- `skills/wl-git-flow/scripts/dashboard.py`
-- `skills/wl-git-flow/scripts/wl-git-flow.sh`
+- `tools/skills/engineering/wl-git-flow/scripts/dashboard.py`
+- `tools/skills/engineering/wl-git-flow/scripts/wl-git-flow.sh`
 - `tests/test_wl_git_requirement_dashboard_server.py`
 
 ### A1. RED：HTTP 安全契约
@@ -76,7 +76,7 @@ Shell 只更新 usage；已有 `dashboard` 透传不需要新路由逻辑。
 
 **写入范围**：
 
-- `skills/wl-git-flow/assets/dashboard-template.html`
+- `tools/skills/engineering/wl-git-flow/assets/dashboard-template.html`
 - `tests/test_wl_git_requirement_dashboard_ui.py`
 
 ### B1. RED：静态结构测试
@@ -128,9 +128,9 @@ Shell 只更新 usage；已有 `dashboard` 透传不需要新路由逻辑。
 
 **写入范围**：
 
-- `skills/wl-git-flow/SKILL.md`
-- `skills/wl-git-flow/references/dashboard-model.md`
-- `skills/wl-git-flow/agents/openai.yaml`
+- `tools/skills/engineering/wl-git-flow/SKILL.md`
+- `tools/skills/engineering/wl-git-flow/references/dashboard-model.md`
+- `tools/skills/engineering/wl-git-flow/agents/openai.yaml`
 - `docs/requirements/0003-wl-git-requirement-live-refresh/*`
 - 本计划文档
 
@@ -159,11 +159,11 @@ uv run --no-project --python 3.12.9 --with pytest --with pyyaml pytest -q \
 以及：
 
 ```bash
-bash -n skills/wl-git-flow/scripts/wl-git-flow.sh
-uv run --no-project --python 3.12.9 python -m py_compile skills/wl-git-flow/scripts/dashboard.py
+bash -n tools/skills/engineering/wl-git-flow/scripts/wl-git-flow.sh
+uv run --no-project --python 3.12.9 python -m py_compile tools/skills/engineering/wl-git-flow/scripts/dashboard.py
 uv run --no-project --python 3.12.9 --with pyyaml python \
   /Users/ziyun/.codex/skills/.system/skill-creator/scripts/quick_validate.py \
-  skills/wl-git-flow
+  tools/skills/engineering/wl-git-flow
 git diff --check
 ```
 

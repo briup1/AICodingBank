@@ -4,7 +4,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-SCRIPT = Path(__file__).resolve().parents[1] / 'skills/wl-compass-local-test/scripts/local-test-down.sh'
+SCRIPT = Path(__file__).resolve().parents[1] / 'tools/skills/engineering/wl-compass-local-test/scripts/local-test-down.sh'
 
 
 class CleanupTests(unittest.TestCase):

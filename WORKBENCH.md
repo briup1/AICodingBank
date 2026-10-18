@@ -14,8 +14,15 @@
 | 编码、修复、测试、审查、部署 | 在目标项目中选择最小能力组合并留下验证证据 | `CATALOG.md` / 已安装 Skill |
 | 统一可视文档、审核图与本机分享 | 优先复用跨项目处理策略，不在每个项目另造服务；按登记状态区分方案与可用工具 | `visual-artifact-workbench` / `WORKBENCH.local.md` |
 | 管理长任务 | 使用 Pi Goal / Personal Workbench 保存状态和产物 | Goal 工具与任务 DAG |
-| 查询长期知识和经验 | 按知识索引读取，不在工作台复制外部事实 | Knowledge Base |
+| 查类似问题怎样解决、沉淀尝试与踩坑 | 按问题查最佳实践记录，保留适用条件和证据 | [最佳实践记录](best_practices/README.md) |
+| 查询项目档案、来源资料或研究 | 按知识索引读取，不复制外部正文 | Knowledge Base |
 | 增加工作台能力 | 自动分流到拓展入口 | `EXTENDING.md` |
+
+## 岗位制结构预览（未启用）
+
+[个人资料入口](personal/README.md)说明真实董事长与个人背景；[岗位名册](roles/README.md)由项目经理统筹，按组分类、按任务召集；[工具分类](tools/README.md)区分 Skill、执行配置与工具接入；[本机记录约定](.local/README.md)引用项目事实。
+
+岗位均为草稿，不能据此自动开工、创建 Agent、切换模型或宣称能力隔离。Skill 已迁入新路径，旧入口为兼容软链；阶段路由和委派规则不变。历史设计见[结构设计](docs/wl-ai-skills/specs/2026-10-18-role-workbench-structure-design.md)，当前变化见[迁移记录](docs/migrations/2026-10-18-role-workbench-migration.md)。
 
 ## 系统地图
 
@@ -47,7 +54,8 @@
 - **`WORKBENCH.local.md`**：本机个人上下文和项目索引；被 Git 忽略。
 - **项目仓库**：代码、接口、命令和运行行为的事实来源。
 - **Pi Goal / Personal Workbench**：长任务执行、状态和产物可观测性。
-- **Knowledge Base**：项目档案、调研和已验证经验；按需读取。
+- **最佳实践记录**：本项目的问题、尝试、解决路径和验证，规范见 [STANDARD](best_practices/STANDARD.md)；不是任务进度。
+- **Knowledge Base**：外部项目档案、来源资料、研究和综合知识；按需读取，与本项目正文互相引用而非复制。
 
 ## 开始一次工作
 
@@ -63,11 +71,11 @@
 
 ## 阶段路由
 
-阶段判断（观察/确认/设计/执行/验证/沉淀）和需求到验收的主链见 [wl-auto-delivery](skills/wl-auto-delivery/SKILL.md)。复杂任务按需加载；只读可在观察结束，简单明确任务直接执行，不强制走满流水线。各环节仍可单独调用。
+阶段判断（观察/确认/设计/执行/验证/沉淀）和需求到验收的主链见 [wl-auto-delivery](tools/skills/workbench/wl-auto-delivery/SKILL.md)。复杂任务按需加载；只读可在观察结束，简单明确任务直接执行，不强制走满流水线。各环节仍可单独调用。
 
 ## 本机工具类任务
 
-规则图、HTML 评审报告、局域网分享及其统一复用，先按个人工具使用意图处理，不自动当作业务项目功能。读取 [可视化文档策略](skills/visual-artifact-workbench/SKILL.md)，再选择当前阶段；本机使用指针放 WORKBENCH.local.md，业务原文仍留在项目。
+规则图、HTML 评审报告、局域网分享及其统一复用，先按个人工具使用意图处理，不自动当作业务项目功能。读取 [可视化文档策略](tools/skills/shared/visual-artifact-workbench/SKILL.md)，再选择当前阶段；本机使用指针放 WORKBENCH.local.md，业务原文仍留在项目。
 
 Skill 的验证与安装状态以 skills.yaml / CATALOG.md 为准。未验证时可以在本工作台阅读方案，但不能宣称已全局安装或已有服务；实际部署、监听和外部访问仍需对应授权。
 
@@ -75,11 +83,11 @@ Skill 的验证与安装状态以 skills.yaml / CATALOG.md 为准。未验证时
 
 AICodingBank 继续负责“能力能否被发现、安装和信任”：
 
-- 自研 Skill：`skills/` + `skills.yaml`
+- 自研 Skill：tools/skills/<分类>/ + skills.yaml
 - 第三方 Skill：`skills-lock.json` + `vendor/`
-- 按需 Skill：`skills-on-demand/`
+- 按需 Skill：tools/skills/engineering/on-demand/ 与 tools/skills/shared/on-demand/
 - 人类目录：`CATALOG.md`
-- 安装入口：`python3 install.py`
+- 目录刷新：python3 install.py --catalog-only（不联网、不安装）；实际安装另核授权
 - 本机停用：`skills.local.yaml`
 
 本文件不复制 Skill 的详细说明；阶段与交接规则见 `wl-auto-delivery`。进入阶段后，从 `CATALOG.md` 或当前 Agent 的可用 Skill 中选择最小能力组合。
@@ -106,7 +114,8 @@ AICodingBank 继续负责“能力能否被发现、安装和信任”：
 | 项目代码、命令、接口和架构 | 对应项目仓库 |
 | 需求、方案和验收证据 | 对应项目的需求文档 |
 | 长任务状态和产物 | Pi Goal / Personal Workbench |
-| 跨会话长期知识 | Knowledge Base / Memory |
+| 问题解决、尝试、踩坑与验证 | best_practices/，按 [规范](best_practices/STANDARD.md) |
+| 项目档案、研究和综合知识 | Knowledge Base；不复制本项目案例正文 |
 | 一次性探索和临时进度 | 当前会话或项目临时目录，不进入个人上下文 |
 
 ## 边界

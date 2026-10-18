@@ -16,22 +16,29 @@
 - **[EXTENDING.md](EXTENDING.md)**：介绍如何持续增加规则、知识、Skill、偏好、项目入口和工作流。
 - **`WORKBENCH.local.md`**：本机个人上下文和项目索引；存在时由使用流程按需读取。
 
-AICodingBank 在工作台中承担能力控制面职责。与知识库（weilan-knowledge-wiki）的分工：**这里管“能不能装上、能不能跑”，wiki 管“是什么、好不好用”**。skill 文件永不进 wiki；wiki 只为值得长期使用的 skill 建 entity 页记录使用经验。
+AICodingBank 管理岗位、能力与本项目的 [最佳实践记录](best_practices/README.md)。外部知识库继续管理项目档案、来源资料、研究和综合知识，不复制本项目 Skill 或最佳实践正文；需要关联时只放指针。
 
-## 目录结构
+## 岗位制新结构（骨架，未启用）
+
+新结构见 [岗位名册](roles/README.md)、[个人资料入口](personal/README.md)、[工具分类](tools/README.md)与[结构设计及迁移边界](docs/wl-ai-skills/specs/2026-10-18-role-workbench-structure-design.md)。协调岗位统一称“项目经理”；岗位按技术工程、媒体内容和共享支持分组，不增加部门管理层。
+
+岗位仍未启用；Skill 已迁到 tools/skills，历史最佳实践已按日期和问题归档。只搬迁及更新必要引用，不处理能力重合，不提升验证状态。旧 Skill 路径保留兼容软链，已按用户逐批批准删除旧副本、空文件、日志、会话原文及旧设备/规则文件，未扩大到其他资料。见 [迁移记录](docs/migrations/2026-10-18-role-workbench-migration.md)与[清理执行记录](docs/migrations/2026-10-18-cleanup-candidates.md)。
+
+## 现用目录结构
 
 ```
 ├── WORKBENCH.md         # 使用入口：能力地图、项目定位与阶段路由
 ├── EXTENDING.md         # 拓展入口：规则、知识、Skill 与偏好的归档方法
 ├── WORKBENCH.local.example.md  # 本机个人上下文与项目索引模板
-├── skills/              # 自研 skill 本体与生成式 Skill Pack（git 跟踪，你是上游）
+├── roles/               # 项目经理与分组岗位手册（草稿、未启用）
+├── personal/            # 个人资料入口，本机画像忽略
+├── tools/skills/        # engineering / media / shared / workbench；Skill 单份正文
+├── skills/              # 旧路径兼容软链，不再新增正文
 ├── skills.yaml          # 总登记表：加载位置 + 自研清单 + lock 指针
 ├── skills-lock.json     # 第三方 skill 登记（只登记上游地址，不复制文件）
 ├── install.py           # 安装器：clone 上游到 vendor/ → 软链到各加载位置
 ├── vendor/              # 第三方上游的 clone 缓存（gitignore，勿手动改）
-├── ai_coding_sec_dev_workflow/   # 自研 prompt 模板包
-├── best_practices/               # 自研 prompt 模板包
-├── double_layer_spec/            # 自研 spec 模板
+├── best_practices/      # 按日期-主题-问题归档，STANDARD.md 维护规范
 └── claudecode_guide/             # 自研使用指南
 ```
 
@@ -44,21 +51,21 @@ git clone <本仓库地址> && cd AICodingBank
 python3 install.py
 ```
 
-跑完后所有 skill 以软链形式出现在 `~/.agents/skills` 和 `~/.claude/skills`（在 `skills.yaml` 的 `targets` 里增减加载位置）。
+默认安装命令会同步第三方上游，并向 skills.yaml 的 targets 写入已验证且未本机停用的 Skill 软链，需明确安装授权。本机默认按需读取，不因登记维护而批量安装。只刷新能力目录时运行 `python3 install.py --catalog-only`，不联网、不写宿主加载位置。
 
 ### 添加自研 skill
 
-1. 在 `skills/<skill-name>/` 下开发，`SKILL.md` 必填
+1. 在 `tools/skills/<分类>/<skill-name>/` 下开发，分类规则见 [Skill 说明](tools/skills/README.md)，`SKILL.md` 必填
 2. 在 `skills.yaml` 的 `self:` 下加一行：
 
 ```yaml
   - name: my-new-skill
-    path: skills/my-new-skill
+    path: tools/skills/engineering/my-new-skill
 ```
 
-3. `python3 install.py` 建立软链，git commit
+3. 保留真实验证状态，先运行 `python3 install.py --catalog-only` 刷新目录；实际安装按授权另行执行，提交也不自动进行。
 
-改进自研 skill = 直接改 `skills/` 里的文件，软链即时生效，commit 即版本化。
+改进自研 Skill = 修改登记指向的新目录；已有软链可能使变动立即影响其他会话，分支不是运行隔离。
 
 ### 仅在当前电脑停用某个 Skill
 
@@ -76,7 +83,7 @@ disabled:
 由 `framework-skill-author` 生成的一组关联 Skill 按 Pack 保存，避免来源清单和生成报告散落：
 
 ```text
-skills/<framework>-pack/
+tools/skills/engineering/<framework>-pack/
 ├── source-manifest.json
 ├── generation-report.md
 └── skills/
@@ -109,7 +116,7 @@ skills/<framework>-pack/
 
 然后 `python3 install.py` 会自动 clone 上游到 `vendor/`。
 
-**verified 闸门**：`verified` 为空的 skill 只登记、只进目录，安装器会移除已有软链接，**agent 根本看不到它**。你在实际项目里用过一次确认靠谱，填上日期（如 `"2026-08-23"`），重跑 `install.py`，它才进入 agent 的视野。固定 `ref` 的 Skill 还必须通过 `computedHash` 校验。agent 的可选集合 = 你的信任集合。
+**verified 闸门**：默认安装模式只安装已验证且未本机停用的 Skill，未验证时移除安装器管理的旧软链；这不阻止按需读取源码，也不构成实际工具权限隔离。真实验证后才能填写日期，迁移不算验证。固定 ref 还需 computedHash 校验。catalog-only 不改任何宿主链接。
 
 个性化第三方 Skill 时不要修改 `vendor/`，而应新增自研策略 Skill 与之组合。升级时先清空 `verified`，更新 `ref` 和哈希，兼容验证通过后再恢复安装。定时检查只报告候选版本，不自动启用。
 
@@ -120,7 +127,7 @@ skills/<framework>-pack/
 `install.py` 每次运行都会重新生成 `CATALOG.md`：按 tag 分组，每条一行能力 + 一行边界 + 验证状态。这是给人看的总览，**勿手改**（改了会被覆盖）。三层分工：
 
 - `CATALOG.md`：它是什么、边界在哪（一眼看穿全局）
-- wiki entity 页：深度使用经验、踩坑（只给值得长期用的建）
+- [最佳实践记录](best_practices/README.md)：本项目问题、尝试、踩坑与验证；外部 wiki 仅引用或独立综合，不复制正文
 - `SKILL.md`：行为本身，要改才看
 
 ### 更新第三方 skill
@@ -133,16 +140,16 @@ python3 install.py   # 默认分支拉取最新；带 ref 的登记固定并刷�
 
 ### prompt 模板包
 
-`ai_coding_sec_dev_workflow/`、`best_practices/`、`double_layer_spec/` 这类**不可被 agent 直接加载**的 prompt/spec 模板，按主题目录存放，使用时复制内容到目标项目。规则：
+Skill 专用模板随包保存；旧 double_layer_spec 已经用户批准清理，不再作为现用模板入口。best_practices 中的历史模板有来源与未验证状态，不冒充真实成功案例。新模板使用对应主题目录：
 
 - 一个主题一个目录，模板文件用 `.prompt.md` / `.prompt.xml` 后缀
 - 只放自研内容；收集来的文章/教程不进这里（那是 wiki 的 ingest 范围）
 
 ## 维护红线
 
-1. **skill 文件只有两个合法居所**：自研的在 `skills/`，第三方的在 `vendor/`（install.py 自动管理）。任何其他位置的 skill 副本都是腐烂源头，发现即删。
+1. **单份正文**：自研在 tools/skills，第三方新来源只登记并由 vendor 管理；历史迁入快照保留待审、不新增复制。旧路径只允许兼容软链。不得因发现重复就未经确认删除。
 2. **第三方只登记不复制**：`skills-lock.json` 是唯一登记处。
 3. **登记必写三行人话**：capability / boundary / tags，当场写，不赊账。
 4. **未验证不安装**：没填 `verified` 的 skill 不进 agent 加载位置。
-5. **改了登记就跑 `install.py`**：它是幂等的，随时可重跑，同时刷新 CATALOG.md。
-6. 使用经验、踩坑、评测写在 wiki 的 entity 页，不写在这里。
+5. **目录自动生成**：登记变化运行 install.py --catalog-only；联网同步与全局安装另核授权，不手改 CATALOG.md。
+6. **最佳实践按统一规范**：本项目记录按 best_practices/STANDARD.md 构建；研究、项目事实和运行进度不混入记录，外部知识正文不重复迁入。

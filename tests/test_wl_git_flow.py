@@ -8,7 +8,7 @@ import pytest
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SCRIPT = ROOT / "skills/wl-git-flow/scripts/wl-git-flow.sh"
+SCRIPT = ROOT / "tools/skills/engineering/wl-git-flow/scripts/wl-git-flow.sh"
 
 
 def run(*args: str | Path, cwd: Path | None = None, check: bool = True) -> subprocess.CompletedProcess[str]:

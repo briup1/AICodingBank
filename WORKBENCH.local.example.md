@@ -18,7 +18,7 @@
 
 ## Docker 端口分配台账
 
-分配规则与查询方法见 `skills/wl-docker-port-registry/SKILL.md`；只记分配决策（谁分到哪个端口），不记实时占用快照。
+分配规则与查询方法见 `tools/skills/shared/wl-docker-port-registry/SKILL.md`；只记分配决策（谁分到哪个端口），不记实时占用快照。
 
 | 端口 | 服务 | 项目路径 | 状态（预留/在用） |
 | --- | --- | --- | --- |

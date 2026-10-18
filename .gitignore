@@ -6,3 +6,10 @@ WORKBENCH.local.md
 __pycache__/
 .wl-ai-skills/
 node_modules/
+
+# Personal facts and execution overrides stay local.
+personal/*.local.md
+tools/execution-profiles/*.local.yaml
+# Keep runtime conventions, not runtime state.
+/.local/*
+!/.local/README.md

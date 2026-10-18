@@ -31,7 +31,7 @@
   |     -> WORKBENCH.md 或 EXTENDING.md
   |
   +-- 条件触发的操作规则、完整步骤或工具能力
-  |     -> 自研 Skill：skills/ + skills.yaml
+  |     -> 自研 Skill：tools/skills/<分类>/ + skills.yaml
   |
   +-- 已存在的第三方 Skill
   |     -> skills-lock.json；由 install.py 管理 vendor/
@@ -39,8 +39,11 @@
   +-- 单个项目的代码、命令、接口、架构或开发规范
   |     -> 对应项目仓库的 AGENTS.md、README 或项目文档
   |
-  +-- 已验证且跨会话复用的知识、经验、踩坑
-  |     -> Knowledge Base
+  +-- 具体问题的尝试、解决办法、踩坑与验证
+  |     -> best_practices/（按 STANDARD.md）
+  |
+  +-- 项目档案、来源资料、研究和综合知识
+  |     -> Knowledge Base（不复制本项目最佳实践正文）
   |
   +-- 需求、方案、验收证据或任务状态
         -> 目标项目文档或 Pi Goal，不写入工作台规则
@@ -71,6 +74,12 @@
 
 以下内容不得写入：Token、密码、Cookie、私钥、完整连接串、客户敏感数据、会话原文和临时任务进度。
 
+### 1.1 新个人入口与岗位骨架
+
+新增的 [personal](personal/README.md)维护个人资料的归宿边界：稳定身份、独有表达特点与长期方向可进入 Git 忽略的 profile.local.md；现有工程偏好和本机路径仍以 WORKBENCH.local.md 为准，不搬动或复制。单次授权与阶段任务不并入永久画像。
+
+[roles](roles/README.md)只保存岗位定义，仍为 draft、enabled: false，不自动加载或启动。[tools](tools/README.md)中的 Skill 已完成路径迁移，新正文使用 tools/skills/<分类>/；旧路径只保留兼容软链，不新增正文。历史快照/按需包保持原验证状态，待另行核对来源与重合，不自动安装。
+
 ### 2. Agent 行为规则与工作流
 
 符合以下任一条件时优先做成 Skill，而不是继续扩充 `AGENTS.md`：
@@ -80,11 +89,11 @@
 - 需要独立维护操作手册
 - 希望所有已安装该 Skill 的 Agent 自动发现
 
-先搜索 `skills/`、`skills-lock.json` 和 `CATALOG.md`，存在相近能力时扩展原能力。新建自研 Skill 时，先向用户提问是否使用 `wl-` 前缀命名，按用户回答确定 Skill 名与目录名，不默认取名。自研 Skill 放在 `skills/<skill-name>/`，并在 `skills.yaml` 的 `self` 下登记：
+先搜索 tools/skills、skills-lock.json 和 CATALOG.md，存在相近能力时扩展原能力。新建自研 Skill 时，先向用户提问是否使用 wl- 前缀命名，按用户回答确定 Skill 名与目录名，不默认取名。自研 Skill 放在 tools/skills/<分类>/<skill-name>/，分类与历史快照边界见 [Skill 说明](tools/skills/README.md)，在 skills.yaml 的 self 下登记：
 
 ```yaml
 - name: <skill-name>
-  path: skills/<skill-name>
+  path: tools/skills/engineering/<skill-name>
   capability: <它能做什么>
   boundary: <它不做什么、依赖什么>
   tags:
@@ -92,13 +101,7 @@
   verified: ''
 ```
 
-开发与修改 Skill 时遵守 Skill 自身的编写规范。`verified` 为空时不会安装；真实场景验证通过后填写日期，再运行：
-
-```bash
-python3 install.py
-```
-
-安装器是幂等的，并会刷新 `CATALOG.md`。不要手改 `CATALOG.md`。
+开发与修改 Skill 时遵守 Skill 自身的编写规范。verified 为空时不得安装，真实场景验证后才能填日期。登记维护只运行 `python3 install.py --catalog-only` 刷新 CATALOG.md，不联网、不改变宿主链接。实际安装/同步使用默认安装模式，需另核授权；不要手改 CATALOG.md。
 
 ### 3. 第三方 Skill
 
@@ -130,11 +133,11 @@ python3 install.py
 
 `WORKBENCH.local.md` 的项目索引只保存名称、绝对路径、一句话稳定用途和入口依据。
 
-### 5. 知识与经验
+### 5. 最佳实践记录与外部知识
 
-已验证且值得跨会话复用的信息进入 Knowledge Base。写入前必须读取知识库 `_index.md` 和 `_schema.md`，按 schema 选择目录并遵守 frontmatter、wikilink、tags 和表格规则；写入后运行知识库审计并修复问题。
+用户要求保存问题解决过程、尝试路径、踩坑和下次做法时，进入 [最佳实践记录](best_practices/README.md)，按 [唯一规范](best_practices/STANDARD.md)使用日期-主题-解决的问题命名，保留验证状态、失败路径和来源；模板/历史材料不能升级为已验证。工作记录只保留进度和案例引用。
 
-Skill 本体不进入知识库。知识库只记录 Skill 的使用经验、评测、限制和踩坑。
+外部 Knowledge Base 继续保存项目档案、来源资料、研究与综合知识。本次不移动外部正文。需要写外部知识库时先读 _index.md / _schema.md 并执行其审计；不要复制本项目案例全文或 Skill，改用指针。OpenViking 读写遵守本机策略，文件迁移不授权上传。
 
 ### 6. 机器配置
 
@@ -160,7 +163,7 @@ default = true
 - **单一事实来源**：同一规则只维护一次，其他位置只放指针。
 - **渐进披露**：入口短，具体内容按意图和触发条件加载。
 - **扩展优先**：优先修改现有文件或 Skill，不创建功能重叠的新入口。
-- **可验证**：行为规则要有触发示例或最小检查；Skill 和安装登记需运行安装器验证。无法满足真实运行前提时保持 `verified` 为空，不以静态检查冒充可用性验证。
+- **可验证**：行为规则要有触发示例或最小检查；目录用 catalog-only 生成，安装适配先在隔离夹具验证。实际全局安装仍需授权。无法满足真实运行前提时保持 verified 为空，不以迁移或静态检查冒充可用性验证。
 - **安全边界**：高权限、凭证、部署、删除和外部写操作必须保留明确授权边界。
 
 ## 完成标准

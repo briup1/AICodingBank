@@ -1,0 +1,280 @@
+{
+  "date": "2026-10-18",
+  "moves": [
+    {
+      "from": "skills/agent-dag-reporting",
+      "to": "tools/skills/workbench/agent-dag-reporting",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "skills/deepagents-pack",
+      "to": "tools/skills/engineering/deepagents-pack",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "skills/framework-skill-author",
+      "to": "tools/skills/workbench/framework-skill-author",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "skills/goal-coach",
+      "to": "tools/skills/workbench/goal-coach",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "skills/harness-pack",
+      "to": "tools/skills/engineering/harness-pack",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "skills/hgj-git-connect",
+      "to": "tools/skills/engineering/hgj-git-connect",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "skills/visual-artifact-workbench",
+      "to": "tools/skills/shared/visual-artifact-workbench",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "skills/wl-auto-delivery",
+      "to": "tools/skills/workbench/wl-auto-delivery",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "skills/wl-brainstorming",
+      "to": "tools/skills/engineering/wl-brainstorming",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "skills/wl-browse",
+      "to": "tools/skills/shared/wl-browse",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "skills/wl-compass-local-test",
+      "to": "tools/skills/engineering/wl-compass-local-test",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "skills/wl-design-doc",
+      "to": "tools/skills/engineering/wl-design-doc",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "skills/wl-design-reachability-review",
+      "to": "tools/skills/engineering/wl-design-reachability-review",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "skills/wl-docker-port-registry",
+      "to": "tools/skills/shared/wl-docker-port-registry",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "skills/wl-external-enterprise-auth",
+      "to": "tools/skills/engineering/wl-external-enterprise-auth",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "skills/wl-git-flow",
+      "to": "tools/skills/engineering/wl-git-flow",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "skills/wl-herdrs",
+      "to": "tools/skills/workbench/wl-herdrs",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "skills/wl-investigate",
+      "to": "tools/skills/engineering/wl-investigate",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "skills/wl-plan-design-review",
+      "to": "tools/skills/engineering/wl-plan-design-review",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "skills/wl-plan-eng-review",
+      "to": "tools/skills/engineering/wl-plan-eng-review",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "skills/wl-prod-db",
+      "to": "tools/skills/engineering/wl-prod-db",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "skills/wl-qa-test-planner",
+      "to": "tools/skills/engineering/wl-qa-test-planner",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "skills/wl-req-confirm",
+      "to": "tools/skills/engineering/wl-req-confirm",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "skills/wl-requesting-code-review",
+      "to": "tools/skills/engineering/wl-requesting-code-review",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "skills/wl-subagent-driven-development",
+      "to": "tools/skills/engineering/wl-subagent-driven-development",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "skills/wl-ticket-run",
+      "to": "tools/skills/engineering/wl-ticket-run",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "skills/wl-web-auto",
+      "to": "tools/skills/shared/wl-web-auto",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "skills/wl-writing-plans",
+      "to": "tools/skills/engineering/wl-writing-plans",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "skills-on-demand/apifox",
+      "to": "tools/skills/engineering/on-demand/apifox",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "skills-on-demand/hgj-cli",
+      "to": "tools/skills/engineering/on-demand/hgj-cli",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "skills-on-demand/hgj-codex",
+      "to": "tools/skills/engineering/on-demand/hgj-codex",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "skills-on-demand/hgj-dev-download",
+      "to": "tools/skills/engineering/on-demand/hgj-dev-download",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "skills-on-demand/tavily",
+      "to": "tools/skills/shared/on-demand/tavily",
+      "compatibility_symlink": true
+    },
+    {
+      "from": ".agents/skills/langfuse",
+      "to": "tools/skills/engineering/legacy-snapshots/langfuse",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "ai_coding_sec_dev_workflow",
+      "to": "tools/skills/engineering/ai_coding_sec_dev_workflow",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "best_practices/历史项目重构skill",
+      "to": "tools/skills/engineering/software-architect-restructure",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "claudecode_guide/skills_guide/android-native-dev",
+      "to": "tools/skills/engineering/legacy-snapshots/android-native-dev",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "claudecode_guide/skills_guide/brainstorming",
+      "to": "tools/skills/engineering/legacy-snapshots/brainstorming",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "claudecode_guide/skills_guide/frontend-dev",
+      "to": "tools/skills/engineering/legacy-snapshots/frontend-dev",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "claudecode_guide/skills_guide/fullstack-dev",
+      "to": "tools/skills/engineering/legacy-snapshots/fullstack-dev",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "claudecode_guide/skills_guide/hot_topics",
+      "to": "tools/skills/media/legacy-snapshots/hot_topics",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "claudecode_guide/skills_guide/ios-application-dev",
+      "to": "tools/skills/engineering/legacy-snapshots/ios-application-dev",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "claudecode_guide/skills_guide/remotion-best-practices",
+      "to": "tools/skills/media/legacy-snapshots/remotion-best-practices",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "claudecode_guide/plugin_guide/plugin_store/agent-browser",
+      "to": "tools/skills/shared/legacy-snapshots/agent-browser",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "claudecode_guide/plugin_guide/plugin_store/frontend-design",
+      "to": "tools/skills/engineering/legacy-snapshots/frontend-design",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "claudecode_guide/plugin_guide/plugin_store/plugin-dev",
+      "to": "tools/skills/engineering/legacy-snapshots/plugin-dev",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "claudecode_guide/plugin_guide/playwright-skill",
+      "to": "tools/skills/engineering/legacy-snapshots/playwright-skill",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "claudecode_guide/000_examples/.opencode/skills/openspec-apply-change",
+      "to": "tools/skills/engineering/legacy-snapshots/opencode/openspec-apply-change",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "claudecode_guide/000_examples/.opencode/skills/openspec-archive-change",
+      "to": "tools/skills/engineering/legacy-snapshots/opencode/openspec-archive-change",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "claudecode_guide/000_examples/.opencode/skills/openspec-explore",
+      "to": "tools/skills/engineering/legacy-snapshots/opencode/openspec-explore",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "claudecode_guide/000_examples/.opencode/skills/openspec-propose",
+      "to": "tools/skills/engineering/legacy-snapshots/opencode/openspec-propose",
+      "compatibility_symlink": true
+    },
+    {
+      "from": "best_practices/历史项目重构",
+      "to": "best_practices/2026-01-06-历史项目重构-生成计划并驱动开发",
+      "compatibility_symlink": false
+    },
+    {
+      "from": "best_practices/陌生项目阅读学习",
+      "to": "best_practices/2026-01-06-陌生项目阅读-梳理架构与用户故事",
+      "compatibility_symlink": false
+    },
+    {
+      "from": "best_practices/历史项目系统学习文档",
+      "to": "best_practices/2026-03-24-历史项目学习-生成系统学习文档",
+      "compatibility_symlink": false
+    },
+    {
+      "from": "best_practices/历史项目探查",
+      "to": "best_practices/2026-03-11-历史项目探查-按需求逐类分析",
+      "compatibility_symlink": false
+    }
+  ]
+}

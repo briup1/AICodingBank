@@ -10,7 +10,7 @@ import yaml
 import install
 
 ROOT = Path(__file__).resolve().parents[1]
-FLOW = ROOT / 'skills/wl-auto-delivery'
+FLOW = ROOT / 'tools/skills/workbench/wl-auto-delivery'
 
 
 class AutoDeliveryTests(unittest.TestCase):
@@ -72,17 +72,17 @@ class AutoDeliveryTests(unittest.TestCase):
                          '目录和分支', 'wl-compass-local-test', '其他项目', '非生产', 'wl-prod-db',
                          '默认只读', '不默许写'):
             self.assertIn(contract, flow)
-        focused = (ROOT / 'skills/wl-requesting-code-review/SKILL.md').read_text().split('## Modes', 1)[1].split('## Prepare review context', 1)[0]
+        focused = (ROOT / 'tools/skills/engineering/wl-requesting-code-review/SKILL.md').read_text().split('## Modes', 1)[1].split('## Prepare review context', 1)[0]
         for contract in ('设计偏离', '具体交付阻断问题', '建议可省略', '不做泛化改进审查'):
             self.assertIn(contract, focused)
-        web = (ROOT / 'skills/wl-web-auto/SKILL.md').read_text()
+        web = (ROOT / 'tools/skills/shared/wl-web-auto/SKILL.md').read_text()
         self.assertIn('R-123 → r-123', web)
         self.assertIn('保留原需求 ID', web)
         self.assertIn('--task r-123', web)
         self.assertNotIn('--task <requirement>', web)
 
     def test_qa_core_and_review_full_are_byte_preserved(self):
-        qa = (ROOT / 'skills/wl-qa-test-planner/SKILL.md').read_text()
+        qa = (ROOT / 'tools/skills/engineering/wl-qa-test-planner/SKILL.md').read_text()
         expected = {
             '## 执行链路': '2c3db85c6a1ec9b9b6bc5f7453d275a348d16aaabe12579e880da10d8e240ccd',
             '## 交付自检与停止': '67b12a0289e8af8f8dfa00320a79d17fc747ce298746ed0abbe34817a94f08d4',
@@ -90,13 +90,13 @@ class AutoDeliveryTests(unittest.TestCase):
         for heading, digest in expected.items():
             section = qa.split(heading, 1)[1].split('\n## ', 1)[0]
             self.assertEqual(hashlib.sha256(section.encode()).hexdigest(), digest)
-        review = (ROOT / 'skills/wl-requesting-code-review/SKILL.md').read_text()
+        review = (ROOT / 'tools/skills/engineering/wl-requesting-code-review/SKILL.md').read_text()
         original = review.split('## Modes', 1)[0] + '## Prepare review context' + review.split('## Prepare review context', 1)[1]
         self.assertEqual(hashlib.sha256(original.encode()).hexdigest(),
                          'a481644352d65dddcf2334a805a52b2bcb77db74416059c3aa53f79dc70d3ffd')
 
     def test_qa_core_five_steps_and_fields_retained(self):
-        text = (ROOT / 'skills/wl-qa-test-planner/SKILL.md').read_text()
+        text = (ROOT / 'tools/skills/engineering/wl-qa-test-planner/SKILL.md').read_text()
         for step in ('1. 列出已确认需求与测试范围。', '2. 按实际规则拆分正向、异常、边界和状态变化场景；',
                      '3. 按业务影响设置 P0/P1/P2；', '4. 为每个场景写出前置条件、具体测试数据、逐步操作和可观察、可判定的逐步预期。',
                      '5. 对照每条需求检查覆盖和遗漏；'):

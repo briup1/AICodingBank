@@ -16,7 +16,7 @@ import pytest
 
 
 ROOT = Path(__file__).resolve().parents[1]
-MODULE_PATH = ROOT / "skills/wl-git-flow/scripts/dashboard.py"
+MODULE_PATH = ROOT / "tools/skills/engineering/wl-git-flow/scripts/dashboard.py"
 SPEC = importlib.util.spec_from_file_location("wl_git_requirement_dashboard_server", MODULE_PATH)
 assert SPEC and SPEC.loader
 DASHBOARD = importlib.util.module_from_spec(SPEC)
@@ -396,7 +396,7 @@ def test_foreground_cli_ctrl_c_closes_socket(tmp_path: Path) -> None:
 
 
 def test_shell_help_lists_serve_command() -> None:
-    shell = ROOT / "skills/wl-git-flow/scripts/wl-git-flow.sh"
+    shell = ROOT / "tools/skills/engineering/wl-git-flow/scripts/wl-git-flow.sh"
     result = subprocess.run(
         [str(shell), "--help"],
         check=True,

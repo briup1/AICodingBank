@@ -6,7 +6,7 @@ import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-CHECK = ROOT / 'skills/wl-design-doc/scripts/check_design_doc.py'
+CHECK = ROOT / 'tools/skills/engineering/wl-design-doc/scripts/check_design_doc.py'
 LEGACY = dict(requirement_id='R1', status='approved', created='2026-10-16',
               updated='2026-10-16', chosen=None, approval_evidence='user-record:1')
 
@@ -82,7 +82,7 @@ class DesignHandoffTests(unittest.TestCase):
         meta['source_test_cases'] = {'path': 'external/confirmed-business-cases.md', 'version': 'external-v5'}
         result = self.check(meta, executable=True, case_path=meta['source_test_cases']['path'])
         self.assertEqual(result.returncode, 0, result.stderr)
-        design = (ROOT / 'skills/wl-design-doc/SKILL.md').read_text()
+        design = (ROOT / 'tools/skills/engineering/wl-design-doc/SKILL.md').read_text()
         for contract in ('已确认的外部用例', '不要求本流程文件', '根本无用例', '交接缺口', '不造来源'):
             self.assertIn(contract, design)
 

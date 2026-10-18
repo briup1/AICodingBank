@@ -3,7 +3,7 @@ import unittest
 from pathlib import Path
 
 
-ROOT = Path(__file__).resolve().parents[1] / "skills" / "harness-pack"
+ROOT = Path(__file__).resolve().parents[1] / "tools/skills/engineering/harness-pack"
 
 
 class HarnessPackContentTests(unittest.TestCase):
