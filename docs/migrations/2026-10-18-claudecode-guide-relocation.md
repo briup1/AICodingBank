@@ -1,6 +1,6 @@
 # claudecode_guide 内容归位记录
 
-日期：2026-10-18。依据：用户在完成岗位制结构迁移提交后选定“提交迁移，再做 claudecode_guide 归位”。本轮只做搬迁与必要引用更新，**未新增删除**；归位后剩余空壳（兼容软链、空目录、过时说明文件）另行列出，等待用户批准后删除。
+日期：2026-10-18。依据：用户在完成岗位制结构迁移提交后选定“提交迁移，再做 claudecode_guide 归位”。搬迁与引用更新**未删除任何内容**；归位后剩余空壳（兼容软链、空目录、过时说明文件）经用户单独批准后删除，见文末。
 
 ## 变更链
 
@@ -51,7 +51,7 @@ claudecode_guide/
 
 未改动：历史迁移记录（role-workbench-migration.md、cleanup-candidates.md、path-map.json）、用户级配置、任何宿主加载位置。
 
-## 剩余空壳（待批准删除）
+## 剩余空壳（已按批准删除）
 
 `claudecode_guide/` 归位后仅剩：
 
@@ -59,7 +59,7 @@ claudecode_guide/
 - 1 个真文件 `000_examples/.claude/.claude-plugin/README.md`（C01 去重时的指向说明，目标内容已再次迁位，说明过时）；
 - 空目录若干。
 
-删除后 Git 中的软链记录同时消失；`legacy-snapshots` 里的 5 个插件副本与其余历史快照一并列入后续删除审核。
+用户批准后已于 2026-10-18 整体删除（含空目录），Git 中软链记录同时消失，15 个软链目标在 `tools/skills/*/legacy-snapshots/` 仍可达。相关测试断言同步更新为“旧目录不存在”；path-map 作为历史记录不改写，测试对其中 claudecode_guide 兼容软链条目按批准删除豁免。`legacy-snapshots` 里的 5 个插件副本与其余历史快照保留，后续统一评估，不在本轮删除范围。
 
 ## 验证与边界
 

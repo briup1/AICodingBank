@@ -56,7 +56,8 @@ class WorkbenchMigrationTests(unittest.TestCase):
             target = ROOT / move["to"]
             self.assertTrue(target.is_dir(), move)
             self.assertFalse(target.is_symlink(), move)
-            if move["compatibility_symlink"]:
+            if move["compatibility_symlink"] and not move["from"].startswith("claudecode_guide/"):
+                # claudecode_guide 内部软链已随归位空壳按批准删除，见归位记录。
                 old = ROOT / move["from"]
                 self.assertTrue(old.is_symlink(), move)
                 self.assertEqual(old.resolve(), target.resolve(), move)
@@ -103,16 +104,15 @@ class WorkbenchMigrationTests(unittest.TestCase):
                 'docs/reference/skills-cheatsheets/AI Coding 全场景工具地图.md',
         ):
             self.assertTrue((ROOT / relative).exists(), relative)
-        self.assertFalse((ROOT / 'claudecode_guide/prompt/100_一个具体的goal任务.md').exists())
-        self.assertFalse((ROOT / 'claudecode_guide/plugin_guide/plugin_store/feature-dev').exists())
-        self.assertTrue((ROOT / 'claudecode_guide/plugin_guide/plugin_store/plugin-dev').is_symlink())
+        self.assertFalse((ROOT / 'claudecode_guide').exists())
 
     def test_migration_and_cleanup_are_separate(self):
         text = (ROOT / 'docs/migrations/2026-10-18-role-workbench-migration.md').read_text()
         self.assertIn('未删除', text)
         review = (ROOT / 'docs/migrations/2026-10-18-cleanup-candidates.md').read_text()
         self.assertIn('全部有明确去向', review)
-        self.assertTrue((ROOT / 'claudecode_guide').is_dir())
+        # 归位空壳经单独批准后删除，与本次迁移、清理仍相互独立。
+        self.assertFalse((ROOT / 'claudecode_guide').exists())
 
 
 if __name__ == '__main__':
