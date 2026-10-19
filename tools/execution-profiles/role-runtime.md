@@ -4,6 +4,8 @@
 
 ## 谁在什么时候使用
 
+仅在用户要求长期项目组、跨会话恢复、成员复用与任务历史，或继续已有台账任务时使用本入口。普通委派默认按 [wl-herdrs](../skills/workbench/wl-herdrs/SKILL.md) 直接交代自然语言任务，不以建组、入组、JSON 登记为前置条件。下文命令只适用于选择了持久台账的任务。
+
 项目经理决定是否委派 → 登记任务包 → 查已有任务与实例 → 派单 → 执行岗位保存检查点 → 项目经理核验证据并验收。
 
 下次会话先查看未完成任务，再读取该任务恢复摘要。摘要包括原目标、范围、已完成内容、证据、阻塞和下一步；核对项目事实后显式确认继续。恢复不是自动重放旧命令，也不是复制完整会话。
@@ -12,20 +14,19 @@
 
 ## 最小操作
 
-### 新需求：先项目组、后派单
+### 持久项目组：先项目组、后派单
 
 新增项目组统一使用下列链路，旧 `dispatch` 仅兼容历史无成员任务。以下 `python` 同样指 uv 管理的 3.12.9。
 
 ```bash
 python tools/scripts/role_runtime.py group-create --file /absolute/group.json
 python tools/scripts/role_runtime.py join requirement-a ui-1 --role /absolute/ui/ROLE.md --timeout-ms 300000
-python tools/scripts/role_runtime.py members --group requirement-a
 python tools/scripts/role_runtime.py create --file /absolute/task.json
 python tools/scripts/role_runtime.py assign task-id --member ui-1 --timeout-ms 300000
 python tools/scripts/role_runtime.py accept task-id --note '已核对成果'
 python tools/scripts/role_runtime.py leave ui-1 --summary '完成内容、证据位置及下一步'
 python tools/scripts/role_runtime.py join requirement-a ui-2 --role /absolute/ui/ROLE.md --timeout-ms 300000
-python tools/scripts/role_runtime.py group-show requirement-a
+# 只有排障、恢复或明确需要完整记录时才使用 group-show。
 ```
 
 group.json 字段为 `id/project/goal/inputs`，project 是实际绝对目录，inputs 是必要资料引用数组。入组只加载身份与组资料入口，成员通过生成的 `member-ready` 命令回执；ready 前不派单。具体任务仍使用下方八字段格式，project/role 须与成员一致。
