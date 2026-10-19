@@ -42,13 +42,14 @@ class WorkbenchMigrationTests(unittest.TestCase):
         self.assertTrue((base / 'STANDARD.md').is_file())
         self.assertTrue((base / 'TEMPLATE.md').is_file())
 
-    def test_compatibility_paths_resolve_without_skill_copies(self):
-        for old in ('skills/wl-git-flow', 'skills/wl-herdrs',
-                    'skills-on-demand/hgj-codex', '.agents/skills/langfuse'):
-            path = ROOT / old
-            self.assertTrue(path.is_symlink(), old)
-            self.assertTrue(path.exists(), old)
-            self.assertTrue(str(path.resolve()).startswith(str(ROOT / 'tools/skills')), old)
+    def test_legacy_entry_paths_are_retired_without_skill_copies(self):
+        for retired in ('skills', 'skills-on-demand', 'ai_coding_sec_dev_workflow'):
+            self.assertFalse((ROOT / retired).exists(), retired)
+        # 保留的项目级加载路径仍解析到 tools/skills，无第二份正文。
+        kept = ROOT / '.agents/skills/langfuse'
+        self.assertTrue(kept.is_symlink(), kept)
+        self.assertTrue(kept.exists(), kept)
+        self.assertTrue(str(kept.resolve()).startswith(str(ROOT / 'tools/skills')), kept)
 
     def test_every_mapped_package_is_present_and_old_skill_paths_are_aliases(self):
         manifest = json.loads((ROOT / "docs/migrations/2026-10-18-path-map.json").read_text())
@@ -56,8 +57,9 @@ class WorkbenchMigrationTests(unittest.TestCase):
             target = ROOT / move["to"]
             self.assertTrue(target.is_dir(), move)
             self.assertFalse(target.is_symlink(), move)
-            if move["compatibility_symlink"] and not move["from"].startswith("claudecode_guide/"):
-                # claudecode_guide 内部软链已随归位空壳按批准删除，见归位记录。
+            if move["compatibility_symlink"] and not move["from"].startswith(
+                    ("claudecode_guide/", "skills/", "skills-on-demand/", "ai_coding_sec_dev_workflow")):
+                # claudecode_guide 内部软链与根兼容入口已按批准退役，见归位/退役记录。
                 old = ROOT / move["from"]
                 self.assertTrue(old.is_symlink(), move)
                 self.assertEqual(old.resolve(), target.resolve(), move)
@@ -72,6 +74,9 @@ class WorkbenchMigrationTests(unittest.TestCase):
             self.assertTrue((ROOT / 'tools/skills/engineering/legacy-snapshots' / relative).is_file())
         for folder in ('AI2AI', 'ME2AI'):
             self.assertEqual(list((ROOT / 'double_layer_spec' / folder).glob('*.md')), [])
+        # 空目录已在旧入口退役时清除（2026-10-18）。
+        self.assertFalse((ROOT / 'double_layer_spec').exists())
+        self.assertFalse((ROOT / '.marscode').exists())
         removed = (
             'double_layer_spec/project_rule.md', '.marscode/deviceInfo.json',
             '.wl-ai-skills/browse/browse-audit.jsonl',

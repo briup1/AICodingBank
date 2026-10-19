@@ -8,7 +8,7 @@
 
 能力控制面：自研 Skill 在 tools/skills/<分类>/，第三方新来源只登记在 skills-lock.json，总入口是 skills.yaml。登记变化用 `python3 install.py --catalog-only` 刷新目录，不联网不安装；实际同步与宿主安装另核授权。详细规范见 [README.md](README.md)。维护红线：
 
-1. Skill 正文单份：自研在 tools/skills，第三方缓存由 vendor 管理；历史迁入快照保留待审，不再复制。旧路径只保留兼容软链，舍弃须经确认。
+1. Skill 正文单份：自研在 tools/skills，第三方缓存由 vendor 管理；历史迁入快照保留待审，不再复制。宿主加载位置由 install.py 直连 canonical；旧兼容入口已于 2026-10-18 按批准退役，重新引入或舍弃须经确认。
 2. 新增第三方 skill 只改 `skills-lock.json`，禁止把文件拷进仓库；登记时必须当场写 capability / boundary / tags 三行人话。
 3. 新增自研 Skill 放 tools/skills/<分类>/ 并在 skills.yaml 登记（同样带三行人话）。
 4. `verified` 为空的 skill 不会被安装；验证通过才填日期。

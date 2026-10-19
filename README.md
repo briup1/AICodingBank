@@ -22,7 +22,7 @@ AICodingBank 管理岗位、能力与本项目的 [最佳实践记录](best_prac
 
 新结构见 [岗位名册](roles/README.md)、[个人资料入口](personal/README.md)、[工具分类](tools/README.md)与[结构设计及迁移边界](docs/wl-ai-skills/specs/2026-10-18-role-workbench-structure-design.md)。协调岗位统一称“项目经理”；岗位按技术工程、媒体内容和共享支持分组，不增加部门管理层。
 
-岗位仍未启用；Skill 已迁到 tools/skills，历史最佳实践已按日期和问题归档，claudecode_guide 的教程内容已归位到对应归宿、归位后空壳已按批准删除（见 [归位记录](docs/migrations/2026-10-18-claudecode-guide-relocation.md)）。只搬迁及更新必要引用，不处理能力重合，不提升验证状态。旧 Skill 路径保留兼容软链，已按用户逐批批准删除旧副本、空文件、日志、会话原文及旧设备/规则文件，未扩大到其他资料。见 [迁移记录](docs/migrations/2026-10-18-role-workbench-migration.md)与[清理执行记录](docs/migrations/2026-10-18-cleanup-candidates.md)。
+岗位仍未启用；Skill 已迁到 tools/skills，历史最佳实践已按日期和问题归档，claudecode_guide 的教程内容已归位到对应归宿、归位后空壳已按批准删除（见 [归位记录](docs/migrations/2026-10-18-claudecode-guide-relocation.md)）。旧兼容入口（skills/、skills-on-demand/、ai_coding_sec_dev_workflow）已按批准退役，宿主加载位置由 install.py 直连 tools/skills（见 [退役记录](docs/migrations/2026-10-18-legacy-entry-retirement.md)）。只搬迁及更新必要引用，不处理能力重合，不提升验证状态。已按用户逐批批准删除旧副本、空文件、日志、会话原文及旧设备/规则文件，未扩大到其他资料。见 [迁移记录](docs/migrations/2026-10-18-role-workbench-migration.md)与[清理执行记录](docs/migrations/2026-10-18-cleanup-candidates.md)。
 
 ## 现用目录结构
 
@@ -33,7 +33,6 @@ AICodingBank 管理岗位、能力与本项目的 [最佳实践记录](best_prac
 ├── roles/               # 项目经理与分组岗位手册（草稿、未启用）
 ├── personal/            # 个人资料入口，本机画像忽略
 ├── tools/skills/        # engineering / media / shared / workbench；Skill 单份正文
-├── skills/              # 旧路径兼容软链，不再新增正文
 ├── skills.yaml          # 总登记表：加载位置 + 自研清单 + lock 指针
 ├── skills-lock.json     # 第三方 skill 登记（只登记上游地址，不复制文件）
 ├── install.py           # 安装器：clone 上游到 vendor/ → 软链到各加载位置

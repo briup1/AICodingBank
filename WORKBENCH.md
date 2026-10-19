@@ -22,7 +22,7 @@
 
 [个人资料入口](personal/README.md)说明真实董事长与个人背景；[岗位名册](roles/README.md)由项目经理统筹，按组分类、按任务召集；[工具分类](tools/README.md)区分 Skill、执行配置与工具接入；[本机记录约定](.local/README.md)引用项目事实。
 
-岗位均为草稿，不能据此自动开工、创建 Agent、切换模型或宣称能力隔离。Skill 已迁入新路径，旧入口为兼容软链；阶段路由和委派规则不变。历史设计见[结构设计](docs/wl-ai-skills/specs/2026-10-18-role-workbench-structure-design.md)，当前变化见[迁移记录](docs/migrations/2026-10-18-role-workbench-migration.md)。
+岗位均为草稿，不能据此自动开工、创建 Agent、切换模型或宣称能力隔离。Skill 已迁入新路径，宿主加载位置由 install.py 直连 canonical，旧兼容入口已按批准退役；阶段路由和委派规则不变。历史设计见[结构设计](docs/wl-ai-skills/specs/2026-10-18-role-workbench-structure-design.md)，当前变化见[迁移记录](docs/migrations/2026-10-18-role-workbench-migration.md)与[退役记录](docs/migrations/2026-10-18-legacy-entry-retirement.md)。
 
 ## 系统地图
 
