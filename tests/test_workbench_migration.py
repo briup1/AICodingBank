@@ -52,9 +52,30 @@ class WorkbenchMigrationTests(unittest.TestCase):
         self.assertTrue(str(kept.resolve()).startswith(str(ROOT / 'tools/skills')), kept)
 
     def test_every_mapped_package_is_present_and_old_skill_paths_are_aliases(self):
+        # 2026-10-19 评估批准删除的迁入快照，目标目录按批准退役（见评估记录）。
+        retired_snapshots = (
+            'tools/skills/engineering/legacy-snapshots/android-native-dev',
+            'tools/skills/engineering/legacy-snapshots/brainstorming',
+            'tools/skills/engineering/legacy-snapshots/code-review',
+            'tools/skills/engineering/legacy-snapshots/code-simplifier',
+            'tools/skills/engineering/legacy-snapshots/feature-dev',
+            'tools/skills/engineering/legacy-snapshots/frontend-design',
+            'tools/skills/engineering/legacy-snapshots/frontend-dev',
+            'tools/skills/engineering/legacy-snapshots/fullstack-dev',
+            'tools/skills/engineering/legacy-snapshots/ios-application-dev',
+            'tools/skills/engineering/legacy-snapshots/opencode',
+            'tools/skills/engineering/legacy-snapshots/playwright-skill',
+            'tools/skills/engineering/legacy-snapshots/plugin-dev',
+            'tools/skills/engineering/legacy-snapshots/pr-review-toolkit',
+            'tools/skills/engineering/legacy-snapshots/ralph-wiggum',
+            'tools/skills/shared/legacy-snapshots/agent-browser',
+        )
         manifest = json.loads((ROOT / "docs/migrations/2026-10-18-path-map.json").read_text())
         for move in manifest["moves"]:
             target = ROOT / move["to"]
+            if any(move["to"] == p or move["to"].startswith(p + "/") for p in retired_snapshots):
+                self.assertFalse(target.exists(), move)
+                continue
             self.assertTrue(target.is_dir(), move)
             self.assertFalse(target.is_symlink(), move)
             if move["compatibility_symlink"] and not move["from"].startswith(
@@ -64,14 +85,15 @@ class WorkbenchMigrationTests(unittest.TestCase):
                 self.assertTrue(old.is_symlink(), move)
                 self.assertEqual(old.resolve(), target.resolve(), move)
 
-    def test_approved_cleanup_keeps_canonical_plugins_and_retained_practice(self):
+    def test_approved_cleanup_retires_duplicates_and_keeps_retained_practice(self):
         base = ROOT / 'claudecode_guide/000_examples/.claude/.claude-plugin'
         for relative in ('code-review/README.md', 'code-review/.claude-plugin/plugin.json',
                          'code-review/commands/code-review.md',
                          'code-simplifier/agents/code-simplifier.md',
                          'code-simplifier/.claude-plugin/plugin.json'):
             self.assertFalse((base / relative).exists(), relative)
-            self.assertTrue((ROOT / 'tools/skills/engineering/legacy-snapshots' / relative).is_file())
+            # 归位时保留的插件副本已于 2026-10-19 按评估批准删除（见评估记录）。
+            self.assertFalse((ROOT / 'tools/skills/engineering/legacy-snapshots' / relative).exists(), relative)
         for folder in ('AI2AI', 'ME2AI'):
             self.assertEqual(list((ROOT / 'double_layer_spec' / folder).glob('*.md')), [])
         # 空目录已在旧入口退役时清除（2026-10-18）。
@@ -105,11 +127,15 @@ class WorkbenchMigrationTests(unittest.TestCase):
                 'tools/integrations/subagent-配置指南.md',
                 'tools/integrations/examples/opencode/opencode.json',
                 'tools/integrations/examples/claude-code/settings-permissions.json',
-                'candidates/agent-definitions/debugger.md',
                 'docs/reference/skills-cheatsheets/AI Coding 全场景工具地图.md',
         ):
             self.assertTrue((ROOT / relative).exists(), relative)
         self.assertFalse((ROOT / 'claudecode_guide').exists())
+        # agent-definitions 候选已随 2026-10-19 评估批准删除，归位落点只剩 langfuse 在用快照。
+        self.assertFalse((ROOT / 'candidates').exists())
+        self.assertTrue((ROOT / 'tools/skills/engineering/legacy-snapshots/langfuse/SKILL.md').is_file())
+        self.assertTrue((ROOT / 'tools/skills/media/legacy-snapshots/hot_topics/SKILL.md').is_file())
+        self.assertTrue((ROOT / 'tools/skills/media/legacy-snapshots/remotion-best-practices/SKILL.md').is_file())
 
     def test_migration_and_cleanup_are_separate(self):
         text = (ROOT / 'docs/migrations/2026-10-18-role-workbench-migration.md').read_text()

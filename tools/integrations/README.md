@@ -8,7 +8,7 @@
 
 2026-10-18 从 `claudecode_guide/` 归位，均为历史材料，未在本轮验证：
 
-- [插件使用与开发指南.md](插件使用与开发指南.md) — Claude Code 插件的使用与开发方法；插件本体副本已迁到 `tools/skills/*/legacy-snapshots/`
+- [插件使用与开发指南.md](插件使用与开发指南.md) — Claude Code 插件的使用与开发方法；插件本体副本已于 2026-10-19 评估后清除，需要时从官方市场重装
 - [插件收录登记.md](插件收录登记.md) — 历史收录插件索引，目录路径已更新到快照位置
 - [subagent-配置指南.md](subagent-配置指南.md) — Claude Code subagent 配置方法
 - [examples/](examples) — Claude Code / opencode 的历史示例配置（settings、commands、claudeignore 等）

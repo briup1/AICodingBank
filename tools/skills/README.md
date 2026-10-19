@@ -11,7 +11,7 @@ Skill 本体已迁入这里。按主要用途一个物理归宿，多用途通�
 
 ## 原有按需包和历史快照
 
-engineering/on-demand 与 shared/on-demand 保留现有按需资料包，路径变更不代表自动安装或重新验证。legacy-snapshots 保存原先散落在指南/宿主目录中的 Skill 与必要配套文件，来源/验证尚未统一登记，不自动晋升到自研或已验证集合，也不在本轮去重。
+engineering/on-demand 与 shared/on-demand 保留现有按需资料包，路径变更不代表自动安装或重新验证。legacy-snapshots 的迁入快照已按 2026-10-19 评估收口：保留 langfuse（项目级在用）与媒体两项候选（hot_topics、remotion-best-practices，未验证），其余经批准删除（见 [评估记录](../../docs/migrations/2026-10-19-legacy-snapshots-and-candidates-evaluation.md)），不自动晋升到自研或已验证集合。
 
 新增第三方仍只登记上游；本轮保留历史快照是迁移例外，不是今后复制第三方源码的许可。快照是否替换为上游登记须另行核对，不能无证据丢掉独有内容。
 

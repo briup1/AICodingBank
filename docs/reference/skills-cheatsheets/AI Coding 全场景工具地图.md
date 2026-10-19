@@ -14,7 +14,7 @@ markmap:
 >    - `tavily:` = Tavily 搜索/抓取工具包（来源：`tavily-skills-cheatsheet.md`）
 >    - `code-review-graph:` = 代码图谱审查包（来源：`code-review-graph-skills-cheatsheet.md`）
 >    - `claude-plugin:` = Claude 官方 Plugins（来源：`claude-plugins-cheatsheet.md`）
->    - `standalone:` = 独立 skill，不在上述统一包中（通常位于 `~/.claude/skills/` 或本仓库 `tools/skills/*/legacy-snapshots/`）
+>    - `standalone:` = 独立 skill，不在上述统一包中（通常位于 `~/.claude/skills/` 或按需目录；仓库快照区已于 2026-10-19 评估后收口）
 >    - `claude-code:` = Claude Code 官方内置 skill
 > 3. 每个 skill 卡片包含：触发条件 → 输入 → 输出 → 推荐度 → 实测状态 → 备胎方案。
 
