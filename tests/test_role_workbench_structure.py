@@ -17,19 +17,25 @@ ROLE_PATHS = (
 
 
 class RoleWorkbenchStructureTests(unittest.TestCase):
-    def test_roles_are_documented_but_not_enabled(self):
+    def test_roles_are_documented_and_only_pm_is_enabled(self):
         self.assertEqual(
             {str(p.relative_to(ROOT)) for p in (ROOT / 'roles').rglob('ROLE.md')},
             set(ROLE_PATHS),
         )
         for relative in ROLE_PATHS:
             text = (ROOT / relative).read_text(encoding='utf-8')
-            self.assertIn('status: draft\n', text)
-            self.assertIn('enabled: false\n', text)
             for heading in ('职责与边界', '接单条件', '能力入口', '执行配置',
                             '工作与交接', '交付标准', '升级与记录'):
                 self.assertIn(f'## {heading}', text, relative)
-        self.assertIn('项目经理', (ROOT / ROLE_PATHS[0]).read_text(encoding='utf-8'))
+        pm = (ROOT / ROLE_PATHS[0]).read_text(encoding='utf-8')
+        self.assertIn('status: active\n', pm)
+        self.assertIn('enabled: true\n', pm)
+        self.assertIn('## 开工开场', pm)
+        self.assertIn('项目经理', pm)
+        for relative in ROLE_PATHS[1:]:
+            text = (ROOT / relative).read_text(encoding='utf-8')
+            self.assertIn('status: draft\n', text, relative)
+            self.assertIn('enabled: false\n', text, relative)
         for directory in ('roles', 'personal', 'tools/execution-profiles'):
             self.assertEqual(list((ROOT / directory).rglob('SKILL.md')), [])
 

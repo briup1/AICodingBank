@@ -18,11 +18,11 @@
 | 查询项目档案、来源资料或研究 | 按知识索引读取，不复制外部正文 | Knowledge Base |
 | 增加工作台能力 | 自动分流到拓展入口 | `EXTENDING.md` |
 
-## 岗位制结构预览（未启用）
+## 岗位制结构
 
-[个人资料入口](personal/README.md)说明真实董事长与个人背景；[岗位名册](roles/README.md)由项目经理统筹，按组分类、按任务召集；[工具分类](tools/README.md)区分 Skill、执行配置与工具接入；[本机记录约定](.local/README.md)引用项目事实。
+[个人资料入口](personal/README.md)说明真实董事长与个人背景；[岗位名册](roles/README.md)由项目经理统筹：项目经理已启用**对话级**开场与接单，其余岗位为草稿、未启用；[工具分类](tools/README.md)区分 Skill、执行配置与工具接入；[本机记录约定](.local/README.md)引用项目事实。
 
-岗位均为草稿，不能据此自动开工、创建 Agent、切换模型或宣称能力隔离。Skill 已迁入新路径，宿主加载位置由 install.py 直连 canonical，旧兼容入口已按批准退役；阶段路由和委派规则不变。历史设计见[结构设计](docs/wl-ai-skills/specs/2026-10-18-role-workbench-structure-design.md)，当前变化见[迁移记录](docs/migrations/2026-10-18-role-workbench-migration.md)与[退役记录](docs/migrations/2026-10-18-legacy-entry-retirement.md)。
+开场与接单是对话行为：不自动创建 Agent、不切换模型、不构成能力隔离；阶段路由和委派规则不变。结构收敛已完成（Skill 直连 tools/skills、旧入口退役、快照评估收口），历史见[结构设计](docs/wl-ai-skills/specs/2026-10-18-role-workbench-structure-design.md)与[迁移记录](docs/migrations/)。
 
 ## 系统地图
 
@@ -59,6 +59,8 @@
 
 ## 开始一次工作
 
+用户表达开工意图（如"开始工作"）且未带具体任务时，以项目经理身份开场：读[项目经理手册](roles/project-manager/ROLE.md)的开场协议，按四项介绍（你是谁 / 我是谁 / 我能干什么 / 我给你什么）开场，然后等目标；带具体任务来则直接接单，不念开场。
+
 ```text
 根据用户指定路径或项目索引定位项目
   -> 读取项目自己的 AGENTS / README / 构建配置
@@ -81,16 +83,9 @@ Skill 的验证与安装状态以 skills.yaml / CATALOG.md 为准。未验证时
 
 ## 能力控制面
 
-AICodingBank 继续负责“能力能否被发现、安装和信任”：
+自研 Skill 在 tools/skills/，第三方只登记在 `skills-lock.json`（缓存 vendor/），人类目录是可读的 `CATALOG.md`，本机停用写 `skills.local.yaml`。目录刷新 `python3 install.py --catalog-only`（不联网、不安装），实际安装另核授权；完整规范见 [README.md](README.md) 与 [EXTENDING.md](EXTENDING.md)。
 
-- 自研 Skill：tools/skills/<分类>/ + skills.yaml
-- 第三方 Skill：`skills-lock.json` + `vendor/`
-- 按需 Skill：tools/skills/engineering/on-demand/ 与 tools/skills/shared/on-demand/
-- 人类目录：`CATALOG.md`
-- 目录刷新：python3 install.py --catalog-only（不联网、不安装）；实际安装另核授权
-- 本机停用：`skills.local.yaml`
-
-本文件不复制 Skill 的详细说明；阶段与交接规则见 `wl-auto-delivery`。进入阶段后，从 `CATALOG.md` 或当前 Agent 的可用 Skill 中选择最小能力组合。
+阶段与交接规则见 `wl-auto-delivery`；进入阶段后，从 `CATALOG.md` 或当前 Agent 的可用 Skill 中选择最小能力组合。
 
 ## 个人上下文与项目索引
 
@@ -107,16 +102,7 @@ AICodingBank 继续负责“能力能否被发现、安装和信任”：
 
 ## 信息归宿
 
-| 信息 | 保存位置 |
-| --- | --- |
-| 稳定个人偏好、私人项目路径 | `WORKBENCH.local.md` |
-| Skill 能力、来源、边界、验证状态 | `skills.yaml` / `skills-lock.json` |
-| 项目代码、命令、接口和架构 | 对应项目仓库 |
-| 需求、方案和验收证据 | 对应项目的需求文档 |
-| 长任务状态和产物 | Pi Goal / Personal Workbench |
-| 问题解决、尝试、踩坑与验证 | best_practices/，按 [规范](best_practices/STANDARD.md) |
-| 项目档案、研究和综合知识 | Knowledge Base；不复制本项目案例正文 |
-| 一次性探索和临时进度 | 当前会话或项目临时目录，不进入个人上下文 |
+信息归档的唯一归宿与判断规则见 [EXTENDING.md](EXTENDING.md) 的"自动分类与唯一归宿"；稳定个人偏好与私人项目路径以 `WORKBENCH.local.md` 为准，最佳实践按 [规范](best_practices/STANDARD.md) 构建。
 
 ## 边界
 

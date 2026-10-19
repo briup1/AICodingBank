@@ -74,11 +74,21 @@
 
 以下内容不得写入：Token、密码、Cookie、私钥、完整连接串、客户敏感数据、会话原文和临时任务进度。
 
-### 1.1 新个人入口与岗位骨架
+### 1.1 个人入口
 
-新增的 [personal](personal/README.md)维护个人资料的归宿边界：稳定身份、独有表达特点与长期方向可进入 Git 忽略的 profile.local.md；现有工程偏好和本机路径仍以 WORKBENCH.local.md 为准，不搬动或复制。单次授权与阶段任务不并入永久画像。
+[personal](personal/README.md)维护个人资料的归宿边界：稳定身份、独有表达特点与长期方向可进入 Git 忽略的 profile.local.md；现有工程偏好和本机路径仍以 WORKBENCH.local.md 为准，不搬动或复制。单次授权与阶段任务不并入永久画像。
 
-[roles](roles/README.md)只保存岗位定义，仍为 draft、enabled: false，不自动加载或启动。[tools](tools/README.md)中的 Skill 已完成路径迁移，新正文使用 tools/skills/<分类>/；旧路径只保留兼容软链，不新增正文。历史快照/按需包保持原验证状态，待另行核对来源与重合，不自动安装。
+### 1.2 岗位与角色
+
+岗位定义职责，不定义方法；方法做成 Skill。新增或修改岗位：
+
+1. 先说明独立职责与接单条件；与现有岗位重合时扩展原手册，不新建。
+2. 在 roles/<组>/<岗位>/ROLE.md 按现有结构写手册，并在[岗位名册](roles/README.md)登记。
+3. 岗位默认 draft、enabled: false，不自动加载或开工；会话身份与调度机制尚未实现。
+4. 启用（含对话级）需另行确认实际能力、工具支持与最小验证，并同步测试断言。
+5. 岗位是工作方式，不是 Skill：不写 SKILL.md、不登记 skills.yaml。
+
+当前状态：项目经理已启用对话级开场与接单，其余岗位仍草稿；见[岗位名册](roles/README.md)。
 
 ### 2. Agent 行为规则与工作流
 
@@ -89,7 +99,7 @@
 - 需要独立维护操作手册
 - 希望所有已安装该 Skill 的 Agent 自动发现
 
-先搜索 tools/skills、skills-lock.json 和 CATALOG.md，存在相近能力时扩展原能力。新建自研 Skill 时，先向用户提问是否使用 wl- 前缀命名，按用户回答确定 Skill 名与目录名，不默认取名。自研 Skill 放在 tools/skills/<分类>/<skill-name>/，分类与历史快照边界见 [Skill 说明](tools/skills/README.md)，在 skills.yaml 的 self 下登记：
+先搜索 tools/skills、skills-lock.json 和 CATALOG.md，存在相近能力时扩展原能力。新建自研 Skill 时，先向用户提问是否使用 wl- 前缀命名，按用户回答确定 Skill 名与目录名，不默认取名。自研 Skill 放在 tools/skills/<分类>/<skill-name>/（唯一正文位置；旧入口已退役、历史快照已按 2026-10-19 评估收口，分类与快照边界见 [Skill 说明](tools/skills/README.md)），在 skills.yaml 的 self 下登记：
 
 ```yaml
 - name: <skill-name>
@@ -103,16 +113,19 @@
 
 开发与修改 Skill 时遵守 Skill 自身的编写规范。verified 为空时不得安装，真实场景验证后才能填日期。登记维护只运行 `python3 install.py --catalog-only` 刷新 CATALOG.md，不联网、不改变宿主链接。实际安装/同步使用默认安装模式，需另核授权；不要手改 CATALOG.md。
 
+由 `framework-skill-author` 生成的一组关联 Skill 按 Pack 保存（source-manifest.json + generation-report.md + skills/<name>/），避免来源清单与生成报告散落；Pack 内每个可加载 Skill 仍需单独登记到 self，其 path 指向 Pack 内具体目录。Skill 专用模板随包或对应主题目录维护，文件名用 `.prompt.md` / `.prompt.xml` 后缀，只放自研内容。改进自研 Skill 直接改正文；宿主软链可能使变动立即影响其他会话，Git 分支不是运行隔离。
+
 ### 3. 第三方 Skill
 
 只在 `skills-lock.json` 登记上游，不复制文件进仓库。每条登记必须包含：
 
 - `capability`：能做什么
 - `boundary`：不做什么、外部依赖和适用边界
-- `tags`：扁平标签
+- `tags`：扁平标签；用扁平小词表——写作/图像/图表/编程/调试/测试/架构/规划/研究/运维/协作/教学/翻译/抓取/效率，不搞树状分类
 - `verified`：真实验证日期；未验证时留空
+- `ref`（可选）：填写分支或标签时安装器固定到该版本，不填写则跟随默认分支
 
-运行 `python3 install.py` 后，安装器才可从上游管理 `vendor/` 并安装已验证 Skill。`vendor/` 是缓存，不是编辑入口。
+运行 `python3 install.py` 后，安装器才可从上游管理 `vendor/` 并安装已验证 Skill；默认安装模式会移除本机未验证 Skill 的安装器旧软链。`vendor/` 是缓存，不是编辑入口。上游删除某 skill 时安装器报“源目录不存在”，从登记中删除该条目即可。
 
 需要个性化第三方 Skill 时，保留上游 Skill 不动，另建自研策略 Skill 组合调用；不要 fork 或修改 `vendor/`。固定 `ref` 的已验证 Skill 必须保存入口文件 `computedHash`，安装时哈希不符会移除旧链接并拒绝安装。跟随默认分支的历史登记暂不强制哈希，后续应逐步迁移到固定版本。
 
