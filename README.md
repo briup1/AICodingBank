@@ -26,10 +26,15 @@ AICodingBank 管理岗位、能力与本项目的 [最佳实践记录](best_prac
 
 ## 现用目录结构
 
-```
+每个目录一行中文注解的完整版见[工作台目录地图](docs/reference/工作台目录地图.md)。
+
+```text
+├── AGENTS.md / CLAUDE.md  # AI 进门规则总纲（同内容，不同工具读不同文件）
 ├── WORKBENCH.md         # 使用入口：能力地图、项目定位与阶段路由
 ├── EXTENDING.md         # 拓展入口：规则、知识、Skill 与偏好的归档方法
 ├── WORKBENCH.local.example.md  # 本机个人上下文与项目索引模板
+├── CONTEXT.md           # 术语表（岗位、执行配置、运行实例等）
+├── CATALOG.md           # 自动生成的能力总览，勿手改
 ├── roles/               # 项目经理与分组岗位手册（草稿、未启用）
 ├── personal/            # 个人资料入口，本机画像忽略
 ├── tools/skills/        # engineering / media / shared / workbench；Skill 单份正文
@@ -38,7 +43,9 @@ AICodingBank 管理岗位、能力与本项目的 [最佳实践记录](best_prac
 ├── install.py           # 安装器：clone 上游到 vendor/ → 软链到各加载位置
 ├── vendor/              # 第三方上游的 clone 缓存（gitignore，勿手动改）
 ├── best_practices/      # 按日期-主题-问题归档，STANDARD.md 维护规范
-└── docs/reference/      # 参考资料（skills 速查表等）
+├── tests/               # 自动检查：结构与约定不被改坏
+├── docs/                # 档案室：migrations 搬家日志、reference 速查、research 调研等
+└── .local/              # 本机账本（gitignore）：迁移证据、软链快照
 ```
 
 ## 日常使用
@@ -146,7 +153,7 @@ Skill 专用模板随包保存；旧 double_layer_spec 已经用户批准清理�
 
 ## 维护红线
 
-1. **单份正文**：自研在 tools/skills，第三方新来源只登记并由 vendor 管理；历史迁入快照保留待审、不新增复制。旧路径只允许兼容软链。不得因发现重复就未经确认删除。
+1. **单份正文**：自研在 tools/skills，第三方新来源只登记并由 vendor 管理；历史迁入快照已按 2026-10-19 评估收口，不再复制。旧兼容入口已于 2026-10-18 退役，重新引入须经确认。不得因发现重复就未经确认删除。
 2. **第三方只登记不复制**：`skills-lock.json` 是唯一登记处。
 3. **登记必写三行人话**：capability / boundary / tags，当场写，不赊账。
 4. **未验证不安装**：没填 `verified` 的 skill 不进 agent 加载位置。
