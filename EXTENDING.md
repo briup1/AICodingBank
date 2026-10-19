@@ -88,7 +88,7 @@
 4. 启用（含对话级）需另行确认实际能力、工具支持与最小验证，并同步测试断言。
 5. 岗位是工作方式，不是 Skill：不写 SKILL.md、不登记 skills.yaml。
 
-当前状态：项目经理已启用对话级开场与接单，其余岗位仍草稿；见[岗位名册](roles/README.md)。
+当前状态与已验证的岗位运行范围以[岗位名册](roles/README.md)和[运行入口](tools/execution-profiles/role-runtime.md)为准。
 
 ### 2. Agent 行为规则与工作流
 

@@ -65,7 +65,9 @@ YOLO 只用于用户已经批准的目标项目或隔离 worktree 内的开发�
 
 ## 委派与回收
 
-按上游 `herdr` Skill 完成布局检查、pane 创建、Agent 启动、prompt、wait 和 read。默认使用当前 tab 的同级 pane、保持当前工作目录且不抢用户焦点；只有隔离确有价值时才创建 worktree。
+岗位任务优先通过[岗位运行与恢复入口](../../../execution-profiles/role-runtime.md)登记与交接：先 list/recover 核对旧任务，再 dispatch；执行岗位 checkpoint，项目经理核验证据后 accept。不绕开记录直接重复发送；返工先 rework，再显式确认继续。该入口不是权限隔离。
+
+岗位入组遵守用户确认的固定工位布局：一名成员一个独立 Tab，不用 pane split。通过 tab create 在调用者所属工作区创建工位，保持目标项目 cwd 且不抢焦点；使用返回的 root pane ID 执行 agent start，后续 prompt/wait/get/read 走 agent 命令。Tab 是布局，Agent 是执行者，不能仅创建 Tab 就宣布岗位就绪。旧任务 dispatch 仅兼容历史任务；新增项目组使用入组入口。只有隔离确有价值时才创建 worktree。
 
 每个子 Agent 的提示至少包含：
 

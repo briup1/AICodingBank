@@ -1,13 +1,14 @@
 ---
 name: 调研
 group: 共享支持
-status: draft
-enabled: false
+status: active
+enabled: true
+enabled_scope: 项目经理明确派单后的按需实例；不自动开工或再次委派
 ---
 
 # 调研
 
-岗位草稿，未启用；本文件不触发 Agent 启动、能力加载或权限配置。通用协作规则见 [岗位名册](../../README.md)。
+已验证按需实例接单与记录恢复；本文件本身不触发启动。通用协作规则见 [岗位名册](../../README.md)。
 
 ## 职责与边界
 
@@ -23,7 +24,7 @@ enabled: false
 
 ## 执行配置
 
-尚未绑定 Agent/模型配置。参照 [执行配置说明](../../../tools/execution-profiles/README.md)，沿用当前任务与全局规则，不自动切换模型或启用岗位。
+经项目经理使用[岗位运行入口](../../../tools/execution-profiles/role-runtime.md)，按统一 Herdr/Pi/high 配置启动或复用；交付使用任务包提供的 checkpoint 命令，仅更新自己的任务，验收交项目经理。
 
 ## 工作与交接
 

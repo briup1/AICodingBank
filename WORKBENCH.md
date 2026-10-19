@@ -20,9 +20,9 @@
 
 ## 岗位制结构
 
-[个人资料入口](personal/README.md)说明真实董事长与个人背景；[岗位名册](roles/README.md)由项目经理统筹：项目经理已启用**对话级**开场与接单，其余岗位为草稿、未启用；[工具分类](tools/README.md)区分 Skill、执行配置与工具接入；[本机记录约定](.local/README.md)引用项目事实。
+[个人资料入口](personal/README.md)说明真实董事长与个人背景；[岗位名册](roles/README.md)由项目经理统筹，按实际验证登记岗位启用状态；[工具分类](tools/README.md)区分 Skill、执行配置与工具接入；[本机记录约定](.local/README.md)引用项目事实。
 
-开场与接单是对话行为：不自动创建 Agent、不切换模型、不构成能力隔离；阶段路由和委派规则不变。结构收敛已完成（Skill 直连 tools/skills、旧入口退役、快照评估收口），历史见[结构设计](docs/wl-ai-skills/specs/2026-10-18-role-workbench-structure-design.md)与[迁移记录](docs/migrations/)。
+开场与接单是对话行为；需要执行岗位时使用[按需运行与恢复入口](tools/execution-profiles/role-runtime.md)，先查询任务记录，再核对实例并派单。调研岗位已完成真实启动、复用和交付验证；其他岗位状态以名册为准。这不构成权限隔离。结构历史见[结构设计](docs/wl-ai-skills/specs/2026-10-18-role-workbench-structure-design.md)与[迁移记录](docs/migrations/)。
 
 ## 系统地图
 

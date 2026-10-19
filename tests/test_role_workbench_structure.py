@@ -13,11 +13,13 @@ ROLE_PATHS = (
     'roles/engineering/tester/ROLE.md',
     'roles/media/editor/ROLE.md',
     'roles/shared/researcher/ROLE.md',
+    'roles/engineering/ui/ROLE.md',
+    'roles/engineering/frontend/ROLE.md',
 )
 
 
 class RoleWorkbenchStructureTests(unittest.TestCase):
-    def test_roles_are_documented_and_only_pm_is_enabled(self):
+    def test_roles_have_explicit_enablement(self):
         self.assertEqual(
             {str(p.relative_to(ROOT)) for p in (ROOT / 'roles').rglob('ROLE.md')},
             set(ROLE_PATHS),
@@ -32,7 +34,17 @@ class RoleWorkbenchStructureTests(unittest.TestCase):
         self.assertIn('enabled: true\n', pm)
         self.assertIn('## 开工开场', pm)
         self.assertIn('项目经理', pm)
-        for relative in ROLE_PATHS[1:]:
+        researcher = (ROOT / 'roles/shared/researcher/ROLE.md').read_text(encoding='utf-8')
+        self.assertIn('status: active\n', researcher)
+        self.assertIn('enabled: true\n', researcher)
+        self.assertIn('enabled_scope:', researcher)
+        active = {'roles/shared/researcher/ROLE.md', 'roles/engineering/ui/ROLE.md',
+                  'roles/engineering/frontend/ROLE.md', 'roles/engineering/tester/ROLE.md'}
+        for relative in active:
+            text = (ROOT / relative).read_text(encoding='utf-8')
+            self.assertIn('enabled: true\n', text)
+            self.assertIn('enabled_scope:', text)
+        for relative in (p for p in ROLE_PATHS[1:] if p not in active):
             text = (ROOT / relative).read_text(encoding='utf-8')
             self.assertIn('status: draft\n', text, relative)
             self.assertIn('enabled: false\n', text, relative)

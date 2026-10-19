@@ -1,13 +1,14 @@
 ---
 name: 测试
 group: 技术工程组
-status: draft
-enabled: false
+status: active
+enabled: true
+enabled_scope: 项目经理派单的独立Tab工位，已验证最小入组交付退组链路
 ---
 
 # 测试
 
-岗位草稿，未启用；本文件不触发 Agent 启动、能力加载或权限配置。通用协作规则见 [岗位名册](../../README.md)。
+已启用项目经理明确派单后的按需工位，本文件本身不触发启动。通用协作规则见 [岗位名册](../../README.md)。
 
 ## 职责与边界
 
@@ -23,7 +24,7 @@ enabled: false
 
 ## 执行配置
 
-尚未绑定 Agent/模型配置。参照 [执行配置说明](../../../tools/execution-profiles/README.md)，沿用当前任务与全局规则，不自动切换模型或启用岗位。
+参照[岗位运行入口](../../../tools/execution-profiles/role-runtime.md)，独立Tab、Herdr agent启动Pi/high；先入组并回执就绪，再领取具体任务。身份与资料按需加载，不自动切换模型。
 
 ## 工作与交接
 
