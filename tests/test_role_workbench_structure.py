@@ -26,9 +26,9 @@ class RoleWorkbenchStructureTests(unittest.TestCase):
         )
         for relative in ROLE_PATHS:
             text = (ROOT / relative).read_text(encoding='utf-8')
-            for heading in ('职责与边界', '接单条件', '能力入口', '执行配置',
-                            '工作与交接', '交付标准', '升级与记录'):
+            for heading in ('角色定位', '边界与协作', '工作方法'):
                 self.assertIn(f'## {heading}', text, relative)
+            self.assertIn('首次承担岗位时必读[共用协作约定]', text, relative)
         pm = (ROOT / ROLE_PATHS[0]).read_text(encoding='utf-8')
         self.assertIn('status: active\n', pm)
         self.assertIn('enabled: true\n', pm)
