@@ -138,6 +138,17 @@ class RoleWorkbenchStructureTests(unittest.TestCase):
                          'tools/execution-profiles/delegation.md'):
             self.assertNotIn(removed.name, (ROOT / relative).read_text(encoding='utf-8'))
 
+    def test_reasoning_check_stays_out_of_worker_prompt(self):
+        config = (ROOT / 'tools/execution-profiles/delegation.md').read_text(encoding='utf-8')
+        self.assertIn('high，启动时显式指定，由项目经理核对启动参数', config)
+        self.assertIn('派单正文不要求执行者检查 `PI_REASONING_LEVEL`、确认或回报 high', config)
+        self.assertIn('执行者收到具体任务后直接开工', config)
+        pm = (ROOT / ROLE_PATHS[0]).read_text(encoding='utf-8')
+        self.assertIn('不塞入派单或要求执行者回执', pm)
+        self.assertIn('-- --thinking high', pm)
+        strategy = (ROOT / 'tools/skills/workbench/wl-herdrs/SKILL.md').read_text(encoding='utf-8')
+        self.assertIn('执行者不再确认思考级别', strategy)
+
     def test_categories_and_supporting_directories_exist(self):
         paths = ['roles', 'personal', 'tools', '.local']
         paths += [f'tools/skills/{name}' for name in

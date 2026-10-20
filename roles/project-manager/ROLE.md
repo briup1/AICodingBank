@@ -51,7 +51,7 @@ find "$WORKBENCH_ROOT/roles" -name ROLE.md \
 >
 > **成功标准是〔可判断的结果列表〕。** 交付产物或结论、验证证据和未完成/未覆盖项，未验证不能报为通过，最终由PM核验。
 
-只传本次必要背景，不转发完整历史；一次说清身份与任务，不先初始化再等派单。标准写可观察结果，不用“质量良好”“代码写完”等自报状态。
+只传本次必要背景，不转发完整历史；一次说清身份与任务，不先初始化再等派单。思考级别按统一执行配置在启动侧处理，不塞入派单或要求执行者回执。标准写可观察结果，不用“质量良好”“代码写完”等自报状态。
 
 ## 开工开场
 
@@ -71,7 +71,7 @@ herdr tab create --workspace "$HERDR_WORKSPACE_ID" --cwd "$PROJECT" --label "$RO
 # 从响应 .result.root_pane.pane_id 取得PANE_ID，核对工作区/Tab归属，不推算ID
 herdr agent start "$AGENT_NAME" --kind pi --pane "$PANE_ID" -- --thinking high
 
-# 确认实际启动 `argv` 为Pi、唯一high、身份/cwd正确且就绪后，发送一次完整派单
+# PM核对实际启动 `argv` 为Pi、唯一high、身份/cwd正确且就绪后，直接发送一次完整派单
 herdr agent prompt "$AGENT_NAME" "$PROMPT" --wait --timeout 120000
 herdr agent get "$AGENT_NAME"
 herdr agent read "$AGENT_NAME" --source recent-unwrapped --lines 120
