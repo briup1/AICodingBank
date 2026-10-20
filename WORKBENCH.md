@@ -11,8 +11,9 @@
 | 找到并进入项目 | 从本机项目索引定位真实仓库，再读取项目入口文件 | `WORKBENCH.local.md` + 目标项目 |
 | 理解现状或调查资料 | 选择观察阶段，读取项目、知识库或可信外部来源 | 阶段路由 + 对应 Skill |
 | 确认需求、设计方案 | 根据当前证据进入确认或设计阶段 | 阶段路由 + 开发流程 Skill |
-| 编码、修复、测试、审查、部署 | 在目标项目中选择最小能力组合并留下验证证据 | `CATALOG.md` / 已安装 Skill |
+| 编码、修复、测试、审查、部署 | 在目标项目中选择最小能力组合；实际测试统一记录进度、问题和证据 | `CATALOG.md` / 已安装 Skill；[测试执行记录约定](tools/execution-profiles/test-execution.md) |
 | 统一可视文档、审核图与本机分享 | 优先复用跨项目处理策略，不在每个项目另造服务；按登记状态区分方案与可用工具 | `visual-artifact-workbench` / `WORKBENCH.local.md` |
+| Playwright 页面用例、免重复登录、重启后恢复测试身份 | 先看共用登录接入和本机运行时配置；身份验证通过才运行引用 fixture 的用例，不接管日常 Chrome | [Playwright 测试登录](tools/integrations/playwright-auth/README.md) / `WORKBENCH.local.md` |
 | 管理长任务 | 使用 Pi Goal / Personal Workbench 保存状态和产物 | Goal 工具与任务 DAG |
 | 查类似问题怎样解决、沉淀尝试与踩坑 | 按问题查最佳实践记录，保留适用条件和证据 | [最佳实践记录](best_practices/README.md) |
 | 查询项目档案、来源资料或研究 | 按知识索引读取，不复制外部正文 | Knowledge Base |

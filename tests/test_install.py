@@ -53,7 +53,7 @@ class LocalDisableTests(unittest.TestCase):
     def test_load_disabled_rejects_invalid_shape(self):
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "skills.local.yaml"
-            path.write_text("disabled: agent-dag-reporting\n", encoding="utf-8")
+            path.write_text("disabled: demo\n", encoding="utf-8")
             with self.assertRaisesRegex(ValueError, "disabled"):
                 installer.load_disabled(path)
 

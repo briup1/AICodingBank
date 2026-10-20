@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="wl-design-doc"><meta name="artifact-schema-version" content="1"><title>0006 · 重启后复用 Playwright 测试登录</title><style>
+*{box-sizing:border-box}body{margin:0;background:#F7F6F3;color:#2F3437;font:16px/1.7 'Plus Jakarta Sans','PingFang SC',sans-serif}a{color:#9F2F2D}.layout{max-width:1380px;margin:auto;padding:32px;display:grid;grid-template-columns:290px minmax(0,1fr);gap:42px}aside{position:sticky;top:25px;align-self:start}h1,h2{font-family:'Instrument Serif','Songti SC',serif;letter-spacing:-.02em}h1{font-size:28px}h2{font-size:30px}main{min-width:0}.eyebrow{font:12px/1.7 ui-monospace,monospace;color:#787774}.chip{display:inline-block;font-size:12px;background:#FDEBEC;color:#9F2F2D;border-radius:999px;padding:3px 10px;margin-right:6px}nav button{display:block;width:100%;text-align:left;background:none;border:0;border-left:2px solid transparent;border-radius:0}nav button.active{background:#FDEBEC;border-left-color:#9F2F2D}button{font:inherit;cursor:pointer;background:white;color:#2F3437;border:1px solid #EAE7E0;border-radius:6px;padding:9px 12px}section[hidden]{display:none}section{animation:appear .5s cubic-bezier(.16,1,.3,1)}pre{white-space:pre;overflow:auto;padding:20px;border-radius:6px;background:#26221E;color:#EDE8E0;font:14px/1.8 ui-monospace,monospace}code{background:#F0EEE9;color:#2F3437;border-radius:4px;padding:2px 5px}pre>code{display:block;background:transparent;color:inherit;padding:0;font:inherit}table{border-collapse:collapse;width:100%;background:white;font-size:14px}td,th{border:1px solid #EAE7E0;text-align:left;padding:10px;vertical-align:top;overflow-wrap:anywhere}th{background:#FBFAF7}p,li{overflow-wrap:anywhere}footer{display:flex;justify-content:space-between;margin-top:30px;padding-top:20px;border-top:1px solid #EAE7E0}details{border:1px solid #EAE7E0;padding:12px;border-radius:6px}summary{cursor:pointer} @keyframes appear{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}@media(max-width:860px){.layout{grid-template-columns:minmax(0,1fr);padding:20px 16px;gap:22px}aside{position:static}nav{display:flex;overflow:auto}nav button{min-width:150px}table{display:block;overflow:auto}h2{font-size:26px}}
+</style></head><body><div class="layout"><aside><p class="eyebrow">DESIGN · 0006</p><span class="chip">wl-design-doc</span><span class="chip">产物规范：1</span><h1>重启后复用<br>Playwright 测试登录</h1><p id="status" class="eyebrow"></p><p class="eyebrow">来源：<a href="requirement.wl-req-confirm.html">已批准需求 v1</a><br>用例：<a href="test-cases.wl-qa-test-planner.html">基线 v1</a><br>创建/更新：2026-10-20</p><nav></nav></aside><main>
+<section><h2>目标与边界</h2><p>关机后不需要保留浏览器进程。登录仍有效时，Agent 从固定入口恢复状态，在独立测试环境核对身份后运行指定用例；登录失效时才请求人工补登。采用共用 CLI 与 Playwright fixture，不新增后台服务或另一套浏览器驱动。</p><p><b>设计基线：</b>制定方案时，运行中 A→独立 B 内存登录复用已通过，持久恢复待实现。<b>交付更新：</b>持久保存、源A退出后的新进程恢复及聚焦独立复核现已完成，实际结果与未覆盖项见<a href="acceptance.md">验收记录</a>。第一版只接 HGJ client / Beta，不发查价、不改网站或日常 Chrome。真正整机重启仍由用户后续验证，不用新进程证据冒充。</p><pre><code>旧：找旧窗口/临时端口 → 内存传递 → 独立环境 → 验证身份
+新：Agent 固定入口 → 本机获准状态 → 新独立环境
+                       → 身份相符 → 指定用例 → 结果与收尾
+                       → 无状态/失效 → 人工补登，再验证
+                       → 身份不明/不符/环境故障 → 停止</code></pre></section>
+<section><h2>场景 A：登录一次，之后恢复</h2><p><b>最小例子：</b>今天用户登录 Beta 并确认企业，获准状态保存到本机；结束本轮测试进程，下一轮 Agent 不提供旧端口也能恢复同身份。现有 profile 曾重启恢复失败且根因未定，因此不把整份 profile 当作已验证持久化协议。</p><pre><code>业务流程〔设计目标〕
+接到获准登录准备请求
+  → 读取获准环境与预期身份
+  → 验证现有状态
+      ├─ 有效：直接交给独立测试环境
+      ├─ 无状态/失效：专用窗口人工登录
+      │    → 原窗口保持 → 独立环境验证 → 保存成功状态
+      └─ 服务异常/身份不符/缺标识：停止，不覆盖旧状态</code></pre><p><b>技术承接：</b>共用程序在 <code>tools/integrations/playwright-auth/</code>；运行时位置放仓库外配置，避免硬编码其他业务项目的 node_modules。先使用本机已有匹配的 Playwright 1.63.0 / Chromium 1243，启动能力实施前最小验证，不下载依赖。</p><pre><code>login / 当前获准 A 的一次导入
+  → 观察真实业务身份响应，确认账号/企业
+  → storageState（Cookie + 本任务 origin 存储）
+  → 新 Context 验证恢复
+  → 原子保存至本机私密目录，身份预期单独受限保存
+
+check（新进程）
+  → 校验保存授权、文件归属/权限/非软链接
+  → 读取状态，启动新浏览器，无旧 CDP 依赖
+  → 业务身份 code/data + 预期账号/企业比较
+  → 输出脱敏状态与耗时；关闭自己创建的资源</code></pre><p><b>保存边界：</b>认证状态与预期身份在本机用户私密目录，目录 0700 / 文件 0600；拒绝软链接与不安全权限，失败不覆盖旧有效状态。不设计额外密钥服务。本机同一系统账号下的其他程序仍可能读取，不能称为加密保险箱。只保存获准 app/login/identity 所需状态，密码不读取、不保存，Token/Cookie 不进入报告与 Git。</p><p>已存在的 A 只用于首次迁入；固定 check/run 不依赖它。授权撤回后拒绝读状态；删除需另行确认。网络异常不当作失效强迫重登，缺身份字段也不放行。</p></section>
+<section><h2>场景 B：交给真正的测试用例</h2><p><b>最小例子：</b>Agent 调用固定 run 入口执行一条引用共用 fixture 的登录只读用例。准备环境通过才提供 page；若企业不符，用例正文不开始。</p><pre><code>业务流程〔设计目标〕
+指定测试用例与本次操作授权
+  → 准备独立环境
+  → 验证登录、账号、企业
+      ├─ 通过 → 执行用例 → 记录结果 → 关闭本次 Context
+      └─ 失败 → 返回具体阻断 → 不进入用例正文</code></pre><pre><code>run → 已配置 Playwright Test 原生 runner
+       → 共用 fixture 载入本机状态
+       → 新独立 Context + 业务身份门禁
+       → 将 page 交给 spec
+       → 最终释放 Context / browser
+
+连续/2路并发身份验证
+  → 各自新 Context，不共享页面导航
+  → 每个环境只核对身份与页面可用
+  → 分别收尾；不产生查价或提交</code></pre><p>现有项目 spec 需要显式引用 fixture，不能声称所有旧用例自动获得保护。第一版提供一条只读示例及调用方式，不拦截或改写项目的全部测试。连续与并发仅证明登录只读检查，不证明业务写入可并行。</p></section>
+<section><h2>专项、依赖与取舍</h2><table><thead><tr><th>专项</th><th>结论与对应边界</th></tr></thead><tbody><tr><td>数据与隐私</td><td>涉及：本机持久状态、原子写、最小域过滤、权限检查、撤回授权拒绝读取。无凭证日志或截图。</td></tr><tr><td>接口与协作</td><td>涉及：login/check/run、fixture；明确 AUTH_REQUIRED / IDENTITY_MISMATCH / IDENTITY_UNVERIFIABLE / ENVIRONMENT_ERROR / RUNTIME_UNAVAILABLE 等失败分类。</td></tr><tr><td>并发</td><td>涉及：Context 独立，只读 2 路验证；共享 profile 不供并发使用，保存写入不互相覆盖。</td></tr><tr><td>性能</td><td>无固定 SLA：记录实际恢复耗时，不把旧演示约 5 秒当目标保证。</td></tr><tr><td>外部依赖</td><td>涉及：本机已装 runner/缓存。路径仅本机配置；若缓存被清理，明确依赖缺失，禁止自动安装。无常驻服务。</td></tr><tr><td>发布与迁移</td><td>不涉及线上发布、数据库或业务迁移；只增工作台接入及发现指针，不替换旧登录工具。</td></tr></tbody></table><p><b>选择理由：</b>复用官方 storageState 和 Context/Test runner，不维护自制浏览器协议。接受依赖本机已安装运行时及服务端登录有效期的限制。工具包源码负责方法，本机配置负责路径，私密状态负责当前身份，不互相复制。</p></section>
+<section><h2>实施边界与验收</h2><p>实现只新增 <code>tools/integrations/playwright-auth/</code> 的入口、fixture、示例及最小自测；现有工具接入导航/工作台本机指针按需增加引用，不改 at-test 或 hgj-session 的既有默认行为，不新增同类 Skill。</p><p>完整预期引用 <a href="test-cases.wl-qa-test-planner.html">用例 v1</a>，不复制第二份用例。技术验证为文件访问安全、原子保存、身份校验 fail-closed、环境与过期错误分流，以及 fixture 拒绝时用例正文不执行。</p><ul><li>真实验证：保存当前获准身份，独立新进程恢复，连续三次与两路并发只读验证，报告身份相等与资源退出。</li><li>本地夹具：无授权、损坏状态、账号/企业/环境错误、身份字段缺失、服务故障；不对真实环境撤权或造数。</li><li>整机重启、其他站点/admin 与业务查价均不在本轮通过声明内。</li><li>缺运行时、身份状态或关键安全证据即停止相关步骤，不自动安装或扩大权限。</li></ul><details><summary>关键依据与决策记录</summary><p>2026-10-20 已验证报告：本机 <code>playwright-auth-reuse-demo-20261020/RESULT.md</code>，11项断言通过，账号企业在真实响应中相同；匹配运行时文件存在且导出可用，运行启动待实施前核验。用户结构化选择“批准并实施（推荐）”，明确允许私密保存及按最小方案实现固定入口，不包括其他环境或业务写操作。本方案按该有限委托采用，不冒充用户逐项批准技术细节。</p></details></section>
+</main></div><script type="application/json" id="wl-design-meta">{"requirement_id":"0006","source_requirement":"requirement.wl-req-confirm.md","requirement_version":"1","design_version":"1","status":"adopted","created":"2026-10-20","updated":"2026-10-20","chosen":"private-storage-state-and-test-fixture","approval_evidence":null,"decision_mode":"delegated","recommendation":"private-storage-state-and-test-fixture","recommendation_reason":"复用已验证storageState与独立Context，去掉旧窗口/端口依赖，最少CLI与fixture满足恢复及用例前身份校验","source_test_cases":{"path":"test-cases.wl-qa-test-planner.md","version":"1"},"critical_validation":{"status":"verified","evidence":"2026-10-20 A→独立B内存复用真实11项断言通过；已有匹配1.63.0 runner与1243缓存文件核验，真实启动为实施第一项门禁，失败停止，不新增依赖"},"delegation_evidence":{"record":"2026-10-20本会话选择批准并实施（推荐）：按最小方案实现固定入口，允许本机私密位置持久保存必要状态","requirement_version":"1","design_version":"1","scope":"HGJ client/Beta登录能力与固定入口；新进程、连续与2路并发只读身份检查","data_boundary":"仅本机私密保存必要登录态，不进仓库/日志，不读取密码vault","cost_boundary":"复用现有依赖，无安装升级下载或新常驻服务","operation_boundary":"不查价不业务提交、不整机重启、不接管日常Chrome"},"diagram_layout":"vertical-ascii"}</script><script>
+const sections=[...document.querySelectorAll('main section')];const nav=document.querySelector('nav');sections.forEach((s,i)=>{s.id='s'+i;s.insertAdjacentHTML('afterbegin','<p class="eyebrow">SEC '+String(i+1).padStart(2,'0')+' / '+sections.length+'</p>');const b=document.createElement('button');b.textContent=String(i+1).padStart(2,'0')+' '+s.querySelector('h2').textContent;b.onclick=()=>show(i);nav.append(b);s.insertAdjacentHTML('beforeend','<footer><button data-prev>上一节</button><button data-next>下一节</button></footer>')});let current=0;function show(i){current=Math.max(0,Math.min(sections.length-1,i));sections.forEach((s,j)=>s.hidden=j!==current);[...nav.children].forEach((b,j)=>b.classList.toggle('active',j===current))}document.querySelectorAll('[data-prev]').forEach(b=>b.onclick=()=>show(current-1));document.querySelectorAll('[data-next]').forEach(b=>b.onclick=()=>show(current+1));document.addEventListener('keydown',e=>{if(e.key==='ArrowDown'){e.preventDefault();show(current+1)}if(e.key==='ArrowUp'){e.preventDefault();show(current-1)}});const meta=JSON.parse(document.querySelector('#wl-design-meta').textContent);document.querySelector('#status').textContent='状态：'+meta.status+'（有限委托采用） · 方案 v'+meta.design_version+' · 核心路径已验收，整机重启待验证';show(0);
+</script></body></html>

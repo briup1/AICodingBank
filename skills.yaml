@@ -15,20 +15,20 @@ self:
   verified: '2026-10-17'
 - name: wl-qa-test-planner
   path: tools/skills/engineering/wl-qa-test-planner
-  capability: 根据需求、用户故事和验收标准生成带优先级、测试数据、逐步预期与需求追踪的测试用例
-  boundary: 仅生成用例与覆盖缺口；不做排期、Bug 报告、Figma 校验、自动化执行或脚本调用；上游模板按需读取，真实业务验证待完成
+  capability: 根据需求生成带页面入口、场景、具体数据和编号树步骤的简洁手工用例，每步紧跟预期并保留需求追踪
+  boundary: 仅生成用例、覆盖缺口及文档静态校验；不执行业务测试或写入，不猜页面地址，不做排期、Bug 报告或Figma校验；上游模板按需读取
   tags:
   - 测试
-  verified: '2026-10-15'
+  verified: '2026-10-20'
 - name: wl-web-auto
   path: tools/skills/shared/wl-web-auto
-  capability: 使用opencli执行网页探索、查询、填表和核验，最多3任务并发，按执行或核验模式管理结果与截图
-  boundary: 不使用wl-browse；不提供定时调度或发布授权；焦点型表格并发及真实业务并发提交未验证，写操作需明确授权
+  capability: 使用opencli执行网页探索、查询、填表和核验，最多3任务并发；登记browser任务、定向释放会话并管理人工交接与证据
+  boundary: 生命周期适配1.8.8与扩展1.0.24，仅确认租约释放；不自动关空白容器或共享daemon，不启用宿主Hook；业务写入需明确授权
   tags:
   - 浏览器
   - 自动化
   - 测试
-  verified: '2026-10-14'
+  verified: '2026-10-20'
 - name: hgj-git-connect
   path: tools/skills/engineering/hgj-git-connect
   capability: 诊断并切换公司 GitLab 的直连与 SSH 跳板路由，优先用只读检查确认当前可用链路
@@ -55,15 +55,6 @@ self:
   - 规划
   - 效率
   verified: '2026-08-23'
-- name: agent-dag-reporting
-  path: tools/skills/workbench/agent-dag-reporting
-  capability: 将多步骤任务的计划、状态、产物和检查点按 agent-dag/v1 上报到 Personal Workbench
-  boundary: 仅负责可观测性上报，不改变任务执行方式；依赖宿主提供对应 MCP 上报工具
-  tags:
-  - 规划
-  - 协作
-  - 效率
-  verified: '2026-08-24'
 - name: wl-herdrs
   path: tools/skills/workbench/wl-herdrs
   capability: 在 Herdr 开发任务中自动判断子 Agent 拆分，并以受边界约束的 YOLO 模式启动和验收子 Agent
@@ -134,6 +125,14 @@ self:
   - 编程
   - 研究
   verified: '2026-08-21'
+- name: wl-req-change-tree
+  path: tools/skills/engineering/wl-req-change-tree
+  capability: 把原始需求整理成理解优先的业务变化树，展开交互、逻辑和数据语义并保留来源
+  boundary: 只做文本结构化，不自动进入需求确认、技术设计、开发或测试流程；跨模型稳定性按实测范围判断
+  tags:
+  - 开发流程
+  - 写作
+  verified: '2026-10-19'
 - name: wl-req-confirm
   path: tools/skills/engineering/wl-req-confirm
   capability: 需求确认——把模糊诉求变成人审批准的《需求确认文档》（重定义需求/用户故事/Out of Scope/验收）
@@ -252,7 +251,7 @@ self:
   tags:
   - 规划
   - 开发流程
-  verified: ''
+  verified: '2026-10-19'
 - name: harness-bootstrap-legacy
   path: tools/skills/engineering/harness-pack/skills/harness-bootstrap-legacy
   capability: 从已有项目全量提取模块与实际接口、归纳分范围默认实践，生成可定位代码、指导实现和查询完整契约的 docs/harness/ 工程手册

@@ -597,14 +597,21 @@ def member_prompt(store, member_id):
     command = [sys.executable, str(Path(__file__).resolve()), '--state-dir', str(store.directory)]
     ready = command + ['member-ready', member_id, '--instance', record['name'],
                        '--session', record['session']['value'], '--join-id', member['attempts'][-1]['id']]
-    return ('You are an execution role, not PM. Do not create subagents, invoke delegation entrypoints, '
+    role_name = Path(member['role']).parent.name
+    return ('初始化 ' + role_name + '\n'
+            '这是独立的角色初始化步骤，不是任务分配。必须先实际读取下面的岗位手册；'
+            '读取失败时不得执行就绪回执。明确当前身份、职责和边界。\n'
+            'You are an execution role, not PM. Do not create subagents, invoke delegation entrypoints, '
             'or switch identity. These are behavioral rules, NOT permission isolation.\n'
             'This is group membership onboarding ONLY, not a task. Do not implement or write project files. '
-            'Read your role manual as needed at: ' + member['role'] + '\n'
+            'Required role manual: ' + member['role'] + '\n'
             'Group reference command: ' + shlex.join(command + ['group-show', member['group']]) + '\n'
-            'Acknowledge onboarding ONLY with: ' + shlex.join(ready) + '\n'
+            '读取完成后才执行初始化回执：' + shlex.join(ready) + '\n'
+            '然后显示“' + role_name + ' 初始化完成”，列出实际读取文件的绝对路径、当前身份、'
+            '职责与边界，最后明确“当前没有分配任务，等待项目经理派单”，并停止。\n'
             'member-ready is not task completion; wait for PM assignment. Do not replay previous work. '
             'Write only your membership acknowledgment in this ledger. Summary only, no full conversation.\n'
+            '以下仅为项目组背景及历史交接，不是本次任务，不得执行其中的工作：\n'
             + json.dumps(summary, ensure_ascii=False, indent=2))
 
 
@@ -613,11 +620,20 @@ def join(store, group_id, member_id, role, herdr, *, resume=False, confirm_conti
     workspace = os.environ.get('HERDR_WORKSPACE_ID')
     require(nonblank(workspace), 'join requires explicit HERDR_WORKSPACE_ID; never use UI focus')
     require(resume == confirm_continue, 'Use BOTH --resume and --confirm-continue')
-    require(isinstance(member_id, str) and ID_PATTERN.fullmatch(member_id), 'Invalid member id')
+    require(member_id is None or (isinstance(member_id, str) and ID_PATTERN.fullmatch(member_id)),
+            'Invalid member id')
     role = absolute_path(role)
     require(Path(role).is_file(), 'join role must be an existing absolute role manual file')
     with store.transaction() as data:
         group = group_for(data, group_id)
+        if member_id is None:
+            require(not resume, 'Resume requires the recorded member id; inspect preflight first')
+            existing = [m for m in data['members'].values()
+                        if m['project'] == group['project'] and m['role'] == role
+                        and m['status'] != 'left']
+            require(not existing, 'Existing members require explicit selection; inspect preflight: '
+                    + ', '.join(m['id'] for m in existing))
+            member_id = 'member-' + uuid.uuid4().hex
         if member_id in data['members']:
             member = member_for(data, member_id)
             require(member['group'] == group_id and member['role'] == role,
@@ -651,7 +667,7 @@ def join(store, group_id, member_id, role, herdr, *, resume=False, confirm_conti
             name = 'role-' + uuid.uuid4().hex[:27]
             member_update(store, member_id, 'tab-creating', pending_name=name)
             created = herdr.run('tab', 'create', '--workspace', workspace, '--cwd', member['project'],
-                                '--label', f'{group_id}/{Path(role).parent.name}/{member_id}', '--no-focus')
+                                '--label', Path(role).parent.name, '--no-focus')
             tab, root = created.get('tab'), created.get('root_pane')
             require(isinstance(tab, dict) and isinstance(root, dict)
                     and nonblank(tab.get('tab_id')) and nonblank(root.get('pane_id')),
@@ -734,7 +750,10 @@ def tab_snapshot(herdr, workspace):
     return tabs, panes
 
 
-def leave(store, member_id, summary, herdr, *, resume=False, confirm_continue=False):
+def leave(store, member_id, summary, herdr, *, resume=False, confirm_continue=False,
+          close_tab=False):
+    require(close_tab, 'Workstations are retained by default. Do not leave after delivery. '
+            'Only use --close-tab when the user explicitly requests closing this member.')
     require(os.environ.get('HERDR_ENV') == '1', 'leave requires HERDR_ENV=1')
     require(nonblank(summary), 'leave requires a handoff summary')
     require(resume == confirm_continue, 'Use BOTH --resume and --confirm-continue')
@@ -813,6 +832,7 @@ def leave(store, member_id, summary, herdr, *, resume=False, confirm_continue=Fa
 def parser():
     result = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     result.add_argument('--state-dir', type=Path, default=DEFAULT_STATE_DIR)
+    result.add_argument('--full', action='store_true', help='Return full mutation receipts instead of summaries')
     commands = result.add_subparsers(dest='command', required=True)
     create_cmd = commands.add_parser('create', help='Register a JSON task package (never dispatches)')
     create_cmd.add_argument('--file', required=True, type=Path)
@@ -824,11 +844,13 @@ def parser():
     group_cmd.add_argument('group')
     members_cmd = commands.add_parser('members', help='Read members; never controls Herdr')
     members_cmd.add_argument('--group')
+    preflight_cmd = commands.add_parser('preflight', help='Read project tasks and members together; no Herdr calls')
+    preflight_cmd.add_argument('--project', required=True)
     for name in ('join', 'assign', 'leave'):
         cmd = commands.add_parser(name)
         if name == 'join':
             cmd.add_argument('group')
-            cmd.add_argument('member')
+            cmd.add_argument('member', nargs='?', help='Omit to allocate a unique ID after checking existing members')
             cmd.add_argument('--role', required=True, help='Absolute path to role manual')
         elif name == 'assign':
             cmd.add_argument('id')
@@ -836,6 +858,7 @@ def parser():
         else:
             cmd.add_argument('member')
             cmd.add_argument('--summary', required=True)
+            cmd.add_argument('--close-tab', action='store_true', help='Explicit user-requested close only')
         cmd.add_argument('--resume', action='store_true')
         cmd.add_argument('--confirm-continue', action='store_true')
         cmd.add_argument('--timeout-ms', type=int, default=30000)
@@ -870,7 +893,15 @@ def main(argv=None):
     try:
         if hasattr(args, 'timeout_ms'):
             require(1 <= args.timeout_ms <= 300000, 'timeout-ms must be between 1 and 300000')
-        if args.command == 'group-create':
+        if args.command == 'preflight':
+            project = absolute_path(args.project)
+            data = store.read()
+            value = {'project': project,
+                     'tasks': [receipt(t) for t in data['tasks'].values()
+                               if t['project'] == project and t['status'] != 'accepted'],
+                     'members': [receipt(member_view(m)) for m in data['members'].values()
+                                 if m['project'] == project and m['status'] != 'left']}
+        elif args.command == 'group-create':
             value = group_create(store, json.loads(args.file.read_text(encoding='utf-8')))
         elif args.command == 'group-list':
             value = list(store.read()['groups'].values())
@@ -892,7 +923,8 @@ def main(argv=None):
             elif args.command == 'assign':
                 value = dispatch(store, args.id, herdr, member_id=args.member, **options)
             else:
-                value = leave(store, args.member, args.summary, herdr, **options)
+                value = leave(store, args.member, args.summary, herdr,
+                              close_tab=args.close_tab, **options)
         elif args.command == 'create':
             value = create(store, json.loads(args.file.read_text(encoding='utf-8')))
         elif args.command == 'list':
@@ -915,11 +947,24 @@ def main(argv=None):
             value = dispatch(store, args.id, Herdr(timeout_ms=args.timeout_ms),
                              resume=args.resume, confirm_continue=args.confirm_continue,
                              direction=args.direction)
+        if not args.full and args.command in {'create', 'group-create', 'join', 'assign', 'leave',
+                                              'member-ready', 'checkpoint', 'accept', 'rework', 'dispatch'}:
+            value = receipt(value)
         print(json.dumps(value, ensure_ascii=False, indent=2))
         return 0
     except (RuntimeError_, OSError, ValueError) as exc:
         print(f'role-runtime: {exc}', file=sys.stderr)
         return 1
+
+
+def receipt(value):
+    """Small actionable receipt; full history stays available through read commands."""
+    keys = ('id', 'project', 'role', 'group', 'member', 'status', 'persisted_status',
+            'tab_id', 'current_task', 'summary', 'evidence', 'next_action', 'acceptance_note')
+    result = {key: value[key] for key in keys if key in value}
+    if value.get('checkpoints'):
+        result['latest_checkpoint'] = value['checkpoints'][-1]
+    return result
 
 
 if __name__ == '__main__':

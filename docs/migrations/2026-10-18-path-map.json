@@ -2,11 +2,6 @@
   "date": "2026-10-18",
   "moves": [
     {
-      "from": "skills/agent-dag-reporting",
-      "to": "tools/skills/workbench/agent-dag-reporting",
-      "compatibility_symlink": true
-    },
-    {
       "from": "skills/deepagents-pack",
       "to": "tools/skills/engineering/deepagents-pack",
       "compatibility_symlink": true

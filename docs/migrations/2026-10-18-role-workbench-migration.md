@@ -20,7 +20,6 @@
 
 | 旧位置 | 新位置 | 旧入口 |
 | --- | --- | --- |
-| `skills/agent-dag-reporting` | `tools/skills/workbench/agent-dag-reporting` | 兼容软链 |
 | `skills/deepagents-pack` | `tools/skills/engineering/deepagents-pack` | 兼容软链 |
 | `skills/framework-skill-author` | `tools/skills/workbench/framework-skill-author` | 兼容软链 |
 | `skills/goal-coach` | `tools/skills/workbench/goal-coach` | 兼容软链 |

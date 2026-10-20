@@ -188,8 +188,9 @@ class RuntimeTests(unittest.TestCase):
         args.update(changes)
         return runtime.checkpoint(self.store, 'one', **args)
 
-    def cli(self, *args, check=True, env=None):
-        result = subprocess.run([sys.executable, str(SCRIPT), '--state-dir', str(self.state_dir), *args],
+    def cli(self, *args, check=True, env=None, full=True):
+        result = subprocess.run([sys.executable, str(SCRIPT), '--state-dir', str(self.state_dir),
+                                 *(['--full'] if full else []), *args],
                                 capture_output=True, text=True, env=env or self.env, timeout=15)
         if check:
             self.assertEqual(result.returncode, 0, result.stderr)
@@ -649,7 +650,36 @@ class RuntimeTests(unittest.TestCase):
         return runtime.accept(self.store, task, 'PM checked ' + task)
 
     def leave_member(self, member='dev-one', summary='Implementation handed over', **options):
-        return runtime.leave(self.store, member, summary, runtime.Herdr(), **options)
+        return runtime.leave(self.store, member, summary, runtime.Herdr(), close_tab=True, **options)
+
+    def test_auto_member_id_preflight_and_retained_workstation(self):
+        role = self.setup_group()
+        first = runtime.join(self.store, 'group-one', None, role, runtime.Herdr())
+        self.assertTrue(first['id'].startswith('member-'))
+        calls = len(self.fake_state()['calls'])
+        with self.assertRaisesRegex(runtime.RuntimeError_, 'Existing members'):
+            runtime.join(self.store, 'group-one', None, role, runtime.Herdr())
+        self.assertEqual(len(self.fake_state()['calls']), calls)
+        before = self.store.path.read_bytes()
+        result = json.loads(self.cli('preflight', '--project', str(self.root), full=False).stdout)
+        self.assertEqual(result['members'][0]['id'], first['id'])
+        self.assertEqual(self.store.path.read_bytes(), before)
+        self.assertEqual(len(self.fake_state()['calls']), calls)
+        denied = self.cli('leave', first['id'], '--summary', 'keep visible', check=False, full=False)
+        self.assertNotEqual(denied.returncode, 0)
+        self.assertIn('retained by default', denied.stderr)
+        self.assertEqual(self.store.path.read_bytes(), before)
+        self.assertEqual(len(self.fake_state()['calls']), calls)
+
+    def test_default_mutation_receipt_is_small_and_full_read_remains(self):
+        package = self.root / 'package.json'
+        package.write_text(json.dumps(self.package('compact')))
+        result = json.loads(self.cli('create', '--file', str(package), full=False).stdout)
+        self.assertEqual(result['status'], 'created')
+        self.assertNotIn('inputs', result)
+        self.assertNotIn('attempts', result)
+        detail = json.loads(self.cli('show', 'compact', full=False).stdout)
+        self.assertIn('inputs', detail)
 
     def test_group_schema_legacy_records_and_read_only_commands(self):
         self.create('role-runtime-smoke')
@@ -684,13 +714,17 @@ class RuntimeTests(unittest.TestCase):
         calls = self.fake_state()['calls']
         tab = next(c for c in calls if c[:2] == ['tab', 'create'])
         self.assertEqual(tab, ['tab', 'create', '--workspace', 'workspace-explicit', '--cwd', str(self.root),
-                               '--label', 'group-one/developer/dev-one', '--no-focus'])
+                               '--label', 'developer', '--no-focus'])
         self.assertFalse(any(c[:2] == ['pane', 'split'] for c in calls))
         start = next(c for c in calls if c[:2] == ['agent', 'start'])
         self.assertEqual(start[start.index('--pane') + 1], member['root_pane'])
         self.assertLessEqual(len(start[2]), 32)
         prompt = (self.root / 'prompt-entered').read_text()
         self.assertIn('onboarding ONLY, not a task', prompt)
+        self.assertTrue(prompt.startswith('初始化 developer\n'))
+        self.assertIn('必须先实际读取', prompt)
+        self.assertIn('读取失败时不得执行就绪回执', prompt)
+        self.assertIn('当前没有分配任务，等待项目经理派单', prompt)
         self.assertIn('Do not create subagents', prompt)
         self.assertIn('NOT permission isolation', prompt)
         self.assertIn(role, prompt)
@@ -1085,7 +1119,8 @@ class RuntimeTests(unittest.TestCase):
         self.cli('member-ready', 'cli-member', '--instance', record['name'],
                  '--session', record['session']['value'], '--join-id', member['attempts'][-1]['id'])
         self.assertEqual(len(json.loads(self.cli('members', '--group', 'cli-group').stdout)), 1)
-        self.assertEqual(json.loads(self.cli('leave', 'cli-member', '--summary', 'No task assigned').stdout)['status'], 'left')
+        self.assertEqual(json.loads(self.cli('leave', 'cli-member', '--summary', 'No task assigned',
+                                            '--close-tab').stdout)['status'], 'left')
 
     def test_main_errors_are_clear_and_no_shell_used(self):
         with redirect_stderr(io.StringIO()) as err, redirect_stdout(io.StringIO()):

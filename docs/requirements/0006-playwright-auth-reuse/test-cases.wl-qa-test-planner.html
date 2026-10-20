@@ -1,0 +1,280 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="wl-qa-test-planner"><meta name="artifact-schema-version" content="1"><title>0006 测试用例 v1</title><style>
+ :root{--bg:#F7F6F3;--text:#2F3437;--muted:#787774;--line:#EAE7E0;--accent:#9F2F2D}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.7 'Plus Jakarta Sans','PingFang SC',sans-serif}a{color:var(--accent)}.layout{display:grid;grid-template-columns:290px minmax(0,1fr);gap:48px;max-width:1440px;margin:auto;padding:38px 28px}aside{position:sticky;top:24px;align-self:start;max-height:calc(100vh - 48px);overflow:auto}h1,h2{font-family:'Instrument Serif','Songti SC',serif;letter-spacing:-.02em}h1{font-size:27px;line-height:1.4}h2{font-size:32px;line-height:1.4}h3{font-size:20px}.eyebrow,.chip{font:12px/1.7 ui-monospace,monospace;color:var(--muted)}.chip{display:inline-block;border-radius:999px;background:#FDEBEC;color:var(--accent);padding:3px 9px;margin:0 4px 7px 0}nav{margin-top:24px}button{font:inherit;color:inherit;cursor:pointer;background:white;border:1px solid var(--line);border-radius:6px;padding:9px 12px}nav button{display:block;width:100%;text-align:left;border:0;border-radius:0;background:transparent;border-left:2px solid transparent;font-size:14px}nav button.active{background:#FDEBEC;border-left-color:var(--accent);color:var(--accent)}nav button:hover{background:#f0eee9}main{min-width:0}section{animation:appear .5s cubic-bezier(.16,1,.3,1)}section[hidden]{display:none}p,li{overflow-wrap:anywhere}pre{background:#26221E;color:#EDE8E0;border-radius:6px;padding:20px;overflow:auto;max-width:100%;font-size:14px;line-height:1.8;white-space:pre}code{background:#F0EEE9;color:#2F3437;padding:2px 5px;border-radius:4px;font-family:ui-monospace,monospace}pre>code{display:block;background:transparent;color:inherit;padding:0;border-radius:0;font:inherit}table{width:100%;border-collapse:collapse;background:white;font-size:14px}th,td{border:1px solid var(--line);padding:10px;text-align:left;vertical-align:top;overflow-wrap:anywhere}th{background:#FBFAF7;font-family:ui-monospace,monospace}img{max-width:100%;height:auto;cursor:zoom-in;border:1px solid var(--line);border-radius:6px}footer{display:flex;justify-content:space-between;margin-top:36px;border-top:1px solid var(--line);padding-top:18px}dialog{border:1px solid var(--line);max-width:95vw;max-height:95vh;background:var(--bg);padding:18px}dialog img{max-width:none;width:auto;max-height:82vh;cursor:default}dialog::backdrop{background:#2f3437bb}@keyframes appear{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}@media(max-width:860px){.layout{grid-template-columns:minmax(0,1fr);padding:20px 16px;gap:20px}aside{position:static;max-height:none}nav{display:flex;overflow:auto}nav button{min-width:160px}h2{font-size:27px}table{display:block;overflow:auto;max-width:100%}}
+ </style></head><body><div class="layout"><aside><p class="eyebrow">REQUIREMENT / REVIEW</p><span class="chip">wl-qa-test-planner</span><span class="chip">产物规范：1</span><h1>0006 测试用例 v1</h1><p class="eyebrow">状态：approved<br>阶段：confirm<br>2026-10-20 · 用例 v1<br>需求已批准，实现待验收</p><nav><button data-panel="s0">01 范围与依据</button><button data-panel="s1">02 A：首次授权与跨运行复用</button><button data-panel="s2">03 B：失效、身份和隐私边界</button><button data-panel="s3">04 C：连续与小规模并发只读验证</button><button data-panel="s4">05 覆盖与缺口</button></nav><p class="eyebrow"><a href="test-cases.wl-qa-test-planner.md">查看唯一 Markdown 正文</a></p></aside><main><section id="s0" ><p class="eyebrow">SEC 01 / 5</p><h2>范围与依据</h2><p>需求：<a href="requirement.wl-req-confirm.html">0006 重启后可复用的 Playwright 测试登录</a>。当前执行结论与证据统一见<a href="acceptance.md">验收记录</a>，下文步骤是批准的预期，不复制第二份运行事实。现有 A→B 演示只作需求现状证据，不替代本版验收。</p>
+<p>公共前提：真实环境仅 HGJ client / Beta，期望账号与企业由用户确认；测试数据不包括密码或 Token 原文。真实请求只作低频登录有效性检查。过期、错误身份和损坏数据使用本地受控夹具，不在公司系统撤权、切换身份或修改配置来造场景。无查价、无业务提交，结果中不得出现凭证原文。人工登录等待不计入自动运行耗时。</p>
+<footer><button data-prev>上一节</button><button data-next>下一节</button></footer></section><section id="s1" hidden><p class="eyebrow">SEC 02 / 5</p><h2>A：首次授权与跨运行复用</h2><h3>TC-A01：首次建立可复用登录</h3>
+<ul>
+<li>Trace：D01、D02、D03；R01、R02、R03。</li>
+<li>优先级：P0。</li>
+<li>前置条件：本机没有该环境的可用保存状态；用户已授权私密保存。</li>
+<li>测试数据：Beta 页面 <code>https://beta-smart-agent.hgj.com/query</code>，已确认的测试账号与企业。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>操作</th>
+<th>预期结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>Agent 按工作台入口查找并调用登录准备能力</td>
+<td>找到唯一入口，不依赖历史对话里的临时端口或外部项目路径</td>
+</tr>
+<tr>
+<td>2</td>
+<td>用户在专用窗口完成登录与企业选择</td>
+<td>原窗口保持；真实身份成功且符合用户确认的身份</td>
+</tr>
+<tr>
+<td>3</td>
+<td>建立独立测试环境并恢复该登录</td>
+<td>无需第二次登录；身份与企业一致，业务页可用</td>
+</tr>
+<tr>
+<td>4</td>
+<td>保存获准保留的登录状态</td>
+<td>状态仅在本机私密位置；未写入仓库、输出或证据</td>
+</tr>
+</tbody></table>
+<ul>
+<li>后置条件：保留状态；只关闭本次创建且不再需要的资源。</li>
+<li>状态：执行结果与限制见<a href="acceptance.md">验收记录</a>。</li>
+</ul>
+<h3>TC-A02：旧进程结束后的新进程恢复</h3>
+<ul>
+<li>Trace：D02、D03、D05；R02、R03、R06、R07。</li>
+<li>优先级：P0。</li>
+<li>前置条件：TC-A01 通过，服务端登录仍有效。</li>
+<li>测试数据：相同环境与预期身份，无旧调试端口依赖。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>操作</th>
+<th>预期结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>结束上轮本任务浏览器和执行进程</td>
+<td>不影响日常 Chrome 或其他任务</td>
+</tr>
+<tr>
+<td>2</td>
+<td>无本轮上下文的新 Agent 仅通过已登记固定入口恢复已有状态，不提供旧端口或临时脚本路径</td>
+<td>无需旧进程和原临时端口，无需人工再次登录；分别记录旧进程退出和新进程身份成功证据</td>
+</tr>
+<tr>
+<td>3</td>
+<td>在新独立环境核对真实身份及页面</td>
+<td>同账号同企业，页面无登录阻断；输出恢复耗时和明确通过结果</td>
+</tr>
+</tbody></table>
+<ul>
+<li>后置条件：保留获准状态；证据注明“新进程恢复”，不写“整机重启已测”。</li>
+<li>状态：执行结果与限制见<a href="acceptance.md">验收记录</a>。</li>
+</ul>
+<h3>TC-A03：真实关机后恢复（人工后续确认）</h3>
+<ul>
+<li>Trace：D02；R07。</li>
+<li>优先级：P0。</li>
+<li>前置条件：TC-A02 通过；用户自行关机开机；服务端登录未失效。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>操作</th>
+<th>预期结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>用户重启后让新 Agent 使用固定入口</td>
+<td>能发现能力，不要求记住旧进程或端口</td>
+</tr>
+<tr>
+<td>2</td>
+<td>执行登录恢复及只读页面检查</td>
+<td>登录仍有效且无需人工再次登录、身份企业正确，才记为“整机重启免登恢复通过”</td>
+</tr>
+<tr>
+<td>3</td>
+<td>若实际发现服务端登录已失效，按 TC-B01 处理</td>
+<td>单独记为“失效分流通过/失败”；本条整机重启免登恢复保持未证实，不能合并为通过</td>
+</tr>
+</tbody></table>
+<ul>
+<li>后置条件：不由 Agent 擅自重启机器。</li>
+<li>状态：待人工后续验证，交付时必须单独标记。</li>
+</ul>
+<footer><button data-prev>上一节</button><button data-next>下一节</button></footer></section><section id="s2" hidden><p class="eyebrow">SEC 03 / 5</p><h2>B：失效、身份和隐私边界</h2><h3>TC-B01：无状态、损坏或登录失效时不继续业务</h3>
+<ul>
+<li>Trace：D03、D04；R02、R03、R04。</li>
+<li>优先级：P0。</li>
+<li>测试数据：本地受控的无状态、损坏状态、身份失效三个变体。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>操作</th>
+<th>预期结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>调用准备能力</td>
+<td>明确报告需要补登或状态不可用，不把文件存在当成已登录</td>
+</tr>
+<tr>
+<td>2</td>
+<td>用户取消或超过等待期限</td>
+<td>不执行后续用例，不发消息，不无限尝试</td>
+</tr>
+<tr>
+<td>3</td>
+<td>允许场景下用户补登并通过独立恢复检查</td>
+<td>只有验证成功后才可更新保存状态；失败不覆盖上一份已验证状态</td>
+</tr>
+</tbody></table>
+<ul>
+<li>状态：执行结果与限制见<a href="acceptance.md">验收记录</a>。</li>
+</ul>
+<h3>TC-B02：错误身份与服务异常分别阻断</h3>
+<ul>
+<li>Trace：D03；R03、R04。</li>
+<li>优先级：P0。</li>
+<li>测试数据：本地夹具分别返回错误环境、错误账号、错误企业、预期身份缺失、业务成功但缺账号、业务成功但缺当前企业、响应无法解释、HTTP 200 但业务未认证、网络/服务不可用。每个变体单独记录。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>操作</th>
+<th>预期结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>分别检查各变体</td>
+<td>环境/账号/企业不符立即阻断；无法确定身份或预期缺失则记校验未完成并停止；未认证请求补登；服务异常报告环境问题，不自动要求反复登录</td>
+</tr>
+<tr>
+<td>2</td>
+<td>检查输出和后续调用</td>
+<td>不泄露真实身份值或凭证；后续业务调用为零</td>
+</tr>
+</tbody></table>
+<ul>
+<li>状态：执行结果与限制见<a href="acceptance.md">验收记录</a>。</li>
+</ul>
+<h3>TC-B03：保存与读取不暴露或混用身份</h3>
+<ul>
+<li>Trace：D01、D02、D03；R02、R03、R06。</li>
+<li>优先级：P0。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>操作</th>
+<th>预期结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>未确认或明确拒绝保存授权时调用准备能力</td>
+<td>不新增持久认证状态；不能把访问 Beta、保留旧 profile 或允许内存复用当成此次保存授权</td>
+</tr>
+<tr>
+<td>2</td>
+<td>获准保存后检查位置、访问限制、站点范围及输出</td>
+<td>只含获准业务/登录/身份服务必需状态；只供本机用户获准测试使用；仓库和日志无认证状态，不打印 Cookie/Token/密码</td>
+</tr>
+<tr>
+<td>3</td>
+<td>用户撤回保存授权后再次调用；另检查不符合预期环境或身份的状态</td>
+<td>停止读取和复用；不静默回退其他账号；不执行业务动作，删除状态需另行确认</td>
+</tr>
+<tr>
+<td>4</td>
+<td>运行测试收尾</td>
+<td>不关闭源用户浏览器，不清除其他登录，不留不明测试资源</td>
+</tr>
+</tbody></table>
+<ul>
+<li>状态：执行结果与限制见<a href="acceptance.md">验收记录</a>。</li>
+</ul>
+<footer><button data-prev>上一节</button><button data-next>下一节</button></footer></section><section id="s3" hidden><p class="eyebrow">SEC 04 / 5</p><h2>C：连续与小规模并发只读验证</h2><h3>TC-C01：连续三次创建独立测试环境</h3>
+<ul>
+<li>Trace：D03、D05；R03、R05、R06。</li>
+<li>优先级：P1。</li>
+<li>测试数据：同一份有效登录，三个不同测试环境，仅身份只读检查。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>操作</th>
+<th>预期结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>依次创建、验证、关闭三个独立测试环境</td>
+<td>三次均无需人工登录，真实身份符合预期，旧页面不被导航</td>
+</tr>
+<tr>
+<td>2</td>
+<td>检查运行记录与资源</td>
+<td>各次结果可区分，报告实际耗时，不用单次约 5 秒作为性能 SLA</td>
+</tr>
+</tbody></table>
+<ul>
+<li>状态：执行结果与限制见<a href="acceptance.md">验收记录</a>。</li>
+</ul>
+<h3>TC-C02：两个独立环境并发验证登录</h3>
+<ul>
+<li>Trace：D03、D05；R03、R05、R06。</li>
+<li>优先级：P1。</li>
+<li>前置条件：仅身份只读验证，不扩大为查价并发或压测。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>操作</th>
+<th>预期结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>同时创建两个独立测试环境并加载同一有效状态</td>
+<td>两个环境分别取得符合预期的真实身份，无页面争抢</td>
+</tr>
+<tr>
+<td>2</td>
+<td>关闭其中一个，核对另一个及源页面</td>
+<td>另一个不受关闭影响；本轮无消息或业务提交</td>
+</tr>
+</tbody></table>
+<ul>
+<li>状态：执行结果与限制见<a href="acceptance.md">验收记录</a>。</li>
+</ul>
+<footer><button data-prev>上一节</button><button data-next>下一节</button></footer></section><section id="s4" hidden><p class="eyebrow">SEC 05 / 5</p><h2>覆盖与缺口</h2><ul>
+<li>D01 → TC-A01、TC-B03：固定入口和使用边界。</li>
+<li>D02 → TC-A01、TC-A02、TC-A03、TC-B03：持久化及跨运行。</li>
+<li>D03 → TC-A01、TC-A02、TC-B01、TC-B02、TC-B03、TC-C01、TC-C02：身份门禁。</li>
+<li>D04 → TC-B01、TC-B02：补登与异常分流。</li>
+<li>D05 → TC-A02、TC-B03、TC-C01、TC-C02：独立环境与资源收尾。</li>
+<li>保存授权：需求 Q01 已解决，用户于本会话选择“批准并实施（推荐）”；只保存当前获准范围的必要状态。</li>
+<li>未覆盖且不宣称：其他站点/admin、跨设备同步、真实撤权实验、并发查价、永久免登、整机重启（TC-A03 留人工后续验证）。</li>
+<li>用例基线独立审查：2026-10-20 已由执行者只读审查，指出身份无法确认及整机重启通过口径缺口，本版已修订；用户确认：2026-10-20 本会话选择“批准并实施（推荐）”。审查、确认及生成均不等于执行通过。</li>
+</ul>
+<footer><button data-prev>上一节</button><button data-next>下一节</button></footer></section></main></div><dialog><button id="close-image">关闭</button><div><img alt="原尺寸证据截图"></div></dialog><script>
+ const sections=[...document.querySelectorAll('section')],buttons=[...document.querySelectorAll('nav button')];let current=0;function show(i){current=Math.max(0,Math.min(sections.length-1,i));sections.forEach((s,j)=>s.hidden=j!==current);buttons.forEach((b,j)=>b.classList.toggle('active',j===current));}buttons.forEach((b,i)=>b.onclick=()=>show(i));document.querySelectorAll('[data-prev]').forEach(b=>b.onclick=()=>show(current-1));document.querySelectorAll('[data-next]').forEach(b=>b.onclick=()=>show(current+1));document.addEventListener('keydown',e=>{if(document.querySelector('dialog').open)return;if(e.key==='ArrowDown'){e.preventDefault();show(current+1)}if(e.key==='ArrowUp'){e.preventDefault();show(current-1)}});const dialog=document.querySelector('dialog');document.querySelectorAll('main img').forEach(img=>img.onclick=()=>{dialog.querySelector('img').src=img.src;dialog.showModal()});document.querySelector('#close-image').onclick=()=>dialog.close();show(0);
+ </script></body></html>

@@ -43,6 +43,34 @@ test('project evidence requires an ignored repository-root directory', () => {
   assert.ok(initRun({ task: 'test', mode: 'verify', project: repo }).startsWith(path.join(fs.realpathSync(repo), '.work/web-task/')));
 });
 
+test('test run attaches without duplicate files or overwriting existing progress', () => {
+  const dir = path.join(root, 'test-runs', '20261020-001');
+  fs.mkdirSync(dir, { recursive: true });
+  const baseline = { schemaVersion: 1, runId: '20261020-001', taskId: 'R-123',
+    cases: { path: 'docs/cases.md', version: '0.4', sha256: 'a'.repeat(64) },
+    items: [{ caseId: 'TC-001', status: '失败', actual: 'observed mismatch' }] };
+  const file = path.join(dir, 'result.json');
+  fs.writeFileSync(file, JSON.stringify(baseline));
+  const before = fs.readFileSync(file);
+  assert.equal(initRun({ task: 'r-123', mode: 'verify', testRun: dir }), fs.realpathSync(dir));
+  assert.deepEqual(fs.readdirSync(dir), ['result.json']);
+  assert.deepEqual(fs.readFileSync(file), before);
+  const cli = execFileSync(process.execPath, [new URL('./run.mjs', import.meta.url).pathname,
+    'init', '--task', 'r-123', '--mode', 'mixed', '--test-run', dir], { encoding: 'utf8' }).trim();
+  assert.equal(cli, fs.realpathSync(dir));
+  assert.deepEqual(fs.readFileSync(file), before);
+  assert.throws(() => initRun({ task: 'r-123', mode: 'verify', testRun: 'relative' }));
+  for (const conflict of [{ project: root }, { runRoot: root }]) {
+    assert.throws(() => initRun({ task: 'r-123', mode: 'verify', testRun: dir, ...conflict }));
+  }
+  assert.throws(() => initRun({ task: 'r-123', mode: 'verify', testRun: path.join(root, 'missing') }));
+  fs.writeFileSync(file, '{invalid');
+  assert.throws(() => initRun({ task: 'r-123', mode: 'verify', testRun: dir }));
+  fs.writeFileSync(file, JSON.stringify({ ...baseline, cases: { version: '0.4' } }));
+  assert.throws(() => initRun({ task: 'r-123', mode: 'verify', testRun: dir }));
+  assert.deepEqual(fs.readdirSync(dir), ['result.json']);
+});
+
 test('rejects >3 concurrency and duplicate jobs before executing', async () => {
   await assert.rejects(runBatch({ concurrency: 4, jobs: [] }));
   const j = { id: 'same', command: 'true', timeoutMs: 1000 };

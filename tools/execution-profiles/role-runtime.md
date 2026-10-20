@@ -16,24 +16,30 @@
 
 ### 持久项目组：先项目组、后派单
 
+2026-10-19 调整：交付后保留工位，不自动执行leave。先用 `preflight --project /absolute/project` 一次读取本项目未完成任务和未退组成员（只读、不访问Herdr）。已有成员时显式选择并核对实例；没有成员时join可省略member，由工具生成唯一ID，Tab仍只显示岗位名。结果不明先preflight，不重复省略ID启动。
+
+修改命令默认返回短回执；完整记录使用show/group-show/recover，或在子命令前传 `--full`。短回执保留ID、状态、证据和下一步，不改变落盘历史。
+
 新增项目组统一使用下列链路，旧 `dispatch` 仅兼容历史无成员任务。以下 `python` 同样指 uv 管理的 3.12.9。
 
 ```bash
 python tools/scripts/role_runtime.py group-create --file /absolute/group.json
-python tools/scripts/role_runtime.py join requirement-a ui-1 --role /absolute/ui/ROLE.md --timeout-ms 300000
+python tools/scripts/role_runtime.py preflight --project /absolute/project
+python tools/scripts/role_runtime.py join requirement-a --role /absolute/ui/ROLE.md --timeout-ms 300000
 python tools/scripts/role_runtime.py create --file /absolute/task.json
-python tools/scripts/role_runtime.py assign task-id --member ui-1 --timeout-ms 300000
+python tools/scripts/role_runtime.py assign task-id --member <returned-member-id> --timeout-ms 300000
 python tools/scripts/role_runtime.py accept task-id --note '已核对成果'
-python tools/scripts/role_runtime.py leave ui-1 --summary '完成内容、证据位置及下一步'
-python tools/scripts/role_runtime.py join requirement-a ui-2 --role /absolute/ui/ROLE.md --timeout-ms 300000
+# 到此保留工位，供观察或同项目后续任务使用。
 # 只有排障、恢复或明确需要完整记录时才使用 group-show。
 ```
 
 group.json 字段为 `id/project/goal/inputs`，project 是实际绝对目录，inputs 是必要资料引用数组。入组只加载身份与组资料入口，成员通过生成的 `member-ready` 命令回执；ready 前不派单。具体任务仍使用下方八字段格式，project/role 须与成员一致。
 
-每人独占一个Tab：tab create在调用者工作区创建工位，使用no-focus；返回的根pane用于agent start，后续agent prompt/get/wait协调。不使用pane split。Tab标题含组、岗位和成员，不跟随其他用户当前聚焦的工作区。
+每人独占一个Tab：tab create在调用者工作区创建工位，使用no-focus；返回的根pane用于agent start，后续agent prompt/get/wait协调。不使用pane split。执行者Tab在创建时使用岗位名，例如ui、frontend、tester，不提前改名或事后批量改名。项目经理不修改自己所在Tab的名称。底层唯一Agent标识与项目组成员关联继续保留，不依靠Tab标题识别实例。
 
-退组要求绑定任务全部验收、无进行中的发送，并核对Tab仅含该成员的根pane且实例身份一致。先落盘摘要再关闭Tab，确认关闭后标left；失败保留needs-reconcile。已退组成员不能复活，换新成员ID；新入组自动带入本组离场摘要和验收成果引用。超时或中断先读group-show核对，再以原命令加 `--resume --confirm-continue` 显式继续；部分启动缺少可靠身份时停下人工核对，不自动重建。
+启动后第一条独立消息明确为“初始化 ui”（其他岗位同理），要求先读取身份手册，读取失败不得回执ready。完成后显示身份、实际读取文件、职责与边界，并回复“当前没有分配任务，等待项目经理派单”。项目组背景和历史摘要明确标为非任务；项目经理后续通过assign另发工作。重复岗位允许同名Tab，实际定位依靠已登记ID。
+
+当前默认不退组。只有用户另行明确要求关闭指定成员时，才允许 `leave MEMBER --close-tab --summary '交接摘要'`。退组仍要求绑定任务全部验收、无进行中的发送，并核对Tab仅含该成员的根pane且实例身份一致。先落盘摘要再关闭Tab，确认关闭后标left；失败保留needs-reconcile。已退组成员不能复活，换新成员ID；新入组自动带入本组离场摘要和验收成果引用。超时或中断先读group-show核对，再以原命令加 `--resume --confirm-continue` 显式继续；部分启动缺少可靠身份时停下人工核对，不自动重建。
 
 ### 历史无成员任务
 
