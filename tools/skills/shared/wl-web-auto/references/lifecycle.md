@@ -1,79 +1,73 @@
-# OpenCLI 任务生命周期
+# Ego TaskSpace 生命周期
 
-## 适用范围
+## 适用范围与新旧差异
 
-只管理新登记的 `opencli browser` 任务，不改 OpenCLI npm 包或 Chrome 扩展，不接管站点适配器、历史会话或 agent-browser。用户本轮选择只更新 Skill 和执行脚本，不启用用户级 Pi 扩展。
+当前新任务使用 Ego 原生 TaskSpace，不经 OpenCLI Bridge，也不新增自动包装器。具体 API 先读已发现的 ego-browser Skill，再完整执行并读取 `ego-browser skill`；下文是本流程的交接边界，不替代上游 API 指南。
 
 ```text
-旧：直接 opencli → 页面操作 → 报告，调用方自行清理
-新：begin 登记随机会话 → exec 原生动作 → 保存业务结果
-                                           ├→ finish 释放 + 原生列表回读
-                                           └→ hold 人工交接 → resume → finish
+旧：OpenCLI begin → exec → 保存结果 → finish / hold
+新：Ego taskSpace → 页面脚本 → 保存结果
+                               ├→ 正常完成：finish
+                               ├→ 人工介入：handOff → 用户确认 → takeOver → 继续
+                               └→ 异常/用户接管：停止 → 记录现状 → 核实后恢复
 ```
 
-- 自建页面：返回 `released` / `releaseConfirmed=true` 仅表示原生租约释放应答已确认且该会话列表为空；`pageCleanup=not-independently-verified` 明确表示物理关页/清空未独立验证。原生释放可能吞物理关页异常，也可能正常保留空白复用容器。
-- 借用页面：原生释放只解绑，不关闭用户页面。
-- 共享 daemon：保留。`/status.pending=0` 只能证明此刻无命令，不能证明其他调用方没有保留页面或下一步动作，因此不据此自动 `daemon stop`。
-- 当前不提供“按名称批量清理”“按内存杀进程”“定时关闭全部”。空白容器彻底退出与跨宿主全局空闲停服未实现，不能宣称解决。
+运行目录和 `result.json` 仍由原有记录约定管理，不放进 TaskSpace 另建一套正文。旧 OpenCLI 脚本及其测试保留，只供已登记旧任务核对，不是新任务执行入口；不自动触碰旧账本、会话、daemon 或 Chrome。旧 `batch.mjs` 不用于 Ego：其强杀策略不理解控制权和浏览器端在途操作，不能靠进程退出保证收尾。
 
-## 交互执行
+## 创建与跨轮恢复
 
-```bash
-LIFECYCLE=/Users/ziyun/workdir/self_project/AICodingBank/tools/skills/shared/wl-web-auto/scripts/lifecycle.mjs
-node "$LIFECYCLE" begin example-check
-# 复制返回的 id，下列 id 为占位符，不是任务名称。
-node "$LIFECYCLE" exec <id> -- open https://example.com
-node "$LIFECYCLE" exec <id> -- state
-node "$LIFECYCLE" finish <id>
-node "$LIFECYCLE" status <id>
+1. 确认环境、角色、版本、授权和证据目录后，一个目标创建一个唯一命名空间，记录实际 spaceId；默认操作 p1。不能为了修复页面失败不断建空间。
+2. 下一轮用实际 id 恢复同一空间和 Page label。变量不跨 Node.js 进程保留；每轮写新脚本，不重播上一轮提交。
+3. Page label 只引用已有页面，不创建页面；确需多页才调用指南中的 newPage。用户来源或未知来源页面先获准并按指南 adopt，不把“有句柄”当成“页面存在且有权操作”。
+4. Ego 不继承调用 shell 的环境和 cwd。把已确认的无凭证 URL、本轮绝对路径写入脚本；不靠环境变量递送身份，不导出登录材料。
+
+## 控制权和收尾分支
+
+### 正常完成
+
+先回读业务结果、保存必要截图/日志、更新记录，再执行：
+
+```js
+await task.finish({ keep: [] });
 ```
 
-多个连接的 Chrome profile：`begin example-check owned <contextId>`；contextId 取 `opencli daemon status` / `opencli profile list` 的实际值。begin 不提供账号、Token 或凭证。
+finish 只调用一次并等待成功，之后不再操作该空间。keep 默认空；只有用户要求或必要结果需留给用户才保留指定 Page label，并记录原因。用户创建/未受管页面受保护，不能承诺整个空间窗口一定关闭，更不能承诺 Ego 全进程退出。
 
-借用用户当前页面：明确授权后 `begin example-check bound <contextId>`，随后 `exec <id> -- bind`。绑定操作选择当前页面，操作前人工确认焦点；完成执行 finish。不要把“测试页面”理解为借用任意用户页面的授权。
+### 人工登录、验证码或其他人工步骤
 
-业务命令仍必须按原有授权执行。exec 不自动重试业务命令；失败码原样返回。截图显式写到本次证据目录，命令参数和业务响应不写生命周期账本。`task`、`owner`、交接原因不得包含客户信息或凭证。
-
-## 整任务脚本
-
-子脚本示例（shell 应使用项目明确支持的解释器）：
-
-```bash
-#!/bin/bash
-set -euo pipefail
-LIFECYCLE=/Users/ziyun/workdir/self_project/AICodingBank/tools/skills/shared/wl-web-auto/scripts/lifecycle.mjs
-node "$LIFECYCLE" exec "$OPENCLI_TASK_ID" -- open https://example.com
-node "$LIFECYCLE" exec "$OPENCLI_TASK_ID" -- state
+```js
+await task.handOff();
+// 结束本轮，向用户说明空间 id、原因和操作。
 ```
 
-执行：
+用户确认后，在新一轮按指南恢复同一空间：
 
-```bash
-node "$LIFECYCLE" run example-check -- bash /absolute/path/task.sh
+```js
+const task = await takeOverTaskSpace(<实际 spaceId>);
 ```
 
-run 在子程序退出后才 finish，不在每条命令后关闭。子脚本必须通过 exec 使用同一个登记 id，不使用原生 browser 调用绕开路由检查。它不是 shell 沙箱，也不追踪后台脱离的子进程。
+上面的两段分属不同轮次，`<实际 spaceId>` 须替换为真实数字。接回后先核对页面与真实身份再继续，不重复已提交的动作。用户自有、已结束且保留页面的空间，需明确授权并按指南 claim，不能直接 takeOver 绕过归属。
 
-- 子任务失败保留原退出码，收尾失败使原成功任务转失败。
-- SIGINT/SIGTERM 转给直接子进程并等待其退出后收尾；若子进程不退出，不假定业务已停止，不提前关页。
-- SIGKILL、断电、调用方硬超时无法执行 finally。自建 session 原生约10分钟空闲释放只是兜底；绑定用户页面没有该回收。恢复时先 status、核对在途请求/任务锁与人工占用，确认后显式 finish。不要自动删 `.lock` 或批量扫描后关闭。
-- hold 后 run 的 finish 会保留交接任务。自建 session 的原生超时仍有效，不承诺页面永久保留；需要长时间人工操作应另外确认借用页面流程。
+### 用户接管、异常或结果未知
 
-## 版本与可信边界
+- 用户接管、空间失活/未分配：立即停止，不重试、不另建空间、不抢回控制权。
+- 人工交接或异常停止时不调用 `finish()`，不写“无论成功失败都自动关闭”的 finally。页面动作失败先观察；无法继续则保存现有证据与原因并交还用户决定，不销毁诊断现场。
+- 超时、断线、脚本解析失败、SIGKILL 或宿主退出都不保证浏览器停止。记录最后已知 space/page、动作及可能延迟副作用；不能仅凭进程退出认定提交失败并重放。
+- 若正常完成的 finish 自身失败或结果未知，记 interrupted，不盲目再次 finish；核对实际状态后再确定后续动作。
+- 不提供跨任务批量关闭、杀 Ego/Chrome 进程、删除 profile、清 Cookie 或自动清理历史空间。异常状态恢复前先核对控制权、身份和业务结果，不自动续做写入。
 
-已核对 OpenCLI 1.8.8、Chrome 扩展 1.0.24。脚本通过本机回环 `127.0.0.1:19825` 原生 Bridge `/command` 执行 close-window 与 tabs/list，不添加浏览器驱动、不抓取用户数据；清理不调用会自动启动 daemon 的客户端。版本变化必须先重新核对 `/status`、路由、释放及列表语义，不自动升级工具或放开门禁。
+## 报告中的任务状态
 
-释放回读只证明原生 session 已无可列出的页面，不独立证明 Chrome UI 的调试横幅已消失、所有子进程已退出。原生扩展 `releaseLease` 可能保留最后一个 about:blank 标签组；这在结果中明确报告。
+业务通过/失败/阻塞仍写测试项；工具收尾另列，不混为一谈：
 
-## 本轮真实验证（2026-10-20）
+| 状态 | 所需事实与交接 |
+| --- | --- |
+| `finished` | finish 成功；记录保留页面及原因，不等于所有用户页面或浏览器退出 |
+| `handed-off` | handOff 成功或已观察到用户接管；记录原因、spaceId、用户下一步 |
+| `interrupted` | 异常、控制权失效、收尾失败/未知；记录最后状态、可能副作用、恢复前核实项 |
 
-本机原生1.8.8 / 扩展1.0.24：临时HTTP无业务数据夹具创建A/B两个随机会话，原生返回不同page；finish A租约回读为空，B仍可读取标题；随后finish B租约回读为空。任务id：`f79a155e-d8a1-4d61-81e0-4beb7fbdc551`、`9dfa9b7a-ee2b-45c4-8e5b-1e3e179a465c`。夹具服务已关闭，账本保留；未触碰历史会话，未停止共享daemon。未实拍调试横幅、未独立确认物理关页；真实借用用户页面、强杀和空闲回收未测试。
+业务阻塞不等于工具未收尾；工具 finished 也不等于用例通过。不生成额外工具账本，用例测试放 result.json.tools，普通任务放原有运行记录。没有宿主 Hook、后台守护或强杀兜底保证。
 
-## 验证
+## 验证边界
 
-```bash
-node --test /Users/ziyun/workdir/self_project/AICodingBank/tools/skills/shared/wl-web-auto/scripts/lifecycle*.test.mjs
-node /Users/ziyun/workdir/self_project/AICodingBank/tools/skills/shared/wl-web-auto/scripts/self-test.mjs
-```
-
-自动夹具覆盖随机归属、定向释放、空列表确认、错误不伪报成功、借用页面、hold/resume、路由拦截、任务锁、失败退出和终止信号。原生浏览器验证使用新建命名任务与本地无业务数据页面；不检查/关闭历史任务，不以 mock 结果冒充真实页面验证。
+本次为执行流程替换，未执行 Ego 登录恢复、多页并行、人工接管或异常收尾的真实浏览器验证；不能套用旧 OpenCLI 验证结果。最小验证场景见 [能力说明](capabilities.md)，获得对应场景授权后逐项记录，不以静态文案断言代替原生行为。

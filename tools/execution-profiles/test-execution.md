@@ -76,6 +76,6 @@
 
 - 实际执行测试的岗位/Skill先读本约定；生成用例的Skill只引用，不执行或代填结果。
 - `wl-web-auto` 用 `scripts/run.mjs init --task <slug> --mode verify --test-run <本轮绝对目录>` 接入已存在且含有效 `result.json` 的轮次，`mixed` 同样支持。不与 `--project/--run-root` 混用；创建轮次及更新执行项由测试负责人完成，接入命令不自动跑测试或保存检查点。
-- 测试模式不创建另一套 `run.json/result.md/screenshots`；浏览器截图和日志均按需存本轮 `evidence/`。生命周期账本仍仅记录工具会话归属，不替代业务结果，可在 `result.json` 的 `tools` 对象记录会话标识与收尾状态。
+- 测试模式不创建另一套 `run.json/result.md/screenshots`；浏览器截图和日志均按需存本轮 `evidence/`。`wl-web-auto` 页面执行使用 Ego TaskSpace；工具状态不替代业务结果，可在 `result.json` 的 `tools` 对象记录 spaceId、Page label 与任务收尾状态，不另建生命周期账本。
 - 普通网页查询/填表任务不是用例测试时，沿用该工具原有运行文件，不强行创建测试轮次。
 - 不自动清理旧轮或原始证据；停止浏览器/服务不等于授权删记录。本约定不改变各项目的授权与证据保留边界。

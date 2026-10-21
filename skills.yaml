@@ -22,13 +22,13 @@ self:
   verified: '2026-10-20'
 - name: wl-web-auto
   path: tools/skills/shared/wl-web-auto
-  capability: 使用opencli执行网页探索、查询、填表和核验，最多3任务并发；登记browser任务、定向释放会话并管理人工交接与证据
-  boundary: 生命周期适配1.8.8与扩展1.0.24，仅确认租约释放；不自动关空白容器或共享daemon，不启用宿主Hook；业务写入需明确授权
+  capability: 使用 Ego TaskSpace 与页面脚本执行网页探索、查询、填表和核验，保留身份核对、测试记录、截图与人工交接；流程最多3任务并发
+  boundary: 依赖本机 ego-browser Skill 与原生控制权规则；Ego 真实场景待验证，不静默回退其他驱动，不接管历史空间；业务写入需明确授权
   tags:
   - 浏览器
   - 自动化
   - 测试
-  verified: '2026-10-20'
+  verified: ''
 - name: hgj-git-connect
   path: tools/skills/engineering/hgj-git-connect
   capability: 诊断并切换公司 GitLab 的直连与 SSH 跳板路由，优先用只读检查确认当前可用链路

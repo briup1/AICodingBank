@@ -3,6 +3,8 @@ import re
 import unittest
 from pathlib import Path
 
+import yaml
+
 ROOT = Path(__file__).resolve().parents[1]
 CONTRACT = ROOT / 'tools/execution-profiles/test-execution.md'
 
@@ -44,6 +46,30 @@ class TestExecutionContractTests(unittest.TestCase):
             self.assertTrue(links, relative)
             for link in links:
                 self.assertEqual((path.parent / link).resolve(), CONTRACT, relative)
+
+    def test_web_execution_uses_ego_without_replacing_evidence_or_identity_gates(self):
+        skill = ROOT / 'tools/skills/shared/wl-web-auto'
+        web = (skill / 'SKILL.md').read_text()
+        for rule in ('ego-browser skill', 'ego-browser nodejs', 'taskSpace(',
+                     'task.handOff()', 'takeOverTaskSpace(', 'task.finish({ keep: [] })',
+                     '账号、企业', '不能证明身份', '不静默回退',
+                     '最多3个活跃网页任务', '不是 Ego 产品上限',
+                     '不继承 shell 环境变量', '截图', '实际查看'):
+            self.assertIn(rule, web)
+        self.assertNotIn('lifecycle.mjs begin', web)
+        self.assertNotIn('lifecycle.mjs exec', web)
+        self.assertNotIn('lifecycle.mjs finish', web)
+        lifecycle = (skill / 'references/lifecycle.md').read_text()
+        for rule in ('用户接管', '异常', '不调用 `finish()`', 'finished', 'handed-off',
+                     'interrupted', '不能仅凭进程退出', '旧 OpenCLI'):
+            self.assertIn(rule, lifecycle)
+        capabilities = (skill / 'references/capabilities.md').read_text()
+        self.assertIn('Ego 未完成真实场景验证', capabilities)
+        self.assertIn('不能作为 Ego 验证证据', capabilities)
+        entry = next(item for item in yaml.safe_load((ROOT / 'skills.yaml').read_text())['self']
+                     if item['name'] == 'wl-web-auto')
+        self.assertIn('Ego', entry['capability'])
+        self.assertEqual(entry['verified'], '')
 
     def test_web_testing_and_general_web_tasks_are_distinct(self):
         web = (ROOT / 'tools/skills/shared/wl-web-auto/SKILL.md').read_text()
