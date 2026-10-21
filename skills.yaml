@@ -57,8 +57,8 @@ self:
   verified: '2026-08-23'
 - name: wl-herdrs
   path: tools/skills/workbench/wl-herdrs
-  capability: 在 Herdr 开发任务中自动判断子 Agent 拆分，并以受边界约束的 YOLO 模式启动和验收子 Agent
-  boundary: 只定义个人编排策略；依赖 HERDR_ENV=1、上游 herdr Skill 与当前 CLI，不允许绕过生产、凭证、发布或破坏性操作授权
+  capability: 定义一层委派的个人策略，默认 Herdr 启动 Pi/high，不可用时允许当前宿主获准的原生 subagent
+  boundary: 仅定义行为约定；Herdr 通道依赖 HERDR_ENV=1 与当前 CLI，备用通道须实际可用，不绕过用户禁令、审批拒绝或资源访问限制
   tags:
   - 协作
   - 效率

@@ -140,14 +140,35 @@ class RoleWorkbenchStructureTests(unittest.TestCase):
 
     def test_reasoning_check_stays_out_of_worker_prompt(self):
         config = (ROOT / 'tools/execution-profiles/delegation.md').read_text(encoding='utf-8')
-        self.assertIn('high，启动时显式指定，由项目经理核对启动参数', config)
-        self.assertIn('派单正文不要求执行者检查 `PI_REASONING_LEVEL`、确认或回报 high', config)
-        self.assertIn('执行者收到具体任务后直接开工', config)
+        self.assertIn('../skills/workbench/wl-herdrs/SKILL.md', config)
+        self.assertIn('不另存执行选择表', config)
+        self.assertNotIn('自动备选通道 | 无', config)
         pm = (ROOT / ROLE_PATHS[0]).read_text(encoding='utf-8')
         self.assertIn('不塞入派单或要求执行者回执', pm)
         self.assertIn('-- --thinking high', pm)
         strategy = (ROOT / 'tools/skills/workbench/wl-herdrs/SKILL.md').read_text(encoding='utf-8')
+        self.assertIn('high 由负责人核对启动参数', strategy)
         self.assertIn('执行者不再确认思考级别', strategy)
+
+    def test_short_delegation_policy_has_bounded_fallback(self):
+        strategy = (ROOT / 'tools/skills/workbench/wl-herdrs/SKILL.md').read_text(encoding='utf-8')
+        for rule in ('优先使用 Herdr', '固定启动 Pi', '显式指定 high', '一层',
+                     '执行者不得再次委派', '独立 Tab', '不抢焦点', '完成后保留',
+                     '无审批模式仅在已授权范围且当前 Pi 明确支持时使用',
+                     '当前 Agent 宿主原生支持且获准使用', '无需另行请示',
+                     '不强制套用 Pi、独立 Tab', '原任务状态不明时先核查',
+                     '不在两个通道重复派发', '用户禁令、组织策略、审批拒绝或资源访问限制',
+                     '不属于可切换绕过的故障', '未获授权时停止说明'):
+            self.assertIn(rule, strategy)
+        self.assertLess(len(strategy.splitlines()), 28)
+        self.assertNotIn('不使用宿主内置子代理', strategy)
+        self.assertNotIn('无人工权限确认模式；启动参数', strategy)
+        auto = (ROOT / 'tools/skills/workbench/wl-auto-delivery/SKILL.md').read_text(encoding='utf-8')
+        self.assertIn('../wl-herdrs/SKILL.md', auto)
+        self.assertNotIn('只通过 Herdr 启动 Pi', auto)
+        pm = (ROOT / ROLE_PATHS[0]).read_text(encoding='utf-8')
+        self.assertIn('默认与备用条件只在该策略维护', pm)
+        self.assertIn('以下命令仅用于 Herdr 通道', pm)
 
     def test_categories_and_supporting_directories_exist(self):
         paths = ['roles', 'personal', 'tools', '.local']
