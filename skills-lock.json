@@ -414,6 +414,20 @@
       ],
       "verified": "2026-08-14"
     },
+    "orchestration": {
+      "source": "stablyai/orca",
+      "sourceType": "github",
+      "ref": "071747853f5995ee233b36751613f09a60007c2b",
+      "skillPath": "skills/orchestration/SKILL.md",
+      "computedHash": "cd1b364bf35781bad06bf75ab1766afa8d6cec69cb2060529691d89871a2098a",
+      "capability": "通过 Orca 协调多个受监督 Agent，管理消息、任务依赖、决策门禁和结果回收",
+      "boundary": "依赖本机 Orca CLI 与真实运行态，不替代既有委派授权；已由 skills CLI 定向安装到 Pi/Codex/OpenCode/Hermes 并验证指南读取，未验证多 Agent 调度；工作台安装器尚未启用",
+      "tags": [
+        "协作",
+        "规划"
+      ],
+      "verified": ""
+    },
     "prototype": {
       "source": "mattpocock/skills",
       "sourceType": "github",

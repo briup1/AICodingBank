@@ -1,6 +1,6 @@
 # Skill 总目录（install.py 自动生成，勿手改）
 
-共 84 个 · 已验证 61 · 待验证 23
+共 85 个 · 已验证 61 · 待验证 24
 
 想看深度使用经验 → wiki entity 页；想改行为 → SKILL.md；本目录只回答“它能干什么、边界在哪”。
 
@@ -53,6 +53,8 @@
   边界：产出文档；要即时交接用 claude-handoff
 - **herdr**（第三方·herdrdev/herdr@v0.8.2·已验证 2026-09-01）— 在 Herdr 管理的终端会话内检查和控制 workspace、tab、pane、命令与编码 Agent
   边界：仅在用户明确提及 Herdr 且 HERDR_ENV=1 时使用；依赖本机 herdr CLI，不替代通用终端或子 Agent 调度
+- **orchestration**（第三方·stablyai/orca@071747853f5995ee233b36751613f09a60007c2b·**待验证（未安装）**）— 通过 Orca 协调多个受监督 Agent，管理消息、任务依赖、决策门禁和结果回收
+  边界：依赖本机 Orca CLI 与真实运行态，不替代既有委派授权；已由 skills CLI 定向安装到 Pi/Codex/OpenCode/Hermes 并验证指南读取，未验证多 Agent 调度；工作台安装器尚未启用
 - **setup-slack-channel**（第三方·CopilotKit/CopilotKit·**待验证（未安装）**）— 完成 CopilotKit Channels 的 Slack Provider 侧首次配置、Token、托管 Channel 绑定与连通性验证
   边界：只覆盖首次 Slack Provider 配置，且主要适配 OpenTag 或 channels-sdk 示例约定；Channel 代码定制用 copilotkit-channels
 - **triage**（第三方·mattpocock/skills·已验证 2026-08-23）— issue 和外部 PR 的分诊状态机：分类、验证、追问，产出 agent 可直接执行的简报
@@ -316,6 +318,8 @@
   边界：偏触发词路由，与 grill-me 同族
 - **loop-me**（第三方·mattpocock/skills·已验证 2026-08-23）— 在本工作区内追问你想构建的 workflow 的 spec
   边界：限当前 workspace
+- **orchestration**（第三方·stablyai/orca@071747853f5995ee233b36751613f09a60007c2b·**待验证（未安装）**）— 通过 Orca 协调多个受监督 Agent，管理消息、任务依赖、决策门禁和结果回收
+  边界：依赖本机 Orca CLI 与真实运行态，不替代既有委派授权；已由 skills CLI 定向安装到 Pi/Codex/OpenCode/Hermes 并验证指南读取，未验证多 Agent 调度；工作台安装器尚未启用
 - **to-spec**（第三方·mattpocock/skills·已验证 2026-08-23）— 把当前对话直接综合成 spec 并发布到 issue tracker
   边界：不做采访式追问（那是 grill 系的事）
 - **to-tickets**（第三方·mattpocock/skills·已验证 2026-08-23）— 把计划/spec 拆成带依赖边的 tracer-bullet tickets，发布到 tracker
