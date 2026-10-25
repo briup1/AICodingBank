@@ -1,6 +1,17 @@
 {
   "version": 1,
   "skills": {
+    "find-skills": {
+      "source": "vercel-labs/skills",
+      "sourceType": "github",
+      "ref": "v1.7.4",
+      "skillPath": "skills/find-skills/SKILL.md",
+      "computedHash": "c00eeea0e13e74fe4a9d84ba0a8542205a1b736d65f13134fe1a6647eb14976f",
+      "capability": "根据需求搜索开放 Skill 生态，核对来源并提供安装建议",
+      "boundary": "依赖 Node.js、npx skills 和联网；已实测搜索，只定向安装到 Pi，安装其他技能仍需用户授权，不批量更新",
+      "tags": ["效率"],
+      "verified": "2026-10-24"
+    },
     "qa-test-planner": {
       "source": "softaworks/agent-toolkit",
       "sourceType": "github",

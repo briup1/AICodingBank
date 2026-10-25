@@ -1,6 +1,6 @@
 # Skill 总目录（install.py 自动生成，勿手改）
 
-共 85 个 · 已验证 61 · 待验证 24
+共 86 个 · 已验证 62 · 待验证 24
 
 想看深度使用经验 → wiki entity 页；想改行为 → SKILL.md；本目录只回答“它能干什么、边界在哪”。
 
@@ -127,6 +127,8 @@
   边界：只更新 CopilotKit Skills，不升级业务依赖；其官方安装命令会直接写 Agent 加载目录，可能绕过本仓库登记流程
 - **deepagents-subagents**（自研·已验证 2026-08-21）— 设计 DeepAgents 同步、动态和异步子 Agent 委派及并发取消语义
   边界：不处理一般 backend 权限或单 Agent 入门
+- **find-skills**（第三方·vercel-labs/skills@v1.7.4·已验证 2026-10-24）— 根据需求搜索开放 Skill 生态，核对来源并提供安装建议
+  边界：依赖 Node.js、npx skills 和联网；已实测搜索，只定向安装到 Pi，安装其他技能仍需用户授权，不批量更新
 - **goal-coach**（自研·已验证 2026-08-23）— 判断任务是否适合 /goal，并生成完整中文 /goal prompt（完成标准/边界/停止规则）
   边界：只服务 Claude Code 的 /goal 命令场景
 - **herdr**（第三方·herdrdev/herdr@v0.8.2·已验证 2026-09-01）— 在 Herdr 管理的终端会话内检查和控制 workspace、tab、pane、命令与编码 Agent
