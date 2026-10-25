@@ -254,8 +254,8 @@ self:
   verified: '2026-10-19'
 - name: wl-harness-setup
   path: tools/skills/engineering/wl-harness-setup
-  capability: 为新项目、自主项目和团队个人接入建立或补齐开发底座，统一规则与Wiki正文结构及docs/changes需求归宿
-  boundary: 复用已有Owner、按需生成；共用模板与只读结构检查；不改业务代码、不建账号数据库、不自动提交或安装；个人测试密码只进获准忽略文件
+  capability: 调查主要模块、能力与边界，建立能指导新增和修改代码的项目规则与Wiki，并做内容可接手回读
+  boundary: 复用已有Owner、按声明范围调查；结构检查不代替内容验收；不改业务代码、不建账号数据库、不自动提交或安装；个人测试密码只进获准忽略文件
   tags:
   - 规划
   - 架构
@@ -263,8 +263,8 @@ self:
   verified: ''
 - name: wl-harness-sync
   path: tools/skills/engineering/wl-harness-sync
-  capability: 按本次需求或明确变更增量维护原有规则与Wiki，与setup共用结构，规范变化记录回同一需求目录
-  boundary: 不要求先运行setup、不全库审计或重建；历史异构资料先报差异，迁移另确认；不改业务代码、不读取真实密码、不自动提交或安装
+  capability: 按本次变化维护规则与Wiki，补齐首次实现使初始化暂缺项失效的资料，并核对受影响任务仍可接手
+  boundary: 不要求先运行setup、不全库审计或重建；共用结构与内容标准；历史异构资料迁移另确认；不改业务代码、不读取真实密码、不自动提交或安装
   tags:
   - 开发流程
   - 效率

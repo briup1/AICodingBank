@@ -1,25 +1,34 @@
 ---
 name: wl-harness-setup
-description: 初始化或补齐项目 AI 开发底座：空项目、已有自主项目、团队项目个人接入。统一规则与 Wiki 的正文结构、需求归宿和测试入口；不用于普通需求实现或已有文档的局部同步。
+description: 初始化或补齐项目 AI 开发底座：调查主要模块、能力与边界，生成能指导新增和修改代码的规则及 Wiki。适用于空项目、已有自主项目和团队个人接入；含内容可接手验收，不用于普通需求实现或局部同步。
 ---
 
 # 建立项目底座
 
-建立可用链路：项目入口 → 规则与主链 → 需求迭代 → 测试入口。够用就停，不生成业务代码，不为填目录虚构设计。
+项目调查 → 工程手册 → 启用入口 → 结构与内容分别验收。不生成业务代码，不自动调用sync。
 
-先读[统一契约](../harness-pack/references/shared-protocol.md)，只读[模板](../harness-pack/assets/harness-template/)中本次需要的文件；缺少正文依据时按[内容标准](../harness-pack/references/content-standard.md)定点查证。不自动调用sync或其他bootstrap。
+先读[统一契约](../harness-pack/references/shared-protocol.md)及[内容标准](../harness-pack/references/content-standard.md)的“先确定调查范围”和“内容可接手验收”；成稿时读对应内容段落、[模板](../harness-pack/assets/harness-template/)与下方对应范文。
+
+## 按需范文导航
+
+生成、重组、补建正文或需校准写法时读对应范文；普通局部同步不读八份，仅必要时跟随关联章节。范文不复制进目标项目，虚构设定不作事实；生成要求仍只在内容标准维护。
+
+| 正文 | 完整成稿参考 |
+|---|---|
+| 工程结构 / 编码规范 | [工程结构](../harness-pack/assets/rule-examples/工程结构.md) · [编码规范](../harness-pack/assets/rule-examples/编码规范.md) |
+| 开发流程 / 测试规范 | [开发流程规范](../harness-pack/assets/rule-examples/开发流程规范.md) · [测试规范](../harness-pack/assets/rule-examples/测试规范.md) |
+| 业务模型 / 领域术语 | [业务模型](../harness-pack/assets/wiki-examples/业务模型.md) · [领域术语](../harness-pack/assets/wiki-examples/领域术语.md) |
+| 数据模型 / 接口协议 | [数据模型](../harness-pack/assets/wiki-examples/数据模型.md) · [接口协议](../harness-pack/assets/wiki-examples/接口协议.md) |
 
 ## 执行
 
-1. **定位与定界**：读目标项目根/子树规则、已知资料入口、构建清单及Git修改状态。选模式：空目录 `new`、用户明确独立控制且授权整理的 `standardize`、团队/无公共结构修改许可的 `overlay`。只追问会改变写入或验收的问题。
-2. **映射与补缺**：在实际入口的资料映射中列复用/新建/冲突/暂缺，不建独立台账。new先补开发流程、测试规范和入口，并用[归档约定](../harness-pack/assets/change-template/README.md)建立docs/changes/README；首个需求开始才建日期-主题子目录，无依据的架构/Wiki暂不生成。standardize保留有效约定、原文与消费者，获准后重组正文并修引用。overlay按[个人接入](../harness-pack/references/local-overlay.md)操作，公共正文只引用。
-3. **成稿**：新建或获准规范化的rules/Wiki使用共享模板的标题与二级章节；章内简单内容紧凑表达，复杂内容才展开条目。工程结构承接架构，术语/业务模型承接上下文，不额外生成ARCHITECTURE或CONTEXT双正文。查清事实来源、确认范围和未知项，不复制schema/接口全集。测试网址/账号另按[测试入口卡](../harness-pack/references/testing-entry.md)维护，不塞进测试规范；已知入口须在账号 JSON 的“环境”填完整 URL，不用本机/DEV标签代替；账号未知也须留可填写 JSON，不用“暂无账号”段落代替，不编造真实身份。
-4. **启用与验货**：先呈文件范围与关键差异；目标规则不明时确认后再启用。草案入口暂存AGENTS，顶部标“草案未启用，不覆盖根/子树现行规则”；启用时向真实入口合并薄导航，保留原规则并让暂存入口只指回真实入口。按统一契约运行只读结构检查，走通找改动点/开始需求/准备测试；准备测试须核对入口卡的填写提示与账号预留字段（具体结构以入口卡约定为准），不把未核验写为登录成功。无输入变化再次使用不重写、不重复建正文。
-
-已有完整底座则只补缺。历史结构与模板不同先说明差异，不能借整理丢掉未提交内容、唯一历史、批准或证据；同文件有并发变化先合并或停下。旧路径有调用方时保留兼容引用，权限不明不搬迁。
+1. **定界**：读取目标项目根/子树规则、资料入口、构建清单和Git状态。模式为：空目录new、用户独立控制且授权整理的standardize、团队/无公共修改许可的overlay。只问会改变写入或验收的问题。
+2. **调查**：按内容标准调查并在入口写覆盖与资料映射。已有底座回读后补缺；new用[归档约定](../harness-pack/assets/change-template/README.md)建立docs/changes/README，首个需求开始才建主题子目录；overlay按[个人接入](../harness-pack/references/local-overlay.md)执行。
+3. **成稿**：保留既有有效约定与消费者，按模板组织获准新建/整理的正文。测试入口按[入口卡](../harness-pack/references/testing-entry.md)维护，不把其凭据复制进规则。
+4. **启用与验收**：先呈范围与关键差异，按统一契约处理草案、确认与真实入口。运行结构检查，再执行内容标准中的任务回读；补齐本次缺口或明确局部/阻塞，另核对需求与测试准备链。
 
 ## 交付与停止
 
-交付实际文件、来源与缺项、结构检查和读取链证据；无源码就说明尚无改动落点，不伪称已运行或跨宿主自动加载。需要规范记录时写本需求的 `docs/changes/日期-主题/规范变更.md`，不复制需求正文。
+按统一契约交付实际文件、覆盖/缺口、结构和内容结果；需要规范记录时沿既有需求目录及[变更模板](../harness-pack/assets/change-template/规范变更.md)，不复制需求正文。无输入变化不重写、不重复建正文。
 
-不自动提交、安装、启停服务、建账号/库、执行需求或改业务代码。未决定的技术栈留给实际需求设计；文档约定不等于Hook/CI强制。满足本次可接手目标后停止。
+旧结构迁移及唯一历史删除仍须授权，保留已有改动；并发变化先合并或停止。不自动提交、安装、启停服务、建账号/库或执行业务需求；不凭静态检查宣称跨宿主自动生效。满足本次可接手目标后停止。

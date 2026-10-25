@@ -11,8 +11,8 @@
 | 找到并进入项目 | 从本机项目索引定位真实仓库，再读取项目入口文件 | `WORKBENCH.local.md` + 目标项目 |
 | 理解现状或调查资料 | 选择观察阶段，读取项目、知识库或可信外部来源 | 阶段路由 + 对应 Skill |
 | 确认需求、设计方案 | 根据当前证据进入确认或设计阶段 | 阶段路由 + 开发流程 Skill |
-| 初始化或补齐项目的 AI 开发底座 | 空项目、自主项目整理、团队项目个人接入；共享固定章节模板，不强制全量生成 | [wl-harness-setup](tools/skills/engineering/wl-harness-setup/SKILL.md)；验证与安装状态以目录登记为准 |
-| 维护本次变化影响的项目资料 | 原位更新规则/Wiki；与setup同结构，不要求先初始化；规范变化回本需求目录 | [wl-harness-sync](tools/skills/engineering/wl-harness-sync/SKILL.md)；结构约定见Pack共享契约 |
+| 初始化或补齐项目的 AI 开发底座 | 调查主要模块/能力/边界，生成可指导开发的规则与Wiki；结构与内容分别验收，不为凑目录虚构 | [wl-harness-setup](tools/skills/engineering/wl-harness-setup/SKILL.md)；验证与安装状态以目录登记为准 |
+| 维护本次变化影响的项目资料 | 原位更新及补齐首次实现后的暂缺项；与setup共用可接手标准，不要求先初始化；规范变化回本需求目录 | [wl-harness-sync](tools/skills/engineering/wl-harness-sync/SKILL.md)；结构约定见Pack共享契约 |
 | 编码、修复、测试、审查、部署 | 在目标项目中选择最小能力组合；实际测试统一记录进度、问题和证据 | `CATALOG.md` / 已安装 Skill；[测试执行记录约定](tools/execution-profiles/test-execution.md) |
 | 统一可视文档、审核图与本机分享 | 优先复用跨项目处理策略，不在每个项目另造服务；按登记状态区分方案与可用工具 | `visual-artifact-workbench` / `WORKBENCH.local.md` |
 | Playwright 页面用例、免重复登录、重启后恢复测试身份 | 先看共用登录接入和本机运行时配置；身份验证通过才运行引用 fixture 的用例，不接管日常 Chrome | [Playwright 测试登录](tools/integrations/playwright-auth/README.md) / `WORKBENCH.local.md` |
