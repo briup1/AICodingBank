@@ -22,8 +22,8 @@ self:
   verified: '2026-10-20'
 - name: wl-web-auto
   path: tools/skills/shared/wl-web-auto
-  capability: 使用 Ego TaskSpace 与页面脚本执行网页探索、查询、填表和核验，保留身份核对、测试记录、截图与人工交接；流程最多3任务并发
-  boundary: 依赖本机 ego-browser Skill 与原生控制权规则；Ego 真实场景待验证，不静默回退其他驱动，不接管历史空间；业务写入需明确授权
+  capability: 使用 Ego TaskSpace/Page 执行网页探索、查询、填表和核验，支持后台页面操作与独立任务并发，保留身份核对、测试记录、截图与人工交接
+  boundary: 依赖本机 ego-browser Skill 与原生控制权规则；本地双页已验证，真实站点待验证；同页串行，并发受资源与网站业务配额限制，不设通用数字上限；业务写入需明确授权，不静默回退其他驱动或接管历史空间
   tags:
   - 浏览器
   - 自动化

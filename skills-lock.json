@@ -1,6 +1,17 @@
 {
   "version": 1,
   "skills": {
+    "ui-ux-pro-max": {
+      "source": "nextlevelbuilder/ui-ux-pro-max-skill",
+      "sourceType": "github",
+      "ref": "v2.15.0",
+      "skillPath": ".claude/skills/ui-ux-pro-max/SKILL.md",
+      "computedHash": "ea087c341bfb5b23195c7302027268ede86da802554c18a5c4896a6017b439f9",
+      "capability": "检索 UI/UX 风格、配色、字体、交互及框架指导，生成可供 AI 实施的设计规范建议",
+      "boundary": "仅定向安装到 Pi；已验证本地检索与设计建议生成，不代表页面验收通过；匹配可能偏题，须核对适用性；依赖 Python 3，Pi 按 Skill 实际目录解析脚本，不使用 Claude 专用环境变量",
+      "tags": ["编程"],
+      "verified": "2026-10-26"
+    },
     "find-skills": {
       "source": "vercel-labs/skills",
       "sourceType": "github",
