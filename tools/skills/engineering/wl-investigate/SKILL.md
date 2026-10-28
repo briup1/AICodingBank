@@ -1,6 +1,7 @@
 ---
 name: wl-investigate
-description: Independently investigate and fix software defects using evidence-first root-cause analysis. Use for bugs, regressions, test failures, production symptoms, unexplained behavior, or requests to diagnose before changing code. Requires a failing reproduction before the fix and verification afterward. Has no gstack dependency.
+disable-model-invocation: true
+description: 仅用户主动点名或选择本 Skill 时加载使用；任务匹配或其他流程引用不构成授权。Independently investigate and fix software defects using evidence-first root-cause analysis. Requires a failing reproduction before the fix and verification afterward. Has no gstack dependency.
 ---
 
 # Investigate — Standalone

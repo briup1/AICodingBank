@@ -67,8 +67,8 @@
 ```text
 根据用户指定路径或项目索引定位项目
   -> 读取项目自己的 AGENTS / README / 构建配置
-  -> 复杂或多步骤任务：加载 wl-auto-delivery 判断唯一当前阶段并按需串起交付
-  -> 按需加载该阶段的最小能力组合
+  -> 判断当前目标和必要步骤；仅用户主动选择 wl-auto-delivery 时加载总流程
+  -> 按需加载最小能力组合，遵守各 Skill 的主动选择边界
   -> 在项目真实目录中工作并留下验证证据
 ```
 
@@ -76,7 +76,7 @@
 
 ## 阶段路由
 
-阶段判断（观察/确认/设计/执行/验证/沉淀）和需求到验收的主链见 [wl-auto-delivery](tools/skills/workbench/wl-auto-delivery/SKILL.md)。复杂任务按需加载；只读可在观察结束，简单明确任务直接执行，不强制走满流水线。各环节仍可单独调用。
+阶段判断（观察/确认/设计/执行/验证/沉淀）和需求到验收的主链见 [wl-auto-delivery](tools/skills/workbench/wl-auto-delivery/SKILL.md)。仅用户主动选择该 Skill 时加载；任务复杂不构成自动选择。各环节可单独选择，未选择时按目标项目规则直接工作。标有 `disable-model-invocation: true` 的 Skill 不因流程引用、项目规则或能力检索推荐而自动加载；选中总流程不自动授权其他需主动选择的 Skill。
 
 ## 本机工具类任务
 
@@ -88,7 +88,7 @@ Skill 的验证与安装状态以 skills.yaml / CATALOG.md 为准。未验证时
 
 自研 Skill 在 tools/skills/，第三方只登记在 `skills-lock.json`（缓存 vendor/），人类目录是可读的 `CATALOG.md`，本机停用写 `skills.local.yaml`。目录刷新 `python3 install.py --catalog-only`（不联网、不安装），实际安装另核授权；完整规范见 [README.md](README.md) 与 [EXTENDING.md](EXTENDING.md)。
 
-阶段与交接规则见 `wl-auto-delivery`；进入阶段后，从 `CATALOG.md` 或当前 Agent 的可用 Skill 中选择最小能力组合。
+用户主动选择 `wl-auto-delivery` 后，才读取其主链与替代路线规则；其他任务从 `CATALOG.md` 或当前 Agent 的可用 Skill 中选择最小能力组合，先遵守各 Skill 的主动选择边界，不因多个 Skill 都匹配而叠加流程。
 
 ## 个人上下文与项目索引
 

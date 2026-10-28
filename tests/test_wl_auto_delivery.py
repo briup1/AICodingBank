@@ -47,6 +47,90 @@ class AutoDeliveryTests(unittest.TestCase):
                     continue
                 self.assertTrue((path.parent / unquote(parts.path)).exists(), (path, href))
 
+    def test_default_chain_and_opt_in_routes_are_unambiguous(self):
+        flow = (FLOW / 'SKILL.md').read_text()
+        for contract in ('默认主链', '不叠加第二套流程', '专项方法', '不自动安装'):
+            self.assertIn(contract, flow)
+        for name in ('wl-brainstorming', 'wl-writing-plans', 'wl-subagent-driven-development'):
+            with self.subTest(name=name):
+                skill = (ROOT / f'tools/skills/engineering/{name}/SKILL.md').read_text()
+                description = skill.split('description: ', 1)[1].split('\n', 1)[0]
+                self.assertIn('explicitly', description)
+                self.assertIn('## 使用边界', skill)
+                self.assertIn('非默认', skill)
+                self.assertIn('wl-auto-delivery', skill)
+                self.assertIn('不叠加', skill)
+        handoff = (ROOT / 'tools/skills/engineering/wl-writing-plans/SKILL.md').read_text().split('## Handoff', 1)[1]
+        self.assertIn('wl-ticket-run', handoff)
+        self.assertIn('显式选择', handoff)
+        self.assertNotIn('offer execution through', handoff)
+        self.assertIn('不把实施计划冒充方案批准', handoff)
+        brainstorming = (ROOT / 'tools/skills/engineering/wl-brainstorming/SKILL.md').read_text()
+        self.assertIn('does not automatically select', brainstorming)
+
+    def test_eight_skills_require_explicit_user_selection(self):
+        entries = {e["name"]: e for e in yaml.safe_load((ROOT / "skills.yaml").read_text())["self"]}
+        names = ("wl-auto-delivery", "wl-design-doc", "wl-git-flow", "wl-investigate",
+                 "wl-qa-test-planner", "wl-req-confirm", "wl-ticket-run", "wl-web-auto")
+        for name in names:
+            with self.subTest(name=name):
+                text = (ROOT / entries[name]["path"] / "SKILL.md").read_text()
+                meta = yaml.safe_load(text.split("---", 2)[1])
+                self.assertIs(meta["disable-model-invocation"], True)
+                self.assertIn("仅用户主动点名或选择本 Skill 时加载使用", meta["description"])
+                self.assertIn("其他流程引用不构成授权", meta["description"])
+        workbench = (ROOT / "WORKBENCH.md").read_text()
+        self.assertNotIn("复杂或多步骤任务：加载 wl-auto-delivery", workbench)
+        self.assertIn("选中总流程不自动授权", workbench)
+        self.assertIn("用户选择本 Skill 不自动授权加载其他", (FLOW / "SKILL.md").read_text())
+
+    def test_dispatch_policy_is_referenced_not_pinned_by_consumers(self):
+        consumers = {
+            ROOT / 'tools/skills/engineering/wl-design-doc/SKILL.md': '## 执行方式',
+            ROOT / 'tools/skills/engineering/wl-ticket-run/SKILL.md': '## 第四步',
+            ROOT / 'tools/skills/engineering/wl-requesting-code-review/SKILL.md': '## Modes',
+            FLOW / 'references/test-case-review.md': '# 正式用例',
+            FLOW / 'references/regression-scenarios.md': '# 总流程',
+            ROOT / 'tools/skills/engineering/wl-design-doc/references/regression-scenarios.md': '# 方案生成',
+        }
+        for path, heading in consumers.items():
+            with self.subTest(path=path):
+                section = path.read_text().split(heading, 1)[1].split('\n## ', 1)[0]
+                self.assertIn('wl-herdrs', section)
+                self.assertNotIn('thinking=high', section)
+                self.assertNotIn('Herdr Pi high', section)
+                for href in re.findall(r'\[[^\]]*\]\(([^)]+)\)', section):
+                    parts = urlsplit(href)
+                    if not parts.scheme and parts.path:
+                        self.assertTrue((path.parent / unquote(parts.path)).exists(), (path, href))
+        review = (FLOW / 'references/test-case-review.md').read_text()
+        self.assertIn('不同会话', review)
+        self.assertIn('阻塞', review)
+        policy = (ROOT / 'tools/skills/workbench/wl-herdrs/SKILL.md').read_text()
+        self.assertIn('宿主原生支持且获准使用', policy)
+        self.assertIn('审批拒绝', policy)
+
+    def test_authorized_execution_reuses_evidence_without_reapproval(self):
+        flow = (FLOW / 'SKILL.md').read_text()
+        for contract in ('已有实施授权', '不重复确认', '原负责人', '需求/用例',
+                         '方案', '授权', '历史验证'):
+            self.assertIn(contract, flow)
+        scenarios = (FLOW / 'references/regression-scenarios.md').read_text()
+        for contract in ('已批准方案并授权实施', '显式选择逐任务隔离执行',
+                         'Herdr 不可用', '重复确认', '重复调查', '重复测试/审查'):
+            self.assertIn(contract, scenarios)
+
+    def test_registration_matches_work_packages_and_opt_in_routes(self):
+        entries = {e['name']: e for e in yaml.safe_load((ROOT / 'skills.yaml').read_text())['self']}
+        ticket = entries['wl-ticket-run']
+        self.assertIn('工作包', ticket['capability'])
+        self.assertIn('用例', ticket['capability'])
+        self.assertNotIn('/list', ticket['capability'])
+        self.assertNotIn('G/W/T', ticket['capability'])
+        for name in ('wl-brainstorming', 'wl-writing-plans', 'wl-subagent-driven-development'):
+            self.assertIn('显式选择', entries[name]['boundary'])
+            self.assertIn('非默认', entries[name]['boundary'])
+
     def test_reading_artifact_handoff_is_caller_owned_and_not_qa_gate(self):
         text = (FLOW / 'references/execution-and-evidence.md').read_text()
         for contract in ('test-cases.wl-qa-test-planner.md', 'test-cases.wl-qa-test-planner.html',

@@ -143,21 +143,21 @@ self:
 - name: wl-design-doc
   path: tools/skills/engineering/wl-design-doc
   capability: 方案设计——按业务场景组织目标、现状事实、最小例子、业务流程、技术承接、专项适用性与验收，生成可批准的单文件HTML
-  boundary: 前置 wl-req-confirm 已批准；只出方案不写实现代码，不替用户拍板选方案
+  boundary: 需求已批准；只出方案不写实现代码，默认人工批准本版，明确委托且边界与证据齐全时可采用推荐；不授予实施或外部操作权限
   tags:
   - 开发流程
   verified: '2026-08-31'
 - name: wl-ticket-run
   path: tools/skills/engineering/wl-ticket-run
-  capability: 工单执行——方案批准后拆垂直切片工单（G/W/T 验收），/list 并行调度、/goal 审计执行到验收
-  boundary: 前置 wl-design-doc 已批准；管执行纪律（台账/熔断/停机），不做需求与方案决策
+  capability: 工单执行——引用已确认用例拆垂直 Ticket，按耦合组合工作包，由持续负责人开发、聚焦测试和Review后在约定环境验收
+  boundary: 前置本版方案人工批准或合法委托采用且实施获准；不重做需求/方案决策，不默认一票一Agent，goal/list可选，提交发布另需授权
   tags:
   - 开发流程
   verified: '2026-08-31'
 - name: wl-brainstorming
   path: tools/skills/engineering/wl-brainstorming
-  capability: 将模糊的软件想法或行为变更澄清为经确认、可测试的设计
-  boundary: 用于新功能或显著行为变更的需求与设计定稿，不执行已经批准的实现方案
+  capability: 独立设计路线——澄清软件想法并形成经确认、可测试的设计
+  boundary: 非默认，仅用户或项目规则显式选择时使用；普通新功能走wl-auto-delivery，不叠加已有需求/方案流程，不执行实现
   tags:
   - 开发流程
   - 需求分析
@@ -220,7 +220,7 @@ self:
 - name: wl-requesting-code-review
   path: tools/skills/engineering/wl-requesting-code-review
   capability: 在交付前依据需求、架构、风险与测试证据审查已完成的代码
-  boundary: 用于完整任务或重要功能实现后的代码审查，不用于需求澄清或方案设计
+  boundary: 完整实现后的代码审查；主链使用focused-delivery仅核设计偏离和交付阻断，full模式独立可用，委派按wl-herdrs，不用于需求澄清或方案设计
   tags:
   - 代码审查
   - 质量
@@ -228,8 +228,8 @@ self:
   verified: '2026-09-01'
 - name: wl-subagent-driven-development
   path: tools/skills/engineering/wl-subagent-driven-development
-  capability: 按已批准计划逐任务调度隔离 Worker，以测试优先、规格审查和质量审查完成开发
-  boundary: 仅在方案已批准后使用；子 Agent 未获授权或不可用时必须在本地执行同等闸门
+  capability: 可选逐任务隔离执行——按已批准计划以测试优先、逐任务规格审查和质量审查完成开发
+  boundary: 非默认，仅用户或项目规则显式选择此执行粒度且实施获准时使用；不与工作包循环叠加，委派按wl-herdrs，本地执行不冒充独立审查
   tags:
   - 多智能体
   - 测试
@@ -237,8 +237,8 @@ self:
   verified: '2026-09-01'
 - name: wl-writing-plans
   path: tools/skills/engineering/wl-writing-plans
-  capability: 将已批准规格或稳定需求转换为详细、测试优先的实施计划
-  boundary: 仅用于多步骤工程任务；需求或架构尚未确定时不得使用
+  capability: 可选详细规划——将已批准规格或稳定需求转换为测试优先的实施计划
+  boundary: 非默认，仅用户或项目规则显式选择此计划格式时使用；复用已有清单，不默认串接隔离Worker执行，未决需求/架构回实际来源阶段
   tags:
   - 规划
   - 测试
@@ -246,8 +246,8 @@ self:
   verified: '2026-09-01'
 - name: wl-auto-delivery
   path: tools/skills/workbench/wl-auto-delivery
-  capability: 按需选择当前阶段，串起需求、业务分组用例、独立审查、方案决策、开发、聚焦Review与目标环境验收
-  boundary: 不强制只读或简单任务走完整流水线；各环节可独立使用，委托不替代高风险授权，静态检查不等于真实交付验证
+  capability: WL默认主链——按当前阶段衔接需求/用例、独立审查、方案决策、工作包持续开发、聚焦Review与目标环境验收
+  boundary: 只读和简单任务不强制全流程；其他设计/规划/隔离执行路线须显式选择，不叠加第二套流程；不重复有效批准，委托不替代操作授权，历史验证不证明本次优化已实测
   tags:
   - 规划
   - 开发流程
@@ -277,6 +277,14 @@ self:
   - 数据库
   - 开发流程
   verified: '2026-09-23'
+- name: wl-prod-logs
+  path: tools/skills/engineering/wl-prod-logs
+  capability: 用户主动调用时使用 Ego 只读查询伏羲生产服务 Loki 日志并分析
+  boundary: 不自动调用、不依赖 wl-web-auto、不发布或修改生产；仅指定范围，未证实分页完整及其他筛选能力
+  tags:
+  - 运维
+  - 浏览器
+  verified: ''
 - name: wl-docker-port-registry
   path: tools/skills/shared/wl-docker-port-registry
   capability: 用 lsof/docker ps/curl 三板斧查明本机端口占用真身，并按 3000-3099 段 10 位槽位规则为新服务分配宿主端口、登记本机台账并显式写入项目 .env

@@ -1,11 +1,15 @@
 ---
 name: wl-subagent-driven-development
-description: Execute an approved implementation plan task by task with isolated workers, test-first development, specification review, quality review, and completion evidence. Use only when subagent delegation is available and authorized; otherwise execute the same gates locally.
+description: Execute an approved plan with per-task isolated workers and specification/quality reviews only when the user or project explicitly selects this route. Not the default for ordinary development or parallel work; wl-ticket-run owns normal work-package execution. Delegation must be authorized.
 ---
 
 # WL Subagent-Driven Development
 
 Execute a reviewed plan while keeping the controller responsible for context, sequencing, integration, and final verification.
+
+## 使用边界
+
+这是非默认的逐任务隔离执行路线，仅用户或项目规则显式选择这种执行粒度时启用；“开始开发”“并行处理”不代表选择。普通任务按 [wl-auto-delivery](../../workbench/wl-auto-delivery/SKILL.md) 交给 `wl-ticket-run`，不叠加两套任务循环或审查门禁。沿本路线时保留下文逐任务规格/质量审查，真实批准和已有任务不重建；委派统一按 [wl-herdrs](../../workbench/wl-herdrs/SKILL.md)，无可用获准通道时由负责人本地执行同等门禁，不冒充独立审查；任务明确要求独立结论时仍须记阻塞。
 
 Read `references/worker-prompts.md` when delegating implementer or reviewer work.
 

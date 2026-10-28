@@ -26,7 +26,7 @@ this requirement + executable design/version
 - 只报**设计偏离**和**具体交付阻断问题**：有 file:line、实际影响、因果链和证据，直接导致本需求失败/回归的安全、数据或兼容性缺陷属于后者。建议可省略；不做泛化改进审查，不主动收集重构/风格/可维护性建议。偶遇需求外问题仅作可选观察，不扩审、不修复、不作为门禁。
 - Missing critical evidence yields **EVIDENCE INSUFFICIENT / 证据不足，不能判定交付** and the smallest missing check, not a fabricated PASS. Do not infer failure of unrelated modules or keep widening review to fill the gap.
 - Output: reviewed versions/scope, verdict, 设计偏离/具体交付阻断问题（无则明确无）, actual evidence and uncovered items; suggestions/observations may be omitted. Stop once these two focused checks are resolved or explicitly blocked; re-review only affected fixes.
-- This mode does not claim broad architecture/security/performance/E2E coverage. Review precedes target-environment business acceptance. Only a real different session can be called independent review; if delegated, use Herdr Pi thinking=high, never claim independence when unavailable.
+- This mode does not claim broad architecture/security/performance/E2E coverage. Review precedes target-environment business acceptance. Only a real different session can be called independent review; choose delegation and fallback through [wl-herdrs](../../workbench/wl-herdrs/SKILL.md), not a mode-specific host/model rule. If no authorized channel can provide a required independent review, report it blocked; never relabel self-review as independent.
 - The full-mode reviewer template below must not silently broaden a focused dispatch: supply the focused scope and output contract explicitly instead. No private total-workflow files are required.
 
 ## Prepare review context

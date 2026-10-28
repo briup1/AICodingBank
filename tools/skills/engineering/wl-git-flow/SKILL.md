@@ -1,6 +1,7 @@
 ---
 name: wl-git-flow
-description: 安全创建、推送、集成和清理需求分支及 Git Worktree，并用用户级 HTML 看板聚合多个项目的需求生命周期。仅在创建需求分支、合入 Dev/Beta、检查污染、记录测试反馈、回收 Worktree、查看并行需求或操作看板时使用；同时兼容 TAPD 项目和没有 TAPD 的私人项目。不用于普通 status、log、diff、merge-base、rev-list、merge-tree、只读分支比较、代码 Review 或无需求分支语义的临时 Git 操作。
+disable-model-invocation: true
+description: 仅用户主动点名或选择本 Skill 时加载使用；任务匹配或其他流程引用不构成授权。安全创建、推送、集成和清理需求分支及 Git Worktree，用用户级 HTML 看板聚合需求生命周期；支持 Dev/Beta 集成、污染审计、测试反馈和回收，兼容 TAPD 与私人项目。不用于普通 Git 状态、历史、差异或只读分支比较，也不代替代码 Review。
 ---
 
 # WL Git Flow

@@ -1,11 +1,15 @@
 ---
 name: wl-brainstorming
-description: Turn an unclear software idea or behavior change into an approved, testable design before implementation. Use for new features, components, workflows, or meaningful behavior changes; do not use for executing an already approved design.
+description: Turn an unclear software idea into an approved, testable design only when the user or project explicitly selects this standalone design route. Not the default for new features; use wl-auto-delivery for ordinary lifecycle requests. Do not execute approved designs.
 ---
 
 # WL Brainstorming
 
 Produce an approved design, not implementation.
+
+## 使用边界
+
+这是非默认的独立设计路线，仅用户或项目规则显式选择时进入；普通新功能请求按 [wl-auto-delivery](../../workbench/wl-auto-delivery/SKILL.md) 路由。已存在需求/方案时复用真实批准及范围，不叠加 `wl-req-confirm` / `wl-design-doc` 重做同一阶段。显式选择后沿下文工作，不因兼容其他路线省略本路线的批准与验证。
 
 ## Workflow
 
@@ -17,7 +21,7 @@ Produce an approved design, not implementation.
 6. Obtain explicit user approval before implementation begins.
 7. Save the approved design to `docs/wl-ai-skills/specs/YYYY-MM-DD-<topic>-design.md` unless the project specifies another location.
 8. Review the document for ambiguity, contradictions, placeholders, unjustified scope, and unverifiable acceptance criteria.
-9. When implementation planning is requested, hand off to `wl-writing-plans` with the approved design path.
+9. Hand off the approved design to `wl-writing-plans` only when the user or project explicitly selects that detailed planning format. Otherwise deliver this stage and stop; choosing this design route does not automatically select another planning or execution route.
 
 ## Design gate
 
