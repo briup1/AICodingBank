@@ -294,5 +294,15 @@ self:
   - 本机工具
   - 端口管理
   verified: '2026-10-03'
+- name: wl-project-refactor
+  path: tools/skills/engineering/wl-project-refactor
+  capability: 编排复杂项目的现状分析、必要的 GitHub 参考调研、目标架构、迁移路线、分批重构、验证与结果沉淀
+  boundary: 默认只读分析；只使用 github-repo-explore 作为外部调研入口；人工确认目标、范围和批次后才修改业务代码；不自动安装 Skill、启动服务、读凭据、提交、推送或发布
+  tags:
+  - 架构
+  - 规划
+  - 研究
+  - 开发流程
+  verified: ''
 third_party:
   lock: skills-lock.json
