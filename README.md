@@ -8,14 +8,13 @@
 - **单点控制面**：能力只有一份正文、一次登记（`skills.yaml` / `skills-lock.json`），由 `install.py` 软链装配到各宿主；登记、验证、安装、停用都可核对。
 - **留痕契约**：结构变动写[迁移记录](docs/migrations/)，目录与引用由测试锁定；不靠记忆和口头约定。
 
-运行时组件关系与工作链见 [WORKBENCH.md](WORKBENCH.md) 的系统地图；每个目录的中文注解见[目录中文地图](docs/reference/工作台目录地图.md)。
+工作台资源入口见 [AGENTS.md](AGENTS.md)；每个目录的中文注解见[目录中文地图](docs/reference/工作台目录地图.md)。
 
 ## 文档导航
 
 | 要看什么 | 去哪里 |
 | --- | --- |
-| 进门规则与维护红线（Agent 每次会话读取） | [AGENTS.md](AGENTS.md)（[CLAUDE.md](CLAUDE.md) 为指针） |
-| 怎么用：开工开场、阶段路由、边界 | [WORKBENCH.md](WORKBENCH.md) |
+| 工作台资源入口 | [AGENTS.md](AGENTS.md)（[CLAUDE.md](CLAUDE.md) 为指针） |
 | 怎么加：Skill、岗位、最佳实践、第三方 | [EXTENDING.md](EXTENDING.md) |
 | 术语 | [CONTEXT.md](CONTEXT.md) |
 | 能力总览（自动生成，勿手改） | [CATALOG.md](CATALOG.md) |

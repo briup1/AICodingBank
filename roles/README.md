@@ -44,4 +44,4 @@
 
 岗位是工作方式，不是Skill，不登记skills.yaml。维护正式岗位时写最小手册，新增默认draft/enabled:false；启用须核对实际能力、工具和最小验证，不因文档改写自动启用。
 
-任务状态和证据留在目标项目或适用的[本机记录](../.local/README.md)，不复制完整会话；真实可复用经验按[最佳实践规范](../best_practices/STANDARD.md)沉淀，不把单次成功直接当成能力验证。身份与个人背景按[个人入口](../personal/README.md)限需读取，不随派单转发私人画像。
+任务状态和证据留在目标项目或适用的[本机记录](../.local/README.md)，不复制完整会话；真实可复用经验按[最佳实践规范](../best_practices/STANDARD.md)沉淀，不把单次成功直接当成能力验证。项目地址按工作台 `personal/projects.local.md` 限需读取，不随派单转发无关本机资料。

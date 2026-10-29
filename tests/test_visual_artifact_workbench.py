@@ -45,13 +45,15 @@ class VisualArtifactWorkbenchTests(unittest.TestCase):
         for doc in skill_root.rglob("*.md"):
             for target in re.findall(r"\[[^]]+\]\(([^)]+\.md)\)", doc.read_text(encoding="utf-8")):
                 self.assertTrue((doc.parent / target).resolve().is_file(), (doc, target))
-        workbench = (ROOT / "WORKBENCH.md").read_text(encoding="utf-8")
-        targets = re.findall(r"\[[^]]+\]\(([^)]+\.md)\)", workbench)
+        workbench = (ROOT / "AGENTS.md").read_text(encoding="utf-8")
+        targets = re.findall(r"`([^`]+\.md)`", workbench)
         self.assertIn(f"tools/skills/shared/{NAME}/SKILL.md", targets)
         for target in targets:
+            if target.startswith("/") or target.endswith(".local.md"):
+                continue
             self.assertTrue((ROOT / target).is_file(), target)
         ignored = subprocess.run(
-            ["git", "check-ignore", "WORKBENCH.local.md"],
+            ["git", "check-ignore", "personal/projects.local.md"],
             cwd=ROOT, capture_output=True, text=True, check=False,
         )
         self.assertEqual(ignored.returncode, 0)

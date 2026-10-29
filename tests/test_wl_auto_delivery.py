@@ -33,13 +33,13 @@ class AutoDeliveryTests(unittest.TestCase):
             self.assertEqual(output.read_bytes(), (ROOT / 'CATALOG.md').read_bytes())
 
     def test_entry_stages_contract_and_local_links(self):
-        paths = [ROOT / 'WORKBENCH.md', FLOW / 'SKILL.md', *sorted((FLOW / 'references').glob('*.md'))]
+        paths = [ROOT / 'AGENTS.md', FLOW / 'SKILL.md', *sorted((FLOW / 'references').glob('*.md'))]
         text = (FLOW / 'SKILL.md').read_text()
         for stage in ('Observe', 'Confirm', 'Design', 'Execute', 'Verify', 'Learn'):
             self.assertIn(stage, text)
         for reference in ('test-case-review.md', 'execution-and-evidence.md', 'regression-scenarios.md'):
             self.assertTrue((FLOW / 'references' / reference).is_file())
-        self.assertNotIn('wl-phase-routing', (ROOT / 'WORKBENCH.md').read_text())
+        self.assertNotIn('wl-phase-routing', (ROOT / 'AGENTS.md').read_text())
         for path in paths:
             for href in re.findall(r'\[[^\]]*\]\(([^)]+)\)', path.read_text()):
                 parts = urlsplit(href)
@@ -79,9 +79,9 @@ class AutoDeliveryTests(unittest.TestCase):
                 self.assertIs(meta["disable-model-invocation"], True)
                 self.assertIn("仅用户主动点名或选择本 Skill 时加载使用", meta["description"])
                 self.assertIn("其他流程引用不构成授权", meta["description"])
-        workbench = (ROOT / "WORKBENCH.md").read_text()
+        workbench = (ROOT / "AGENTS.md").read_text()
         self.assertNotIn("复杂或多步骤任务：加载 wl-auto-delivery", workbench)
-        self.assertIn("选中总流程不自动授权", workbench)
+        self.assertNotIn("选中总流程不自动授权", workbench)
         self.assertIn("用户选择本 Skill 不自动授权加载其他", (FLOW / "SKILL.md").read_text())
 
     def test_dispatch_policy_is_referenced_not_pinned_by_consumers(self):

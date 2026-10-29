@@ -171,7 +171,7 @@ class RoleWorkbenchStructureTests(unittest.TestCase):
         self.assertIn('以下命令仅用于 Herdr 通道', pm)
 
     def test_categories_and_supporting_directories_exist(self):
-        paths = ['roles', 'personal', 'tools', '.local']
+        paths = ['roles', 'tools', '.local']
         paths += [f'tools/skills/{name}' for name in
                   ('engineering', 'media', 'shared', 'workbench')]
         paths += [f'tools/{name}' for name in
@@ -180,7 +180,7 @@ class RoleWorkbenchStructureTests(unittest.TestCase):
             self.assertTrue((ROOT / path / 'README.md').is_file(), path)
 
     def test_new_documentation_links_resolve(self):
-        paths = [ROOT / name for name in ('README.md', 'WORKBENCH.md', 'EXTENDING.md')]
+        paths = [ROOT / name for name in ('README.md', 'AGENTS.md', 'EXTENDING.md')]
         for directory in ('roles', 'personal', '.local'):
             paths += list((ROOT / directory).rglob('*.md'))
         paths += list((ROOT / 'tools').glob('README.md'))
@@ -199,9 +199,20 @@ class RoleWorkbenchStructureTests(unittest.TestCase):
                     continue
                 self.assertTrue((path.parent / unquote(parts.path)).exists(), (path, href))
 
+    def test_workbench_entry_is_a_resource_index(self):
+        entry = (ROOT / 'AGENTS.md').read_text(encoding='utf-8')
+        self.assertIn('personal/projects.local.md', entry)
+        self.assertIn('roles/project-manager/ROLE.md', entry)
+        self.assertEqual(list(ROOT.glob('WORKBENCH*')), [])
+        for name in ('README.md', 'profile.example.md', 'profile.local.md',
+                     'preferences.local.md', 'runtime.local.md'):
+            self.assertFalse((ROOT / 'personal' / name).exists(), name)
+        for line in entry.splitlines():
+            self.assertTrue(not line or line.startswith(('#', '- ')), line)
+
     def test_private_files_and_runtime_data_are_ignored(self):
         private_paths = (
-            'personal/profile.local.md',
+            'personal/projects.local.md',
             '.local/sessions/probe.json',
             '.local/records/probe.md',
         )

@@ -29,8 +29,10 @@ class TestExecutionContractTests(unittest.TestCase):
             self.assertIn(rule, text)
 
     def test_test_entrypoints_link_the_single_contract(self):
+        agents = (ROOT / 'AGENTS.md').read_text()
+        self.assertIn('tools/execution-profiles/test-execution.md', agents)
         entries = [
-            'WORKBENCH.md', 'tools/execution-profiles/README.md',
+            'tools/execution-profiles/README.md',
             'roles/engineering/tester/ROLE.md',
             'tools/skills/engineering/wl-qa-test-planner/SKILL.md',
             'tools/skills/engineering/wl-ticket-run/SKILL.md',

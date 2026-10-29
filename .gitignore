@@ -2,13 +2,12 @@ vendor/
 .pi-glla/
 
 skills.local.yaml
-WORKBENCH.local.md
 __pycache__/
 .wl-ai-skills/
 node_modules/
 
-# Personal facts and execution overrides stay local.
-personal/*.local.md
+# The local project index stays local.
+personal/projects.local.md
 tools/execution-profiles/*.local.yaml
 # Keep runtime conventions, not runtime state.
 /.local/*

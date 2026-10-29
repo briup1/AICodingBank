@@ -34,7 +34,7 @@ approval_evidence: 用户本轮明确接受岗位分组、角色与执行配置�
 ## 已定结构与唯一正文
 
 - [roles](../../../roles/README.md)：项目经理；技术工程组的架构、开发、测试；媒体内容组的编辑；共享支持的调研。岗位职责只在各 ROLE.md 维护。
-- [personal](../../../personal/README.md)：真实董事长资料入口；profile.local.md 是本机事实，不提交；已有工程偏好仍引用 WORKBENCH.local.md。
+- 项目索引：`personal/projects.local.md`（本机可选文件，不提交）；用户偏好沿用用户级规则。
 - [tools](../../../tools/README.md)：Skill、执行配置、接入说明、公用脚本与通用模板。Skill 分类按主要用途，仅一个实体归宿，多用途通过标签表达。
 - [.local](../../../.local/README.md)：版本化记录约定，其他运行内容忽略；项目记录仍是事实源。
 - docs/tests 与根能力登记、安装器、CATALOG、vendor 保持职责不变。知识正文、业务代码与创作产物不迁入工作台。
