@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+<title>$title</title>
+<style>
+:root{--paper:#f6f7f9;--ink:#223449;--muted:#65758a;--blue:#315c8a;--line:#dfe5ec;--soft:#edf2f7}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.75 "PingFang SC","Microsoft YaHei",system-ui,sans-serif;overflow-wrap:anywhere}a{color:var(--blue);text-underline-offset:4px}button,summary{font:inherit}button,summary{cursor:pointer}:focus-visible{outline:3px solid #79a5d0;outline-offset:4px}button{border:0;border-radius:20px;padding:7px 15px;background:white;color:var(--blue)}.page{max-width:1160px;margin:auto;padding:56px 32px}.eyebrow{font-size:12px;letter-spacing:.12em;color:var(--blue)}h1{font-size:clamp(28px,4vw,42px);line-height:1.3;margin:12px 0 18px}h2{font-size:20px;margin:0}h3{font-size:17px}h4{font-size:13px}.meta,.muted{color:var(--muted);font-size:12px}.intro{margin:28px 0;padding:22px 25px;background:#eaf0f6;border-radius:18px}.intro p{font-size:14px;margin:10px 0}.intro>strong{font-size:17px}.navigation{display:flex;flex-wrap:wrap;gap:12px 22px;align-items:center;padding-bottom:18px;border-bottom:1px solid var(--line)}.navigation a{font-size:13px;text-decoration:none}.tools{display:flex;gap:8px;margin-left:auto}.tools[hidden]{display:none}.section-header{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin:30px 0 12px}.section-header p,.legend{font-size:12px;color:var(--muted)}.legend{line-height:2}.status{font-size:12px;font-weight:600}.existing{color:#257151}.partial{color:#92601e}.missing{color:#a34b49}.unknown{color:var(--muted)}.scope,.decision{display:inline-block;font-size:11px;background:var(--soft);border-radius:5px;padding:2px 7px;color:#526b83}.scope{margin-left:10px}.placement{margin:26px 0}.placement>h3{font-size:13px;color:var(--muted);font-weight:500}.module-shell{min-width:0;padding:5px;background:#e9edf2;border-radius:21px;scroll-margin-top:24px}.support .module-shell{background:#e3ebf3}.module{border-radius:16px;background:white;overflow:hidden}.module>summary{display:flex;align-items:flex-start;gap:14px;padding:20px;list-style:none}.module>summary::-webkit-details-marker{display:none}.module>summary::after{content:'⌄';color:var(--muted);flex:none}.module[open]>summary::after{content:'⌃'}.number{display:flex;align-items:center;justify-content:center;flex:none;width:34px;height:34px;background:var(--soft);border-radius:11px;color:var(--blue);font-size:13px}.module-heading{display:block;min-width:0;flex:1}.module-heading strong{font-size:16px}.responsibility,.necessity-reason,.module-count,.module-progress,.module-decisions{display:block;font-size:12px;color:var(--muted);margin-top:5px}.module-count{font-size:11px}.module-content{padding:0 20px 22px}.module-content h4{font-size:12px;color:var(--muted);border-bottom:1px solid var(--line);padding-bottom:6px;margin:16px 0 6px}.capability{border-bottom:1px solid #edf0f4;scroll-margin-top:24px}.capability>summary{display:flex;align-items:center;flex-wrap:wrap;gap:6px 10px;padding:12px 0;font-size:13px}.capability>summary::before{content:'▸';color:var(--muted)}.capability[open]>summary::before{content:'▾'}.cap-name{flex:1;min-width:120px;font-weight:600}.capability dl{display:grid;grid-template-columns:100px minmax(0,1fr);gap:8px 12px;background:#f5f7fa;border-radius:10px;padding:16px;font-size:12px;margin:0 0 12px}.capability dt{color:var(--muted)}.capability dd{margin:0;white-space:pre-line}.capability ul{padding-left:16px;margin:0}.external{padding:20px;border:1px dashed #a8b7c8;border-radius:16px;background:white;min-width:0}.external h4{margin:0 0 8px}.external p{font-size:13px;color:var(--muted);margin:0}.overview{margin-top:46px}.overview>p,.table-module>p{font-size:13px;color:var(--muted)}.table-module{margin:26px 0 32px}.table-module h3{margin-bottom:4px}.table-module>p{margin-top:0}.table-scroll{max-width:100%;overflow-x:auto;background:white;border-radius:14px;padding:5px}table{border-collapse:collapse;width:100%;min-width:940px;text-align:left;font-size:12px}caption{text-align:left;padding:8px 12px;color:var(--muted)}th{background:var(--soft);color:#526b83;font-weight:600}th,td{padding:12px 14px;vertical-align:top;border-bottom:1px solid #edf0f4}th:first-child{width:15%}th:nth-child(2){width:17%}th:nth-child(3){width:18%}th:nth-child(4){width:9%}th:nth-child(5){width:22%}th:nth-child(6){width:19%}.boundaries{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:24px;margin-top:32px;padding-top:24px;border-top:1px solid var(--line)}.boundaries h2{font-size:15px}.boundaries ul{padding-left:20px;font-size:13px;color:var(--muted)}footer{margin-top:30px;font-size:11px;color:var(--muted)}noscript p{padding:12px;background:#fff3da;border-radius:10px}
+@media(max-width:700px){.page{padding:28px 16px}.tools{margin-left:0}.section-header{display:block}.module>summary{padding:16px;gap:10px}.module-heading strong{font-size:15px}.scope{margin-left:0}.module-content{padding:0 15px 18px}.intro{padding:18px}.capability dl{grid-template-columns:minmax(0,1fr);gap:3px}.capability dt{margin-top:7px}.branches{grid-template-columns:minmax(0,1fr)}.branches:before{display:none}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media print{body{background:white}.page{max-width:none;padding:0}.navigation{display:none}.branches,.boundaries{display:block}.branch{margin-bottom:16px}.module-shell{margin-bottom:14px}.module-content{display:block}.table-scroll{overflow:visible}table{min-width:0;font-size:9px;table-layout:fixed}th,td{padding:5px;overflow-wrap:anywhere}summary{break-after:avoid}thead{display:table-header-group}tr{break-inside:avoid}}
+.main-chain>.chain-step>.module-shell,.connector{max-width:790px;margin:auto}.connector{position:relative;padding:16px 12px;text-align:center;font-size:12px;color:var(--muted)}.connector:after{content:'↓';display:block;color:#8a9fb5;font-size:20px;line-height:1.2}.branches{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:20px;position:relative;margin:0 0 24px;padding-top:20px}.branches:before{content:'';position:absolute;height:20px;top:0;left:50%;border-left:1px dashed #a8b7c8}.branch{min-width:0;border-top:1px dashed #a8b7c8;padding-top:10px}.branch-action{font-size:12px;color:var(--muted);margin:0 8px 10px}.branch-action:after{content:'↓';display:block;font-size:18px;line-height:1.2}.branches .module>summary{padding:16px;gap:10px}.branches .capability dl{grid-template-columns:minmax(0,1fr);gap:3px}.placement>.module-shell{margin-bottom:14px}.relation-notes{margin:18px 0;padding:14px 18px;background:#edf2f7;border-radius:12px}.relation-notes h3{font-size:13px;margin:0 0 8px}.relation-row{font-size:12px;margin:5px 0}.architecture-note{font-size:12px;color:var(--muted)}
+@media(max-width:700px){.branches{grid-template-columns:minmax(0,1fr)}.branches:before{display:none}}
+</style>
+</head>
+<body>
+<main class="page">
+<header><p class="eyebrow">ARCHITECTURE / CAPABILITY ATLAS</p><h1>$title</h1><p class="muted">先看系统怎样运转，再看能力、差距与建设取舍。</p><div class="meta">$date · $count · 不计算完成百分比</div></header>
+<section class="intro" aria-label="项目目标与操作链"><strong>$goal</strong><p>$scope</p><div class="workflow">$workflows</div></section>
+<nav class="navigation" aria-label="页面导航"><a href="#architecture">系统结构</a><a href="#capability-overview">模块能力表</a><a href="#boundaries">目标边界</a><div class="tools" hidden><button type="button" id="expand-modules">展开模块</button><button type="button" id="collapse-all">全部收起</button></div></nav>
+<noscript><p>浏览器已禁用脚本。所有摘要、表格与详情仍可阅读；请手动展开两层详情，表格链接只定位，不会自动展开。打印前请手动展开需要的详情。</p></noscript>
+<section id="architecture" aria-labelledby="architecture-title"><div class="section-header"><h2 id="architecture-title">系统结构与协作</h2><p>模块展开看能力；能力展开看定义、适用条件与依据。</p></div>
+<div class="legend">$legend<br>颜色只表示实现程度；必要性与建设决定独立判断。实现状态看目标范围内开发情况；本轮未复测不自动降级，验证限制见详情。部分完成须有目标行为差距；若目标本身要求证明效果或演练，缺结果也可构成差距。沿用现有不保证已验收。</div>
+<p class="architecture-note">从上到下沿动作箭头看主链；虚线分支属于紧邻上方模块的按需调用，不是主链必经步骤。卡片本身可展开。独立数据与贯穿支撑单列，关系行只作补充，不冒充顺序连线。</p>
+$architecture
+</section>
+<section class="overview" id="capability-overview" aria-labelledby="overview-title"><div class="section-header"><h2 id="overview-title">模块能力表</h2><p>$count</p></div><p>图看职责与协作，表比较用途、适用条件、已有基础与建设方式。点击能力名称展开并定位详情；窄屏在表内横向滚动。表格与模块摘要由同一份数据生成。</p>$tables</section>
+<section class="boundaries" id="boundaries" aria-label="范围与阅读边界"><div><h2>目标范围与明确边界</h2><ul>$boundaries</ul></div><div><h2>尚待确认</h2><ul>$questions</ul></div><div><h2>如何使用本地图</h2><ul><li>用模块、协作和能力差距解释系统、拆解后续工作，不替代接口、数据结构与业务规则规格。</li><li>未完成不等于必须补做；当前不做不等于删除已有能力或永久放弃。只从已确认要做的决定提取建设项。</li><li>证据仅证明写明的范围。没有执行的测试不计通过，选择人工方式也不等于已验证有效。</li></ul></div></section>
+<footer>内容基线：$date。判断依据见逐项详情；本页是独立离线报告，无外部字体、脚本或数据请求。</footer>
+</main>
+<script>
+'use strict';
+// Project text is server-rendered and escaped; no inline project JSON or innerHTML.
+const modules = [...document.querySelectorAll('details.module')];
+const details = [...document.querySelectorAll('details')];
+document.querySelector('.tools').hidden = false;
+function reveal(target, focus) {
+  if (!target) return;
+  let parent = target.parentElement;
+  while (parent) {
+    if (parent.tagName === 'DETAILS') parent.open = true;
+    parent = parent.parentElement;
+  }
+  if (target.tagName === 'DETAILS') target.open = true;
+  target.scrollIntoView({block: 'center', behavior: 'auto'});
+  if (focus) target.querySelector('summary')?.focus({preventScroll: true});
+}
+document.querySelectorAll('a[data-cap]').forEach(link => {
+  link.addEventListener('click', event => {
+    event.preventDefault();
+    const target = document.getElementById(link.dataset.cap);
+    reveal(target, true);
+    // location.hash also works when opened directly as a local file.
+    window.location.hash = link.dataset.cap;
+  });
+});
+function revealHash() {
+  const id = window.location.hash.slice(1);
+  if (id.startsWith('cap-')) reveal(document.getElementById(id), true);
+}
+window.addEventListener('hashchange', revealHash);
+revealHash();
+document.getElementById('expand-modules').addEventListener('click', () => {
+  modules.forEach(module => { module.open = true; });
+});
+document.getElementById('collapse-all').addEventListener('click', () => {
+  details.forEach(detail => { detail.open = false; });
+});
+let beforePrint = null;
+window.addEventListener('beforeprint', () => {
+  if (beforePrint !== null) return;
+  beforePrint = details.map(detail => detail.open);
+  details.forEach(detail => { detail.open = true; });
+});
+window.addEventListener('afterprint', () => {
+  if (beforePrint === null) return;
+  details.forEach((detail, index) => { detail.open = beforePrint[index]; });
+  beforePrint = null;
+});
+</script>
+</body>
+</html>

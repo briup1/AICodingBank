@@ -1,0 +1,75 @@
+{
+  "title": "纸舟 · 小型借书站能力地图",
+  "date": "2030-04-12 · 虚构示例，非真实验收",
+  "goal": "让社团成员借还纸质书，并让管理员查清每本书的去向。",
+  "scope": "当前只服务一个社团，先支持网页申请和人工交接；不处理收费。",
+  "workflows": [
+    {"name": "准备交付", "steps": ["管理员登记书籍", "管理员核对可借状态", "管理员开放目录"]},
+    {"name": "成员借书", "steps": ["成员提交借书申请", "站点登记申请", "管理员人工交接并登记归还"]}
+  ],
+  "modules": [
+    {
+      "id": "lending",
+      "name": "借还登记",
+      "responsibility": "记录谁借了哪本书，避免同一本书被重复交接。",
+      "necessity": {"kind": "必要", "reason": "没有借还记录就不能说明书在哪里。", "condition": ""},
+      "placement": "main",
+      "capabilities": [
+        {
+          "id": "borrow-request",
+          "name": "提交借书申请",
+          "definition": "成员选择书籍后留下自己的借书申请。",
+          "purpose": "让管理员知道谁想借哪本书。",
+          "necessity": {"kind": "必要", "reason": "这是当前网页借书入口。", "condition": ""},
+          "status": "部分完成",
+          "current": "已有申请处理；目标要求的重复申请拦截尚未接入。",
+          "decision": "沿用现有",
+          "approach": "继续使用当前表单；重复申请拦截怎样补齐尚需确认，不据此承诺新增页面。",
+          "evidence": [{"source": "虚构示例：src/lending.py:submit_request", "finding": "虚构代码核对：已接申请保存，目标要求的重复申请拦截入口尚缺，属具体目标行为差距。"}]
+        },
+        {
+          "id": "return-entry",
+          "name": "人工登记归还",
+          "definition": "管理员收到实体书后，在原登记册记下归还日期。",
+          "purpose": "让下一位成员知道书已归还。",
+          "necessity": {"kind": "必要", "reason": "纸质书的交接需要有人确认。", "condition": ""},
+          "status": "尚未核实",
+          "current": "已选择人工登记方式，但未取得现用登记册及归还操作步骤，无法判断是否已经落地。",
+          "decision": "已确认要做",
+          "approach": "先把登记册归还步骤交给值班管理员执行，不新建归还页面。",
+          "evidence": [{"source": "虚构示例：负责人选择记录 D-1", "finding": "明确采用人工方式；现用登记载体和步骤的实现依据尚缺，不只是本轮未观察交接。"}]
+        }
+      ]
+    },
+    {
+      "id": "reminder",
+      "name": "提醒服务",
+      "responsibility": "按选择的通知方式提醒到期，不能代替实际归还。",
+      "necessity": {"kind": "扩展", "reason": "当前可人工询问，借还登记不依赖提醒服务。", "condition": ""},
+      "placement": "branch",
+      "capabilities": [
+        {
+          "id": "message-reminder",
+          "name": "自动到期提醒",
+          "definition": "定时查找快到期的借书记录并发送消息。",
+          "purpose": "减少管理员逐个询问的时间。",
+          "necessity": {"kind": "条件必要", "reason": "提醒模块若建设，就需要读取真实到期记录。", "condition": "决定建设自动提醒时"},
+          "status": "未完成",
+          "current": "示例检查范围内未见定时发送实现。",
+          "decision": "当前不做",
+          "approach": "当前社团人数少，继续人工联系；人数增加时重新确认，不删除现有记录。",
+          "evidence": [{"source": "虚构示例：目标范围 R-2 与代码清单", "finding": "当前不建设的选择已明确；实现检查范围仅限示例清单。"}]
+        }
+      ]
+    }
+  ],
+  "externals": [
+    {"id": "notice-provider", "name": "外部消息服务", "responsibility": "若未来接入，只负责发送获准消息，不持有借还记录的最终解释权。"}
+  ],
+  "relations": [
+    {"from": "lending", "to": "reminder", "kind": "按需", "action": "仅在启用自动提醒后提供到期记录"},
+    {"from": "lending", "to": "notice-provider", "kind": "按需", "action": "未来启用提醒后，经许可请求发送到期消息"}
+  ],
+  "boundaries": ["当前只建设网页申请与人工交接，不接入支付，也不承诺自动提醒。", "本文件所有事实都是虚构示例，不能当成真实项目调查结果。"],
+  "questions": ["重复申请拦截尚未接入，补齐方式需确认；本轮也未复测已有申请保存，后者只作验证限制。"]
+}

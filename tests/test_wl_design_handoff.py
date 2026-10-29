@@ -6,7 +6,7 @@ import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-CHECK = ROOT / 'skills/wl-design-doc/scripts/check_design_doc.py'
+CHECK = ROOT / 'tools/skills/engineering/wl-design-doc/scripts/check_design_doc.py'
 LEGACY = dict(requirement_id='R1', status='approved', created='2026-10-16',
               updated='2026-10-16', chosen=None, approval_evidence='user-record:1')
 
@@ -82,13 +82,31 @@ class DesignHandoffTests(unittest.TestCase):
         meta['source_test_cases'] = {'path': 'external/confirmed-business-cases.md', 'version': 'external-v5'}
         result = self.check(meta, executable=True, case_path=meta['source_test_cases']['path'])
         self.assertEqual(result.returncode, 0, result.stderr)
-        design = (ROOT / 'skills/wl-design-doc/SKILL.md').read_text()
+        design = (ROOT / 'tools/skills/engineering/wl-design-doc/SKILL.md').read_text()
         for contract in ('已确认的外部用例', '不要求本流程文件', '根本无用例', '交接缺口', '不造来源'):
             self.assertIn(contract, design)
 
     def test_new_executable_design_without_cases_is_not_fabricated(self):
         meta = delegated(); meta.pop('source_test_cases')
         self.assertNotEqual(self.check(meta, executable=True).returncode, 0)
+
+    def test_engineering_decisions_are_required_without_fixed_chapters(self):
+        skill = ROOT / 'tools/skills/engineering/wl-design-doc'
+        design = (skill / 'SKILL.md').read_text()
+        card = (skill / 'references/scenario-template.md').read_text()
+        regression = (skill / 'references/regression-scenarios.md').read_text()
+        # Text contract only: independent generation must still validate actual coverage.
+        for contract in ('技术底座与选型', '模块职责与状态归属', '数据与保存边界',
+                         '工程运行与交付', '直接质量约束', '不是强制五个章节',
+                         '不发布/不安装', '实验通过只能证明对应能力', '工程决定可接手'):
+            with self.subTest(contract=contract):
+                self.assertIn(contract, design)
+        for contract in ('正式现状 vs 原型实验 vs 本版推荐', '谁持有权威状态',
+                         '提交触发与边界', '最小交付物', '是否阻塞实施'):
+            self.assertIn(contract, card)
+        for contract in ('独立 Agent', '不同类型的小改动', '正文缺权威状态与交付路径',
+                         '不提供协调者的五块补充正文'):
+            self.assertIn(contract, regression)
 
     def test_metadata_must_be_object(self):
         self.assertNotEqual(self.check([]).returncode, 0)

@@ -29,7 +29,7 @@ def entry():
 class VisualArtifactWorkbenchTests(unittest.TestCase):
     def test_registration_resolves_to_the_canonical_skill(self):
         item = entry()
-        self.assertEqual(item["path"], f"skills/{NAME}")
+        self.assertEqual(item["path"], f"tools/skills/shared/{NAME}")
         skill = ROOT / item["path"] / "SKILL.md"
         text = skill.read_text(encoding="utf-8")
         metadata = yaml.safe_load(text.split("---", 2)[1])
@@ -45,13 +45,15 @@ class VisualArtifactWorkbenchTests(unittest.TestCase):
         for doc in skill_root.rglob("*.md"):
             for target in re.findall(r"\[[^]]+\]\(([^)]+\.md)\)", doc.read_text(encoding="utf-8")):
                 self.assertTrue((doc.parent / target).resolve().is_file(), (doc, target))
-        workbench = (ROOT / "WORKBENCH.md").read_text(encoding="utf-8")
-        targets = re.findall(r"\[[^]]+\]\(([^)]+\.md)\)", workbench)
-        self.assertIn(f"skills/{NAME}/SKILL.md", targets)
+        workbench = (ROOT / "AGENTS.md").read_text(encoding="utf-8")
+        targets = re.findall(r"`([^`]+\.md)`", workbench)
+        self.assertIn(f"tools/skills/shared/{NAME}/SKILL.md", targets)
         for target in targets:
+            if target.startswith("/") or target.endswith(".local.md"):
+                continue
             self.assertTrue((ROOT / target).is_file(), target)
         ignored = subprocess.run(
-            ["git", "check-ignore", "WORKBENCH.local.md"],
+            ["git", "check-ignore", "personal/projects.local.md"],
             cwd=ROOT, capture_output=True, text=True, check=False,
         )
         self.assertEqual(ignored.returncode, 0)
@@ -61,7 +63,7 @@ class VisualArtifactWorkbenchTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             fixture = Path(tmp)
             (fixture / "install.py").write_bytes((ROOT / "install.py").read_bytes())
-            (fixture / "skills").symlink_to(ROOT / "skills", target_is_directory=True)
+            (fixture / "tools").symlink_to(ROOT / "tools", target_is_directory=True)
             target = fixture / "agent-skills"
             target.mkdir()
             (target / NAME).symlink_to(ROOT / entry()["path"], target_is_directory=True)

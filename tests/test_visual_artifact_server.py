@@ -9,7 +9,7 @@ import unittest
 from urllib.error import HTTPError
 from urllib.request import ProxyHandler, Request, build_opener
 
-SCRIPT = Path(__file__).resolve().parents[1] / "skills/visual-artifact-workbench/scripts/serve.py"
+SCRIPT = Path(__file__).resolve().parents[1] / "tools/skills/shared/visual-artifact-workbench/scripts/serve.py"
 
 
 class ShareServerTests(unittest.TestCase):

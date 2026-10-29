@@ -1,0 +1,104 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="wl-req-confirm"><meta name="artifact-schema-version" content="1"><title>需求 0006：重启后可复用的 Playwright 测试登录</title><style>
+ :root{--bg:#F7F6F3;--text:#2F3437;--muted:#787774;--line:#EAE7E0;--accent:#9F2F2D}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.7 'Plus Jakarta Sans','PingFang SC',sans-serif}a{color:var(--accent)}.layout{display:grid;grid-template-columns:290px minmax(0,1fr);gap:48px;max-width:1440px;margin:auto;padding:38px 28px}aside{position:sticky;top:24px;align-self:start;max-height:calc(100vh - 48px);overflow:auto}h1,h2{font-family:'Instrument Serif','Songti SC',serif;letter-spacing:-.02em}h1{font-size:27px;line-height:1.4}h2{font-size:32px;line-height:1.4}h3{font-size:20px}.eyebrow,.chip{font:12px/1.7 ui-monospace,monospace;color:var(--muted)}.chip{display:inline-block;border-radius:999px;background:#FDEBEC;color:var(--accent);padding:3px 9px;margin:0 4px 7px 0}nav{margin-top:24px}button{font:inherit;color:inherit;cursor:pointer;background:white;border:1px solid var(--line);border-radius:6px;padding:9px 12px}nav button{display:block;width:100%;text-align:left;border:0;border-radius:0;background:transparent;border-left:2px solid transparent;font-size:14px}nav button.active{background:#FDEBEC;border-left-color:var(--accent);color:var(--accent)}nav button:hover{background:#f0eee9}main{min-width:0}section{animation:appear .5s cubic-bezier(.16,1,.3,1)}section[hidden]{display:none}p,li{overflow-wrap:anywhere}pre{background:#26221E;color:#EDE8E0;border-radius:6px;padding:20px;overflow:auto;max-width:100%;font-size:14px;line-height:1.8;white-space:pre}code{background:#F0EEE9;color:#2F3437;padding:2px 5px;border-radius:4px;font-family:ui-monospace,monospace}pre>code{display:block;background:transparent;color:inherit;padding:0;border-radius:0;font:inherit}table{width:100%;border-collapse:collapse;background:white;font-size:14px}th,td{border:1px solid var(--line);padding:10px;text-align:left;vertical-align:top;overflow-wrap:anywhere}th{background:#FBFAF7;font-family:ui-monospace,monospace}img{max-width:100%;height:auto;cursor:zoom-in;border:1px solid var(--line);border-radius:6px}footer{display:flex;justify-content:space-between;margin-top:36px;border-top:1px solid var(--line);padding-top:18px}dialog{border:1px solid var(--line);max-width:95vw;max-height:95vh;background:var(--bg);padding:18px}dialog img{max-width:none;width:auto;max-height:82vh;cursor:default}dialog::backdrop{background:#2f3437bb}@keyframes appear{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}@media(max-width:860px){.layout{grid-template-columns:minmax(0,1fr);padding:20px 16px;gap:20px}aside{position:static;max-height:none}nav{display:flex;overflow:auto}nav button{min-width:160px}h2{font-size:27px}table{display:block;overflow:auto;max-width:100%}}
+ </style></head><body><div class="layout"><aside><p class="eyebrow">REQUIREMENT / REVIEW</p><span class="chip">wl-req-confirm</span><span class="chip">产物规范：1</span><h1>需求 0006：重启后可复用的 Playwright 测试登录</h1><p class="eyebrow">状态：approved<br>阶段：done<br>2026-10-20 · 用例 v1<br>需求已批准，实现待验收</p><nav><button data-panel="s0">01 现状：现在能做到什么</button><button data-panel="s1">02 需求重定义</button><button data-panel="s2">03 新旧链路与差异</button><button data-panel="s3">04 用户故事与规则</button><button data-panel="s4">05 不做什么</button><button data-panel="s5">06 用例与执行约定</button><button data-panel="s6">07 来源、证据与待确认</button></nav><p class="eyebrow"><a href="requirement.wl-req-confirm.md">查看唯一 Markdown 正文</a></p></aside><main><section id="s0" ><p class="eyebrow">SEC 01 / 7</p><h2>现状：现在能做到什么</h2><p>E01 已验证：用户在专用测试窗口 A 手动登录，保持 A 打开；独立测试环境 B 无需再次登录，真实身份响应的账号和企业均与 A 一致。Playwright Test 1.60.0 最终运行 11 项断言通过，约 5 秒，不含人工登录。登录态仅在内存传递，没有跨运行保存。</p>
+<pre><code class="language-text">N01 Agent 接到测试任务
+  → N02 查找仍在运行的专用登录窗口
+  → N03 把当前登录交给独立测试环境
+  → N04 核对账号、企业及页面可用
+  → N05 允许继续测试
+</code></pre>
+<p>最小例子：A 仍打开时，B 可直接进入 Beta 业务页。若关机，旧进程和调试端口不再存在；当前演示未交付重启后的入口，不能据此继续免登。</p>
+<p>E02 旧尝试：只保留 profile 并重启浏览器，没有恢复出可用登录；原因未证实。它不是“Playwright 无法复用”的证据。</p>
+<p>本需求不修改被测网站的界面。现有页面截图仅为历史运行观察，不是当前线上新事实：</p>
+<p><img src="assets/B-verified.png" alt="E01：独立测试环境 B 已登录，账号和历史区域已遮罩"></p>
+<footer><button data-prev>上一节</button><button data-next>下一节</button></footer></section><section id="s1" hidden><p class="eyebrow">SEC 02 / 7</p><h2>需求重定义</h2><p><strong>原始诉求</strong>：能力能复用，关机后重新开机，Agent 依然能直接使用 Playwright 执行测试用例。</p>
+<p><strong>最终目标</strong>：登录有效时不反复要求人工登录，Agent 有稳定、可发现的执行入口，测试与日常浏览互不争抢；无效身份不能进入后续业务操作。</p>
+<p><strong>异议与限制</strong>：“重启仍可用”不等于永久免登。服务器可能使登录过期或撤销权限；正确结果是识别失效并请求补登，不能伪造或绕过登录。一次新进程恢复通过，也不能写成已经做过真实整机重启。</p>
+<p><strong>本版边界</strong>：先固化跨运行的共用能力，以已验证的 HGJ client / Beta 页面作为第一条真实接入。其他站点、admin 账号体系不自动宣称已接入。保存方式与程序组织属于后续设计，不在本阶段冻结。</p>
+<footer><button data-prev>上一节</button><button data-next>下一节</button></footer></section><section id="s2" hidden><p class="eyebrow">SEC 03 / 7</p><h2>新旧链路与差异</h2><pre><code class="language-text">N01 Agent 接到测试任务〔保持〕
+  → N02 选择已确认的环境、账号及企业〔修改，D01〕
+  → N03 恢复此前获准保存的测试登录〔修改，D02〕
+  → N04 在独立测试环境验证身份〔修改，D03〕
+      ├─ 有效且符合预期 → N05 执行明确指定的用例〔保持〕
+      ├─ 登录失效/无状态 → N06 专用窗口人工补登〔新增，D04〕
+      │                      → 回到 N03，再验证后继续
+      └─ 身份不符/服务异常 → 停止，报告原因，不执行业务〔新增，D03〕
+  → N07 输出结果并收尾本次测试资源〔修改，D05〕
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>差异</th>
+<th>原来 → 目标及最小例子</th>
+<th>后续影响</th>
+<th>依据与验收</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>D01 / 修改 / N02</td>
+<td>临时演示入口 → Agent 可发现的固定能力入口；换个会话仍能找到，不要求记住旧端口</td>
+<td>调用不依赖本轮 Agent 的上下文</td>
+<td>用户目标；R01；用例 v1</td>
+</tr>
+<tr>
+<td>D02 / 修改 / N03</td>
+<td>仅内存复用 → 获准保留的登录可跨进程读取；关闭上轮测试进程后，新进程仍可验证有效身份</td>
+<td>不要求专用浏览器一直运行</td>
+<td>用户目标；R02；用例 v1</td>
+</tr>
+<tr>
+<td>D03 / 修改 / N04</td>
+<td>演示时人工核对 → 每次在业务操作前核对真实身份；例如期望企业 A，读到企业 B 必须停止</td>
+<td>不静默跨账号、跨企业测试</td>
+<td>E01、由目标推导；R03；用例 v1</td>
+</tr>
+<tr>
+<td>D04 / 新增 / N06</td>
+<td>失败后反复试启动 → 明确补登交接；例如登录已失效时只等待用户补登，不发送测试消息</td>
+<td>减少重复认证与越权业务操作</td>
+<td>用户免登目标的必要失败路径；R04；用例 v1</td>
+</tr>
+<tr>
+<td>D05 / 修改 / N07</td>
+<td>演示文件绑定旧端口 → 输出本次身份校验及测试结果，结束只关闭自己的资源</td>
+<td>日常浏览与其他任务不受影响</td>
+<td>用户原始约束；R05、R06；用例 v1</td>
+</tr>
+</tbody></table>
+<footer><button data-prev>上一节</button><button data-next>下一节</button></footer></section><section id="s3" hidden><p class="eyebrow">SEC 04 / 7</p><h2>用户故事与规则</h2><ol>
+<li>As a 测试任务发起人, I want 重新开机后 Agent 仍能找到登录复用入口, so that 不需要重新解释本机启动方式。</li>
+<li>As a 页面测试执行者, I want 登录有效时直接运行指定用例, so that 不必每条用例重复登录。</li>
+<li>As a 账号使用者, I want 失效或身份不符时先停止, so that 自动化不会用错误身份操作业务。</li>
+</ol>
+<ul>
+<li>R01：共用方法唯一维护，现有测试入口按需引用，不新增相互竞争的网页自动化默认入口。首次接入范围明确显示为 HGJ client / Beta。</li>
+<li>R02：只有用户明确允许后，才能在本机私密位置保存可用于认证的状态；范围限获准环境的业务域、登录域和身份服务所需状态，仅供当前本机用户获准测试使用，不读其他站点档案；不得写入 Git、需求附件、日志或模型输出。撤回授权后停止读取和复用，清除保存状态需另行确认，不擅自删除。不得依赖旧进程和旧临时端口。保存方案在设计阶段确定。</li>
+<li>R03：在每轮业务测试前确认真实身份、企业和页面可用。HTTP 200、有账号按钮或本地存有状态文件，都不能单独作为成功依据。测试传入的预期身份必须明确；第一次建立基线由用户确认，不把任意返回的账号自动视为正确。缺少账号或当前企业标识、身份响应无法解释、预期身份未提供时，判定校验未完成并停止，不自动判为需要重登。</li>
+<li>R04：无登录、过期或已撤销时请求人工补登；身份不符、身份无法确定和网络/服务异常单独报告，不误判为必须重登。补登不读取密码库、不代填密码。成功交接前保留登录窗口；取消或超时不执行业务动作。</li>
+<li>R05：每个测试有独立浏览环境；共享服务端业务状态是否允许并发另行判断。本轮连续与小规模并发验证只使用身份只读检查，不触发查价。</li>
+<li>R06：只管理自己创建的测试资源，不启动开机常驻服务、不接管日常 Chrome、不终止其他浏览器。指定用例的原始操作授权仍独立成立；保存登录不构成未来查价/提交的永久授权。</li>
+<li>R07：新进程恢复和真实整机重启分别记录。无需人为等待登录过期才能完成实现；失效与错误身份在本地受控夹具验证，不能对真实服务做撤权/破坏性实验。</li>
+</ul>
+<footer><button data-prev>上一节</button><button data-next>下一节</button></footer></section><section id="s4" hidden><p class="eyebrow">SEC 05 / 7</p><h2>不做什么</h2><ul>
+<li>不承诺永久免登，不绕过验证码、企业选择或服务端权限。</li>
+<li>不发送查价消息，不恢复旧查价会话，不修改被测业务代码、配置或数据库。</li>
+<li>不把全部网站、全部角色或全部账号接入作为第一版交付。</li>
+<li>不复制日常 Chrome 完整档案，不启用后台常驻平台，不全局安装新依赖或自动升级工具。</li>
+<li>不主动重启整机；用户自行完成整机重启前，只能交付新进程恢复证据及重启后操作入口。</li>
+</ul>
+<footer><button data-prev>上一节</button><button data-next>下一节</button></footer></section><section id="s5" hidden><p class="eyebrow">SEC 06 / 7</p><h2>用例与执行约定</h2><ul>
+<li>用例：<a href="test-cases.wl-qa-test-planner.html">按场景分组的用例 v1</a>；唯一正文：<a href="test-cases.wl-qa-test-planner.html">Markdown</a>。尚未执行，不把用例生成当成通过。</li>
+<li>正式基线独立审查：2026-10-20 执行者只读审查，指出身份无法确认的停止规则及整机重启通过口径缺口，本版已补齐；用例 v1 同步修订。该审查不是实现或运行验收。用户已在本会话选择“批准并实施（推荐）”，本版范围与本机持久保存获准。</li>
+<li>已获准访问：HGJ client / Beta 登录和业务页；范围只读身份验证、用户手动登录及独立测试页创建。新业务写操作仍需另行明确授权。</li>
+<li>本轮可模拟关闭旧进程、在新进程加载并检查状态；不能声称已完成真正关机开机。</li>
+</ul>
+<footer><button data-prev>上一节</button><button data-next>下一节</button></footer></section><section id="s6" hidden><p class="eyebrow">SEC 07 / 7</p><h2>来源、证据与待确认</h2><ul>
+<li>S01：本会话用户“能力能复用，比如关机了，启动后依然可以 Agent 最直接地使用 Playwright 进行测试用例测试”。</li>
+<li>E01：2026-10-20 13:39，Beta 实际运行。报告：<code>/Users/ziyun/.local/state/web-task/runs/playwright-auth-reuse-demo-20261020/RESULT.md</code>；断言：同目录 <code>reuse-verified-result.json</code>；11 项断言通过。附件为同次已脱敏 B 页面。局限：仅运行中浏览器 A→独立 B，没有跨进程恢复或并发。</li>
+<li>E02：同日此前失败记录：<code>/Users/ziyun/.local/state/web-task/runs/playwright-freight-demo-20261020/run-12-final-report.md</code>；跨重启 profile 未恢复身份，根因未确定。</li>
+<li>E03：本轮核对工作台工具接入入口及现有测试能力，未发现已交付的重启后登录恢复共用入口；现有演示绑定外部项目 runner 和临时 CDP。静态检查不证明其他自定义目录没有类似脚本。</li>
+<li>Q01：已解决。用户于 2026-10-20 本会话选择“批准并实施（推荐）”，允许在仓库外本机私密目录持久保存必要测试登录态；不包含其他环境、其他账号或业务提交的永久授权。</li>
+</ul>
+<footer><button data-prev>上一节</button><button data-next>下一节</button></footer></section></main></div><dialog><button id="close-image">关闭</button><div><img alt="原尺寸证据截图"></div></dialog><script>
+ const sections=[...document.querySelectorAll('section')],buttons=[...document.querySelectorAll('nav button')];let current=0;function show(i){current=Math.max(0,Math.min(sections.length-1,i));sections.forEach((s,j)=>s.hidden=j!==current);buttons.forEach((b,j)=>b.classList.toggle('active',j===current));}buttons.forEach((b,i)=>b.onclick=()=>show(i));document.querySelectorAll('[data-prev]').forEach(b=>b.onclick=()=>show(current-1));document.querySelectorAll('[data-next]').forEach(b=>b.onclick=()=>show(current+1));document.addEventListener('keydown',e=>{if(document.querySelector('dialog').open)return;if(e.key==='ArrowDown'){e.preventDefault();show(current+1)}if(e.key==='ArrowUp'){e.preventDefault();show(current-1)}});const dialog=document.querySelector('dialog');document.querySelectorAll('main img').forEach(img=>img.onclick=()=>{dialog.querySelector('img').src=img.src;dialog.showModal()});document.querySelector('#close-image').onclick=()=>dialog.close();show(0);
+ </script></body></html>

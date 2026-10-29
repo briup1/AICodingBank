@@ -1,0 +1,71 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="wl-req-confirm"><meta name="artifact-schema-version" content="1"><title>OpenCLI 任务收尾</title><style>
+*{box-sizing:border-box}body{margin:0;background:#F7F6F3;color:#2F3437;font:16px/1.7 'Plus Jakarta Sans','PingFang SC',sans-serif} .layout{display:grid;grid-template-columns:290px minmax(0,1fr);gap:40px;max-width:1300px;margin:auto;padding:36px}aside{position:sticky;top:24px;align-self:start}h1,h2{font-family:'Instrument Serif','Songti SC',serif;letter-spacing:-.02em}h1{font-size:32px}h2{font-size:30px}.badge{display:inline-block;background:#FBF3DB;color:#956400;border-radius:999px;padding:4px 10px;font-size:12px}nav a{display:block;padding:9px;color:#787774;text-decoration:none;border-left:2px solid transparent}nav a.active{background:#FDEBEC;color:#9F2F2D;border-color:#9F2F2D}main{min-width:0}section{display:none;animation:show .5s cubic-bezier(.16,1,.3,1)}section.active{display:block}code{background:#F0EEE9;color:#2F3437;padding:2px 5px;border-radius:4px}pre{background:#26221E;color:#EDE8E0;padding:20px;overflow:auto;font:14px/1.7 'JetBrains Mono',monospace}pre>code{display:block;background:transparent;color:inherit;padding:0;border-radius:0;font:inherit}table{border-collapse:collapse;width:100%;font-size:14px}td,th{border:1px solid #EAE7E0;padding:10px;text-align:left}th{background:#FBFAF7}.table-scroll{overflow:auto}a{color:#9F2F2D}button{background:#fff;color:#2F3437;border:1px solid #EAE7E0;border-radius:6px;padding:10px;margin:16px 8px 0 0}.eyebrow{font:12px monospace;color:#787774}@keyframes show{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}@media(max-width:860px){.layout{grid-template-columns:1fr;padding:20px;gap:20px}aside{position:static}nav{display:flex;flex-wrap:wrap}nav a{font-size:14px}h1{font-size:28px}}
+</style></head><body><div class="layout"><aside><div class="eyebrow">REQUIREMENT 0005</div><h1>OpenCLI 任务收尾</h1><p class="badge">wl-req-confirm · 产物规范：1</p><p>批准状态：approved<br>执行阶段：done</p><p class="badge">租约收尾；非全部服务退出</p><nav><a href="#s0">01 现状</a><a href="#s1">02 需求重定义</a><a href="#s2">03 新旧变化</a><a href="#s3">04 范围与规则</a><a href="#s4">05 本期不做</a><a href="#s5">06 用例与执行约定</a><a href="#s6">07 证据与局限</a></nav><p><a href="requirement.wl-req-confirm.md">Markdown 正文</a></p></aside><main><section id="s0"><div class="eyebrow">SEC 1 / 7</div><h2>现状</h2><p>E01：本机 OpenCLI 1.8.8、扩展1.0.24。网页 Skill 要求独立会话，却无强制结束步骤。原生自建会话约10分钟空闲释放；借用用户页面不自动空闲释放。最后一个会话释放后可能保留空白复用容器；daemon 不随任务退出。</p>
+<pre><code class="language-text">N01 接收网页任务
+  ↓
+N02 创建/使用浏览器会话
+  ↓
+N03 执行并报告结果
+  ↓
+N04 资源留存，依赖调用方或原生空闲回收
+</code></pre>
+<p>当前没有针对 OpenCLI 的统一任务收尾脚本；已有 browser-console 针对 agent-browser，不能当作同一工具。浏览器横幅、标签组、扩展图标不是同一个状态；本轮无原页面截图，不以源码冒充横幅实际可见状态。</p>
+<button data-go="0">上一节</button><button data-go="1">下一节</button></section><section id="s1"><div class="eyebrow">SEC 2 / 7</div><h2>需求重定义</h2><p>最终目标是减少工作完成后的自动化遗留，同时不影响其他任务、普通Chrome或登录配置。只停止后台服务不能替代会话释放；按用户选定范围，先交付“可执行的会话收尾”，不把它包装成全部服务和容器已退出。</p>
+<p>用户故事：As a 经常使用网页自动化的本机用户, I want 每个任务有明确归属、结束动作和真实状态, so that 不必手工猜测哪些浏览器资源可以关闭。</p>
+<button data-go="0">上一节</button><button data-go="2">下一节</button></section><section id="s2"><div class="eyebrow">SEC 3 / 7</div><h2>新旧变化</h2><pre><code class="language-text">N01 接收网页任务（保持）
+  ↓
+N02 登记本任务独立会话（修改 D01）
+  ↓
+N03 执行并保留业务结果（保持）
+  ↓
+N04 结束或人工接手？（新增 D02）
+  ├─ 结束 → 释放指定会话 → 回读租约状态 → 报告限制（新增 D03）
+  └─ 接手 → 记录保留原因 → 人工继续 → 再结束（新增 D04）
+</code></pre>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>差异</th>
+<th>原来 → 目标</th>
+<th>下游结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>D01</td>
+<td>手写会话名 → 每任务随机登记会话</td>
+<td>不复用未知历史会话</td>
+</tr>
+<tr>
+<td>D02</td>
+<td>报告即结束 → 报告前收尾；整任务脚本结束也执行收尾</td>
+<td>成功、失败、可捕获终止均有结束路径</td>
+</tr>
+<tr>
+<td>D03</td>
+<td>凭关闭成功文案 → 原生释放应答和会话列表回读；物理关页另标未验证</td>
+<td>不把租约级成功当全部浏览器退出</td>
+</tr>
+<tr>
+<td>D04</td>
+<td>页面无限保留或随意关闭 → 明确人工交接及恢复</td>
+<td>交接状态可见；不承诺取消原生超时</td>
+</tr>
+</tbody></table></div>
+<button data-go="1">上一节</button><button data-go="3">下一节</button></section><section id="s3"><div class="eyebrow">SEC 4 / 7</div><h2>范围与规则</h2><ul>
+<li>R01：只处理新登记、本任务拥有的会话。借用页面须明确授权，结束只解绑，不删除页面或登录配置。</li>
+<li>R02：业务失败码保留；收尾失败不能伪报成功。仍有在途请求、结果未知或锁冲突时停止自动释放并报告。</li>
+<li>R03：普通交互 Agent 显式收尾；整任务脚本正常结束/失败/可捕获终止时尝试收尾。硬强杀/断电无法保证执行。</li>
+<li>R04：结果分开报告租约释放、物理页面清理、原生空白容器和共享服务。没有物理关闭证据就写未独立验证。</li>
+<li>R05：不自动清理未知历史任务，不批量杀Chrome或停止共享daemon。</li>
+</ul>
+<button data-go="2">上一节</button><button data-go="4">下一节</button></section><section id="s4"><div class="eyebrow">SEC 5 / 7</div><h2>本期不做</h2><p>不启用用户级Pi扩展、全局shell拦截、后台回收器；不改OpenCLI或Chrome扩展；不强关最后空白容器，不证明跨宿主空闲后自动停服。原始诉求中的“所有标识消失、服务退出”只部分覆盖，作为明确未完成项保留，不因验收改写成全部完成。</p>
+<button data-go="3">上一节</button><button data-go="5">下一节</button></section><section id="s5"><div class="eyebrow">SEC 6 / 7</div><h2>用例与执行约定</h2><p>用例v1：<a href="test-cases.md">聚焦验证</a>。只用本机无业务数据页面与mock夹具，不操作历史会话、不访问外部业务。独立核对只覆盖本次改动与直接原生契约；完成一次阻断修复及聚焦复核，无剩余已发现阻断，17项mock测试由验证者重跑通过。执行证据见 <a href="verification.md">验证记录</a>，不追溯声称用例基线在实现前已独立审查。</p>
+<button data-go="4">上一节</button><button data-go="6">下一节</button></section><section id="s6"><div class="eyebrow">SEC 7 / 7</div><h2>证据与局限</h2><ul>
+<li>E01：已安装CLI与扩展源码的会话释放、空闲回收、daemon生命周期；版本为1.8.8 / 1.0.24。</li>
+<li>E02：本轮本地HTTP夹具新建A/B，释放A后B仍可读标题，之后释放B。仅证明原生会话路径，不证明浏览器横幅消失或普通用户所有标签状态。</li>
+<li>E03：原生释放会吞部分物理关页异常，租约消失与真实页关闭不能等同。结果必须带物理清理未独立验证。</li>
+<li>确认边界：本轮用户同意实现建议，明确排除宿主级启用。更彻底容器/服务退出需有可验证的跨调用方归属能力，不自动扩展。</li>
+</ul>
+<button data-go="5">上一节</button><button data-go="6">下一节</button></section></main></div><script>
+const sections=[...document.querySelectorAll('section')],links=[...document.querySelectorAll('nav a')];function show(){const index=Math.max(0,sections.findIndex(s=>'#'+s.id===location.hash));sections.forEach((s,i)=>s.classList.toggle('active',i===index));links.forEach((s,i)=>s.classList.toggle('active',i===index));}document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>location.hash=sections[Number(b.dataset.go)].id);addEventListener('hashchange',show);addEventListener('keydown',e=>{const i=sections.findIndex(s=>s.classList.contains('active'));if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();location.hash=sections[Math.max(0,Math.min(sections.length-1,i+(e.key==='ArrowDown'?1:-1)))].id;}});show();
+</script></body></html>

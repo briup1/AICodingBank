@@ -35,14 +35,14 @@
 ## 子计划 A：总入口与契约（独立可验收，最多 8 个文件）
 
 文件（均相对仓库根）：
-1. 删除/重命名 skills/wl-phase-routing/SKILL.md → skills/wl-auto-delivery/SKILL.md（一个重命名对象）
-2. 新增 skills/wl-auto-delivery/references/test-case-review.md
-3. 新增 skills/wl-auto-delivery/references/execution-and-evidence.md
+1. 删除/重命名 skills/wl-phase-routing/SKILL.md → tools/skills/workbench/wl-auto-delivery/SKILL.md（一个重命名对象）
+2. 新增 tools/skills/workbench/wl-auto-delivery/references/test-case-review.md
+3. 新增 tools/skills/workbench/wl-auto-delivery/references/execution-and-evidence.md
 4. 修改 WORKBENCH.md
 5. 修改 skills.yaml（只改对应项；verified 留空）
 6. 生成 CATALOG.md（用 install.py 的纯 write_catalog API；不执行 main，不手改）
 7. 新增 tests/test_wl_auto_delivery.py
-8. 新增 skills/wl-auto-delivery/references/regression-scenarios.md
+8. 新增 tools/skills/workbench/wl-auto-delivery/references/regression-scenarios.md
 
 任务：先添加测试并见 RED（新入口/登记缺失）；再实现精简总入口和配套规则。维持 Observe/Confirm/Design/Execute/Verify/Learn 的按需行为，不强迫只读任务走流水线。自动模式要求显式委托、范围/数据/成本/操作授权边界；不能以沉默批准。推荐需明确结论和理由，不制造多方案；重大不可逆或范围/授权变化停止。正式用例基线一次独立审查；其他角色按缺口最少使用，只通过 Herdr Pi high 委派；不可用不能冒充独立完成。
 
@@ -50,14 +50,14 @@
 
 ## 子计划 B：需求→用例→方案→开发→Review（依赖 A，最多 9 个文件）
 
-1. skills/wl-req-confirm/SKILL.md
-2. skills/wl-req-confirm/doc-html-style.md
-3. skills/wl-qa-test-planner/SKILL.md（最小增补，不重写）
-4. skills/wl-design-doc/SKILL.md
-5. skills/wl-design-doc/scripts/check_design_doc.py
-6. skills/wl-design-doc/references/regression-scenarios.md
-7. skills/wl-ticket-run/SKILL.md
-8. skills/wl-requesting-code-review/SKILL.md
+1. tools/skills/engineering/wl-req-confirm/SKILL.md
+2. tools/skills/engineering/wl-req-confirm/doc-html-style.md
+3. tools/skills/engineering/wl-qa-test-planner/SKILL.md（最小增补，不重写）
+4. tools/skills/engineering/wl-design-doc/SKILL.md
+5. tools/skills/engineering/wl-design-doc/scripts/check_design_doc.py
+6. tools/skills/engineering/wl-design-doc/references/regression-scenarios.md
+7. tools/skills/engineering/wl-ticket-run/SKILL.md
+8. tools/skills/engineering/wl-requesting-code-review/SKILL.md
 9. 新增 tests/test_wl_design_handoff.py
 
 任务：更新需求唯一正文与整体链接；批准状态与执行阶段分离且兼容旧稿。设计保持唯一 HTML，增加来源用例/版本及明确决策方式；新增委托模式时同步脚本校验与工单入口，不把委托标人工批准。先为委托缺证据/人工缺批准/合法委托/旧合法批准等写小 HTML 夹具见 RED，再修改检查脚本到 GREEN。候选方案不等于可执行方案，关键假设无证据依旧阻断。
@@ -68,13 +68,13 @@
 
 ## 子计划 C：执行环境、证据与安全清理（依赖 A，最多 7 个文件）
 
-1. skills/wl-web-auto/SKILL.md
-2. skills/wl-web-auto/scripts/run.mjs（仅确需复用外部运行根时最小增补）
-3. skills/wl-web-auto/scripts/self-test.mjs（随目录行为有改才改）
-4. skills/wl-compass-local-test/SKILL.md
-5. skills/wl-compass-local-test/scripts/local-test-down.sh
+1. tools/skills/shared/wl-web-auto/SKILL.md
+2. tools/skills/shared/wl-web-auto/scripts/run.mjs（仅确需复用外部运行根时最小增补）
+3. tools/skills/shared/wl-web-auto/scripts/self-test.mjs（随目录行为有改才改）
+4. tools/skills/engineering/wl-compass-local-test/SKILL.md
+5. tools/skills/engineering/wl-compass-local-test/scripts/local-test-down.sh
 6. 新增 tests/test_wl_local_test_cleanup.py
-7. skills/wl-auto-delivery/references/execution-and-evidence.md（A 文件的定向补充，不另计全任务文件数）
+7. tools/skills/workbench/wl-auto-delivery/references/execution-and-evidence.md（A 文件的定向补充，不另计全任务文件数）
 
 任务：总流程记录环境→Web Auto 接收明确入口和基线；单独调用仍可沿已确认项目设置或用户输入，不依赖总流程。默认业务环境无设置时推荐 Dev（私人项目本地）并随确认一次确定；生产永不默认，不获授权不写。
 
@@ -92,8 +92,8 @@ Python 固定 uv 管理的 3.12.9，先验证版本；不装依赖。当前裸 P
 - uv run --no-project --python 3.12.9 --no-python-downloads python -m unittest discover -s tests -p 'test_wl_auto_delivery.py' -v
 - 同上分别运行 test_wl_design_handoff.py、test_wl_local_test_cleanup.py
 - 需要 YAML 的命令显式设置上述 PYTHONPATH；tests/test_install.py 仅作为登记/生成直接回归。
-- node --test skills/wl-web-auto/scripts/self-test.mjs
-- bash -n skills/wl-compass-local-test/scripts/local-test-down.sh
+- node --test tools/skills/shared/wl-web-auto/scripts/self-test.mjs
+- bash -n tools/skills/engineering/wl-compass-local-test/scripts/local-test-down.sh
 - git diff --check；针对委派前基线核对所有新增/修改及未授权文件不变。
 
 负责人语义验收：独立调用 QA、A/B 两部分分组、Grill 确定规则后用例回流、默认人工方案与显式委托两模式、缺证据不推进、聚焦 Review 不越界、环境阻塞不静默切换、失败→修复→新轮复测、合入 master 不触发删除、证据 hold/未授权保留、Worktree 清理后报告仍可解释。
@@ -119,7 +119,7 @@ Python 固定 uv 管理的 3.12.9，先验证版本；不装依赖。当前裸 P
 | 清理与独立证据目录 | 8 项隔离清理检查、5 项 Node 检查通过；默认留产物、不停共享 MQ，显式删除拒绝穿越/符号链接；7/30 天仅待确认建议，未启用自动删除 |
 | 入口与目录登记 | 7 项总入口/契约检查、10 项隔离 installer 回归通过；CATALOG 由纯函数生成，未跑真实安装器 main |
 
-负责人最终实际运行：Python 3.12.9；test_wl_auto_delivery.py 7 项、test_wl_design_handoff.py 11 项、test_wl_local_test_cleanup.py 8 项、test_install.py 10 项，合计 36 项通过；node --test skills/wl-web-auto/scripts/self-test.mjs 5 项通过；bash -n local-test-down.sh 与 git diff --check 通过。所有真实运行目录/删除验证均限定于临时夹具，未停真实服务/容器。QA 保留与 Review full 保留另用派发前快照独立核对，不仅依赖实现者给定的哈希。
+负责人最终实际运行：Python 3.12.9；test_wl_auto_delivery.py 7 项、test_wl_design_handoff.py 11 项、test_wl_local_test_cleanup.py 8 项、test_install.py 10 项，合计 36 项通过；node --test tools/skills/shared/wl-web-auto/scripts/self-test.mjs 5 项通过；bash -n local-test-down.sh 与 git diff --check 通过。所有真实运行目录/删除验证均限定于临时夹具，未停真实服务/容器。QA 保留与 Review full 保留另用派发前快照独立核对，不仅依赖实现者给定的哈希。
 
 派发前快照实际共 28 个相关文件，本轮 17 个既有路径修改或重命名、11 个未变；保留原 wl-web-auto 改名等未提交改动，不将其算作本轮成果。未 commit/push、未同步第三方、未安装依赖、未改宿主加载目录。
 

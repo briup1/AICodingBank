@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """安装登记中的 Skill，并生成能力目录。
 
-用法: python3 install.py
+用法: python3 install.py（同步并安装，需授权）；python3 install.py --catalog-only（只刷新目录）
 可重复运行：第三方仓库 git pull 到最新，软链幂等重建，目录重新生成。
 闸门：只有带 verified 日期且未被本机禁用的 Skill 会被软链。
 本机配置：可在被 Git 忽略的 skills.local.yaml 中通过 disabled 列表停用 Skill。
 """
+import argparse
 import hashlib
 import json
 import os
@@ -132,7 +133,22 @@ def write_catalog(entries, path):
         f.write("\n".join(lines) + "\n")
 
 
-def main():
+def main(catalog_only=False):
+    if catalog_only:
+        # Path migrations must not fetch upstream or change host loading directories.
+        with open(os.path.join(ROOT, "skills.yaml"), encoding="utf-8") as f:
+            cfg = yaml.safe_load(f)
+        with open(os.path.join(ROOT, cfg["third_party"]["lock"]), encoding="utf-8") as f:
+            lock = json.load(f)["skills"]
+        entries = [dict(skill, origin="自研") for skill in cfg.get("self") or []]
+        for name, meta in lock.items():
+            ref = meta.get("ref")
+            origin = f"第三方·{meta['source']}" + (f"@{ref}" if ref else "")
+            entries.append(dict(meta, name=name, origin=origin))
+        write_catalog(entries, os.path.join(ROOT, "CATALOG.md"))
+        print(f"CATALOG.md 已生成（{len(entries)} 个登记）；未同步上游或安装 Skill")
+        return
+
     report = []
     try:
         disabled = load_disabled(os.path.join(ROOT, LOCAL_CONFIG))
@@ -236,4 +252,6 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--catalog-only", action="store_true", help="只生成目录，不联网、不安装")
+    main(catalog_only=parser.parse_args().catalog_only)

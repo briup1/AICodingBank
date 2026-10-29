@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="wl-req-confirm"><meta name="artifact-schema-version" content="1"><title>Harness：从目录整理恢复为可指导开发的工程手册</title>
+<style>
+:root{color-scheme:light;--bg:#F7F6F3;--ink:#2F3437;--accent:#9F2F2D;--line:#EAE7E0}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 'Plus Jakarta Sans','PingFang SC','Microsoft YaHei',sans-serif}aside{width:290px;position:sticky;top:0;height:100vh;overflow:auto;padding:32px 22px;border-right:1px solid var(--line)}.layout{display:flex}main{min-width:0;max-width:1100px;flex:1;padding:44px}h1,h2{font-family:'Instrument Serif','Songti SC','SimSun',serif;letter-spacing:-.02em;line-height:1.3}h1{font-size:27px}h2{font-size:32px}small{font:12px/1.6 ui-monospace,monospace;color:#787774}nav{margin-top:28px}nav a{display:block;padding:9px;color:var(--ink);text-decoration:none;border-left:2px solid transparent}nav a[aria-current]{background:#FDEBEC;border-left-color:var(--accent)}a{color:var(--accent)}.badge{display:inline-block;background:#FBF3DB;color:#956400;padding:3px 8px;border-radius:999px;font-size:11px;margin:3px 0}code{background:#F0EEE9;color:var(--ink);padding:2px 5px;border-radius:4px;font-family:ui-monospace,monospace;overflow-wrap:anywhere}pre{background:#26221E;color:#EDE8E0;overflow:auto;padding:18px;border-radius:6px;font-size:14px}pre>code{display:block;background:transparent;color:inherit;padding:0;font:inherit;white-space:pre;overflow-wrap:normal}.table-scroll{max-width:100%;overflow:auto}table{border-collapse:collapse;width:100%;background:white}th,td{text-align:left;vertical-align:top;border:1px solid var(--line);padding:10px;min-width:130px}th{background:#FBFAF7}footer{margin-top:28px;display:flex;justify-content:space-between}button{background:white;border:1px solid var(--line);padding:10px 18px;border-radius:4px;color:var(--ink);cursor:pointer}section:not([hidden]){animation:up .5s cubic-bezier(.16,1,.3,1)}@keyframes up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}@media(max-width:859px){.layout{display:block}aside{position:static;width:auto;height:auto;border-right:0;border-bottom:1px solid var(--line);padding:22px}main{padding:22px}h2{font-size:27px}}
+</style></head><body><div class="layout"><aside><small>REQUIREMENT / 0007</small><h1>Harness：从目录整理恢复为可指导开发的工程手册</h1><div class="badge">wl-req-confirm · 产物规范：1</div><p><span class="badge">批准状态：reviewing</span><br><span class="badge">执行阶段：verifying</span></p><p><a href="requirement.wl-req-confirm.md">Markdown 正文</a> · <a href="acceptance.md">验证记录</a></p><nav><a href="#s0" data-page="0" aria-current="page">01 现状与目标</a>
+<a href="#s1" data-page="1" >02 需求重定义</a>
+<a href="#s2" data-page="2" >03 新旧差异</a>
+<a href="#s3" data-page="3" >04 规则与边界</a>
+<a href="#s4" data-page="4" >05 验收与执行约定</a>
+<a href="#s5" data-page="5" >06 来源与未验证</a></nav></aside><main><section id="s0" ><small>SEC 1 / 6</small><h2>现状与目标</h2><p>本次是 Skill 行为与文档变更，无业务页面变化；不把博客截图当作本项目运行结果。用户先授权优化本工作台技能，随后纠正将“精简”解释为删除完整范文的方案，明确授权：阅读全文独立评估，由一个执行者采用其最小推荐完成修改及验证，不再委派。不含其他项目写入、安装、提交或发布。本文整理现行目标，正式需求/用例基线未另经独立审查及人工批准，不因实施授权伪造 approved。</p>
+<p>现状：读取项目入口 → 映射资料/按需查证 → 填固定章节 → 结构检查与代表链回读。主要风险是未充分调查就缩小到“当前已知”，单条范文被当作覆盖上限，暂缺资料在首个实现后未补齐。</p>
+<p>目标：识别本次覆盖的主要模块/能力/数据和交互边界 → 依据实际项目生成可操作规则及 Wiki → 分别验结构与内容 → 首次实现后按变化补齐暂缺项。</p>
+<footer><button data-page="1">下一节</button></footer></section>
+<section id="s1" hidden><small>SEC 2 / 6</small><h2>需求重定义</h2><ul>
+<li>最终目标：不熟悉项目的人或 Agent 能通过手册知道功能放哪、复用什么、不能破坏什么、业务/状态怎么流转、改后怎么验证。</li>
+<li>不追求：复制商城的 Java/Vue 分层，或生成相同数量、相同长度的文件。</li>
+<li>用户故事：作为跨项目开发负责人，我希望初始化后的资料能指导下一次真实改动，而非每次仍从源码盲搜；作为接手者，我希望明确哪些内容已覆盖、哪些缺口会阻塞任务，不把诚实声明未知误当作资料已齐备。</li>
+<li>取舍：保留按需读取、权威正文唯一、未知不编造、安全与授权边界；保留内容标准＋薄模板＋按需完整范文，不恢复旧版全量字段复制、中央编号、默认多 Agent 探查。精简重复维护和默认读取量，不削弱完整成稿的示范价值；安全和结构统一不是将能力降为资料整理的理由。</li>
+</ul>
+<footer><button data-page="0">上一节</button><button data-page="2">下一节</button></footer></section>
+<section id="s2" hidden><small>SEC 3 / 6</small><h2>新旧差异</h2><table>
+<thead>
+<tr>
+<th>差异</th>
+<th>旧链路 → 本次目标</th>
+<th>后续影响</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>D01 调查</td>
+<td>缺依据时定点查证 → 先识别声明范围内主要对象，再定点核对</td>
+<td>未调查不能当不存在，局部产物不能声称全项目完成</td>
+</tr>
+<tr>
+<td>D02 规则</td>
+<td>职责/约束摘要 → 对主要改动类型给放置、命名、复用入口、边界和参考写法</td>
+<td>新增功能不再依赖重新盲搜</td>
+</tr>
+<tr>
+<td>D03 Wiki</td>
+<td>一条代表流程即可示范 → 重要能力、状态与交互覆盖可定位</td>
+<td>单条范文只教表达，不代替整体覆盖</td>
+</tr>
+<tr>
+<td>D04 验收</td>
+<td>结构通过容易被误读 → 结构检查与人工任务回读分别报告</td>
+<td>空泛但结构正确的文档仍不可报可接手</td>
+</tr>
+<tr>
+<td>D05 维护</td>
+<td>主要更新已有正文 → 本次使暂缺失效时也补建正文和更新入口</td>
+<td>首次实现后不继续保留“暂无代码”</td>
+</tr>
+<tr>
+<td>D06 收敛纠正</td>
+<td>前执行者删除八份范文、内联短例的方案已被用户纠正 → 内容标准维护生成要求，模板只留骨架/短提示，完整范文按需读取</td>
+<td>八份沿原路径重建，保留成品代码/表格/完整链与互链；两入口直接导航，不要求普通局部同步全读；二级章节不变</td>
+</tr>
+<tr>
+<td>D07 范围与扩展</td>
+<td>旧范文声称新增/查看/完成但只展开完成 → 统一虚构局部输入，明确仅示范完成操作，并补未来取消完成的扩展落点</td>
+<td>拟采用的命名/导出/页面绑定及联动更新不写成已实现能力，不以局部范文替代全项目调查</td>
+</tr>
+</tbody></table>
+<footer><button data-page="1">上一节</button><button data-page="3">下一节</button></footer></section>
+<section id="s3" hidden><small>SEC 4 / 6</small><h2>规则与边界</h2><ul>
+<li>R01：通用的是需要回答的开发问题，不是统一技术栈。新项目无实现时保留具体暂缺和补齐时点，不虚构架构。</li>
+<li>R02：已有项目初始化覆盖声明范围内主要模块、能力与边界。已有 Owner 回读后复用，不能因为链接存在就当完整。</li>
+<li>R03：规则区分已确认与默认实践；项目具体写法可指导开发，但不能由出现次数推导强制红线。</li>
+<li>R04：已有 schema/OpenAPI 等不抄全集；缺正式契约时写足调用必需语义，不能只让读者去找源码。</li>
+<li>R05：固定标题及二级章节不变，保留既有结构兼容。检查器继续只读和只验结构，不新增伪语义自动评分。</li>
+<li>R06：sync 只处理本次影响的资料及暂缺项，公共结构迁移仍须授权；普通样式修正无稳定变化时可无需同步。</li>
+<li>R07：结构/提示/手写夹具验证不替代真实 setup→sync 验证；本次不全局安装，verified 保持空。</li>
+</ul>
+<footer><button data-page="2">上一节</button><button data-page="4">下一节</button></footer></section>
+<section id="s4" hidden><small>SEC 5 / 6</small><h2>验收与执行约定</h2><p>本轮聚焦验证：<a href="acceptance.md">验收场景与结果</a>。这是技能回归与静态任务回读记录，不是业务页面用例，也不是已独立确认的正式用例基线。</p>
+<ul>
+<li>使用现有 Python 3.12.9 环境；不安装依赖，不启动服务，不修改业务项目。</li>
+<li>验固定章节兼容、必要范文可定位、相对链接与章节锚点、范文结构兼容、空泛正文反例、两个入口的按需导航和内容标准引用、交付后维护路由。检查器继续只读/只验结构；手写夹具只证明兼容/只读，不冒充 setup 或 sync 执行效果。</li>
+<li>人工核对空项目→首次实现、已有多模块项目、局部样式改动、共享项目个人接入及结构通过但内容空泛的场景；推演不冒充真实 Agent 生成验收。</li>
+<li>不做：新增技能入口/引擎、批量迁移业务项目、安装、上传、提交、发布、真实页面操作、代用户批准规则。</li>
+</ul>
+<footer><button data-page="3">上一节</button><button data-page="5">下一节</button></footer></section>
+<section id="s5" hidden><small>SEC 6 / 6</small><h2>来源与未验证</h2><ul>
+<li>博客：<a href="https://www.cnblogs.com/kebibuluan/p/21056962">AI大模型的学习技术路线和技术栈</a>，正文及工程结构截图展示放置规则、命名、依赖与红线；完整 Wiki 和生成效果未展示，不能据此推定。</li>
+<li>当前与历史依据：两个 harness 入口、共享模板/内容标准、结构检查器和测试；历史收敛提交 134a477。前执行者曾删范文并将此记为用户授权方案，用户随后明确纠正；该历史过程保留在验收记录，不再作为现行要求。</li>
+<li>本次依据：完整阅读 <code>/tmp/harness-independent-skill-creator-review.md</code>，及本机只读第三方 Skill Creator 的 SKILL.md、output-patterns.md、workflows.md。采用“标准＋薄模板＋按需完整范文”的最小推荐；报告不复制进仓库。八份范文以 <code>git show HEAD:&lt;path&gt;</code> 为底稿重建并补范围/扩展说明，HEAD 不是删前所有未提交增强的快照，不能称为精确恢复。</li>
+<li>本次实施与核验由唯一执行者完成，没有另委派。独立报告是实施前设计评估，不是本次实现后的独立代码/内容审查；当前结果见验收记录。</li>
+<li>前轮分析记录曾只读抽查 FreightMate 的入口/资料与 README，发现初始“暂无代码”与后续实现说明不一致；没有证明其后实际调用过 sync，不归因为 sync 执行失败，也不在本轮修改该项目。</li>
+<li>尚未验证：独立接手者真实使用优化后的 setup→sync 生成质量、跨宿主自动加载、复杂项目迁移。因此正式批准字段留空，两个技能的 verified 不晋升。</li>
+</ul>
+<footer><button data-page="4">上一节</button></footer></section></main></div>
+<script>
+const sections=[...document.querySelectorAll('section')], links=[...document.querySelectorAll('nav a')];
+for(const table of document.querySelectorAll('table')){const wrapper=document.createElement('div');wrapper.className='table-scroll';table.before(wrapper);wrapper.append(table)}
+function show(i){sections.forEach((s,n)=>s.hidden=n!==i);links.forEach((a,n)=>{if(n===i)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')})}
+function fromHash(){const match=location.hash.match(/^#s(\d+)$/);if(match&&Number(match[1])<sections.length)show(Number(match[1]));else show(0)}
+document.addEventListener('click',e=>{const b=e.target.closest('button[data-page]');if(b)location.hash='s'+b.dataset.page});
+document.addEventListener('keydown',e=>{if(e.target.closest('input,textarea,select,button,a')||!['ArrowDown','ArrowUp'].includes(e.key))return;e.preventDefault();const i=sections.findIndex(s=>!s.hidden);location.hash='s'+Math.max(0,Math.min(sections.length-1,i+(e.key==='ArrowDown'?1:-1)))});
+window.addEventListener('hashchange',fromHash);fromHash();
+</script></body></html>

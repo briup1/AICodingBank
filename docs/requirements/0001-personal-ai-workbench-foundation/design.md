@@ -129,9 +129,9 @@ AGENTS.md / CLAUDE.md ---------------+--> [NEW] WORKBENCH.md
 | Skill 能力控制面 | 原样保留登记、验证、安装和目录生成职责 | `skills.yaml`、`skills-lock.json`、`install.py`、`CATALOG.md` |
 | 人类入口 | 扩展现有说明，不新建门户程序 | `README.md` 已是仓库总入口 |
 | Agent 入口 | 在现有规则文件增加短指针，不建立新加载器 | `AGENTS.md`、`CLAUDE.md` 已由当前 Harness 提供给 Agent |
-| 需求到交付流程 | 路由到现有 `wl-*` Skill，不新增六个阶段 Skill | `skills/wl-req-confirm/`、`skills/wl-design-doc/`、`skills/wl-ticket-run/` 等 |
-| 持续任务 | 将 Pi Goal 视为 Execute 阶段的执行机制 | 当前环境已有 Goal 工具；`skills/goal-coach/` 已提供适用性判断 |
-| 任务可观测性 | 将 Personal Workbench 视为状态展示能力 | `skills/agent-dag-reporting/SKILL.md` 已定义计划、状态、产物和检查点上报 |
+| 需求到交付流程 | 路由到现有 `wl-*` Skill，不新增六个阶段 Skill | `tools/skills/engineering/wl-req-confirm/`、`tools/skills/engineering/wl-design-doc/`、`tools/skills/engineering/wl-ticket-run/` 等 |
+| 持续任务 | 将 Pi Goal 视为 Execute 阶段的执行机制 | 当前环境已有 Goal 工具；`tools/skills/workbench/goal-coach/` 已提供适用性判断 |
+| 任务执行 | 将 Pi Goal 视为长任务的执行机制 | 当前环境已有 Goal 工具；`tools/skills/workbench/goal-coach/` 已提供适用性判断 |
 | 长期知识 | 保持独立知识库，工作台只保存入口 | Knowledge Base 的 `_index.md` 已定义索引、schema 和审计规则 |
 | 本机覆盖约定 | 延续“共享配置 + Git 忽略本地覆盖”的现有模式 | `.gitignore` 已忽略 `skills.local.yaml` |
 | 项目术语 | 使用项目级 glossary，不把术语散落到方案正文之外 | `CONTEXT.md` |

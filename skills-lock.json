@@ -1,6 +1,28 @@
 {
   "version": 1,
   "skills": {
+    "ui-ux-pro-max": {
+      "source": "nextlevelbuilder/ui-ux-pro-max-skill",
+      "sourceType": "github",
+      "ref": "v2.15.0",
+      "skillPath": ".claude/skills/ui-ux-pro-max/SKILL.md",
+      "computedHash": "ea087c341bfb5b23195c7302027268ede86da802554c18a5c4896a6017b439f9",
+      "capability": "检索 UI/UX 风格、配色、字体、交互及框架指导，生成可供 AI 实施的设计规范建议",
+      "boundary": "仅定向安装到 Pi；已验证本地检索与设计建议生成，不代表页面验收通过；匹配可能偏题，须核对适用性；依赖 Python 3，Pi 按 Skill 实际目录解析脚本，不使用 Claude 专用环境变量",
+      "tags": ["编程"],
+      "verified": "2026-10-26"
+    },
+    "find-skills": {
+      "source": "vercel-labs/skills",
+      "sourceType": "github",
+      "ref": "v1.7.4",
+      "skillPath": "skills/find-skills/SKILL.md",
+      "computedHash": "c00eeea0e13e74fe4a9d84ba0a8542205a1b736d65f13134fe1a6647eb14976f",
+      "capability": "根据需求搜索开放 Skill 生态，核对来源并提供安装建议",
+      "boundary": "依赖 Node.js、npx skills 和联网；已实测搜索，只定向安装到 Pi，安装其他技能仍需用户授权，不批量更新",
+      "tags": ["效率"],
+      "verified": "2026-10-24"
+    },
     "qa-test-planner": {
       "source": "softaworks/agent-toolkit",
       "sourceType": "github",
@@ -413,6 +435,20 @@
         "编程"
       ],
       "verified": "2026-08-14"
+    },
+    "orchestration": {
+      "source": "stablyai/orca",
+      "sourceType": "github",
+      "ref": "071747853f5995ee233b36751613f09a60007c2b",
+      "skillPath": "skills/orchestration/SKILL.md",
+      "computedHash": "cd1b364bf35781bad06bf75ab1766afa8d6cec69cb2060529691d89871a2098a",
+      "capability": "通过 Orca 协调多个受监督 Agent，管理消息、任务依赖、决策门禁和结果回收",
+      "boundary": "依赖本机 Orca CLI 与真实运行态，不替代既有委派授权；已由 skills CLI 定向安装到 Pi/Codex/OpenCode/Hermes 并验证指南读取，未验证多 Agent 调度；工作台安装器尚未启用",
+      "tags": [
+        "协作",
+        "规划"
+      ],
+      "verified": ""
     },
     "prototype": {
       "source": "mattpocock/skills",

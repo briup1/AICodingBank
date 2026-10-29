@@ -17,6 +17,34 @@ installer = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(installer)
 
 
+class CatalogOnlyTests(unittest.TestCase):
+    def test_catalog_only_does_not_sync_or_touch_host_targets(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            target = root / "must-not-create"
+            (root / "skills.yaml").write_text(yaml.safe_dump({
+                "targets": [str(target)],
+                "self": [{"name": "demo", "path": "tools/skills/shared/demo", "verified": ""}],
+                "third_party": {"lock": "skills-lock.json"},
+            }))
+            (root / "skills-lock.json").write_text(json.dumps({"skills": {"third": {
+                "source": "owner/repo", "sourceType": "github", "ref": "v1", "verified": "",
+            }}}))
+            with mock.patch.object(installer, "ROOT", str(root)), \
+                    mock.patch.object(installer, "sync_github_repo") as sync, \
+                    mock.patch.object(installer, "link") as link, \
+                    mock.patch.object(installer, "unlink_skill") as unlink:
+                with contextlib.redirect_stdout(io.StringIO()):
+                    installer.main(catalog_only=True)
+                sync.assert_not_called()
+                link.assert_not_called()
+                unlink.assert_not_called()
+            self.assertFalse(target.exists())
+            self.assertFalse((root / "vendor").exists())
+            self.assertIn("demo", (root / "CATALOG.md").read_text())
+            self.assertIn("第三方·owner/repo@v1", (root / "CATALOG.md").read_text())
+
+
 class LocalDisableTests(unittest.TestCase):
     def test_load_disabled_missing_file_returns_empty_set(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -25,7 +53,7 @@ class LocalDisableTests(unittest.TestCase):
     def test_load_disabled_rejects_invalid_shape(self):
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "skills.local.yaml"
-            path.write_text("disabled: agent-dag-reporting\n", encoding="utf-8")
+            path.write_text("disabled: demo\n", encoding="utf-8")
             with self.assertRaisesRegex(ValueError, "disabled"):
                 installer.load_disabled(path)
 
@@ -52,7 +80,7 @@ class LocalDisableTests(unittest.TestCase):
     def test_end_to_end_local_disable_then_enable(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            skill = root / "skills" / "demo"
+            skill = root / "tools" / "skills" / "shared" / "demo"
             skill.mkdir(parents=True)
             (skill / "SKILL.md").write_text("---\nname: demo\n---\n", encoding="utf-8")
             target = root / "loaded"
@@ -65,7 +93,7 @@ class LocalDisableTests(unittest.TestCase):
                         "self": [
                             {
                                 "name": "demo",
-                                "path": "skills/demo",
+                                "path": "tools/skills/shared/demo",
                                 "capability": "测试本机禁用",
                                 "boundary": "仅测试",
                                 "tags": ["测试"],
