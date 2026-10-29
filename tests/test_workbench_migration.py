@@ -21,8 +21,8 @@ class WorkbenchMigrationTests(unittest.TestCase):
             self.assertFalse(path.is_symlink(), entry)
             paths.append(path.resolve())
         self.assertEqual(len(paths), len(set(paths)))
-        pending = next(e for e in config['self'] if e['name'] == 'wl-auto-delivery')
-        self.assertEqual(pending['verified'], '')
+        verified = next(e for e in config['self'] if e['name'] == 'wl-auto-delivery')
+        self.assertEqual(verified['verified'], '2026-10-19')
         # Historical packages move without being silently promoted/installed.
         self.assertNotIn('software-architect-restructure', [e['name'] for e in config['self']])
         lock = json.loads((ROOT / 'skills-lock.json').read_text())

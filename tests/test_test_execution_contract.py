@@ -55,8 +55,8 @@ class TestExecutionContractTests(unittest.TestCase):
         for rule in ('ego-browser skill', 'ego-browser nodejs', 'taskSpace(',
                      'task.handOff()', 'takeOverTaskSpace(', 'task.finish({ keep: [] })',
                      '账号、企业', '不能证明身份', '不静默回退',
-                     '最多3个活跃网页任务', '不是 Ego 产品上限',
-                     '不继承 shell 环境变量', '截图', '实际查看'):
+                     '不设通用数字上限', '不继承 shell 环境变量',
+                     '截图', '实际查看'):
             self.assertIn(rule, web)
         self.assertNotIn('lifecycle.mjs begin', web)
         self.assertNotIn('lifecycle.mjs exec', web)
@@ -66,7 +66,7 @@ class TestExecutionContractTests(unittest.TestCase):
                      'interrupted', '不能仅凭进程退出', '旧 OpenCLI'):
             self.assertIn(rule, lifecycle)
         capabilities = (skill / 'references/capabilities.md').read_text()
-        self.assertIn('Ego 未完成真实场景验证', capabilities)
+        self.assertIn('真实站点待验证', capabilities)
         self.assertIn('不能作为 Ego 验证证据', capabilities)
         entry = next(item for item in yaml.safe_load((ROOT / 'skills.yaml').read_text())['self']
                      if item['name'] == 'wl-web-auto')
