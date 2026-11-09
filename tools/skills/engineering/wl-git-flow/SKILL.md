@@ -1,7 +1,6 @@
 ---
 name: wl-git-flow
-disable-model-invocation: true
-description: 仅用户主动点名或选择本 Skill 时加载使用；任务匹配或其他流程引用不构成授权。安全创建、推送、集成和清理需求分支及 Git Worktree，用用户级 HTML 看板聚合需求生命周期；支持 Dev/Beta 集成、污染审计、测试反馈和回收，兼容 TAPD 与私人项目。不用于普通 Git 状态、历史、差异或只读分支比较，也不代替代码 Review。
+description: 任务明确匹配 Git 分支、集成、Worktree 生命周期或发版管理时自动加载；实际推送、创建或删除分支、合入集成等写操作仍需当次明确授权。安全创建、推送、集成和清理需求分支及 Git Worktree，用用户级 HTML 看板聚合需求生命周期；支持 Dev/Beta 集成、污染审计、测试反馈和回收，兼容 TAPD 与私人项目。不用于普通 Git 状态、历史、差异或只读分支比较，也不代替代码 Review。
 ---
 
 # WL Git Flow
