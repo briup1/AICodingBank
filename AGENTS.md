@@ -35,6 +35,7 @@
 - `CONTEXT.md`
 - `best_practices/README.md`
 - `best_practices/STANDARD.md`
+- `tools/prompt-library/README.md`
 - `.local/README.md`
 - `tools/execution-profiles/test-execution.md`
 - `tools/skills/shared/visual-artifact-workbench/SKILL.md`
