@@ -8,6 +8,8 @@ node_modules/
 
 # The local project index stays local.
 personal/projects.local.md
+# User-maintained local test accounts; never publish credentials.
+personal/compass-test-accounts.local.md
 tools/execution-profiles/*.local.yaml
 # Keep runtime conventions, not runtime state.
 /.local/*
