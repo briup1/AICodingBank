@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "scenarios": [
+    {
+      "id": "qingdao-la-followup",
+      "turns": [
+        {
+          "message": "青岛--LA 马士基 超高 (40HQ)",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "has_results"
+          }
+        },
+        {
+          "message": "结果出来了吗",
+          "expect": {
+            "action": "status_only",
+            "ui": "response"
+          }
+        },
+        {
+          "message": "青岛--LA 马士基 超高 (40HQ)，重新查一次",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "has_results"
+          }
+        }
+      ]
+    }
+  ]
+}

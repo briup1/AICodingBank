@@ -2,7 +2,7 @@
 title: "e2e：可靠接入与独立回归使用指南"
 date: 2026-11-06
 date_basis: practice-date
-updated: 2026-11-06
+updated: 2026-11-11
 category: 技术
 tags: [e2e, 浏览器测试, 登录态, 异步任务, 回归测试]
 status: verified
@@ -74,6 +74,17 @@ Secret 不等于全链路脱敏：Cookie token、视频、普通页面文字和�
 
 ## 本机复用入口
 
+当前可复用工具已收进工作台：[Compass 对话 E2E](../../tools/compass-platform-e2e/README.md)。单／多轮用例、环境选择、运行和结果查看以该工具说明为准。新工具的当前入口为先 `login --env <环境>`、再 `run --env <环境> --allow-live-queries`，生产查询另加 `--allow-production`。2026-11-11 固定“上海到洛杉矶”两轮实验中，dev/beta/prod 均通过；三个环境首次登录态按明确授权本机加密保存，已分别验证新进程恢复、真实身份与独立 Context 恢复。此前 Beta 旧密码失败改由手动登录，不重试密码；Dev/Prod 身份接口路由及个人账号企业为空的误判已修正。详细边界及证据以工具说明和本机 `.work/test-runs/` 为准；不承诺永久免登，不把历史报告移用为新版本验证。
+
+```bash
+cd /Users/ziyun/workdir/self_project/AICodingBank/tools/compass-platform-e2e
+./e2e check
+./e2e list --env dev --cases cases/single-turn.json
+./e2e list --env beta --cases cases/multi-turn.json
+```
+
+以下为 **2026-11-06 历史验证入口**，保留用于回读证据；不再作为新工具入口，也不依赖它运行新脚本。
+
 ```bash
 cd /Users/ziyun/workdir/private/compass-platform-e2e
 export E2E_TELEMETRY_DISABLED=1
@@ -104,3 +115,4 @@ export E2E_TELEMETRY_DISABLED=1
 - 私有项目：`/Users/ziyun/workdir/private/compass-platform-e2e/`；完整结果、任务标识和历史偏差见 `reports/dev-freight-final-20261106/verification.md`，原始报告/截图留在项目，不复制到工作台。
 - e2e/engine/Node 升级，登录/身份/语言、完成协议或数据变化时，重新核对对应 guide 并跑 canary。不照抄此项目路径、CSS 或超时数值；旧授权不继承，不自动安装、启服务、提交、发布或删测试数据。
 - 2026-11-06：依据官方随包文档、真实矩阵及重复运行形成首版。
+- 2026-11-11 工具化：可执行入口收进工作台 `tools/compass-platform-e2e/`；旧报告保留，本页历史 verified 范围不扩大。

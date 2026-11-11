@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -euo pipefail
+ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+NODE="${COMPASS_E2E_NODE:-node}"
+if [[ -z "${COMPASS_E2E_NODE:-}" && -x /opt/homebrew/opt/node@24/bin/node ]]; then
+  NODE=/opt/homebrew/opt/node@24/bin/node
+fi
+exec "$NODE" "$ROOT/run.mjs" "$@"

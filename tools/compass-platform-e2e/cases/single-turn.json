@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "scenarios": [
+    {
+      "id": "qingdao-la",
+      "turns": [
+        {
+          "message": "青岛--LA 马士基 超高 (40HQ)",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "has_results",
+            "route": {
+              "pol_code": "CNTAO",
+              "pod_code": "USLAX",
+              "carrier_code": "MSK",
+              "container_types": [
+                "40HQ"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

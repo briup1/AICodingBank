@@ -1,0 +1,155 @@
+{
+  "schemaVersion": 1,
+  "scenarios": [
+    {
+      "id": "lf-repeat-01-waiting-not-rewritten",
+      "turns": [
+        {
+          "message": "上海到洛杉矶，40HQ 的运价",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": { "pol_code": "CNSHA", "pod_code": "USLAX", "container_types": ["40HQ"] }
+          }
+        }
+      ]
+    },
+    {
+      "id": "lf-repeat-02-complete-once",
+      "turns": [
+        {
+          "message": "上海到洛杉矶，40HQ 的运价",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": { "pol_code": "CNSHA", "pod_code": "USLAX", "container_types": ["40HQ"] }
+          }
+        }
+      ]
+    },
+    {
+      "id": "lf-repeat-03-zero-result-followup",
+      "turns": [
+        {
+          "message": "上海到海防，只看船司官网价",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": { "pol_code": "CNSHA", "pod_code": "VNHPH" }
+          }
+        },
+        {
+          "message": "所以是没结果吗",
+          "expect": { "action": "status_only", "ui": "response", "contains": "结束" }
+        }
+      ]
+    },
+    {
+      "id": "lf-repeat-04-route-change",
+      "turns": [
+        {
+          "message": "上海到洛杉矶，40HQ 的运价",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": { "pol_code": "CNSHA", "pod_code": "USLAX", "container_types": ["40HQ"] }
+          }
+        },
+        {
+          "message": "那上海到鹿特丹，40HQ 呢",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": { "pol_code": "CNSHA", "pod_code": "NLRTM", "container_types": ["40HQ"] }
+          }
+        }
+      ]
+    },
+    {
+      "id": "lf-repeat-05-carrier-recall",
+      "turns": [
+        {
+          "message": "上海到洛杉矶，40HQ 的运价",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": { "pol_code": "CNSHA", "pod_code": "USLAX", "container_types": ["40HQ"] }
+          }
+        },
+        {
+          "message": "刚才那批里马士基有几条",
+          "expect": { "action": "status_only", "ui": "response" }
+        }
+      ]
+    },
+    {
+      "id": "lf-repeat-06-any-more-results",
+      "turns": [
+        {
+          "message": "上海到洛杉矶，40HQ 的运价",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": { "pol_code": "CNSHA", "pod_code": "USLAX", "container_types": ["40HQ"] }
+          }
+        },
+        {
+          "message": "还有结果吗",
+          "expect": { "action": "status_only", "ui": "response", "contains": "结束" }
+        }
+      ]
+    },
+    {
+      "id": "lf-repeat-07-filter-existing-carrier",
+      "turns": [
+        {
+          "message": "上海到洛杉矶，40HQ 的运价",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": { "pol_code": "CNSHA", "pod_code": "USLAX", "container_types": ["40HQ"] }
+          }
+        },
+        {
+          "message": "刚才那批里只看马士基",
+          "expect": {
+            "action": "filter_existing",
+            "ui": "result_or_empty",
+            "route": { "carrier_code": "MSK" }
+          }
+        }
+      ]
+    },
+    {
+      "id": "lf-repeat-08-query-again",
+      "turns": [
+        {
+          "message": "上海到洛杉矶，40HQ 的运价",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": { "pol_code": "CNSHA", "pod_code": "USLAX", "container_types": ["40HQ"] }
+          }
+        },
+        {
+          "message": "再查一次上海到洛杉矶，40HQ",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": { "pol_code": "CNSHA", "pod_code": "USLAX", "container_types": ["40HQ"] }
+          }
+        }
+      ]
+    }
+  ]
+}

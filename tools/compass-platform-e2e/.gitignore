@@ -1,0 +1,5 @@
+node_modules/
+.work/
+.e2e/
+.env*
+*.local.json

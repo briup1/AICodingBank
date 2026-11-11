@@ -7,6 +7,7 @@ Skill 本体已按主要用途迁入 [skills](skills/README.md)，名称、验�
 | Skill | [分类与迁移说明](skills/README.md) | 可按需加载的方法与操作能力 |
 | 执行配置 | [execution-profiles](execution-profiles/README.md) | Agent、模型和升级条件，尚未配置 |
 | 工具接入 | [integrations](integrations/README.md) | 共用 CLI/MCP 接入说明指针 |
+| Compass 对话回归 | [compass-platform-e2e](compass-platform-e2e/README.md) | 可替换单／多轮用例、dev/beta/prod Web 配置与逐轮证据；真实查询需当次授权 |
 | 共用程序 | [scripts](scripts/README.md) | 真正跨能力共用的程序 |
 | 通用格式 | [templates](templates/README.md) | 真正共用的交接格式 |
 

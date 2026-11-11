@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "scenarios": [
+    {
+      "id": "two-turn-route-change",
+      "turns": [
+        {
+          "message": "帮我查青岛到洛杉矶的马士基运价，40HQ",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "has_results",
+            "route": {
+              "pol_code": "CNTAO",
+              "pod_code": "USLAX",
+              "carrier_code": "MSK",
+              "container_types": ["40HQ"]
+            }
+          }
+        },
+        {
+          "message": "改成上海出发，目的港、船司和箱型不变，重新查一下",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "has_results",
+            "route": {
+              "pol_code": "CNSHA",
+              "pod_code": "USLAX",
+              "carrier_code": "MSK",
+              "container_types": ["40HQ"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

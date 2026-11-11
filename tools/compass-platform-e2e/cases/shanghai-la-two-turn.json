@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "scenarios": [
+    {
+      "id": "shanghai-la-two-turn",
+      "turns": [
+        {
+          "message": "上海到洛杉矶",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": {
+              "pol_code": "CNSHA",
+              "pod_code": "USLAX"
+            }
+          }
+        },
+        {
+          "message": "上海到洛杉矶，再查一次",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": {
+              "pol_code": "CNSHA",
+              "pod_code": "USLAX"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

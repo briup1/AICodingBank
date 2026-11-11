@@ -18,6 +18,7 @@
 - `skills-lock.json`
 - `tools/skills/`
 - `tools/integrations/`
+- Compass Web 单／多轮 Bot 对话回归：`tools/compass-platform-e2e/README.md`
 - `tools/execution-profiles/`
 - `tools/templates/`
 

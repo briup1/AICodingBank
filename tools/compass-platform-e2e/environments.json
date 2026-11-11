@@ -1,0 +1,23 @@
+{
+  "dev": {
+    "appUrl": "https://dev-smart-agent.hgj.com",
+    "loginUrl": "https://dev-login.hgj.com/login",
+    "allowedLoginHosts": [
+      "dev-login.hgj.com"
+    ]
+  },
+  "beta": {
+    "appUrl": "https://beta-smart-agent.hgj.com",
+    "loginUrl": "https://beta-login.hgj.com/login/",
+    "allowedLoginHosts": [
+      "beta-login.hgj.com"
+    ]
+  },
+  "prod": {
+    "appUrl": "https://qianxun.hgj.com",
+    "loginUrl": null,
+    "allowedLoginHosts": [
+      "login.hgj.com"
+    ]
+  }
+}
