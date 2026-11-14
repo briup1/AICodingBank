@@ -21,11 +21,12 @@ export function validateCases(value) {
     for (const [index, turn] of scenario.turns.entries()) {
       if (!object(turn) || !own(turn, ['message', 'expect']) || typeof turn.message !== 'string' || !turn.message.trim() || turn.message.length > 4000) throw new Error(`${scenario.id}/${index + 1}: 无效问句`)
       const e = turn.expect
-      if (!object(e) || !own(e, ['action', 'task', 'ui', 'contains', 'route']) || !actions.includes(e.action)) throw new Error(`${scenario.id}/${index + 1}: 必须指定有效 expect.action，未知字段不被忽略`)
+      if (!object(e) || !own(e, ['action', 'task', 'ui', 'contains', 'not_contains', 'route']) || !actions.includes(e.action)) throw new Error(`${scenario.id}/${index + 1}: 必须指定有效 expect.action，未知字段不被忽略`)
       if (e.action === 'new_search' ? e.task !== 'COMPLETE' : e.task !== undefined) throw new Error('new_search 必须要求 task=COMPLETE；其他动作不接受 task 字段')
       if (!['has_results', 'empty', 'result_or_empty', 'response'].includes(e.ui)) throw new Error('每轮必须指定 ui: has_results / empty / result_or_empty / response')
       if (e.action === 'new_search' && e.ui === 'response') throw new Error('new_search 必须检查 has_results 或 empty，不能只检查回复')
       if (e.contains !== undefined && (typeof e.contains !== 'string' || !e.contains.trim())) throw new Error('contains 必须为非空字符串')
+      if (e.not_contains !== undefined && (!Array.isArray(e.not_contains) || !e.not_contains.length || e.not_contains.some(x => typeof x !== 'string' || !x.trim()))) throw new Error('not_contains 必须为非空字符串数组')
       if (e.route !== undefined && (!object(e.route) || !own(e.route, ['pol_code', 'pod_code', 'carrier_code', 'container_types']) || Object.entries(e.route).some(([key, v]) => key === 'container_types' ? !Array.isArray(v) || !v.length || v.some(x => typeof x !== 'string' || !x) : typeof v !== 'string' || !v))) throw new Error('route 仅接受 pol_code/pod_code/carrier_code/container_types')
     }
   }

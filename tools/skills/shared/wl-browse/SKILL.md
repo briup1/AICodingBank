@@ -1,6 +1,6 @@
 ---
 name: wl-browse
-description: Legacy bundled-browser CLI workflow. Use only when the user explicitly requests wl-browse or its bin/browse driver; new link-based webpage tasks, form filling, parallel queries and verification use wl-web-auto with opencli instead. Does not depend on gstack.
+description: Legacy bundled-browser CLI workflow; use when the bundled bin/browse driver is needed. For normal webpage tasks prefer wl-web-auto and its current browser backend. Does not depend on gstack.
 ---
 
 # Browse — Standalone

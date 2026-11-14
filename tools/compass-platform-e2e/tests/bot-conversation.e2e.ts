@@ -20,7 +20,8 @@ for (const scenario of suite.scenarios) {
     if (result.items.some((item: any) => item.caseId === scenario.id && item.status !== '未执行')) throw new Error('场景已有提交/执行记录，拒绝自动重放')
     await app.open('/query?lang=zh-CN')
     expect(new URL(await browser.url()).origin).toBe(env.appUrl)
-    await expect(browser.locator('textarea')).toBeVisible()
+    // 冷启动首屏可能只渲染 #root（SPA 未挂载），默认 5s 会误判为失败；这里给出与 actionTimeout 一致的等待。
+    await expect(browser.locator('textarea')).toBeVisible({ timeout: 30_000 })
     await browser.locator('button').filter({ hasText: '新会话' }).click()
     await expect(browser.locator('.smart-a-chat-message.is-user')).toHaveCount(0)
     let session: string | null = null
@@ -45,7 +46,9 @@ for (const scenario of suite.scenarios) {
         const cards = [...(latest?.querySelectorAll('[data-welfare-guide-target="freight-card"]') ?? [])].filter(visible)
         const empty = [...(latest?.querySelectorAll('[class$="__empty-text"], [class$="__route-empty-text"]') ?? [])].some(visible)
         const input = document.querySelector<HTMLTextAreaElement>('textarea')
-        return { exists: Boolean(latest), cards: cards.length, empty, text: latest?.innerText.slice(0, 16000) ?? '', cardTexts: cards.map(node => (node as HTMLElement).innerText.slice(0, 2000)), inputEnabled: Boolean(input && !input.disabled) }
+        // 结果可能折叠在“查看全部 N 条结果”入口后；该入口的条数即接口已返回的结果数。
+        const hint = latest?.innerText.match(/查看全部\s*(\d+)\s*条结果/)
+        return { exists: Boolean(latest), cards: cards.length, empty, totalHint: hint ? Number(hint[1]) : null, text: latest?.innerText.slice(0, 16000) ?? '', cardTexts: cards.map(node => (node as HTMLElement).innerText.slice(0, 2000)), inputEnabled: Boolean(input && !input.disabled) }
       }, assistantCount)
       updateTurn(runDir, scenario.id, number, (item: any) => {
         item.status = '进行中'
@@ -79,6 +82,15 @@ for (const scenario of suite.scenarios) {
         session = actual.session
         if (actual.taskId) tasks.add(actual.taskId)
         if (turn.expect.action === 'new_search') {
+          // has_polling=false 表示首次响应已拿到全部结果，前端不会发起轮询，
+          // 任务在查价返回时即已结束；此时以查价返回的条数与页面卡片交叉核对。
+          if (actual.queryContext?.has_polling === false) {
+            const syncCount = (actual.frames ?? [])
+              .filter((frame: any) => frame.type === 'tool_end' && frame.tool === 'unified_search')
+              .reduce((sum: number, frame: any) => sum + (frame.outputCount ?? 0), 0)
+            taskPoll = { at: new Date().toISOString(), taskId: actual.taskId, kind: 'sync', status: 200, taskStatus: 'COMPLETE', count: syncCount, error: null }
+            updateTurn(runDir, scenario.id, number, (item: any) => { item.context.lastPoll = taskPoll })
+          } else {
           await expect.poll(async () => {
             taskPoll = await browser.evaluate(taskId => {
               const polls = (window as any).__compassE2E?.polls ?? []
@@ -88,10 +100,11 @@ for (const scenario of suite.scenarios) {
             return taskPoll?.error || taskPoll?.taskStatus || 'unobserved'
           }, { timeout: LIMITS.task, interval: 1500 }).not.toMatch(/^(CHECKING|unobserved)$/)
           expect(taskPoll?.taskStatus).toBe('COMPLETE')
+          }
         }
         await expect.poll(async () => {
           ui = await readUi()
-          const agreesWithTask = turn.expect.action !== 'new_search' || (taskPoll.count === 0 ? ui.cards === 0 && ui.empty : taskPoll.count > 0 && ui.cards > 0)
+          const agreesWithTask = turn.expect.action !== 'new_search' || (taskPoll.count === 0 ? ui.cards === 0 && ui.empty : taskPoll.count > 0 && (ui.cards > 0 || ui.totalHint === taskPoll.count))
           return agreesWithTask && uiReady(ui, turn.expect, actual.text)
         }, { timeout: LIMITS.ui, interval: 500 }).toBe(true)
       } catch (error) {

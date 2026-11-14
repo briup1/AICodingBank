@@ -1,0 +1,260 @@
+{
+  "schemaVersion": 1,
+  "scenarios": [
+    {
+      "id": "lf-h008-01-agent-price-zh",
+      "turns": [
+        {
+          "message": "上海到洛杉矶，只看一代好价",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": {
+              "pol_code": "CNSHA",
+              "pod_code": "USLAX"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "lf-h008-02-carrier-official-space",
+      "turns": [
+        {
+          "message": "上海到洛杉矶，船司官网价，要保放舱",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": {
+              "pol_code": "CNSHA",
+              "pod_code": "USLAX"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "lf-h008-03-carrier-official-en",
+      "turns": [
+        {
+          "message": "Shanghai to Los Angeles, carrier website price only",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": {
+              "pol_code": "CNSHA",
+              "pod_code": "USLAX"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "lf-h008-04-carrier-official-haiphong",
+      "turns": [
+        {
+          "message": "上海到海防，只看船司官网价",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": {
+              "pol_code": "CNSHA",
+              "pod_code": "VNHPH"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "lf-h008-05-agent-price-fast",
+      "turns": [
+        {
+          "message": "上海到洛杉矶，一代好价，要快船或可快提",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": {
+              "pol_code": "CNSHA",
+              "pod_code": "USLAX"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "lf-h008-06-carrier-guaranteed",
+      "turns": [
+        {
+          "message": "找船司的，要保舱，上海到洛杉矶",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": {
+              "pol_code": "CNSHA",
+              "pod_code": "USLAX"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "lf-h008-07-agent-price-space",
+      "turns": [
+        {
+          "message": "上海到洛杉矶，一代好价，要保放舱",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": {
+              "pol_code": "CNSHA",
+              "pod_code": "USLAX"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "lf-h008-08-reference-price-label",
+      "turns": [
+        {
+          "message": "上海到洛杉矶，只看参考价的运价",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": {
+              "pol_code": "CNSHA",
+              "pod_code": "USLAX"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "lf-h008-09-space-probability",
+      "turns": [
+        {
+          "message": "上海到洛杉矶，放舱概率95%的运价",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": {
+              "pol_code": "CNSHA",
+              "pod_code": "USLAX"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "lf-h008-10-agent-price-equipment",
+      "turns": [
+        {
+          "message": "上海到洛杉矶，一代好价，要保柜",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": {
+              "pol_code": "CNSHA",
+              "pod_code": "USLAX"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "lf-h008-11-legacy-agent-direct",
+      "turns": [
+        {
+          "message": "上海到洛杉矶，只要代理直营",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": {
+              "pol_code": "CNSHA",
+              "pod_code": "USLAX"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "lf-h008-12-legacy-agent-guaranteed",
+      "turns": [
+        {
+          "message": "上海到洛杉矶，只要代理保舱",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": {
+              "pol_code": "CNSHA",
+              "pod_code": "USLAX"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "lf-h008-13-legacy-carrier-direct",
+      "turns": [
+        {
+          "message": "上海到洛杉矶，只要船司直营",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": {
+              "pol_code": "CNSHA",
+              "pod_code": "USLAX"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "lf-h008-14-legacy-carrier-guaranteed",
+      "turns": [
+        {
+          "message": "上海到洛杉矶，只要船司保舱",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": {
+              "pol_code": "CNSHA",
+              "pod_code": "USLAX"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "lf-h008-15-agent-generic-hold",
+      "turns": [
+        {
+          "message": "上海到洛杉矶，代理的，要保舱",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": {
+              "pol_code": "CNSHA",
+              "pod_code": "USLAX"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

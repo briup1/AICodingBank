@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "scenarios": [
+    {
+      "id": "lf-h008-11-legacy-agent-direct",
+      "turns": [
+        {
+          "message": "上海到洛杉矶，只要代理直营",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": {
+              "pol_code": "CNSHA",
+              "pod_code": "USLAX"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "lf-h008-12-legacy-agent-guaranteed",
+      "turns": [
+        {
+          "message": "上海到洛杉矶，只要代理保舱",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": {
+              "pol_code": "CNSHA",
+              "pod_code": "USLAX"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "lf-h008-13-legacy-carrier-direct",
+      "turns": [
+        {
+          "message": "上海到洛杉矶，只要船司直营",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": {
+              "pol_code": "CNSHA",
+              "pod_code": "USLAX"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "lf-h008-14-legacy-carrier-guaranteed",
+      "turns": [
+        {
+          "message": "上海到洛杉矶，只要船司保舱",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": {
+              "pol_code": "CNSHA",
+              "pod_code": "USLAX"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "lf-h008-15-agent-generic-hold",
+      "turns": [
+        {
+          "message": "上海到洛杉矶，代理的，要保舱",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": {
+              "pol_code": "CNSHA",
+              "pod_code": "USLAX"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

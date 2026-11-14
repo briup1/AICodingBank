@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "scenarios": [
+    {
+      "id": "diagnose-bayuquan-jakarta",
+      "turns": [
+        {
+          "message": "鲅鱼圈到雅加达",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty"
+          }
+        }
+      ]
+    }
+  ]
+}

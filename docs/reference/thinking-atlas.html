@@ -1,0 +1,1817 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>思维模式画册 · 说一个词，换一条思路</title>
+<style>
+:root{
+  --bg:#FAFAFA; --card:#FFFFFF; --ink:#09090B; --body:#27272A; --muted:#475569; --faint:#71717A;
+  --border:#E4E4E7; --border-2:#D4D4D8; --ring:#18181B; --soft:#F4F4F5;
+  --c-arch:#2563EB; --c-flow:#0F766E; --c-io:#7C3AED; --c-data:#B45309;
+  --c-code:#BE123C; --c-plan:#15803D; --c-think:#475569;
+  --r:12px; --shadow:0 1px 2px rgba(9,9,11,.05), 0 10px 28px -16px rgba(9,9,11,.25);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--bg);color:var(--body);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{margin:0;color:var(--ink);letter-spacing:-.015em;line-height:1.25;font-weight:600}
+p{margin:0}
+a{color:inherit}
+button{font:inherit;color:inherit;cursor:pointer}
+.wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* topbar */
+.topbar{position:sticky;top:0;z-index:30;background:rgba(250,250,250,.86);backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--border)}
+.topbar .wrap{display:flex;align-items:center;gap:18px;height:56px}
+.brand{display:flex;align-items:center;gap:9px;font-weight:600;color:var(--ink);text-decoration:none;white-space:nowrap}
+.brand svg{width:20px;height:20px}
+.topnav{display:flex;gap:4px;margin-left:auto;overflow:auto}
+.topnav a{font-size:13.5px;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:8px;white-space:nowrap}
+.topnav a:hover{background:var(--soft);color:var(--ink)}
+
+/* hero */
+.hero{padding:46px 0 26px}
+.hero h1{font-size:clamp(28px,4vw,42px);letter-spacing:-.025em}
+.hero .lede{margin-top:12px;max-width:62ch;color:var(--muted);font-size:15.5px}
+.hero .lede b{color:var(--ink);font-weight:600}
+.searchbar{margin-top:22px;display:flex;gap:10px;max-width:720px}
+.searchbox{position:relative;flex:1}
+.searchbox svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:17px;height:17px;color:var(--faint)}
+.searchbox input{
+  width:100%;padding:13px 14px 13px 40px;border:1px solid var(--border-2);border-radius:10px;
+  background:var(--card);color:var(--ink);font-size:15px;outline:none
+}
+.searchbox input:focus{border-color:var(--ring);box-shadow:0 0 0 3px rgba(24,24,27,.12)}
+.searchbox input::placeholder{color:#A1A1AA}
+.btn{
+  border:1px solid var(--border-2);background:var(--card);border-radius:10px;padding:12px 16px;
+  font-size:14px;color:var(--ink);transition:background .18s,border-color .18s,transform .18s
+}
+.btn:hover{background:var(--soft)}
+.btn.primary{background:var(--ink);border-color:var(--ink);color:#fff}
+.btn.primary:hover{background:#27272A}
+.btn:focus-visible,.chip:focus-visible,.card:focus-visible,.purpose button:focus-visible,.close:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
+
+/* filters */
+.filters{position:sticky;top:56px;z-index:20;background:rgba(250,250,250,.92);backdrop-filter:blur(8px);padding:14px 0 10px;border-bottom:1px solid transparent}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{
+  border:1px solid var(--border-2);background:var(--card);color:var(--muted);
+  border-radius:999px;padding:6px 13px;font-size:13px;transition:all .18s
+}
+.chip:hover{color:var(--ink);border-color:#A1A1AA}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.chip .n{opacity:.55;margin-left:5px;font-variant-numeric:tabular-nums}
+.statusline{margin-top:12px;font-size:13px;color:var(--faint);display:flex;flex-wrap:wrap;gap:6px;align-items:center;min-height:20px}
+.statusline b{color:var(--ink);font-weight:600}
+.reason{background:#EEF2FF;color:#3730A3;border-radius:6px;padding:1px 7px;font-size:12px}
+
+/* grid */
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(258px,1fr));padding:22px 0 10px}
+.card{
+  display:flex;flex-direction:column;text-align:left;padding:0;overflow:hidden;
+  background:var(--card);border:1px solid var(--border);border-radius:var(--r);box-shadow:none;
+  transition:transform .2s,box-shadow .2s,border-color .2s
+}
+.card:hover{transform:translateY(-2px);box-shadow:var(--shadow);border-color:var(--border-2)}
+.card .art{aspect-ratio:24/13;background:#fff;border-bottom:1px solid var(--border);padding:6px;display:block}
+.card .art svg{display:block;width:100%;height:100%}
+.card .meta{padding:12px 14px 15px}
+.card .row{display:flex;align-items:baseline;gap:8px;justify-content:space-between}
+.card h3{font-size:15.5px}
+.card .en{font-size:11.5px;color:var(--faint);font-weight:500;letter-spacing:.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card .best{margin-top:6px;font-size:13px;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.9em}
+.card .tag{display:inline-flex;align-items:center;gap:5px;margin-top:10px;font-size:11.5px;color:var(--ac);font-weight:600}
+.card .tag::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--ac)}
+[data-cat="arch"]{--ac:var(--c-arch)}[data-cat="flow"]{--ac:var(--c-flow)}[data-cat="io"]{--ac:var(--c-io)}
+[data-cat="data"]{--ac:var(--c-data)}[data-cat="code"]{--ac:var(--c-code)}[data-cat="plan"]{--ac:var(--c-plan)}
+[data-cat="think"]{--ac:var(--c-think)}
+.empty{padding:60px 0;text-align:center;color:var(--faint);font-size:14px}
+
+/* sections */
+.section{padding:52px 0;border-top:1px solid var(--border)}
+.section > h2{font-size:clamp(20px,2.4vw,26px)}
+.section > .sub{margin-top:8px;color:var(--muted);font-size:14px;max-width:66ch}
+.note{margin-top:10px;font-size:12.5px;color:var(--faint)}
+
+/* purpose list */
+.plist{margin-top:20px;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;background:var(--card)}
+.prow{display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:14px;padding:13px 16px;border-top:1px solid var(--border);align-items:start}
+.prow:first-child{border-top:0;background:#FCFCFD;font-size:12px;color:var(--faint);font-weight:600;letter-spacing:.04em}
+.prow .need{font-size:14px;color:var(--ink)}
+.prow .opts{display:flex;flex-wrap:wrap;gap:6px}
+.prow button{
+  border:1px solid var(--border);background:#fff;border-radius:7px;padding:3px 9px;font-size:12.5px;
+  color:var(--body);transition:all .16s
+}
+.prow button:hover{border-color:var(--ac,var(--ring));color:var(--ac,var(--ink));background:#fff}
+.prow .no{display:flex;flex-wrap:wrap;gap:6px}
+.prow .no span{font-size:12.5px;color:#9F1239;background:#FFF1F2;border-radius:7px;padding:3px 9px}
+
+/* compare table */
+.tablewrap{margin-top:20px;border:1px solid var(--border);border-radius:var(--r);overflow:auto;background:var(--card)}
+table{border-collapse:collapse;width:100%;min-width:640px}
+th,td{text-align:left;padding:12px 16px;border-top:1px solid var(--border);font-size:13.5px;vertical-align:top}
+th{background:#FCFCFD;font-size:12px;letter-spacing:.04em;color:var(--faint);font-weight:600;border-top:0}
+td:first-child{color:var(--ink);font-weight:600;white-space:nowrap}
+
+/* drawer */
+.overlay{position:fixed;inset:0;background:rgba(9,9,11,.35);opacity:0;pointer-events:none;transition:opacity .22s;z-index:40}
+.overlay.on{opacity:1;pointer-events:auto}
+.drawer{
+  position:fixed;top:0;right:0;height:100dvh;width:min(600px,94vw);background:#fff;border-left:1px solid var(--border);
+  transform:translateX(102%);transition:transform .26s cubic-bezier(.32,.72,0,1);z-index:50;display:flex;flex-direction:column
+}
+.drawer.on{transform:none}
+.drawer header{padding:18px 22px 14px;border-bottom:1px solid var(--border);display:flex;gap:14px;align-items:flex-start}
+.drawer header .t{flex:1;min-width:0}
+.drawer header h2{font-size:21px}
+.drawer header .en{font-size:12.5px;color:var(--faint);margin-top:3px}
+.close{border:1px solid var(--border);background:#fff;width:34px;height:34px;border-radius:9px;display:grid;place-items:center;flex:0 0 auto}
+.close:hover{background:var(--soft)}
+.drawer .body{overflow:auto;padding:20px 22px 40px;flex:1;overscroll-behavior:contain}
+.drawer .art{background:#fff;border:1px solid var(--border);border-radius:10px;padding:8px;aspect-ratio:24/13}
+.drawer .art svg{width:100%;height:100%;display:block}
+.block{margin-top:24px}
+.block h4{font-size:12px;letter-spacing:.06em;color:var(--faint);text-transform:uppercase;font-weight:600}
+.block .def{margin-top:8px;font-size:15px;color:var(--ink)}
+.ul{margin:8px 0 0;padding-left:0;list-style:none}
+.ul li{position:relative;padding-left:16px;margin-top:6px;font-size:14px;color:var(--body)}
+.ul li::before{content:"";position:absolute;left:2px;top:.62em;width:5px;height:5px;border-radius:50%;background:var(--ac,var(--ring));opacity:.5}
+.avoid li::before{background:#E11D48;opacity:.7}
+.hl{background:#FCFCFD;border:1px solid var(--border);border-left:3px solid var(--ac);border-radius:8px;padding:12px 14px;font-size:14.5px;color:var(--ink);margin-top:8px}
+.pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+.pills span{font-size:12.5px;background:var(--soft);border-radius:7px;padding:3px 9px;color:var(--muted)}
+.vs{margin-top:9px;font-size:14px;color:var(--body)}
+.vs b{color:var(--ink)}
+.prompt{margin-top:10px;position:relative}
+.prompt pre{
+  margin:0;background:#0B0B0F;color:#E4E4E7;border-radius:10px;padding:16px 16px 18px;overflow:auto;
+  font-family:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;font-size:12.5px;line-height:1.72;white-space:pre-wrap
+}
+.copyrow{display:flex;gap:8px;align-items:center;margin-top:9px;flex-wrap:wrap}
+.copyrow .hint{font-size:12px;color:var(--faint)}
+.rel{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px}
+.rel button{border:1px solid var(--border);background:#fff;border-radius:8px;padding:5px 10px;font-size:13px}
+.rel button:hover{background:var(--soft)}
+
+/* footer + toast */
+footer{padding:40px 0 70px;border-top:1px solid var(--border);color:var(--faint);font-size:12.5px}
+footer p+p{margin-top:6px}
+.toast{
+  position:fixed;left:50%;bottom:26px;transform:translate(-50%,16px);background:var(--ink);color:#fff;
+  padding:10px 16px;border-radius:10px;font-size:13.5px;opacity:0;pointer-events:none;transition:all .22s;z-index:60
+}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+@media (max-width:720px){
+  .searchbar{flex-direction:column}
+  .searchbar .btn{width:100%}
+  .prow{grid-template-columns:1fr;gap:8px}
+  .prow:first-child{display:none}
+  .drawer{width:100%}
+  .topnav{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none !important;animation:none !important}
+  .card:hover{transform:none}
+}
+
+/* ---- 模式画册增量 ---- */
+.card .tag{display:inline-flex;align-items:center;gap:6px}
+.tier{font-size:10.5px;font-weight:600;padding:1px 6px;border-radius:5px;letter-spacing:.02em}
+.tier.mother{background:#18181B;color:#fff}
+.tier.core{background:#EEF2FF;color:#3730A3}
+.tier.ref{background:var(--soft);color:var(--faint)}
+.card .best{min-height:3.2em}
+.mgrid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));margin-top:20px}
+.mcard{border:1px solid var(--border);border-radius:var(--r);background:var(--card);padding:16px 16px 14px}
+.mcard .mhead{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+.mcard .mhead b{font-size:15.5px;color:var(--ink)}
+.mcard .mhead span{font-size:11.5px;color:var(--faint)}
+.mcard .mwhy{margin-top:7px;font-size:13.5px;color:var(--muted)}
+.mcard .msay{
+  margin:10px 0 0;background:#0B0B0F;color:#E4E4E7;border-radius:9px;padding:11px 12px;
+  font-family:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+  font-size:11.8px;line-height:1.66;white-space:pre-wrap;overflow:auto
+}
+.mcard .copyrow{margin-top:9px}
+.mcard .btn{padding:7px 11px;font-size:12.5px;border-radius:8px}
+.legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:16px;font-size:12.5px;color:var(--muted)}
+.legend b{color:var(--ink)}
+.legend .tier{vertical-align:1px;margin-right:5px}
+#ctable td:first-child{font-weight:600;color:var(--ink);white-space:normal}
+#ctable td:nth-child(2){color:var(--body)}
+#ctable td:nth-child(3){color:#475569}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="#top">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="7" cy="7" r="2.6"/><circle cx="17" cy="7" r="2.6"/><circle cx="7" cy="17" r="2.6"/><circle cx="17" cy="17" r="2.6"/><path d="M9.6 7h4.8M7 9.6v4.8M17 9.6v4.8M9.6 17h4.8"/></svg>
+      思维模式画册
+    </a>
+    <nav class="topnav">
+      <a href="#gallery">画册</a>
+      <a href="#kadian">按卡点选</a>
+      <a href="#conflict">会打架</a>
+      <a href="#mothers">母模式</a>
+      <a href="#howto">怎么开口</a>
+      <a href="#traps">别给逃生口</a>
+</nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <h1>说一个词，换一条思路</h1>
+      <p class="lede">每个模式都画了它的<b>思维形状</b>，标出它<b>强制 Agent 做什么</b>、什么时候该调它、怎么一句说出口。搜你卡住的那句话，复制底部的<b>调用语</b>。</p>
+      <div class="searchbar">
+        <div class="searchbox">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>
+          <label class="sr" for="q">搜索模式</label>
+          <input id="q" type="search" placeholder="输入你卡住的那句话：它说做完了我不敢信 / 方案都不满意 / 它一直在猜…" autocomplete="off">
+        </div>
+        <button class="btn primary" id="searchBtn">搜索</button>
+        <button class="btn" id="resetBtn">重置</button>
+      </div>
+      <p class="note">离线关键词匹配，不理解长句；没命中时换个更短的说法，或直接用下面的「按卡点选」。</p>
+      <div class="legend">
+        <span><span class="tier mother">母</span><b>母模式</b>：一个词就能换掉整套加工路径，其余多是它的组合</span>
+        <span><span class="tier core">核心</span><b>高频</b>：值得记下来，日常反复用</span>
+        <span><span class="tier ref">查阅</span><b>备用</b>：不记，用到时来查</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="gallery">
+    <div class="wrap">
+      <div class="filters">
+        <div class="chips" id="chips" role="group" aria-label="按家族筛选"></div>
+        <div class="statusline" id="statusline"></div>
+      </div>
+      <div class="grid" id="grid"></div>
+      <div class="empty" id="empty" hidden>没有匹配的模式。试试更短的说法，例如「不敢信」「拆」「回路」「取舍」。</div>
+    </div>
+  </section>
+
+  <section class="section" id="kadian">
+    <div class="wrap">
+      <h2>按卡点选：先说你现在卡在哪句话上</h2>
+      <p class="sub">左边是你嘴里那句说不清的话，中间是可以直接调的模式，右边是最容易在这时候误用的模式。点按钮打开详情。</p>
+      <div class="plist" id="plist"></div>
+    </div>
+  </section>
+
+  <section class="section" id="conflict">
+    <div class="wrap">
+      <h2>模式会打架：这两条别在同一句话里用</h2>
+      <p class="sub">模式不是越多越好。有些组合会互相抵消，甚至让它自相矛盾。判断标准只有一条——你要它先干什么。</p>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>组合</th><th>同时用会出什么事</th><th>怎么排先后</th></tr></thead>
+          <tbody id="ctable"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="mothers">
+    <div class="wrap">
+      <h2>母模式速查：只背这 8 个</h2>
+      <p class="sub">其余模式基本是它们的组合或应用。每个下面就是可以直接复制的调用语。</p>
+      <div class="mgrid" id="mgrid"></div>
+    </div>
+  </section>
+
+  <section class="section" id="howto">
+    <div class="wrap">
+      <h2>怎么把一个模式说给 Agent</h2>
+      <p class="sub">说清这四样，它才会真的换路径；少一样，它会用自己的默认方式应付你。</p>
+      <div class="plist" id="hlist"></div>
+      <p class="note">模式名给英文更好用——中文名常常不触发，英文名是它的训练语料里反复出现的开关。</p>
+    </div>
+  </section>
+
+  <section class="section" id="traps">
+    <div class="wrap">
+      <h2>别给它逃生口：这 7 句话等于放行</h2>
+      <p class="sub">这些是你以为已经说清了、实际上给了它逃生口的瞬间。右边是可以立刻补上的半句话。</p>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>你会这么说</th><th>它会怎么做</th><th>补上这半句</th></tr></thead>
+          <tbody id="ttable"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <p>模式名与口径参考：溯因推理（Peirce）、MECE 与议题树（Minto）、Cynefin（Snowden）、Pre-mortem（Klein）、可逆性决策（Bezos）、受控语言（ASD-STE100）、换上下文审（Critic-Reviewer / Reflexion 的实践修正）。</p>
+      <p>与 <b>diagram-atlas.html</b> 的关系：那本管「怎么表达结构」，这本管「用什么结构去想」。两本共用同一套视觉语言，可离线打开。</p>
+      <p>离线可用 · 无外部依赖 · 单文件</p>
+    </div>
+  </footer>
+</main>
+
+<div class="overlay" id="overlay"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="dTitle" tabindex="-1"></aside>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+"use strict";
+/* ==========================================================
+   模式画册 · 数据层（第一部分：推理 / 抽象 / 拆解 / 攻防）
+   字段：id name en fam tier best def sym when[] invoke never[] vs{} g[]
+   ========================================================== */
+
+const FAMS = [
+  { id:'infer',    name:'推理模式', desc:'它从已知走到未知的方式：演绎、归纳、溯因、类比' },
+  { id:'abstract', name:'抽象层级', desc:'它在哪个高度说话：原理 / 实例 / 跳层' },
+  { id:'decomp',   name:'拆解模式', desc:'怎么把一团东西拆开：不漏、不重、有顺序' },
+  { id:'attack',   name:'视角与攻防', desc:'换一双眼睛看：逆向、红队、钢人、换位' },
+  { id:'create',   name:'生成模式', desc:'造出原本不存在的东西：发散、变体、极端' },
+  { id:'system',   name:'系统模式', desc:'看结构而不是零件：回路、存量、瓶颈' },
+  { id:'decide',   name:'决策模式', desc:'取舍：二阶、期望、可逆、够好即停' },
+  { id:'output',   name:'输出与过程', desc:'允许它生成什么形态：受控、外化、计划、预演' },
+  { id:'verify',   name:'校验模式', desc:'怎么算真完成：证据、反例、复现、影响面' }
+];
+
+const D = [
+
+/* ================= 推理模式 ================= */
+{
+  id:'firstprinciples', name:'第一性原理', en:'First Principles Thinking', fam:'infer', tier:'母',
+  best:'拆到不可再拆的约束，再从约束重推，不许引用惯例',
+  def:'不从「别人怎么做」出发，从「规则允许什么」出发重建方案。',
+  sym:'现成方案都不满意，但说不出哪里不对',
+  when:['你想推翻的不是做法，而是默认前提','讨论里出现「行业都这样」'],
+  invoke:'用第一性原理：先只列不可再拆的约束（物理/法规/预算/人的注意力），不许列惯例；再从这些约束重推方案，并说明每一步推掉了哪条惯例。',
+  never:['拿它做日常小事——成本极高','把「否定一切」当第一性原理'],
+  vs:{ name:'类比推理', diff:'类比从别人的做法出发，第一性从约束出发。判据：你的起点是案例还是约束。' },
+  g:['rebuild','惯例','约束']
+},
+{
+  id:'deductive', name:'演绎推理', en:'Deductive Reasoning', fam:'infer', tier:'核心',
+  best:'先摆规则前提，再推个案，结论必须被前提保证',
+  def:'从一般规则推到具体结论；前提真则结论必真。',
+  sym:'它有规则，但结论飘了',
+  when:['要在既定规则下判断某个个案','需要保证结论不超出前提'],
+  invoke:'用演绎推理：先明确列出你使用的规则和前提（编号），再逐步推出结论，每一步注明用了哪条前提；任何一步缺前提就停下说明缺口。',
+  never:['前提本身可疑时用它——会把错前提放大'],
+  vs:{ name:'归纳推理', diff:'演绎保真但不出新知识；归纳出新知识但不保真。' },
+  g:['div','规则','个案']
+},
+{
+  id:'inductive', name:'归纳推理', en:'Inductive Reasoning', fam:'infer', tier:'核心',
+  best:'从多个个案提共性，并标出样本量和反例',
+  def:'从个案推到一般；只能给概率，不能给必然。',
+  sym:'看了几个例子就想下通则',
+  when:['你手上只有若干实例','要形成一条可复用规则'],
+  invoke:'用归纳推理：先列你观察到的全部个案（标数量），再提共性，然后主动给出至少一个反例或例外，最后把结论写成带概率的表达。',
+  never:['把归纳结论当必然','样本只有一个就下通则'],
+  vs:{ name:'演绎推理', diff:'归纳负责发现，演绎负责保证。发现完要用演绎检验。' },
+  g:['conv','个案','通则']
+},
+{
+  id:'abductive', name:'溯因推理', en:'Abductive Reasoning', fam:'infer', tier:'母',
+  best:'先列现象，再列能解释它的多个假设，再设计能区分它们的观测',
+  def:'从结果反推最可能的解释；诊断和排障的核心模式。',
+  sym:'它在猜，不是在推',
+  when:['现象清楚但原因不明','有多个解释都说得通'],
+  invoke:'用溯因推理：先列观察到的现象；再列 3 个都能解释它的假设；然后为每个假设设计一个能区分它们的观测；最后只保留还站得住的。',
+  never:['停在「最像的那个假设」，不做区分性观测'],
+  vs:{ name:'因果推断', diff:'溯因找候选原因，因果推断验证「动这个变量结果会不会变」。' },
+  g:['sieve','现象','假设']
+},
+{
+  id:'analogical', name:'类比推理', en:'Analogical Reasoning', fam:'infer', tier:'母',
+  best:'找结构相同的领域做映射，并标出不适用条件',
+  def:'借另一个领域的结构来解决当前问题。',
+  sym:'我想借鉴别人的做法，但怕搬错',
+  when:['当前领域没有成熟解法','要评估一个「照搬」是否成立'],
+  invoke:'用类比推理：先找结构相同的另一个领域（说明相同的是哪几条关系），做逐项映射，再明确列出哪些地方不适用以及为什么。',
+  never:['把表面相似当结构相似','映射完不谈差异'],
+  vs:{ name:'第一性原理', diff:'类比借现成结构，第一性从约束重推。两者对冲，别在同一轮混用。' },
+  g:['mirror','甲域','乙域']
+},
+{
+  id:'counterfactual', name:'反事实推理', en:'Counterfactual Reasoning', fam:'infer', tier:'查阅',
+  best:'假设「不这么做」会怎样，用来判定真因',
+  def:'构造未发生的对照，看结果差异。',
+  sym:'不确定是不是这个原因造成的',
+  when:['要判断某因素是必要原因','事故复盘要区分诱因和真因'],
+  invoke:'用反事实推理：明确写出「如果当时没有 X，结果会是什么」，并说明这个推演依据什么证据；如果无法判断，直接说无法判断，不要编。',
+  never:['推演成小说，不落回可验证的一条'],
+  vs:{ name:'因果推断', diff:'反事实是思想实验，因果推断要求可观测的干预。' },
+  g:['ghost','实际','如果']
+},
+{
+  id:'causal', name:'因果推断', en:'Causal Inference', fam:'infer', tier:'核心',
+  best:'先画谁影响谁的图，区分混杂因子，再谈干预效果',
+  def:'区分相关与因果；问「动这个变量，结果会不会变」。',
+  sym:'两件事总一起发生，不知道谁导致谁',
+  when:['要判断改动是否真有效','看到两个指标同步变化'],
+  invoke:'用因果推断：先画因果图（A→B、C 同时影响 A 和 B），指出哪些是混杂因子；再说明「如果只动 A，B 预期怎么变」，以及什么观测能反驳这个方向。',
+  never:['把时序先后当因果'],
+  vs:{ name:'溯因推理', diff:'溯因产假设，因果推断做检验。' },
+  g:['tree','A','B']
+},
+{
+  id:'bayes', name:'概率推理', en:'Bayesian Reasoning', fam:'infer', tier:'核心',
+  best:'先给先验，再按证据更新，说明多大证据才会改判',
+  def:'用概率表达不确定性，用证据逐步修正判断。',
+  sym:'它只会说「可能性较大」',
+  when:['结论不确定但必须给判断','新证据不断进来'],
+  invoke:'用概率推理：先给当前判断的先验概率和依据；再列新证据，逐条说明每条把概率往哪边推、推多少；最后说明「看到什么证据我会改判」。',
+  never:['概率凭空捏，不写来源'],
+  vs:{ name:'模糊推理', diff:'概率给数字，模糊给程度。要决策用概率。' },
+  g:['curve','先验','后验']
+},
+{
+  id:'constraint', name:'约束满足', en:'Constraint Satisfaction', fam:'infer', tier:'母',
+  best:'先分硬约束和软约束，再找可行解；无解时说清该松哪条',
+  def:'把问题写成「在一组约束下找可行解」。',
+  sym:'方案都别扭，好像被什么卡住了',
+  when:['多个方案都违反某些条件','需求之间互相打架'],
+  invoke:'用约束满足：先列硬约束（不可违反）和软约束（可让步，标代价）；再给可行域内的解；如果无解，明确说「必须松哪一条约束，松了会付出什么」。',
+  never:['先想方案再补约束'],
+  vs:{ name:'第一性原理', diff:'第一性列约束后重推方案；约束满足在约束内找解。' },
+  g:['narrow','约束','解']
+},
+{
+  id:'formal', name:'形式化推理', en:'Formal / Symbolic Reasoning', fam:'infer', tier:'查阅',
+  best:'把自然语言翻成符号或可执行约束，再求解',
+  def:'用符号系统替代自然语言来推理。',
+  sym:'逻辑绕来绕去绕不清',
+  when:['条件多且互相牵连','需要机器可检验的结论'],
+  invoke:'用形式化推理：把条件翻译成符号（变量、约束、关系），写出推理式，再求解；最后把结果翻译回自然语言，并指出形式化过程中丢失了什么。',
+  never:['现实条件无法形式化时硬套'],
+  vs:{ name:'约束满足', diff:'形式化管表达，约束满足管求解。' },
+  g:['chain','自然语言','符号']
+},
+{
+  id:'casebased', name:'案例推理', en:'Case-Based Reasoning', fam:'infer', tier:'查阅',
+  best:'检索最相似的历史案例，列出差异点，再做适配',
+  def:'用过去的相似案例作为起点，而不是从零推导。',
+  sym:'这事以前好像发生过',
+  when:['团队里有类似历史处理','要从旧方案改出新的'],
+  invoke:'用案例推理：检索最相似的历史案例（给出来源和时间），列出它与当前情况的 3 个关键差异，再说明因此要改哪几处，不许直接照搬。',
+  never:['只有一个案例就下通则'],
+  vs:{ name:'类比推理', diff:'案例推理比同域，类比推理跨域。' },
+  g:['loop','旧案','适配']
+},
+{
+  id:'fuzzy', name:'模糊推理', en:'Fuzzy Reasoning', fam:'infer', tier:'查阅',
+  best:'用程度而非真假处理「有点/大概」，并给出阈值',
+  def:'处理连续程度的推理，而不是二值真假。',
+  sym:'结论只能是「还行」「差不多」',
+  when:['标准本身是连续的（快/慢、够/不够）','要定一个可执行的阈值'],
+  invoke:'用模糊推理：把判断拆成几个连续维度，给每个维度定 0-1 的程度和三档阈值（合格/警戒/不可接受），再给总判定规则。',
+  never:['需要精确判定时用它糊过去'],
+  vs:{ name:'概率推理', diff:'模糊说的是程度，概率说的是可能性。' },
+  g:['curve','程度','阈值']
+},
+
+/* ================= 抽象层级 ================= */
+{
+  id:'up', name:'上升抽象', en:'Abstract Up', fam:'abstract', tier:'查阅',
+  best:'先给上位原则，再落到本题',
+  def:'把具体问题归到一个更大的类别里看。',
+  sym:'讨论陷在细节里出不来',
+  when:['细节越谈越乱','要让结论可迁移到别的场景'],
+  invoke:'用上升抽象：先给这个问题所属的上位原则/不变量，再说明本题是哪一种特例，最后指出哪些细节在此层不重要。',
+  never:['简单执行任务时用它——纯浪费'],
+  vs:{ name:'下降具体', diff:'上升找共性，下降找可执行。' },
+  g:['stair','原则','实例']
+},
+{
+  id:'down', name:'下降具体', en:'Concretize Down', fam:'abstract', tier:'核心',
+  best:'每条抽象结论必须配一个具体例子、数字或文件',
+  def:'把原则落成可执行的一步。',
+  sym:'它讲得很对，但落不了地',
+  when:['结论全是原则没有实例','要拿去执行但不知从哪下手'],
+  invoke:'用下降具体：每条抽象结论后面必须跟一个具体例子，给出文件名/命令/数字中至少一项；给不出来的结论直接删掉。',
+  never:['把例子当结论'],
+  vs:{ name:'上升抽象', diff:'下降给可执行，上升给可迁移。' },
+  g:['stair','抽象','例子']
+},
+{
+  id:'ladder', name:'抽象阶梯', en:'Ladder of Abstraction', fam:'abstract', tier:'查阅',
+  best:'明确现在在第几层，并指出下一层是什么',
+  def:'把讨论按抽象高度分层，先定位再移动。',
+  sym:'两个人说的都对，但接不上',
+  when:['讨论反复在不同高度间跳','争论其实是层级不同'],
+  invoke:'用抽象阶梯：先用一句标注「我们现在在第几层」，把各层列出来（意图/目标/方案/步骤/命令），指出对方在哪层、我在哪层，再指定接下来降到哪一层。',
+  never:['在同一层换说法冒充深入'],
+  vs:{ name:'上升/下降', diff:'阶梯管「定位」，升降管「移动」。' },
+  g:['stair','层 3','层 1']
+},
+{
+  id:'sbf', name:'结构-行为-功能', en:'Structure-Behavior-Function', fam:'abstract', tier:'查阅',
+  best:'分三栏看它由什么组成、怎么动、为了什么',
+  def:'同时看组成、动态过程和设计目的，检查三者是否匹配。',
+  sym:'说不清这东西为什么长这样',
+  when:['要评估一个设计是否合理','结构与目的不一致'],
+  invoke:'用结构-行为-功能三分：分别列出它的组成（结构）、它的动态过程（行为）、它服务的目的（功能），再指出三者哪里不匹配。',
+  never:['拿它替代状态机'],
+  vs:{ name:'状态机', diff:'SBF 看设计意图，状态机看允许的迁移。' },
+  g:['grid','结构','行为','功能']
+},
+
+/* ================= 拆解模式 ================= */
+{
+  id:'mece', name:'MECE', en:'Mutually Exclusive, Collectively Exhaustive', fam:'decomp', tier:'母',
+  best:'拆完自查：举例证明重叠、举例证明遗漏',
+  def:'拆分结果的质检标准：任意两项不重叠，加起来不漏。',
+  sym:'分类拆完了，但我总觉得有漏',
+  when:['要保证拆分不漏不重','两拨人在讨论不同的东西'],
+  invoke:'用 MECE：先给拆分维度和各项；再自查——举一个同时属于两项的例子（验证不重叠），举一个哪项都不属于的例子（验证不遗漏）；举得出来就改分类。',
+  never:['拿它当拆分方法——它只是检验'],
+  vs:{ name:'议题树', diff:'议题树长出层次，MECE 检查长出来对不对。' },
+  g:['part','A','B','C']
+},
+{
+  id:'issuetree', name:'议题树', en:'Issue Tree', fam:'decomp', tier:'核心',
+  best:'一层层挂子问题，直到叶子能单独回答',
+  def:'把主问题递归拆成可分别回答的子问题。',
+  sym:'大问题不知道从哪切',
+  when:['结论要一层层挂证据','问题太大无法直接回答'],
+  invoke:'用议题树：根是主问题，往下每层只问一个问题，直到叶子是「能单独回答的子问题」；每个分支标注「回答它需要什么证据」。',
+  never:['树长得比问题还复杂'],
+  vs:{ name:'MECE', diff:'树负责结构，MECE 负责质量。' },
+  g:['tree','主问','子问']
+},
+{
+  id:'fivewhys', name:'5 Whys', en:'Five Whys', fam:'decomp', tier:'核心',
+  best:'连问五层，每层必须给出可查的证据',
+  def:'沿单条因果链往下追问，直到找到能改的那一层。',
+  sym:'找到的原因还能再往下问',
+  when:['单次故障要找到可改的那一层','原因停在「人为疏忽」'],
+  invoke:'用 5 Whys：连续追问，每一层的答案后面必须附上可查证据（日志/代码/配置）；问到「改这里就能防止复发」为止；如果某层没有证据，标为假设并停下。',
+  never:['重复性问题用它——该换系统思维'],
+  vs:{ name:'系统思维', diff:'5 Whys 找单链根因，系统思维认为根因是结构。' },
+  g:['chain','现象','真因']
+},
+{
+  id:'ishikawa', name:'鱼骨图', en:'Ishikawa / Cause-and-Effect', fam:'decomp', tier:'核心',
+  best:'先按维度穷举可能原因，再逐条排除',
+  def:'用固定维度把原因铺开，防止第一直觉带走。',
+  sym:'原因有好几种可能，不知道哪个',
+  when:['要穷举原因不被第一直觉带走','多人一起找原因'],
+  invoke:'用鱼骨图：按固定维度（人/机/料/法/环/测 或你项目适用的维度）穷举可能原因，再对每条标「已排除/待验证/已确认」，并给待验证项一个验证方法。',
+  never:['只列原因不排除'],
+  vs:{ name:'溯因推理', diff:'鱼骨管穷举，溯因管区分。' },
+  g:['fish','人机料法','现象']
+},
+{
+  id:'decisiontree', name:'决策树', en:'Decision Tree', fam:'decomp', tier:'核心',
+  best:'画分支，每支标概率与代价',
+  def:'把有先后依赖的选择展开成树，再回算。',
+  sym:'选择后面还有选择，绕晕了',
+  when:['决策有先后依赖','每个分支代价不同'],
+  invoke:'用决策树：画出分支，每个分支标概率（及依据）和代价，算出每条路径的期望；标出哪一步是「必须等结果才能走」的。',
+  never:['有回路的问题用它'],
+  vs:{ name:'状态机', diff:'决策树无回路，状态机有回路。' },
+  g:['tree','判据','结果']
+},
+{
+  id:'statemachine', name:'状态机', en:'State Machine', fam:'decomp', tier:'核心',
+  best:'列状态、触发事件、迁移表，检查不可达状态和死锁',
+  def:'用「当前状态 + 事件 → 下一状态」描述对象行为。',
+  sym:'状态乱七八糟，不知道什么情况下会卡住',
+  when:['对象有明确的状态和事件','要排查「卡住/重复」类问题'],
+  invoke:'用状态机建模：列全部状态、触发事件、迁移表（当前态+事件→下一态+动作）；然后检查有没有不可达状态、有没有只能进不能出的状态（死锁）、有没有漏掉的非法迁移。',
+  never:['只是线性步骤时用它'],
+  vs:{ name:'流程图', diff:'流程图问「下一步做什么」，状态机问「现在是什么、什么能改变它」。' },
+  g:['loop','A','B']
+},
+{
+  id:'dag', name:'任务依赖图', en:'Task DAG', fam:'decomp', tier:'核心',
+  best:'先出「哪些并行、哪些必须顺序」的图，再动手',
+  def:'用有向无环图表达子任务之间的先后约束。',
+  sym:'活太大，它一次干乱了',
+  when:['多个子任务之间有依赖','要决定并行还是串行'],
+  invoke:'用任务 DAG：先只给依赖图（节点=任务，边=必须在前），标出关键路径和可并行的组；在我确认图之前不要开始执行。',
+  never:['小任务也画图——图比活贵'],
+  vs:{ name:'甘特图', diff:'DAG 管顺序，甘特管时间。' },
+  g:['dag','T1','T2']
+},
+{
+  id:'ontology', name:'本体建模', en:'Ontology / Concept Map', fam:'decomp', tier:'查阅',
+  best:'定概念、定关系类型、定约束，先把语言统一',
+  def:'先定义概念和关系，再谈实现。',
+  sym:'同一个词每个人理解不一样',
+  when:['多方协作术语不统一','要设计数据模型前的概念层'],
+  invoke:'用本体建模：列出核心概念（每个给一句定义）、关系类型（每个给方向语义，如属于/依赖/触发）、以及约束（唯一、必填、互斥）；不要直接画表。',
+  never:['直接当数据库设计'],
+  vs:{ name:'ER 图', diff:'本体按业务语言组织，ER 按表和约束组织。' },
+  g:['dag','概念','关系']
+},
+{
+  id:'boundary', name:'边界划分', en:'Boundary Partitioning', fam:'decomp', tier:'核心',
+  best:'先划「哪些归我们、哪些不归」，再谈内部',
+  def:'先定范围，再谈实现。',
+  sym:'讨论半天，其实在争边界',
+  when:['范围不清导致反复返工','责任划分有争议'],
+  invoke:'用边界划分：先明确「本次范围内/范围外」各列一张清单，再指出边界上的 3 个灰色地带并给出归属判断和理由；边界未定前不讨论内部实现。',
+  never:['边界没定就拆内部'],
+  vs:{ name:'系统上下文图', diff:'边界划分是决策，上下文图是它的表达。' },
+  g:['sep','内','外']
+},
+{
+  id:'layered', name:'分层分解', en:'Hierarchical Decomposition', fam:'decomp', tier:'查阅',
+  best:'层级和粒度明确，不许跳层',
+  def:'按固定粒度分层，先声明在哪层再讨论。',
+  sym:'有人在讲服务，有人在讲方法',
+  when:['需要跨层沟通','不同人关注不同粒度'],
+  invoke:'用分层分解：先定义层名和每层粒度（系统/容器/模块/文件/函数），声明当前讨论在哪层，禁止跨层讨论；需要跨层时显式说明「现在跳到某一层」。',
+  never:['每层都画一遍同样的东西'],
+  vs:{ name:'抽象阶梯', diff:'分层管技术粒度，阶梯管认知高度。' },
+  g:['layer','L1','L3']
+},
+
+/* ================= 视角与攻防 ================= */
+{
+  id:'inversion', name:'逆向思维', en:'Inversion', fam:'attack', tier:'母',
+  best:'先问「怎么保证失败」，再反推必避项',
+  def:'把「怎么成功」翻转成「怎么必然失败」，再逐个避开。',
+  sym:'正面想不出好方案',
+  when:['方案已经太顺，没人反对','想不出新思路'],
+  invoke:'用逆向思维：假设目标已经彻底失败，列 5 种失败方式，每种写「哪个环节出的问题 + 最早可观察信号」，再给对应的正向防护动作。',
+  never:['把反向清单当风险清单'],
+  vs:{ name:'事前验尸', diff:'逆向是通用逻辑操作；验尸是固定仪式（已失败 + 逐个写）。' },
+  g:['back','失败','必避']
+},
+{
+  id:'premortem', name:'事前验尸', en:'Pre-mortem', fam:'attack', tier:'核心',
+  best:'虚构「已失败」，倒推原因和最早信号',
+  def:'用「已经失败了」的虚构前提，解除不许唱衰的压力。',
+  sym:'方案要投了，我怕有没想到的坑',
+  when:['评审会一片同意','马上要投入资源'],
+  invoke:'做一次 pre-mortem：假设【项目】在【时间点】彻底失败，写出 6 个最可能的失败原因，每个附「当月就能观察到的信号」，并按「只能提前防一个，防哪个」排序。不要写成功要素。',
+  never:['用来罗列已知风险——会退化成风险登记表'],
+  vs:{ name:'风险清单', diff:'风险清单问概率×影响；验尸问「已经坏了，为什么」。' },
+  g:['back','已失败','原因']
+},
+{
+  id:'redteam', name:'红队', en:'Red Teaming', fam:'attack', tier:'核心',
+  best:'主动攻击这套方案，找最省力的攻破点',
+  def:'指定一个攻击者角色，目标是让方案失败。',
+  sym:'我需要有人真的来打它',
+  when:['方案要强化后再上线','安全与边界相关'],
+  invoke:'用红队视角：你是攻击者，目标是让这个方案失败或造成最大损害。列出 5 条最省力的攻击路径，每条给「利用什么弱点 + 需要什么前提 + 后果」，按省力度排序。',
+  never:['变成无差别挑刺'],
+  vs:{ name:'魔鬼代言人', diff:'红队给攻击路径，魔鬼代言人只提反方论据。' },
+  g:['attack','弱点','攻击']
+},
+{
+  id:'steelman', name:'钢人论证', en:'Steelmanning', fam:'attack', tier:'查阅',
+  best:'把对方论点说到最强，再判断',
+  def:'先重建对方的最强版本，再评估。',
+  sym:'我要评估一个我不同意的意见',
+  when:['要真正评估反对意见','对方表达得不好但可能对'],
+  invoke:'用钢人法：先把对方论点重写成最强版本（补上他没说清的假设和证据），确认这就是他的意思，再判断它成立与否；不许先反驳弱版本。',
+  never:['用来表演中立'],
+  vs:{ name:'红队', diff:'钢人是替对方增强，红队是替攻击者找路。' },
+  g:['mirror','我方','对方']
+},
+{
+  id:'devil', name:'魔鬼代言人', en:'Devil’s Advocate', fam:'attack', tier:'查阅',
+  best:'强制给出反方论据，不许附议',
+  def:'指定一个人只负责反对，保证反方意见被记录。',
+  sym:'大家意见太一致了',
+  when:['会议一边倒','需要留出反对记录'],
+  invoke:'用魔鬼代言人：不许附议。给出 3 条反对这个方案的具体理由，每条附一个可验证的事实或风险场景；最后说明「如果这些都不成立，方案就成立」。',
+  never:['只反不建'],
+  vs:{ name:'红队', diff:'魔鬼代言人管立场，红队管攻击路径。' },
+  g:['mirror','正方','反方']
+},
+{
+  id:'perspective', name:'换位视角', en:'Perspective-Taking', fam:'attack', tier:'核心',
+  best:'指定具体身份，说出他最在意什么、最怕什么',
+  def:'换成利益相关者的眼睛看同一件事。',
+  sym:'我担心某些人会觉得不对',
+  when:['要给非技术方看结果','上线前评估各方反应'],
+  invoke:'用换位视角：分别以【角色1】【角色2】【角色3】的身份，写出「这个身份最在意什么、最怕什么、会怎么理解这个方案」，每个角色给一句他会实际说的话。',
+  never:['一句「站在用户角度」了事'],
+  vs:{ name:'多角色议会', diff:'换位是对同一方案多视角，议会是多立场互相辩论。' },
+  g:['quad','用户','运维','老板']
+},
+{
+  id:'council', name:'多角色议会', en:'Council / Multi-Persona', fam:'attack', tier:'查阅',
+  best:'开三个立场互斥的角色，各自发言，再裁决',
+  def:'让不同立场互相辩论，逼出理由而不是结论。',
+  sym:'我需要几个不同立场的人吵一遍',
+  when:['方案涉及利益冲突','一个人想不全'],
+  invoke:'开三个立场互斥的角色（保守维护者/激进重构者/成本控制者），各自用 3 句话陈述立场和理由，然后由你作为裁决者指出哪条理由最强、哪些只是立场不是理由。',
+  never:['角色都一个声音'],
+  vs:{ name:'换位视角', diff:'议会要辩论，换位只要视角。' },
+  g:['div','甲','乙']
+},
+{
+  id:'zoom', name:'换抽象层', en:'Zoom In / Zoom Out', fam:'attack', tier:'核心',
+  best:'明确「放大到某层」或「拉远看全局」，说明看到的不同',
+  def:'主动切换观察尺度，并对比两种尺度下的不同结论。',
+  sym:'我一会儿在细节一会儿在全局，接不上',
+  when:['讨论来回跳层','要看全局但细节又没弄清'],
+  invoke:'用换层视角：先拉远给全局（3-5 个要点，不看细节），再放大到【具体位置】给细节，最后说明「拉远时看不到什么、放大时看不到什么」。',
+  never:['反复拉远逃避细节'],
+  vs:{ name:'抽象阶梯', diff:'Zoom 是移动动作，阶梯是层级标注。' },
+  g:['stair','全局','细节']
+}
+];
+
+/* ==========================================================
+   模式画册 · 数据层（第二部分：生成 / 系统 / 决策 / 输出 / 校验 + 附表）
+   ========================================================== */
+
+const D2 = [
+
+/* ================= 生成模式 ================= */
+{
+  id:'diverge', name:'发散-收敛', en:'Diverge-Converge', fam:'create', tier:'核心',
+  best:'先明确现在在发散还是收敛，两阶段不许混',
+  def:'把创造过程切成两段：先只出主意，后只做筛选。',
+  sym:'讨论既在出主意，又在否定',
+  when:['一会儿出主意一会儿否定','会议效率低'],
+  invoke:'分两阶段：第一阶段只发散，不许评价，出 8 个方案；第二阶段才收敛，用固定判据筛到 2 个。现在先做第一阶段，等我确认再进第二阶段。',
+  never:['边发散边否定'],
+  vs:{ name:'变体枚举', diff:'发散-收敛是节奏，变体枚举是产出要求。' },
+  g:['hour','8 个','2 个']
+},
+{
+  id:'variants', name:'变体枚举', en:'Variant Enumeration', fam:'create', tier:'核心',
+  best:'出 N 个结构不同的方案，并说明差异轴',
+  def:'强制沿几条不同的结构轴出方案，而不是同一方案的措辞变体。',
+  sym:'它给的方案都差不多',
+  when:['要比较方案','需要真正不同的选项'],
+  invoke:'出 4 个方案，要求结构不同：先声明差异轴（如同步/异步、单体/拆分、推/拉），每个方案落在不同位置；不许出只改措辞的同款。',
+  never:['出 5 个只改措辞的同款'],
+  vs:{ name:'SCAMPER', diff:'变体枚举管差异，SCAMPER 管改造手法。' },
+  g:['div','A','D']
+},
+{
+  id:'extreme', name:'极端假设', en:'Extreme Case Analysis', fam:'create', tier:'查阅',
+  best:'把参数推到 0 和极大，看结论在哪崩',
+  def:'用极端输入找出方案的适用边界。',
+  sym:'不知道边界在哪',
+  when:['要找出方案的适用边界','想验证结论是否稳健'],
+  invoke:'用极端假设：把关键参数推到 0、推到极大、推到负，分别说明结论会怎样崩；指出崩的那个点就是边界，并给出安全范围。',
+  never:['把极端情况当真实场景'],
+  vs:{ name:'极小极大', diff:'极端假设找边界，极小极大选抗最坏的方案。' },
+  g:['edge','0','极大']
+},
+{
+  id:'scamper', name:'SCAMPER', en:'SCAMPER', fam:'create', tier:'查阅',
+  best:'按 7 个动词逐个改造现有物',
+  def:'用固定动词表系统化地改造一个已有对象。',
+  sym:'要在现有东西上改出新意',
+  when:['有现成方案要改进','需要系统化地想改造'],
+  invoke:'用 SCAMPER 逐条过：替代/组合/借用/改造/他用/删除/重排，每条给一个具体改法，说明改完解决了什么。',
+  never:['没有现成对象时用它'],
+  vs:{ name:'变体枚举', diff:'SCAMPER 是改造手法，变体枚举是产出结构。' },
+  g:['div','替代','重排']
+},
+{
+  id:'reverse', name:'逆向头脑风暴', en:'Reverse Brainstorming', fam:'create', tier:'核心',
+  best:'先想「怎么搞砸」，再取反成方案',
+  def:'把「怎么改进」换成「怎么毁掉」，再取反。',
+  sym:'正常头脑风暴出不来东西',
+  when:['正面想不出改进点','团队太保守不敢提'],
+  invoke:'用逆向头脑风暴：先问「怎样做能保证这件事彻底失败」，穷举 10 条；再把每条取反，转成一条正向做法；最后挑 3 条现在就能做的。',
+  never:['得到方案后不回来'],
+  vs:{ name:'逆向思维', diff:'逆向头脑风暴是团队流程，逆向思维是推理操作。' },
+  g:['back','搞砸','取反']
+},
+{
+  id:'mvp', name:'最简可行', en:'MVP / Minimum Viable', fam:'create', tier:'核心',
+  best:'先给能验证核心假设的最小版本',
+  def:'用最小代价造出能验证或推翻假设的东西。',
+  sym:'一次做太多，迟迟验证不了',
+  when:['要尽快验证一个假设','资源有限'],
+  invoke:'用 MVP：先写出要验证的核心假设，再给「能验证它的最小版本」——列出必须有的 3 项和明确砍掉的项，以及验证判据（什么结果算成功/失败）。',
+  never:['把半成品叫 MVP'],
+  vs:{ name:'分批交付', diff:'MVP 为验证，分批交付为降低交付风险。' },
+  g:['narrow','全量','最小']
+},
+{
+  id:'cdd', name:'约束驱动设计', en:'Constraint-Driven Design', fam:'create', tier:'核心',
+  best:'从硬约束反推方案，而不是从偏好正向选',
+  def:'让约束决定结构，让偏好只决定细节。',
+  sym:'我在一堆偏好里选不出来',
+  when:['约束很强（预算/工期/合规）','方案讨论变成偏好之争'],
+  invoke:'用约束驱动设计：先列硬约束（不可谈的），再在约束内推导可行结构，然后才谈偏好；如果某个偏好与硬约束冲突，直接标出冲突项。',
+  never:['约束没确认就推'],
+  vs:{ name:'约束满足', diff:'同源：CDD 用于设计，约束满足用于求解。' },
+  g:['narrow','约束','结构']
+},
+{
+  id:'gentest', name:'生成-测试', en:'Generate-and-Test', fam:'create', tier:'核心',
+  best:'批量生成，用自动判据筛，只留通过的',
+  def:'把「想」和「判」分开，判据先写死再生成。',
+  sym:'它一次只给一个想法，好坏全靠感觉',
+  when:['候选空间大','有可自动判定的标准'],
+  invoke:'用生成-测试：先定义可自动判定的通过条件（写出来），再批量生成 10 个候选，逐个用这个条件判定（给判定结果），只保留通过的并说明淘汰原因。',
+  never:['只生成不筛'],
+  vs:{ name:'发散-收敛', diff:'生成-测试有机器判据，发散-收敛靠人判断。' },
+  g:['sieve','10 个','通过']
+},
+{
+  id:'transfer', name:'类比迁移', en:'Analogical Transfer', fam:'create', tier:'查阅',
+  best:'从别的领域搬结构，并标注不适用条件',
+  def:'把源领域的结构关系搬到目标领域。',
+  sym:'我想把这个项目的写法搬过来',
+  when:['要跨项目或跨语言复用写法','学习别人怎么做的'],
+  invoke:'用类比迁移：说明源领域的结构（不是名词），列出要搬的关系，再注明目标领域的 3 个不同条件以及因此需要改的地方。',
+  never:['搬表面名词'],
+  vs:{ name:'案例推理', diff:'迁移跨域借结构，案例同域借经验。' },
+  g:['mirror','源','目标']
+},
+
+/* ================= 系统模式 ================= */
+{
+  id:'systems', name:'系统思维', en:'Systems Thinking', fam:'system', tier:'母',
+  best:'找「什么结构让它必然这样」，不给责任人结论',
+  def:'用回路、延迟、存量解释重复发生的行为。',
+  sym:'同一个问题修完又冒出来',
+  when:['同类问题反复出现','换个负责人还是坏'],
+  invoke:'用系统思维：不说责任人。给出存量是什么、流入流出各是什么、有无增强回路和调节回路、延迟在哪一段，以及「看似有效但长期恶化」的应对方式。',
+  never:['用来免责','线性过程也硬画回路'],
+  vs:{ name:'5 Whys', diff:'5 Whys 假设有单一根因，系统思维假设根因是结构。' },
+  g:['loop','流入','流出']
+},
+{
+  id:'cloop', name:'因果回路', en:'Causal Loop Diagram', fam:'system', tier:'核心',
+  best:'画增强/调节回路，标出延迟在哪',
+  def:'用带极性的有环图表示互相推动的关系。',
+  sym:'越努力越糟，或者越顺越顺',
+  when:['多个因素互相影响','要解释「为什么会失衡」'],
+  invoke:'用因果回路：列出变量和它们之间的影响方向（同向/反向），标出增强回路与调节回路，并标出每一段延迟在哪；再说明哪个回路目前占主导。',
+  never:['线性过程也画回路'],
+  vs:{ name:'任务依赖图', diff:'DAG 无环表顺序，回路图有环表反馈。' },
+  g:['loop','R 增强','B 调节']
+},
+{
+  id:'stockflow', name:'存量流量', en:'Stock and Flow', fam:'system', tier:'核心',
+  best:'分开「累积量」和「变化速率」',
+  def:'区分系统的状态量和改变状态量的速率。',
+  sym:'分不清「多」和「快」',
+  when:['讨论积压、库存、技术债','速率和总量被混着说'],
+  invoke:'用存量-流量：先指明哪些是存量（累积量，如积压任务数、技术债）、哪些是流量（进/出的速率），再说明当前存量是流入流出不平衡的结果，而不是「量本身大」。',
+  never:['把两者混着说'],
+  vs:{ name:'系统思维', diff:'存量流量是它的分解工具之一。' },
+  g:['tub','存量','流量']
+},
+{
+  id:'leverage', name:'杠杆点', en:'Leverage Points', fam:'system', tier:'核心',
+  best:'找出「改这里最省力」的一两处，并说明为什么',
+  def:'在系统里找干预效果最大的位置。',
+  sym:'能改的地方太多，不知道改哪个',
+  when:['优化目标多而资源少','想找最小改动最大效果'],
+  invoke:'用杠杆点：先列系统里的可干预位置（规则、信息流、激励、目标、参数），再挑 1-2 个杠杆最高点，说明「改这里会连带改变什么」以及为什么比改参数省力。',
+  never:['变成清单罗列'],
+  vs:{ name:'约束理论', diff:'杠杆点看干预位置，TOC 看瓶颈节点。' },
+  g:['pivot','支点','力']
+},
+{
+  id:'pathdep', name:'路径依赖', en:'Path Dependence', fam:'system', tier:'查阅',
+  best:'指出「历史哪个选择锁死了现在的选项」',
+  def:'解释当下的选项为什么被过去的选择限制。',
+  sym:'都知道不对，但改不动',
+  when:['方案明明不好却换不掉','要解释「为什么还在用这个」'],
+  invoke:'用路径依赖：找出当初那个锁定的选择（时间、原因），说明它现在通过什么机制（兼容、习惯、数据、契约）限制了选项，再给一个「解锁需要付出什么」的估计。',
+  never:['把一切都归因历史'],
+  vs:{ name:'约束理论', diff:'路径依赖解释限制来源，TOC 定位当前瓶颈。' },
+  g:['narrow','岔口','现状']
+},
+{
+  id:'toc', name:'约束理论', en:'Theory of Constraints', fam:'system', tier:'核心',
+  best:'找瓶颈节点，只在瓶颈上优化',
+  def:'系统产出由最窄的环节决定，其他优化不影响总产出。',
+  sym:'每个地方都优化了，整体没变快',
+  when:['局部改善但整体没变','吞吐上不去'],
+  invoke:'用约束理论：先找出系统里吞吐最小的那个环节（给证据），说明其他环节再优化都不影响总产出；然后只给针对瓶颈的改进，以及瓶颈转移后下一个瓶颈在哪。',
+  never:['整体性优化口号'],
+  vs:{ name:'杠杆点', diff:'TOC 找瓶颈，杠杆点找干预位置。' },
+  g:['narrow','瓶颈','产出']
+},
+
+/* ================= 决策模式 ================= */
+{
+  id:'secondorder', name:'二阶思维', en:'Second-Order Thinking', fam:'decide', tier:'核心',
+  best:'每步连问两遍「然后呢」，分一阶/二阶/三阶写',
+  def:'沿时间递推后果，而不只看第一步。',
+  sym:'改完之后没想到会引出别的问题',
+  when:['方案短期都对，要比长期','涉及人的激励和行为'],
+  invoke:'用二阶思维：分三列写——一阶（立刻发生什么）、二阶（1-3 个月后谁的行为变了、有什么新成本）、三阶（半年后大家适应新规则会怎么绕过它）。每列只写可观察的行为变化。',
+  never:['推成预言','推到三阶以上就行动瘫痪'],
+  vs:{ name:'影响关系图', diff:'二阶思维沿时间递推，影响关系图沿空间传导。' },
+  g:['chain','1 阶','3 阶']
+},
+{
+  id:'ev', name:'期望值', en:'Expected Value', fam:'decide', tier:'核心',
+  best:'列分支×概率×代价，算期望并标概率来源',
+  def:'用概率加权把不确定性折算成可比数值。',
+  sym:'不知道值不值得赌',
+  when:['有概率性收益','多个方案风险不同'],
+  invoke:'用期望值：列出每个分支的概率（并说明概率来源：历史数据/类比/主观）和收益与损失，算出期望值；再单独给出「最坏情况损失」和能否承受。',
+  never:['概率凭空捏'],
+  vs:{ name:'极小极大', diff:'期望值看平均，极小极大看最坏。' },
+  g:['tree','概率','值']
+},
+{
+  id:'reversible', name:'可逆性判断', en:'Reversibility / One-Way Door', fam:'decide', tier:'核心',
+  best:'先判「这步能不能退」，决定要不要慢',
+  def:'按可逆性给决策分级，再配不同的审查强度。',
+  sym:'不知道这个决定能不能快点下',
+  when:['要决定是否加审批','改动可能难回滚'],
+  invoke:'先判可逆性：这个动作能不能退、退的代价是多少、多久之内可退；如果是单向门，列出必须确认的 3 件事再执行；如果是双向门，给出最快验证路径。',
+  never:['把双向门当单向门，事事审批'],
+  vs:{ name:'风险定级', diff:'可逆性只看能不能退，风险看炸多大。' },
+  g:['gate','可退','不可退']
+},
+{
+  id:'minimax', name:'极小极大', en:'Minimax / Worst-Case', fam:'decide', tier:'查阅',
+  best:'假设最坏会发生，选「最坏也扛得住」的方案',
+  def:'以最小化最坏结果为目标做选择。',
+  sym:'我不能承受最坏结果',
+  when:['失败代价不可承受','对手会主动对抗'],
+  invoke:'用极小极大：假设每个方案都遇到最坏情况，列出各方案在最坏情况下的损失，选损失最小的那个；再说明这个选择的正常情况收益比最优方案少多少。',
+  never:['正常场景也用它——代价过高'],
+  vs:{ name:'期望值', diff:'极小极大抗最坏，期望值求平均。' },
+  g:['quad','坏','更坏','最坏']
+},
+{
+  id:'satisficing', name:'够好即停', en:'Satisficing', fam:'decide', tier:'核心',
+  best:'定「够好的门槛」，达到就停，不追最优',
+  def:'设定可接受阈值，第一个达标的就接受。',
+  sym:'一直在比较，迟迟不决定',
+  when:['选项太多且差异小','时间成本高于最优收益'],
+  invoke:'用够好即停：先定门槛（必须满足的 3 条），然后按顺序评估，第一个全部满足的就停，不再比较剩下的；说明为什么继续比较不划算。',
+  never:['关键不可逆决策上偷懒'],
+  vs:{ name:'加权矩阵', diff:'够好即停要速度，矩阵要比精度。' },
+  g:['gate','门槛','停']
+},
+{
+  id:'realoptions', name:'实物期权', en:'Real Options', fam:'decide', tier:'查阅',
+  best:'先小投入保留选择权，给出「什么信号才加注」',
+  def:'用可以放弃的小投入换取未来的选择权。',
+  sym:'现在信息不够，但不做又怕错过',
+  when:['不确定性高但值得下注','要分阶段投入'],
+  invoke:'用实物期权：设计一个「小投入保留选择权」的第一步，明确它买到的是什么选择权；再给加注/放弃的信号（可观察的事件和阈值）。',
+  never:['无限拖延不决策'],
+  vs:{ name:'MVP', diff:'MVP 验证假设，期权保留选择权。' },
+  g:['div','小投','加注']
+},
+{
+  id:'matrix', name:'加权矩阵', en:'Weighted Decision Matrix', fam:'decide', tier:'核心',
+  best:'定维度、定权重、打分，并做权重敏感性检查',
+  def:'把多维比较变成可解释的分数。',
+  sym:'方案都差不多，选不出来',
+  when:['三个以上方案多维比较','需要让选择可解释'],
+  invoke:'用加权矩阵：定维度和权重（权重和 100，说明依据），逐项打分（1-5，说明打分依据），算总分；然后做敏感性检查——把权重改动 ±20%，看排名是否翻转。',
+  never:['权重随手定'],
+  vs:{ name:'够好即停', diff:'矩阵求比准，够好即停求快。' },
+  g:['grid','A','B','C']
+},
+{
+  id:'game', name:'博弈推演', en:'Game-Theoretic Reasoning', fam:'decide', tier:'核心',
+  best:'先问「对方看到我这步会怎么应」，再选',
+  def:'把对方的主动反应纳入推演。',
+  sym:'我改了规则，别人会绕过去',
+  when:['涉及多方互相影响','要预测对手反应'],
+  invoke:'用博弈推演：先列出参与方和各自目标，再写「我这么做→他会怎么应→我再怎么应」，给出两轮应对后的稳态；最后指出这个稳态是否对我不利。',
+  never:['假设对方不动'],
+  vs:{ name:'二阶思维', diff:'二阶思维看后果，博弈看对方主动应对。' },
+  g:['mirror','我','他']
+},
+{
+  id:'cynefin', name:'问题分类', en:'Cynefin Framework', fam:'decide', tier:'查阅',
+  best:'先判「简单/繁杂/复杂/混乱」，再选对应方法',
+  def:'先判定问题类型，再决定用最佳实践还是做实验。',
+  sym:'不知道该用最佳实践还是做实验',
+  when:['方法选错导致白忙','问题类型不清楚'],
+  invoke:'先用 Cynefin 分类：这条问题属于「简单（有最佳实践）/繁杂（需专家分析）/复杂（只能试探）/混乱（先止血）」，说明依据；再给出该类问题对应的做法，不要用错类的做法。',
+  never:['跳过分类直接用最佳实践'],
+  vs:{ name:'约束满足', diff:'Cynefin 先分类再选法，约束满足直接求解。' },
+  g:['quad','简单','复杂','混乱']
+},
+
+/* ================= 输出与过程 ================= */
+{
+  id:'controlled', name:'受控语言', en:'Controlled Language (ASD-STE100)', fam:'output', tier:'核心',
+  best:'一句一个动作，术语统一，禁无阈值词',
+  def:'用受限的表达规则压缩歧义密度。',
+  sym:'它写的东西我读不下去',
+  when:['输出要被直接执行','反复因为措辞返工'],
+  invoke:'用受控表达：一句话只表达一个动作；术语前后一致（先给术语表）；禁止「适当/尽量/一些/优化一下」这类无阈值词，全部换成具体数字或明确条件；不确定的写「未验证」，不写「应该没问题」。',
+  never:['用在创意发散阶段——会杀死发散'],
+  vs:{ name:'结构化字段', diff:'受控语言管句子，结构化管字段。' },
+  g:['lines','改前','改后']
+},
+{
+  id:'pyramid', name:'金字塔结构', en:'Pyramid Principle', fam:'output', tier:'核心',
+  best:'结论先行，下面挂不重叠的论证',
+  def:'结论放最前，支撑理由分层且互不重叠。',
+  sym:'它讲了半天我还没听到结论',
+  when:['要快速传达结论','对方只读前两句'],
+  invoke:'用金字塔结构：第一句给结论；然后 3 个支撑理由，彼此独立不重叠；每个理由下面给证据（数字/事实/文件）；不要按时间顺序叙述。',
+  never:['探索阶段还没结论时用它'],
+  vs:{ name:'SCQA', diff:'金字塔给结论，SCQA 给开场。' },
+  g:['pyramid','结论','理由']
+},
+{
+  id:'scqa', name:'SCQA', en:'Situation-Complication-Question-Answer', fam:'output', tier:'核心',
+  best:'情境-冲突-问题-答案四段开场',
+  def:'用四段式把读者从已知带到你要说的事。',
+  sym:'我不知道怎么开口讲这件事',
+  when:['要写方案或汇报开头','对方不知道背景'],
+  invoke:'用 SCQA 写开场：情境（公认事实）→ 冲突（发生了什么变化或矛盾）→ 问题（因此要回答什么）→ 答案（一句话结论）。四段各不超过两句。',
+  never:['用在长文正文——正文用金字塔'],
+  vs:{ name:'金字塔结构', diff:'SCQA 管怎么引入，金字塔管怎么论证。' },
+  g:['layer','S 情境','A 答案']
+},
+{
+  id:'schema', name:'结构化字段', en:'Structured Output / Schema', fam:'output', tier:'核心',
+  best:'按固定字段返回，不允许散文',
+  def:'用固定字段约束输出形态，使结果可比可解析。',
+  sym:'每次给的格式都不一样，我没法比较',
+  when:['要多次比较同类输出','结果要被机器处理'],
+  invoke:'按固定字段返回，不要散文：字段为【字段1】【字段2】【字段3】；每个字段用一句话，缺失就写 null 并说明原因；不要额外补充字段。',
+  never:['需要解释因果时用它——会把推理压没'],
+  vs:{ name:'受控语言', diff:'结构化管架子，受控语言管句子。' },
+  g:['grid','字段 1','字段 2','字段 3']
+},
+{
+  id:'scratchpad', name:'草稿外化', en:'Scratchpad / Show-your-work', fam:'output', tier:'核心',
+  best:'分段写「要验证什么→用什么→期望→真实输出」',
+  def:'把中间状态写出来，让你能在任意一段打断它。',
+  sym:'我只拿到结论，不知道它怎么推的',
+  when:['多步任务需要过程可见','要能在中途打断它'],
+  invoke:'分段输出，每段四行：这一步要验证什么 / 用什么命令或方法 / 期望看到什么 / 真实输出。判断是否符合期望后再进入下一段。不允许用描述代替真实输出。',
+  never:['当审计日志——它写的推理不等于真实路径'],
+  vs:{ name:'证据链', diff:'草稿是过程接口，证据链是结论附件。' },
+  g:['lines','要验','实测']
+},
+{
+  id:'planafter', name:'先计划后执行', en:'Plan-then-Approve', fam:'output', tier:'核心',
+  best:'只出计划，等批准，不许直接改',
+  def:'把「说」和「做」分成两次交互。',
+  sym:'它直接动手了，我还没看清要改什么',
+  when:['改动范围大','有不可逆动作'],
+  invoke:'用先计划后执行：只输出计划（要改哪些文件、每处改什么、怎么验证、怎么回滚），不要执行任何写操作；等我明确批准后再动手。',
+  never:['明确的小任务也这样做——拖慢节奏'],
+  vs:{ name:'预演', diff:'计划是写给人看的，预演是模拟执行。' },
+  g:['gate','计划','执行']
+},
+{
+  id:'ledger', name:'进度账本', en:'Progress Ledger', fam:'output', tier:'核心',
+  best:'固定四栏：已做/在做/未做/卡住',
+  def:'用固定栏目持续报告状态，替代叙述式汇报。',
+  sym:'我不知道现在到哪一步了',
+  when:['长任务多轮对话','中途接手'],
+  invoke:'每轮结束给进度账本四栏：已做（完成并验证的）/在做（当前一项）/未做（剩余）/卡住（阻塞项 + 需要什么）。不要写感想。',
+  never:['一句话能说完的活也开账本'],
+  vs:{ name:'交接摘要', diff:'账本管过程，摘要在收尾。' },
+  g:['grid','已做','卡住','未做']
+},
+{
+  id:'staged', name:'分批交付', en:'Staged Delivery', fam:'output', tier:'核心',
+  best:'每批可独立验收、可独立回滚',
+  def:'把大改动切成语义完整、可单独验收的批次。',
+  sym:'一次交一大堆，我不敢合',
+  when:['改动量大','要能随时停在一个可用状态'],
+  invoke:'用分批交付：拆成每批都能独立验收、独立回滚的批次；给出每批的验收方式和回滚方式；第一批只做最小可验证的一件事。',
+  never:['拆得太碎导致集成地狱'],
+  vs:{ name:'MVP', diff:'分批为降风险，MVP 为验证假设。' },
+  g:['layer','批 1','批 3']
+},
+{
+  id:'dryrun', name:'预演', en:'Dry-run', fam:'output', tier:'核心',
+  best:'只打印「将要执行什么」，不执行',
+  def:'模拟执行路径，输出影响清单而不产生副作用。',
+  sym:'我不敢让它直接在真环境跑',
+  when:['有写操作、删除或迁移','第一次跑新脚本'],
+  invoke:'用预演：只打印将要执行的命令和将影响的对象（文件/表/行数），不执行任何写操作；等我确认后再真正执行。',
+  never:['把预演当验证——它没走真实路径'],
+  vs:{ name:'先计划后执行', diff:'预演模拟执行，计划描述改动。' },
+  g:['ghost','执行','不执行']
+},
+{
+  id:'budget', name:'上限约束', en:'Budget Cap', fam:'output', tier:'查阅',
+  best:'限制步数/时间/调用次数，到顶停下报告',
+  def:'给执行设硬上限，防止无限重试和成本失控。',
+  sym:'它可能一直重试，烧时间',
+  when:['长任务或自动化循环','重试可能无限'],
+  invoke:'设上限：最多【N】步、最多【T】分钟、同一动作最多重试【K】次；到达任一上限就停下，报告「做到哪、为什么卡住、需要什么决定」，不许自行放宽。',
+  never:['把上限当成目标冲到顶'],
+  vs:{ name:'分批交付', diff:'上限管失控，分批管可交付。' },
+  g:['gate','N 步','停']
+},
+
+/* ================= 校验模式 ================= */
+{
+  id:'critic', name:'换上下文审', en:'Critic-Reviewer (fresh context)', fam:'verify', tier:'母',
+  best:'另开一个看不到前文原因的审阅者，只看产出与需求',
+  def:'用独立上下文做审阅，摆脱作者的自我确认。',
+  sym:'它自己说没问题，我不敢信',
+  when:['交付前要独立检查','同一上下文反复改还是错'],
+  invoke:'另起一个不带本次推理过程的审阅者（新上下文），只给它需求和产出（diff/文件/结论），让它逐条指出问题并给证据，不许评价「整体不错」。',
+  never:['同一上下文自评——会自我盖章'],
+  vs:{ name:'证据链', diff:'换上下文审解决「谁来判断」，证据链解决「拿什么判断」。' },
+  g:['sep','作者','审者']
+},
+{
+  id:'evidence', name:'证据链', en:'Evidence-based Verification', fam:'verify', tier:'核心',
+  best:'每个结论附命令/输出/行号，并标出哪些没验证',
+  def:'结论必须能被外部证据复核。',
+  sym:'它说做完了，我不敢信',
+  when:['交付需要被验收','结论会被直接采用'],
+  invoke:'用证据链：每条结论后面附证据（跑过的命令 + 真实输出、文件路径 + 行号、测试结果）；最后单列「未验证项」并说明为什么没验证。没有证据的结论请标为「未验证」。',
+  never:['用日志代替结论'],
+  vs:{ name:'草稿外化', diff:'证据链是交付附件，草稿是过程接口。' },
+  g:['evid','结论','证据']
+},
+{
+  id:'falsifiable', name:'可证伪', en:'Falsifiability', fam:'verify', tier:'核心',
+  best:'先写「什么现象算失败」，再干活',
+  def:'先定推翻条件，再看它是否成立。',
+  sym:'它说什么都无法被推翻',
+  when:['动手前定验收','听了很顺但无法否掉的说法'],
+  invoke:'用可证伪：先不要论证它对。写出：① 什么观测结果会证明它错；② 现有证据里有没有一条指向它错；③ 如果在【N 天】内看不到【具体信号】，判定为假。',
+  never:['要求价值判断也证伪'],
+  vs:{ name:'证据链', diff:'可证伪先定推翻条件，证据链事后附证据。' },
+  g:['gate','成立','推翻']
+},
+{
+  id:'counterex', name:'反例搜索', en:'Counterexample Search', fam:'verify', tier:'核心',
+  best:'主动找能推翻结论的例子，找到就改口',
+  def:'专门搜索边界输入与异常路径，检验通则。',
+  sym:'我怕它只找了支持自己的证据',
+  when:['结论来自归纳','要检查一个通则'],
+  invoke:'用反例搜索：先列出结论，再专门去找能推翻它的例子（边界输入、罕见状态、异常路径），每找到一条就说明结论需要怎么修；找不到也要说明「我搜了哪些方向」。',
+  never:['找完不提'],
+  vs:{ name:'鱼骨图', diff:'反例搜索针对结论，鱼骨针对现象原因。' },
+  g:['sieve','结论','反例']
+},
+{
+  id:'reproduce', name:'先复现后修复', en:'Reproduce-before-Fix', fam:'verify', tier:'核心',
+  best:'先给失败复现，再修，再证明复现消失',
+  def:'用可重复的失败证明问题真实存在，再用同一复现验证修复。',
+  sym:'它改了，但没证明原来是坏的',
+  when:['修缺陷','说不清问题是否真存在'],
+  invoke:'用先复现后修复：第一步给出最小复现（步骤/输入/现象），让我确认复现成立；第二步才修；第三步用同一个复现证明现象消失，并说明修复影响面。',
+  never:['复现不出来就猜着改'],
+  vs:{ name:'反例搜索', diff:'复现针对缺陷，反例针对结论。' },
+  g:['chain','复现','修复']
+},
+{
+  id:'blast', name:'影响面', en:'Blast Radius', fam:'verify', tier:'核心',
+  best:'反向列出会被波及的调用方、数据、契约',
+  def:'从改动点向外划出会被波及的范围。',
+  sym:'我不知道这个改动会炸到哪',
+  when:['改公共代码、接口或表结构','上线前评估风险'],
+  invoke:'用影响面分析：从改动点反向列出被波及的调用方、依赖的契约、受影响的数据，以及每处的触发条件；按「会不会炸」排序，并给出验证重点。',
+  never:['只往前看调用链，不看反向依赖'],
+  vs:{ name:'可逆性判断', diff:'影响面看炸多大，可逆性看能不能退。' },
+  g:['div','改动','波及']
+}
+];
+
+D.push.apply(D, D2);
+
+/* ================= 附表一：按卡点选 ================= */
+const KADIAN = [
+  { need:'我不满意，但说不出哪里不对', first:['firstprinciples','constraint'], also:['analogical','variants'], never:['controlled','schema'] },
+  { need:'它给的结论我不敢信', first:['evidence'], also:['critic','falsifiable'], never:['pyramid','scratchpad'] },
+  { need:'同一个错它反复犯', first:['systems'], also:['fivewhys','pathdep'], never:['reproduce','budget'] },
+  { need:'活太大，它一次干乱了', first:['dag'], also:['boundary','mece'], never:['fivewhys','controlled'] },
+  { need:'我想让它自己想出更多可能', first:['diverge'], also:['variants','scamper'], never:['mece','matrix'] },
+  { need:'我要判断这件事会不会炸', first:['premortem'], also:['inversion','redteam','reversible'], never:['pyramid','variants'] },
+  { need:'它在猜，不是在推', first:['abductive'], also:['deductive','causal','bayes'], never:['fuzzy','pyramid'] },
+  { need:'它说做完了，但我不确定', first:['reproduce'], also:['evidence','blast','dryrun'], never:['scratchpad','satisficing'] },
+  { need:'它写的东西我不耐烦读', first:['controlled'], also:['pyramid','scqa'], never:['issuetree','ontology'] },
+  { need:'几个方案要摆在一起比', first:['variants'], also:['matrix','ev','analogical'], never:['satisficing','diverge'] },
+  { need:'几个子任务互相污染', first:['critic'], also:['dag','staged'], never:['systems','diverge'] },
+  { need:'它把简单问题搞复杂了', first:['satisficing'], also:['mvp','down'], never:['ontology','ladder'] }
+];
+
+/* ================= 附表二：模式会打架 ================= */
+const CONFLICTS = [
+  { a:'第一性原理 ↔ 类比迁移', b:'一个要扔掉惯例，一个要借惯例，同一轮里会自相矛盾。', c:'先用类比找骨架，再用第一性重推；分两轮，不要混在一句话里。' },
+  { a:'逆向 ↔ 系统思维', b:'逆向找具体失败点，系统思维会把每个小失败放大成结构问题，越推越大。', c:'先逆向后系统。只在「同类问题重复三次以上」时升级到系统层。' },
+  { a:'MECE ↔ 发散-收敛', b:'边发散边查重会立刻杀死发散，人不敢提不完整的想法。', c:'严格分两阶段：发散阶段禁止任何分类自查。' },
+  { a:'草稿外化 ↔ 受控语言', b:'一个要求多写过程，一个要求一句一个动作，同时说会让它输出又长又碎。', c:'过程用草稿外化，最终交付才切受控语言。' },
+  { a:'够好即停 ↔ 加权矩阵', b:'一个要速度，一个要比精度，同时要求会退化成无限比较。', c:'按可逆性选：可逆的事用够好即停，不可逆的用矩阵。' },
+  { a:'红队 ↔ 钢人论证', b:'一个要把对方打穿，一个要把对方说到最强，同时用会立场撕裂。', c:'先钢人（理解最强版本）再红队（攻击最强版本）。' },
+  { a:'溯因 ↔ 演绎', b:'溯因容许多个假设并存，演绎要求前提为真；前提未定就演绎会把猜测当事实。', c:'溯因在前产出假设，前提确认后才允许演绎展开。' },
+  { a:'MVP ↔ 分批交付', b:'MVP 为验证假设会故意做得很糙，分批交付要求每批可独立验收，标准冲突。', c:'两个词不要一起用：先说清这批是「验证」还是「交付」。' }
+];
+
+/* ================= 附表三：母模式速查 ================= */
+const MOTHERS = [
+  { id:'abductive', why:'排障、诊断、找真因全靠它。不会溯因的 Agent 只会猜。' },
+  { id:'analogical', why:'一切「借鉴、迁移、学习别人写法」都是它的应用。' },
+  { id:'firstprinciples', why:'推翻默认前提的唯一路径，是溯因 + 约束满足的合成。' },
+  { id:'inversion', why:'所有攻防模式（验尸、红队、逆向风暴）的母体。' },
+  { id:'mece', why:'所有拆解的质检标准；配 DAG 才有顺序。' },
+  { id:'systems', why:'所有「反复出问题」的唯一合理解释层。' },
+  { id:'constraint', why:'一切「在限制下选最优」的底座。' },
+  { id:'critic', why:'一切「我不敢信」的解药：换上下文，而不是让它自评。' }
+];
+
+/* ================= 附表四：怎么把一个模式说给 AI ================= */
+const HOWTO = [
+  { k:'1 · 模式名（给英文）', v:'「用溯因推理」「做一次 pre-mortem」', no:'不要解释三句话——解释越多，它越容易自创方法' },
+  { k:'2 · 对象（套在哪个具体东西上）', v:'「对象是这次 SSE 无数据的问题」', no:'不要给「这个问题」——它会自己挑一个好答的' },
+  { k:'3 · 路径约束（先做什么、不许做什么）', v:'「先列现象，不许先给结论」', no:'不要只说「严谨一点」——那不是模式' },
+  { k:'4 · 停止条件（做到哪算完）', v:'「三个假设里只留一个，就停」', no:'不给停止条件，它会一直展开' }
+];
+
+/* ================= 附表五：别给它逃生口 ================= */
+const TRAPS = [
+  { say:'详细说明一下', does:'写长篇看起来周全的空话', fix:'每句必须对应到具体文件/命令/数字，做不到就删掉' },
+  { say:'先分析一下', does:'分析完就停，把分析当完成', fix:'分析完必须给可执行的下一步，和一个验证方法' },
+  { say:'优化一下', does:'挑几个小地方改，报「已优化」', fix:'先给基线指标，改完给同口径数字，否则不算完成' },
+  { say:'再试一次', does:'机械重复同样的失败动作', fix:'先判失败属于环境/理解/权限/目标哪一类，再决定改还是换路' },
+  { say:'确认没问题吧', does:'回「没问题，逻辑正确」', fix:'不要复述，给证据：跑过的命令、输出、覆盖了哪几个用例、哪些没验证' },
+  { say:'你自己检查一遍', does:'自己盖章通过', fix:'另起一个不带这次上下文的审阅者，只看 diff' },
+  { say:'有问题再问我', does:'把「问」当成最后手段，先猜着做完', fix:'列出三类必须先问的：目标有歧义、要动不可逆操作、需要外部权限' }
+];
+
+/* ==========================================================
+   模式画册 · 渲染层
+   ========================================================== */
+"use strict";
+
+/* ---------------- SVG 基元 ---------------- */
+var ST = { ln:'#CBD5E1', ln2:'#94A3B8', ink:'#334155', soft:'#F4F4F5' };
+
+function gEsc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function gT(x,y,s,o){ o=o||{}; return '<text x="'+x+'" y="'+y+'" font-size="'+(o.size||7.2)+'" fill="'+(o.tone||ST.ink)+'" text-anchor="'+(o.anchor||'middle')+'" font-weight="'+(o.weight||500)+'">'+gEsc(s)+'</text>'; }
+function gR(x,y,w,h,o){ o=o||{}; return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="'+(o.rx==null?4:o.rx)+'" fill="'+(o.fill||'#FFFFFF')+'" stroke="'+(o.stroke||ST.ln)+'" stroke-width="'+(o.sw||1)+'"'+(o.dash?' stroke-dasharray="'+o.dash+'"':'')+'/>'; }
+function gB(x,y,w,h,s,o){ o=o||{}; return gR(x,y,w,h,o)+gT(x+w/2,y+h/2+3,s,{size:o.size||7.2,tone:o.tone,weight:o.weight}); }
+function gL(x1,y1,x2,y2,o){ o=o||{}; return '<path d="M'+x1+' '+y1+' L'+x2+' '+y2+'" stroke="'+(o.stroke||ST.ln2)+'" stroke-width="'+(o.sw||1.1)+'" fill="none"'+(o.dash?' stroke-dasharray="4 3"':'')+'/>'; }
+function gA(x1,y1,x2,y2,o){
+  o=o||{};
+  var a=Math.atan2(y2-y1,x2-x1), hx=x2-Math.cos(a)*5, hy=y2-Math.sin(a)*5;
+  return gL(x1,y1,hx,hy,o)+'<path d="M'+x2+' '+y2+' L'+(hx-Math.sin(a)*3)+' '+(hy+Math.cos(a)*3)+' L'+(hx+Math.sin(a)*3)+' '+(hy-Math.cos(a)*3)+' Z" fill="'+(o.stroke||ST.ln2)+'"/>';
+}
+function gArc(x1,y1,cx,cy,x2,y2,o){
+  o=o||{};
+  var a=Math.atan2(y2-cy,x2-cx), hx=x2-Math.cos(a)*5, hy=y2-Math.sin(a)*5;
+  return '<path d="M'+x1+' '+y1+' Q'+cx+' '+cy+' '+hx+' '+hy+'" stroke="'+(o.stroke||ST.ln2)+'" stroke-width="'+(o.sw||1.1)+'" fill="none"'+(o.dash?' stroke-dasharray="4 3"':'')+'/>'
+    + '<path d="M'+x2+' '+y2+' L'+(hx-Math.sin(a)*3)+' '+(hy+Math.cos(a)*3)+' L'+(hx+Math.sin(a)*3)+' '+(hy-Math.cos(a)*3)+' Z" fill="'+(o.stroke||ST.ln2)+'"/>';
+}
+function gDot(x,y,r,f){ return '<circle cx="'+x+'" cy="'+y+'" r="'+(r||3.2)+'" fill="'+(f||ST.ln2)+'"/>'; }
+
+var G = {
+  conv:function(a,b){
+    return gDot(34,38)+gDot(34,65)+gDot(34,92)
+      + gA(46,38,132,62)+gA(46,65,132,65)+gA(46,92,132,68)
+      + gR(134,50,80,30)+gT(174,68,b,{size:7.6})
+      + gT(34,116,a,{size:6.8});
+  },
+  div:function(a,b){
+    return gR(26,50,76,30)+gT(64,68,a,{size:7.6})
+      + gA(108,62,192,40)+gA(108,65,192,65)+gA(108,68,192,90)
+      + gDot(196,40)+gDot(196,65)+gDot(196,90)
+      + gT(196,116,b,{size:6.8});
+  },
+  chain:function(a,b,c){
+    c = c || '·';
+    return gR(16,52,58,26)+gR(91,52,58,26)+gR(166,52,58,26)
+      + gA(74,65,89,65)+gA(149,65,164,65)
+      + gT(45,65,a,{size:7}) + gT(120,65,b,{size:7}) + gT(195,65,c,{size:7});
+  },
+  loop:function(a,b){
+    return gR(30,26,72,28)+gT(66,44,a,{size:7.2})
+      + gR(138,76,72,28)+gT(174,94,b,{size:7.2})
+      + gArc(102,40,140,44,170,76)+gArc(138,90,100,86,70,54);
+  },
+  mirror:function(a,b){
+    return gR(16,44,84,42)+gT(58,70,a,{size:7.6})
+      + gR(140,44,84,42)+gT(182,70,b,{size:7.6})
+      + '<path d="M120 28 L120 102" stroke="'+ST.ln+'" stroke-width="1" stroke-dasharray="5 4" fill="none"/>'
+      + gA(102,58,117,58)+gA(138,80,123,80);
+  },
+  back:function(a,b){
+    return gA(34,44,200,44,{stroke:'#CBD5E1'})
+      + '<path d="M104 32 L136 56" stroke="#CBD5E1" stroke-width="2"/>'
+      + gA(202,88,32,88,{stroke:'#334155',sw:1.8})
+      + gT(36,36,a,{size:6.8,anchor:'start',tone:'#94A3B8'})
+      + gT(204,110,b,{size:6.8,anchor:'end'});
+  },
+  gate:function(a,b){
+    return gR(16,52,58,26)+gT(45,65,a,{size:7})
+      + gA(76,65,112,65)+'<path d="M118 38 L118 92" stroke="#334155" stroke-width="2.6"/>' + gA(124,65,160,65)
+      + gR(162,52,62,26)+gT(193,65,b,{size:7})
+      + gT(118,30,'判据',{size:6.6,tone:'#64748B'});
+  },
+  sieve:function(a,b){
+    var d='',i,y;
+    for(i=0;i<3;i++){ y=38+i*26; d+=gDot(32,y,4)+gDot(50,y,4)+gDot(68,y,4); }
+    d+='<rect x="92" y="24" width="18" height="80" rx="3" fill="#F4F4F5" stroke="'+ST.ln+'"/>';
+    for(i=0;i<7;i++){ d+=gL(94,30+i*11,108,26+i*11,{stroke:'#CBD5E1'}); }
+    d+=gA(114,64,160,50)+gA(114,68,160,84)+gDot(166,50,4.4)+gDot(166,84,4.4);
+    d+=gT(46,120,a,{size:6.8})+gT(176,120,b,{size:6.8});
+    return d;
+  },
+  quad:function(a,b,c,d){
+    return gR(28,22,88,40)+gR(124,22,88,40)+gR(28,70,88,40,{fill:'#FCFCFD'})+gR(124,70,88,40)
+      + gT(72,46,a,{size:7.2})+gT(168,46,b,{size:7.2})+gT(72,94,c||'·',{size:7.2})+gT(168,94,d||'·',{size:7.2});
+  },
+  hour:function(a,b){
+    return '<polygon points="62,22 178,22 132,60 108,60" fill="#FFFFFF" stroke="'+ST.ln+'"/>'
+      + '<polygon points="108,70 132,70 178,108 62,108" fill="#FCFCFD" stroke="'+ST.ln+'"/>'
+      + gA(76,30,112,54)+gA(164,30,128,54)
+      + gA(128,76,164,100)+gA(112,76,76,100)
+      + gT(200,42,a,{size:6.8,anchor:'end'})+gT(200,96,b,{size:6.8,anchor:'end'});
+  },
+  stair:function(a,b){
+    return gR(26,86,44,22)+gR(70,64,44,22)+gR(114,42,44,22)+gR(158,20,44,22)
+      + gT(48,120,a,{size:7})+gT(180,36,b,{size:7})
+      + gA(200,80,200,34,{stroke:'#334155'});
+  },
+  tree:function(a,b){
+    return gR(88,12,64,22)+gT(120,27,a,{size:7})
+      + gR(40,58,62,22)+gR(138,58,62,22)
+      + gL(120,34,71,58)+gL(120,34,169,58)
+      + gT(71,73,b,{size:6.8})+gT(169,73,'·',{size:7})
+      + gL(71,80,52,102)+gL(71,80,90,102)+gL(169,80,150,102)+gL(169,80,188,102)
+      + gR(40,102,24,12,{rx:2})+gR(78,102,24,12,{rx:2})+gR(138,102,24,12,{rx:2})+gR(176,102,24,12,{rx:2});
+  },
+  part:function(a,b,c){
+    return gR(28,32,184,64)
+      + '<path d="M90 32 L90 96 M150 32 L150 96" stroke="'+ST.ln+'" stroke-width="1"/>'
+      + gT(59,68,a,{size:7.4})+gT(120,68,b,{size:7.4})+gT(181,68,c||'·',{size:7.4});
+  },
+  layer:function(a,b){
+    return gR(26,22,188,26)+gR(26,54,188,26,{fill:'#FCFCFD'})+gR(26,86,188,26)
+      + gT(120,40,a,{size:7.4})+gT(120,104,b||'·',{size:7.4})+gT(120,72,'·',{size:7.4});
+  },
+  tub:function(a,b){
+    return gR(76,44,88,58,{fill:'#FCFCFD',stroke:'#94A3B8',sw:1.3})
+      + gA(28,22,74,50)+gA(166,98,212,120)
+      + gT(38,18,a,{size:6.8,anchor:'start'})+gT(206,114,b,{size:6.8,anchor:'end'});
+  },
+  pivot:function(a,b){
+    return '<polygon points="120,84 98,106 142,106" fill="#FFFFFF" stroke="'+ST.ln2+'"/>'
+      + '<path d="M44 84 L196 84" stroke="#334155" stroke-width="2.6" fill="none"/>'
+      + gA(184,84,184,46,{stroke:'#334155'})
+      + gT(44,74,a,{size:6.8,anchor:'start'})+gT(198,74,b,{size:6.8,anchor:'end'});
+  },
+  narrow:function(a,b){
+    return gR(24,34,54,62,{fill:'#FCFCFD'})+gR(78,54,84,22,{stroke:'#334155',sw:1.5,fill:'#FFFFFF'})+gR(162,34,54,62,{fill:'#FCFCFD'})
+      + gT(51,118,a,{size:6.8})+gT(120,44,b,{size:6.6,tone:'#334155'});
+  },
+  sep:function(a,b){
+    return gR(16,40,84,50)+gT(58,68,a,{size:7.4})
+      + gR(140,40,84,50)+gT(182,68,b,{size:7.4})
+      + '<rect x="114" y="26" width="12" height="80" fill="#F4F4F5" stroke="'+ST.ln+'"/>'
+      + gL(114,26,126,106,{stroke:'#E4E4E7'});
+  },
+  grid:function(a,b,c,d){
+    var d2='',i;
+    for(i=0;i<3;i++){ d2+=gR(26+i*64,32,60,36); d2+=gR(26+i*64,72,60,34,{fill:'#FCFCFD'}); }
+    d2+=gT(56,52,a,{size:6.8})+gT(120,52,b,{size:6.8})+gT(184,52,c||'·',{size:6.8});
+    d2+=gT(56,92,'·',{size:6.8})+gT(120,92,'·',{size:6.8})+gT(184,92,d||'·',{size:6.8});
+    return d2;
+  },
+  pyramid:function(a,b){
+    return '<polygon points="120,18 152,50 88,50" fill="#FFFFFF" stroke="'+ST.ln+'"/>'
+      + '<polygon points="84,54 156,54 186,86 54,86" fill="#FCFCFD" stroke="'+ST.ln+'"/>'
+      + '<polygon points="50,90 190,90 214,116 26,116" fill="#FFFFFF" stroke="'+ST.ln+'"/>'
+      + gT(120,38,a,{size:6.6})+gT(120,74,b,{size:6.6});
+  },
+  ghost:function(a,b){
+    return gR(20,48,74,34)+gT(57,69,a,{size:7})
+      + gA(96,65,142,65,{dash:1})
+      + gR(146,48,74,34,{dash:'5 4',stroke:'#94A3B8'})+gT(183,69,b,{size:7});
+  },
+  evid:function(a,b){
+    return gR(56,16,128,30)+gT(120,35,a,{size:7.4})
+      + gL(120,46,120,58)
+      + gR(36,58,168,8,{fill:'#EFF6FF',stroke:'#BFDBFE'})
+      + gR(36,72,168,8,{fill:'#EFF6FF',stroke:'#BFDBFE'})
+      + gR(36,86,168,8,{fill:'#EFF6FF',stroke:'#BFDBFE'})
+      + gR(36,100,110,8,{fill:'#F4F4F5',stroke:ST.ln,dash:'3 3'})
+      + gT(30,64,b,{size:6.6,anchor:'end'});
+  },
+  rebuild:function(a,b){
+    return gR(24,16,56,18,{rx:3})+gR(88,16,56,18,{rx:3})+gR(152,16,56,18,{rx:3})
+      + '<path d="M28 12 L204 38" stroke="#E11D48" stroke-width="2"/>'
+      + gR(56,50,56,20,{stroke:'#334155'})+gR(128,50,56,20,{stroke:'#334155'})
+      + gT(84,64,a,{size:6.6})+gT(156,64,a,{size:6.6})
+      + gA(120,74,120,94)
+      + gR(56,96,128,24,{stroke:'#2563EB'})+gT(120,112,b,{size:7.4});
+  },
+  curve:function(a,b){
+    return '<path d="M28 18 L28 108 L212 108" stroke="'+ST.ln+'" stroke-width="1" fill="none"/>'
+      + '<path d="M40 104 C74 96 78 40 96 40 C114 40 118 96 150 104" stroke="#CBD5E1" stroke-width="1.4" fill="none"/>'
+      + '<path d="M76 104 C110 96 116 44 134 44 C152 44 156 96 188 104" stroke="#2563EB" stroke-width="1.6" fill="none"/>'
+      + gT(96,34,a,{size:6.6,tone:'#64748B'})+gT(136,38,b,{size:6.6,tone:'#2563EB'});
+  },
+  fish:function(a,b){
+    var d='',i,x;
+    for(i=0;i<3;i++){ x=84+i*40; d+=gL(x,64,x-18,32)+gL(x,64,x-18,96); }
+    d+='<path d="M36 64 L206 64" stroke="#334155" stroke-width="1.6" fill="none"/>';
+    d+='<path d="M206 64 L196 59 L196 69 Z" fill="#334155"/>';
+    d+=gR(12,50,26,28);
+    for(i=0;i<3;i++){ x=84+i*40; d+=gDot(x-18,32,2.6)+gDot(x-18,96,2.6); }
+    d+=gT(120,118,a,{size:6.6})+gT(212,44,b,{size:6.6,anchor:'end'});
+    return d;
+  },
+  dag:function(a,b){
+    return '<circle cx="52" cy="34" r="13" fill="#FFFFFF" stroke="'+ST.ln2+'"/>'+gT(52,37,a,{size:6.6})
+      + '<circle cx="52" cy="92" r="13" fill="#FFFFFF" stroke="'+ST.ln2+'"/>'+gT(52,95,b,{size:6.6})
+      + '<circle cx="132" cy="62" r="13" fill="#EFF6FF" stroke="#2563EB"/>'+gT(132,65,'T3',{size:6.6})
+      + '<circle cx="192" cy="62" r="13" fill="#FFFFFF" stroke="'+ST.ln2+'"/>'+gT(192,65,'T4',{size:6.6})
+      + gA(65,38,119,58)+gA(65,88,119,66)+gA(145,62,179,62);
+  },
+  attack:function(a,b){
+    return gR(84,36,116,58,{fill:'#FCFCFD'})
+      + '<circle cx="164" cy="64" r="11" fill="#FFF1F2" stroke="#E11D48" stroke-width="1.4"/>'
+      + '<circle cx="164" cy="64" r="4" fill="#E11D48"/>'
+      + gA(20,44,150,60,{stroke:'#E11D48'})+gA(20,86,150,70,{stroke:'#E11D48'})
+      + gT(20,116,b,{size:6.8,anchor:'start'})+gT(96,116,a,{size:6.8,anchor:'end'});
+  },
+  lines:function(a,b){
+    return gT(36,20,a,{size:6.6,anchor:'start',tone:'#94A3B8'})
+      + gL(34,32,204,32,{stroke:'#CBD5E1',sw:3.4})
+      + gL(34,46,204,46,{stroke:'#E11D48',sw:2})
+      + gR(34,56,172,4,{rx:2,fill:'#CBD5E1',stroke:'none'})
+      + gR(34,70,196,4,{rx:2,fill:'#CBD5E1',stroke:'none'})
+      + gR(34,84,150,4,{rx:2,fill:'#CBD5E1',stroke:'none'})
+      + gT(36,110,b,{size:6.6,anchor:'start',tone:'#334155'});
+  },
+  edge:function(a,b){
+    return '<path d="M32 40 L32 104 L208 104" stroke="'+ST.ln+'" stroke-width="1" fill="none"/>'
+      + gR(34,44,26,58,{fill:'#FFF1F2',stroke:'#FECDD3'})
+      + gR(174,44,32,58,{fill:'#FFF1F2',stroke:'#FECDD3'})
+      + gT(47,116,a,{size:6.8})+gT(190,116,b,{size:6.8})
+      + '<path d="M66 74 L172 74" stroke="#334155" stroke-width="1.2" fill="none"/>';
+  }
+};
+
+function SVG(inner){
+  return '<svg viewBox="0 0 240 130" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">'+inner+'</svg>';
+}
+function drawOf(it){
+  var f = G[it.g[0]] || G.part;
+  return f(it.g[1], it.g[2], it.g[3], it.g[4]);
+}
+
+/* ---------------- 索引与字段 ---------------- */
+var FAMNAME = {};
+FAMS.forEach(function(f){ FAMNAME[f.id] = f.name; });
+var BYID = {};
+D.forEach(function(it){
+  it.famName = FAMNAME[it.fam] || '';
+  it._fields = [
+    { label:'名称',   text: it.name },
+    { label:'英文',   text: it.en },
+    { label:'定义',   text: it.def },
+    { label:'最擅长', text: it.best },
+    { label:'症状',   text: it.sym },
+    { label:'触发',   text: it.when.join(' ') },
+    { label:'调用语', text: it.invoke },
+    { label:'误用',   text: it.never.join(' ') },
+    { label:'家族',   text: it.famName },
+    { label:'相对',   text: it.vs.name + ' ' + it.vs.diff }
+  ];
+  BYID[it.id] = it;
+});
+function byId(id){ return BYID[id] || null; }
+
+/* ---------------- 状态 ---------------- */
+var state = { cat:'all', tokens:[], openId:null };
+function $(id){ return document.getElementById(id); }
+
+/* ---------------- 筛选条 ---------------- */
+function renderChips(){
+  var counts = { all:0, mother:0 };
+  D.forEach(function(d){
+    counts[d.fam] = (counts[d.fam]||0) + 1;
+    if (d.tier === '母') counts.mother++;
+  });
+  var html = '<button class="chip" data-cat="all" aria-pressed="'+(state.cat==='all')+'">全部<span class="n">'+D.length+'</span></button>';
+  html += '<button class="chip" data-cat="mother" aria-pressed="'+(state.cat==='mother')+'">只看母模式<span class="n">'+counts.mother+'</span></button>';
+  FAMS.forEach(function(c){
+    html += '<button class="chip" data-cat="'+c.id+'" aria-pressed="'+(state.cat===c.id)+'">'+c.name+'<span class="n">'+(counts[c.id]||0)+'</span></button>';
+  });
+  $('chips').innerHTML = html;
+  Array.prototype.forEach.call($('chips').querySelectorAll('.chip'), function(btn){
+    btn.addEventListener('click', function(){
+      state.cat = btn.dataset.cat;
+      renderChips(); renderGrid();
+    });
+  });
+}
+
+/* ---------------- 搜索 ---------------- */
+function tokenize(q){
+  return q.trim().toLowerCase().split(/[\s,，、;；/]+/).filter(Boolean).slice(0, 6);
+}
+function matchItem(it, tokens, loose){
+  var hits = [];
+  for (var i=0;i<tokens.length;i++){
+    var tk = tokens[i], places = [];
+    it._fields.forEach(function(f){
+      if (f.text.toLowerCase().indexOf(tk) !== -1) places.push(f.label);
+    });
+    if (!places.length){ if (!loose) return null; continue; }
+    hits.push({ token: tk, places: places.filter(function(v,idx,arr){ return arr.indexOf(v)===idx; }).slice(0,3) });
+  }
+  return hits.length ? hits : null;
+}
+function currentResults(){
+  var tokens = state.tokens;
+  var list = D.filter(function(d){
+    if (state.cat === 'all') return true;
+    if (state.cat === 'mother') return d.tier === '母';
+    return d.fam === state.cat;
+  });
+  if (!tokens.length) return { items: list.map(function(it){ return { it:it, hits:[] }; }), loose:false };
+
+  var scored = [];
+  list.forEach(function(it){ var h = matchItem(it, tokens, false); if (h) scored.push({ it:it, hits:h }); });
+  if (scored.length) return { items: scored, loose:false };
+
+  list.forEach(function(it){ var h = matchItem(it, tokens, true); if (h) scored.push({ it:it, hits:h }); });
+  return { items: scored, loose:true };
+}
+function reasonText(items){
+  if (!items.length || !items[0].hits || !items[0].hits.length) return '';
+  var tokens = [], places = [];
+  items.forEach(function(e){
+    (e.hits||[]).forEach(function(h){
+      if (tokens.indexOf(h.token) === -1) tokens.push(h.token);
+      h.places.forEach(function(p){ if (places.indexOf(p) === -1) places.push(p); });
+    });
+  });
+  return tokens.slice(0,4).join(' / ') + ' → ' + places.slice(0,4).join(' · ');
+}
+
+/* ---------------- 卡片网格 ---------------- */
+function tierClass(t){ return t === '母' ? 'tier mother' : (t === '核心' ? 'tier core' : 'tier ref'); }
+
+function renderGrid(){
+  var res = currentResults(), items = res.items;
+  var sl = $('statusline');
+  if (!state.tokens.length){
+    sl.innerHTML = '共 <b>'+D.length+'</b> 个模式 · 其中 <b>'+D.filter(function(d){return d.tier==='母';}).length+'</b> 个是母模式 · 点卡片看它强制 Agent 做什么、怎么说出口';
+  } else {
+    var r = '<span>命中 <b>'+items.length+'</b> 个'+(res.loose ? '（宽松匹配：任一关键词满足）' : '')+'</span>';
+    var rs = reasonText(items);
+    if (rs) r += '<span class="reason">'+rs+'</span>';
+    sl.innerHTML = r;
+  }
+
+  $('grid').innerHTML = items.map(function(entry){
+    var it = entry.it;
+    var why = entry.hits && entry.hits.length
+      ? '<span class="reason" style="margin-top:8px;display:inline-block">命中：' + entry.hits.map(function(h){ return h.token; }).join(' / ') + '</span>'
+      : '';
+    return '<button class="card" data-cat="'+it.fam+'" data-id="'+it.id+'" aria-label="打开 '+it.name+' 详情">'
+      + '<span class="art">' + SVG(drawOf(it)) + '</span>'
+      + '<span class="meta">'
+        + '<span class="row"><h3>'+it.name+'</h3><span class="en">'+it.en+'</span></span>'
+        + '<span class="best">'+it.best+'</span>'
+        + '<span class="tag">'+it.famName+'<span class="'+tierClass(it.tier)+'">'+it.tier+'</span></span>'
+        + why
+      + '</span></button>';
+  }).join('');
+
+  Array.prototype.forEach.call($('grid').querySelectorAll('.card'), function(btn){
+    btn.addEventListener('click', function(){ openDrawer(btn.dataset.id); });
+  });
+  $('empty').hidden = items.length > 0;
+}
+
+/* ---------------- 按卡点选 ---------------- */
+function renderKadian(){
+  var rows = KADIAN.map(function(p){
+    var btn = function(id, cls){
+      var d = byId(id);
+      if (!d) return '';
+      return '<button class="'+(cls||'')+'" data-id="'+id+'" data-cat="'+d.fam+'">'+d.name+'</button>';
+    };
+    return '<div class="prow">'
+      + '<div class="need">'+p.need+'</div>'
+      + '<div class="opts">'+p.first.map(function(i){return btn(i);}).join('')+p.also.map(function(i){return btn(i);}).join('')+'</div>'
+      + '<div class="no">'+p.never.map(function(i){ var d=byId(i); return d ? '<span>'+d.name+'</span>' : ''; }).join('')+'</div>'
+      + '</div>';
+  }).join('');
+  $('plist').innerHTML = '<div class="prow"><div>我卡在这句话上</div><div>首选 / 也可以</div><div>别在这用它</div></div>' + rows;
+  Array.prototype.forEach.call($('plist').querySelectorAll('button'), function(b){
+    b.addEventListener('click', function(){ openDrawer(b.dataset.id); });
+  });
+}
+
+/* ---------------- 冲突表 ---------------- */
+function renderConflicts(){
+  $('ctable').innerHTML = CONFLICTS.map(function(c){
+    return '<tr><td>'+c.a+'</td><td>'+c.b+'</td><td>'+c.c+'</td></tr>';
+  }).join('');
+}
+
+/* ---------------- 母模式速查 ---------------- */
+function renderMothers(){
+  $('mgrid').innerHTML = MOTHERS.map(function(m){
+    var d = byId(m.id);
+    if (!d) return '';
+    return '<div class="mcard" data-cat="'+d.fam+'">'
+      + '<div class="mhead"><b>'+d.name+'</b><span>'+d.en+'</span></div>'
+      + '<p class="mwhy">'+m.why+'</p>'
+      + '<pre class="msay">'+gEsc(d.invoke)+'</pre>'
+      + '<div class="copyrow"><button class="btn primary" data-copy="'+m.id+'">复制调用语</button><button class="btn" data-open="'+m.id+'">看详情</button></div>'
+      + '</div>';
+  }).join('');
+  Array.prototype.forEach.call($('mgrid').querySelectorAll('[data-copy]'), function(b){
+    b.addEventListener('click', function(){
+      var d = byId(b.dataset.copy);
+      copyText(d.invoke, d.name);
+    });
+  });
+  Array.prototype.forEach.call($('mgrid').querySelectorAll('[data-open]'), function(b){
+    b.addEventListener('click', function(){ openDrawer(b.dataset.open); });
+  });
+}
+
+/* ---------------- 怎么描述 / 别给逃生口 ---------------- */
+function renderHowto(){
+  $('hlist').innerHTML = '<div class="prow"><div>要说清这四样</div><div>例子</div><div>反面</div></div>'
+    + HOWTO.map(function(h){
+      return '<div class="prow"><div class="need">'+h.k+'</div><div class="opts">'+h.v+'</div><div class="no"><span>'+h.no+'</span></div></div>';
+    }).join('');
+}
+function renderTraps(){
+  $('ttable').innerHTML = TRAPS.map(function(t){
+    return '<tr><td>“'+t.say+'”</td><td>'+t.does+'</td><td>'+t.fix+'</td></tr>';
+  }).join('');
+}
+
+/* ---------------- 详情抽屉 ---------------- */
+function openDrawer(id){
+  var it = byId(id);
+  if (!it) return;
+  state.openId = id;
+
+  var sameFam = D.filter(function(x){ return x.id !== it.id && x.fam === it.fam; });
+  var rel = sameFam.slice(0, 7);
+
+  var body =
+      '<div class="art" data-cat="'+it.fam+'">' + SVG(drawOf(it)) + '</div>'
+
+    + '<div class="block"><h4>一句话定义</h4><p class="def">'+it.def+'</p></div>'
+
+    + '<div class="block"><h4>它强制 Agent 做什么</h4><div class="hl">'+it.best+'</div></div>'
+
+    + '<div class="block"><h4>你会卡在这句话上</h4><ul class="ul"><li>'+it.sym+'</li>'+it.when.map(function(x){ return '<li>'+x+'</li>'; }).join('')+'</ul></div>'
+
+    + '<div class="block"><h4>调用语（直接复制）</h4>'
+      + '<div class="prompt"><pre id="promptText">'+gEsc(it.invoke)+'</pre></div>'
+      + '<div class="copyrow"><button class="btn primary" id="copyBtn">复制调用语</button><span class="hint">复制后替换【】里的内容</span></div>'
+    + '</div>'
+
+    + '<div class="block"><h4>别用它来</h4><ul class="ul avoid">'+it.never.map(function(x){ return '<li>'+x+'</li>'; }).join('')+'</ul></div>'
+
+    + '<div class="block"><h4>容易和谁混</h4><p class="vs"><b>对比「'+it.vs.name+'」：</b>'+it.vs.diff+'</p></div>'
+
+    + '<div class="block"><h4>同族模式</h4><div class="rel">'
+      + rel.map(function(x){ return '<button data-id="'+x.id+'">'+x.name+'</button>'; }).join('')
+    + '</div></div>';
+
+  var drawer = $('drawer');
+  drawer.innerHTML =
+      '<header><div class="t"><h2 id="dTitle">'+it.name+'</h2><div class="en">'+it.en+' · '+it.famName+' · '+it.tier+'</div></div>'
+    + '<button class="close" id="closeBtn" aria-label="关闭">'
+    + '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 6 12 12M18 6 6 18"/></svg>'
+    + '</button></header>'
+    + '<div class="body" data-cat="'+it.fam+'">'+body+'</div>';
+
+  drawer.dataset.cat = it.fam;
+  drawer.setAttribute('aria-label', it.name + ' 详情');
+
+  $('overlay').classList.add('on');
+  drawer.classList.add('on');
+  document.body.style.overflow = 'hidden';
+  drawer.scrollTop = 0;
+  drawer.querySelector('.body').scrollTop = 0;
+  $('closeBtn').focus();
+
+  $('closeBtn').addEventListener('click', closeDrawer);
+  Array.prototype.forEach.call(drawer.querySelectorAll('.rel button'), function(b){
+    b.addEventListener('click', function(){
+      var target = b.dataset.id;
+      closeDrawer();
+      setTimeout(function(){ openDrawer(target); }, 220);
+    });
+  });
+  $('copyBtn').addEventListener('click', function(){ copyText(it.invoke, it.name); });
+  history.replaceState(null, '', '#' + it.id);
+}
+
+function closeDrawer(){
+  var drawer = $('drawer');
+  drawer.classList.remove('on');
+  $('overlay').classList.remove('on');
+  document.body.style.overflow = '';
+  state.openId = null;
+  history.replaceState(null, '', location.pathname + location.search);
+}
+
+/* ---------------- 复制 ---------------- */
+function copyText(text, name){
+  function manual(){
+    var pre = $('promptText');
+    if (pre){
+      var range = document.createRange();
+      range.selectNodeContents(pre);
+      var sel = window.getSelection();
+      sel.removeAllRanges(); sel.addRange(range);
+    }
+    toast('浏览器阻止了自动复制，已选中，请按 ⌘C / Ctrl+C');
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){
+      toast('已复制「'+name+'」调用语');
+    }).catch(function(){ legacyCopy(text, manual); });
+  } else {
+    legacyCopy(text, manual);
+  }
+}
+function legacyCopy(text, fallback){
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.setAttribute('readonly','');
+  ta.style.position = 'fixed';
+  ta.style.top = '-1000px';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  var ok = false;
+  try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+  document.body.removeChild(ta);
+  if (ok) toast('已复制调用语'); else fallback();
+}
+
+var toastTimer = null;
+function toast(msg){
+  var t = $('toast');
+  t.textContent = msg;
+  t.classList.add('on');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){ t.classList.remove('on'); }, 2600);
+}
+
+/* ---------------- 事件 ---------------- */
+function applySearch(){ state.tokens = tokenize($('q').value); renderGrid(); }
+function resetAll(){ state.cat='all'; state.tokens=[]; $('q').value=''; renderChips(); renderGrid(); }
+
+$('searchBtn').addEventListener('click', applySearch);
+$('resetBtn').addEventListener('click', resetAll);
+$('q').addEventListener('keydown', function(e){
+  if (e.key === 'Enter'){ e.preventDefault(); applySearch(); }
+  if (e.key === 'Escape'){ resetAll(); }
+});
+$('q').addEventListener('input', function(){
+  if ($('q').value.trim() === ''){ state.tokens = []; renderGrid(); }
+});
+$('overlay').addEventListener('click', closeDrawer);
+document.addEventListener('keydown', function(e){
+  if (e.key === 'Escape' && state.openId) closeDrawer();
+});
+window.addEventListener('hashchange', function(){
+  var id = decodeURIComponent(location.hash.replace('#',''));
+  if (id && byId(id)) openDrawer(id);
+});
+
+/* ---------------- 启动 ---------------- */
+renderChips();
+renderKadian();
+renderConflicts();
+renderMothers();
+renderHowto();
+renderTraps();
+renderGrid();
+
+var deep = decodeURIComponent(location.hash.replace('#',''));
+if (deep && byId(deep)) openDrawer(deep);
+
+
+</script>
+</body>
+</html>

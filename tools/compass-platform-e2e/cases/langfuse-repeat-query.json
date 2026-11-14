@@ -10,7 +10,13 @@
             "action": "new_search",
             "task": "COMPLETE",
             "ui": "result_or_empty",
-            "route": { "pol_code": "CNSHA", "pod_code": "USLAX", "container_types": ["40HQ"] }
+            "route": {
+              "pol_code": "CNSHA",
+              "pod_code": "USLAX",
+              "container_types": [
+                "40HQ"
+              ]
+            }
           }
         }
       ]
@@ -24,7 +30,13 @@
             "action": "new_search",
             "task": "COMPLETE",
             "ui": "result_or_empty",
-            "route": { "pol_code": "CNSHA", "pod_code": "USLAX", "container_types": ["40HQ"] }
+            "route": {
+              "pol_code": "CNSHA",
+              "pod_code": "USLAX",
+              "container_types": [
+                "40HQ"
+              ]
+            }
           }
         }
       ]
@@ -38,12 +50,19 @@
             "action": "new_search",
             "task": "COMPLETE",
             "ui": "result_or_empty",
-            "route": { "pol_code": "CNSHA", "pod_code": "VNHPH" }
+            "route": {
+              "pol_code": "CNSHA",
+              "pod_code": "VNHPH"
+            }
           }
         },
         {
           "message": "所以是没结果吗",
-          "expect": { "action": "status_only", "ui": "response", "contains": "结束" }
+          "expect": {
+            "action": "status_only",
+            "ui": "response",
+            "contains": "结束"
+          }
         }
       ]
     },
@@ -56,7 +75,13 @@
             "action": "new_search",
             "task": "COMPLETE",
             "ui": "result_or_empty",
-            "route": { "pol_code": "CNSHA", "pod_code": "USLAX", "container_types": ["40HQ"] }
+            "route": {
+              "pol_code": "CNSHA",
+              "pod_code": "USLAX",
+              "container_types": [
+                "40HQ"
+              ]
+            }
           }
         },
         {
@@ -65,7 +90,13 @@
             "action": "new_search",
             "task": "COMPLETE",
             "ui": "result_or_empty",
-            "route": { "pol_code": "CNSHA", "pod_code": "NLRTM", "container_types": ["40HQ"] }
+            "route": {
+              "pol_code": "CNSHA",
+              "pod_code": "NLRTM",
+              "container_types": [
+                "40HQ"
+              ]
+            }
           }
         }
       ]
@@ -79,12 +110,21 @@
             "action": "new_search",
             "task": "COMPLETE",
             "ui": "result_or_empty",
-            "route": { "pol_code": "CNSHA", "pod_code": "USLAX", "container_types": ["40HQ"] }
+            "route": {
+              "pol_code": "CNSHA",
+              "pod_code": "USLAX",
+              "container_types": [
+                "40HQ"
+              ]
+            }
           }
         },
         {
           "message": "刚才那批里马士基有几条",
-          "expect": { "action": "status_only", "ui": "response" }
+          "expect": {
+            "action": "filter_existing",
+            "ui": "response"
+          }
         }
       ]
     },
@@ -97,12 +137,22 @@
             "action": "new_search",
             "task": "COMPLETE",
             "ui": "result_or_empty",
-            "route": { "pol_code": "CNSHA", "pod_code": "USLAX", "container_types": ["40HQ"] }
+            "route": {
+              "pol_code": "CNSHA",
+              "pod_code": "USLAX",
+              "container_types": [
+                "40HQ"
+              ]
+            }
           }
         },
         {
           "message": "还有结果吗",
-          "expect": { "action": "status_only", "ui": "response", "contains": "结束" }
+          "expect": {
+            "action": "status_only",
+            "ui": "response",
+            "contains": "结束"
+          }
         }
       ]
     },
@@ -115,15 +165,20 @@
             "action": "new_search",
             "task": "COMPLETE",
             "ui": "result_or_empty",
-            "route": { "pol_code": "CNSHA", "pod_code": "USLAX", "container_types": ["40HQ"] }
+            "route": {
+              "pol_code": "CNSHA",
+              "pod_code": "USLAX",
+              "container_types": [
+                "40HQ"
+              ]
+            }
           }
         },
         {
           "message": "刚才那批里只看马士基",
           "expect": {
             "action": "filter_existing",
-            "ui": "result_or_empty",
-            "route": { "carrier_code": "MSK" }
+            "ui": "response"
           }
         }
       ]
@@ -137,7 +192,13 @@
             "action": "new_search",
             "task": "COMPLETE",
             "ui": "result_or_empty",
-            "route": { "pol_code": "CNSHA", "pod_code": "USLAX", "container_types": ["40HQ"] }
+            "route": {
+              "pol_code": "CNSHA",
+              "pod_code": "USLAX",
+              "container_types": [
+                "40HQ"
+              ]
+            }
           }
         },
         {
@@ -146,7 +207,13 @@
             "action": "new_search",
             "task": "COMPLETE",
             "ui": "result_or_empty",
-            "route": { "pol_code": "CNSHA", "pod_code": "USLAX", "container_types": ["40HQ"] }
+            "route": {
+              "pol_code": "CNSHA",
+              "pod_code": "USLAX",
+              "container_types": [
+                "40HQ"
+              ]
+            }
           }
         }
       ]

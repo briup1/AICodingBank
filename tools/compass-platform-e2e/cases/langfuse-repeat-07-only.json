@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "scenarios": [
+    {
+      "id": "lf-repeat-07-filter-existing-carrier",
+      "turns": [
+        {
+          "message": "上海到洛杉矶，40HQ 的运价",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": {
+              "pol_code": "CNSHA",
+              "pod_code": "USLAX",
+              "container_types": [
+                "40HQ"
+              ]
+            }
+          }
+        },
+        {
+          "message": "刚才那批里只看马士基",
+          "expect": {
+            "action": "filter_existing",
+            "ui": "response"
+          }
+        }
+      ]
+    }
+  ]
+}

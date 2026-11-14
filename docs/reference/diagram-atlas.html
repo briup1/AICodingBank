@@ -1,0 +1,1962 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>工程图形画册 · 看图选图</title>
+<style>
+:root{
+  --bg:#FAFAFA; --card:#FFFFFF; --ink:#09090B; --body:#27272A; --muted:#475569; --faint:#71717A;
+  --border:#E4E4E7; --border-2:#D4D4D8; --ring:#18181B; --soft:#F4F4F5;
+  --c-arch:#2563EB; --c-flow:#0F766E; --c-io:#7C3AED; --c-data:#B45309;
+  --c-code:#BE123C; --c-plan:#15803D; --c-think:#475569;
+  --r:12px; --shadow:0 1px 2px rgba(9,9,11,.05), 0 10px 28px -16px rgba(9,9,11,.25);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--bg);color:var(--body);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{margin:0;color:var(--ink);letter-spacing:-.015em;line-height:1.25;font-weight:600}
+p{margin:0}
+a{color:inherit}
+button{font:inherit;color:inherit;cursor:pointer}
+.wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* topbar */
+.topbar{position:sticky;top:0;z-index:30;background:rgba(250,250,250,.86);backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--border)}
+.topbar .wrap{display:flex;align-items:center;gap:18px;height:56px}
+.brand{display:flex;align-items:center;gap:9px;font-weight:600;color:var(--ink);text-decoration:none;white-space:nowrap}
+.brand svg{width:20px;height:20px}
+.topnav{display:flex;gap:4px;margin-left:auto;overflow:auto}
+.topnav a{font-size:13.5px;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:8px;white-space:nowrap}
+.topnav a:hover{background:var(--soft);color:var(--ink)}
+
+/* hero */
+.hero{padding:46px 0 26px}
+.hero h1{font-size:clamp(28px,4vw,42px);letter-spacing:-.025em}
+.hero .lede{margin-top:12px;max-width:62ch;color:var(--muted);font-size:15.5px}
+.hero .lede b{color:var(--ink);font-weight:600}
+.searchbar{margin-top:22px;display:flex;gap:10px;max-width:720px}
+.searchbox{position:relative;flex:1}
+.searchbox svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:17px;height:17px;color:var(--faint)}
+.searchbox input{
+  width:100%;padding:13px 14px 13px 40px;border:1px solid var(--border-2);border-radius:10px;
+  background:var(--card);color:var(--ink);font-size:15px;outline:none
+}
+.searchbox input:focus{border-color:var(--ring);box-shadow:0 0 0 3px rgba(24,24,27,.12)}
+.searchbox input::placeholder{color:#A1A1AA}
+.btn{
+  border:1px solid var(--border-2);background:var(--card);border-radius:10px;padding:12px 16px;
+  font-size:14px;color:var(--ink);transition:background .18s,border-color .18s,transform .18s
+}
+.btn:hover{background:var(--soft)}
+.btn.primary{background:var(--ink);border-color:var(--ink);color:#fff}
+.btn.primary:hover{background:#27272A}
+.btn:focus-visible,.chip:focus-visible,.card:focus-visible,.purpose button:focus-visible,.close:focus-visible{outline:2px solid var(--ring);outline-offset:2px}
+
+/* filters */
+.filters{position:sticky;top:56px;z-index:20;background:rgba(250,250,250,.92);backdrop-filter:blur(8px);padding:14px 0 10px;border-bottom:1px solid transparent}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{
+  border:1px solid var(--border-2);background:var(--card);color:var(--muted);
+  border-radius:999px;padding:6px 13px;font-size:13px;transition:all .18s
+}
+.chip:hover{color:var(--ink);border-color:#A1A1AA}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.chip .n{opacity:.55;margin-left:5px;font-variant-numeric:tabular-nums}
+.statusline{margin-top:12px;font-size:13px;color:var(--faint);display:flex;flex-wrap:wrap;gap:6px;align-items:center;min-height:20px}
+.statusline b{color:var(--ink);font-weight:600}
+.reason{background:#EEF2FF;color:#3730A3;border-radius:6px;padding:1px 7px;font-size:12px}
+
+/* grid */
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(258px,1fr));padding:22px 0 10px}
+.card{
+  display:flex;flex-direction:column;text-align:left;padding:0;overflow:hidden;
+  background:var(--card);border:1px solid var(--border);border-radius:var(--r);box-shadow:none;
+  transition:transform .2s,box-shadow .2s,border-color .2s
+}
+.card:hover{transform:translateY(-2px);box-shadow:var(--shadow);border-color:var(--border-2)}
+.card .art{aspect-ratio:24/13;background:#fff;border-bottom:1px solid var(--border);padding:6px;display:block}
+.card .art svg{display:block;width:100%;height:100%}
+.card .meta{padding:12px 14px 15px}
+.card .row{display:flex;align-items:baseline;gap:8px;justify-content:space-between}
+.card h3{font-size:15.5px}
+.card .en{font-size:11.5px;color:var(--faint);font-weight:500;letter-spacing:.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card .best{margin-top:6px;font-size:13px;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.9em}
+.card .tag{display:inline-flex;align-items:center;gap:5px;margin-top:10px;font-size:11.5px;color:var(--ac);font-weight:600}
+.card .tag::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--ac)}
+[data-cat="arch"]{--ac:var(--c-arch)}[data-cat="flow"]{--ac:var(--c-flow)}[data-cat="io"]{--ac:var(--c-io)}
+[data-cat="data"]{--ac:var(--c-data)}[data-cat="code"]{--ac:var(--c-code)}[data-cat="plan"]{--ac:var(--c-plan)}
+[data-cat="think"]{--ac:var(--c-think)}
+.empty{padding:60px 0;text-align:center;color:var(--faint);font-size:14px}
+
+/* sections */
+.section{padding:52px 0;border-top:1px solid var(--border)}
+.section > h2{font-size:clamp(20px,2.4vw,26px)}
+.section > .sub{margin-top:8px;color:var(--muted);font-size:14px;max-width:66ch}
+.note{margin-top:10px;font-size:12.5px;color:var(--faint)}
+
+/* purpose list */
+.plist{margin-top:20px;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;background:var(--card)}
+.prow{display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:14px;padding:13px 16px;border-top:1px solid var(--border);align-items:start}
+.prow:first-child{border-top:0;background:#FCFCFD;font-size:12px;color:var(--faint);font-weight:600;letter-spacing:.04em}
+.prow .need{font-size:14px;color:var(--ink)}
+.prow .opts{display:flex;flex-wrap:wrap;gap:6px}
+.prow button{
+  border:1px solid var(--border);background:#fff;border-radius:7px;padding:3px 9px;font-size:12.5px;
+  color:var(--body);transition:all .16s
+}
+.prow button:hover{border-color:var(--ac,var(--ring));color:var(--ac,var(--ink));background:#fff}
+.prow .no{display:flex;flex-wrap:wrap;gap:6px}
+.prow .no span{font-size:12.5px;color:#9F1239;background:#FFF1F2;border-radius:7px;padding:3px 9px}
+
+/* compare table */
+.tablewrap{margin-top:20px;border:1px solid var(--border);border-radius:var(--r);overflow:auto;background:var(--card)}
+table{border-collapse:collapse;width:100%;min-width:640px}
+th,td{text-align:left;padding:12px 16px;border-top:1px solid var(--border);font-size:13.5px;vertical-align:top}
+th{background:#FCFCFD;font-size:12px;letter-spacing:.04em;color:var(--faint);font-weight:600;border-top:0}
+td:first-child{color:var(--ink);font-weight:600;white-space:nowrap}
+
+/* drawer */
+.overlay{position:fixed;inset:0;background:rgba(9,9,11,.35);opacity:0;pointer-events:none;transition:opacity .22s;z-index:40}
+.overlay.on{opacity:1;pointer-events:auto}
+.drawer{
+  position:fixed;top:0;right:0;height:100dvh;width:min(600px,94vw);background:#fff;border-left:1px solid var(--border);
+  transform:translateX(102%);transition:transform .26s cubic-bezier(.32,.72,0,1);z-index:50;display:flex;flex-direction:column
+}
+.drawer.on{transform:none}
+.drawer header{padding:18px 22px 14px;border-bottom:1px solid var(--border);display:flex;gap:14px;align-items:flex-start}
+.drawer header .t{flex:1;min-width:0}
+.drawer header h2{font-size:21px}
+.drawer header .en{font-size:12.5px;color:var(--faint);margin-top:3px}
+.close{border:1px solid var(--border);background:#fff;width:34px;height:34px;border-radius:9px;display:grid;place-items:center;flex:0 0 auto}
+.close:hover{background:var(--soft)}
+.drawer .body{overflow:auto;padding:20px 22px 40px;flex:1;overscroll-behavior:contain}
+.drawer .art{background:#fff;border:1px solid var(--border);border-radius:10px;padding:8px;aspect-ratio:24/13}
+.drawer .art svg{width:100%;height:100%;display:block}
+.block{margin-top:24px}
+.block h4{font-size:12px;letter-spacing:.06em;color:var(--faint);text-transform:uppercase;font-weight:600}
+.block .def{margin-top:8px;font-size:15px;color:var(--ink)}
+.ul{margin:8px 0 0;padding-left:0;list-style:none}
+.ul li{position:relative;padding-left:16px;margin-top:6px;font-size:14px;color:var(--body)}
+.ul li::before{content:"";position:absolute;left:2px;top:.62em;width:5px;height:5px;border-radius:50%;background:var(--ac,var(--ring));opacity:.5}
+.avoid li::before{background:#E11D48;opacity:.7}
+.hl{background:#FCFCFD;border:1px solid var(--border);border-left:3px solid var(--ac);border-radius:8px;padding:12px 14px;font-size:14.5px;color:var(--ink);margin-top:8px}
+.pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+.pills span{font-size:12.5px;background:var(--soft);border-radius:7px;padding:3px 9px;color:var(--muted)}
+.vs{margin-top:9px;font-size:14px;color:var(--body)}
+.vs b{color:var(--ink)}
+.prompt{margin-top:10px;position:relative}
+.prompt pre{
+  margin:0;background:#0B0B0F;color:#E4E4E7;border-radius:10px;padding:16px 16px 18px;overflow:auto;
+  font-family:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;font-size:12.5px;line-height:1.72;white-space:pre-wrap
+}
+.copyrow{display:flex;gap:8px;align-items:center;margin-top:9px;flex-wrap:wrap}
+.copyrow .hint{font-size:12px;color:var(--faint)}
+.rel{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px}
+.rel button{border:1px solid var(--border);background:#fff;border-radius:8px;padding:5px 10px;font-size:13px}
+.rel button:hover{background:var(--soft)}
+
+/* footer + toast */
+footer{padding:40px 0 70px;border-top:1px solid var(--border);color:var(--faint);font-size:12.5px}
+footer p+p{margin-top:6px}
+.toast{
+  position:fixed;left:50%;bottom:26px;transform:translate(-50%,16px);background:var(--ink);color:#fff;
+  padding:10px 16px;border-radius:10px;font-size:13.5px;opacity:0;pointer-events:none;transition:all .22s;z-index:60
+}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+@media (max-width:720px){
+  .searchbar{flex-direction:column}
+  .searchbar .btn{width:100%}
+  .prow{grid-template-columns:1fr;gap:8px}
+  .prow:first-child{display:none}
+  .drawer{width:100%}
+  .topnav{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none !important;animation:none !important}
+  .card:hover{transform:none}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="#top">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><path d="M14 17.5h7M17.5 14v7"/></svg>
+      工程图形画册
+    </a>
+    <nav class="topnav">
+      <a href="#gallery">画册</a>
+      <a href="#purpose">按目的选</a>
+      <a href="#compare">怎么区分</a>
+      <a href="#howto">怎么描述给 AI</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <h1>看图选图，然后用一句话说清你要什么</h1>
+      <p class="lede">每种图形都画了<b>形态示意</b>，标出它<b>最擅长</b>表达什么、别拿它做什么。需要时按目的或关键词找到它，直接复制底部的 <b>AI 描述模板</b>。</p>
+      <div class="searchbar">
+        <div class="searchbox">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>
+          <label class="sr" for="q">搜索图形</label>
+          <input id="q" type="search" placeholder="输入你想表达的：调用顺序 / 表关系 / 部署 / 排期 / 根因…" autocomplete="off">
+        </div>
+        <button class="btn primary" id="searchBtn">搜索</button>
+        <button class="btn" id="resetBtn">重置</button>
+      </div>
+      <p class="note">离线关键词匹配，不理解长句；没命中时可换更短的名词，或直接用下面的「按目的选」。</p>
+    </div>
+  </section>
+
+  <section id="gallery">
+    <div class="wrap">
+      <div class="filters">
+        <div class="chips" id="chips" role="group" aria-label="按分类筛选"></div>
+        <div class="statusline" id="statusline"></div>
+      </div>
+      <div class="grid" id="grid"></div>
+      <div class="empty" id="empty" hidden>没有匹配的图形。试试更短的名词，例如「调用」「表」「部署」「排期」「原因」。</div>
+    </div>
+  </section>
+
+  <section class="section" id="purpose">
+    <div class="wrap">
+      <h2>按表达目的选：先说你想表达什么</h2>
+      <p class="sub">左边是你脑子里的那句话，中间是可以直接用的图形，右边是常见误用。点按钮打开图形详情。</p>
+      <div class="plist" id="plist"></div>
+    </div>
+  </section>
+
+  <section class="section" id="compare">
+    <div class="wrap">
+      <h2>长得像、用错就废：相近图形怎么区分</h2>
+      <p class="sub">这几组最容易混。判断标准只有一条——你要让看图的人回答什么问题。</p>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>两两对比</th><th>怎么选</th></tr></thead>
+          <tbody id="ctable"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="howto">
+    <div class="wrap">
+      <h2>怎么把图形描述给 AI</h2>
+      <p class="sub">图形选对之后，描述里固定给这五样，AI 出的图基本不用返工。</p>
+      <div class="plist">
+        <div class="prow"><div class="need">1 · 图名 + 变体</div><div class="opts">“UML 时序图”“C4 容器图”“泳道图（3 条泳道）”</div><div class="no"><span>不要只说“画个图”</span></div></div>
+        <div class="prow"><div class="need">2 · 目的 + 读者</div><div class="opts">“给运维看部署拓扑”“给产品看状态流转”</div><div class="no"><span>不要省掉读者</span></div></div>
+        <div class="prow"><div class="need">3 · 参与者 / 元素清单</div><div class="opts">逐个列出：服务名、角色、表名、状态名</div><div class="no"><span>不要给“一些服务”</span></div></div>
+        <div class="prow"><div class="need">4 · 关系与顺序</div><div class="opts">谁调谁、同步/异步、条件分支、异常与补偿</div><div class="no"><span>不要漏异常路径</span></div></div>
+        <div class="prow"><div class="need">5 · 输出格式 + 边界</div><div class="opts">“Mermaid sequenceDiagram”“不要画字段细节”</div><div class="no"><span>不要不设边界</span></div></div>
+      </div>
+      <p class="note">每张图形详情里已按这个结构写好模板，填【】里的内容即可。</p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <p>形态示意为手绘示意图，用来认形状，不是渲染结果。分类参考 C4 model（Simon Brown）、Microsoft Azure Well-Architected 图表指南、UML 2.5.1 与 BPMN 2.0 的常用口径。</p>
+      <p>离线可用 · 无外部依赖 · 单文件</p>
+    </div>
+  </footer>
+</main>
+
+<div class="overlay" id="overlay"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="dTitle" tabindex="-1"></aside>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+"use strict";
+
+/* ---------------- 分类 ---------------- */
+const CATS = [
+  { id:'arch',  name:'架构与系统', desc:'系统由什么组成、边界在哪、怎么部署' },
+  { id:'flow',  name:'流程与行为', desc:'事情怎么发生、分几步、条件怎么走' },
+  { id:'io',    name:'交互与调用', desc:'谁调用谁、先后、同步异步、失败怎么办' },
+  { id:'data',  name:'数据',       desc:'数据长什么样、从哪来、存到哪' },
+  { id:'code',  name:'代码与模型', desc:'类、模块、依赖、业务概念' },
+  { id:'plan',  name:'计划与协作', desc:'谁在什么时候做什么' },
+  { id:'think', name:'分析与决策', desc:'为什么出问题、改动影响谁、怎么取舍' }
+];
+const CATNAME = Object.fromEntries(CATS.map(c => [c.id, c.name]));
+
+/* ---------------- SVG 小工具 ---------------- */
+const K = { line:'#CBD5E1', line2:'#94A3B8', ink:'#334155', white:'#FFFFFF' };
+
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function T(x,y,s,o){
+  o = o || {};
+  const size = o.size || 7.5, anchor = o.anchor || 'middle', tone = o.tone || K.ink, weight = o.weight || 500;
+  return '<text x="'+x+'" y="'+y+'" font-size="'+size+'" fill="'+tone+'" text-anchor="'+anchor+'" font-weight="'+weight+'">'+esc(s)+'</text>';
+}
+function R(x,y,w,h,o){
+  o = o || {};
+  const rx = o.rx === undefined ? 4 : o.rx, stroke = o.stroke || K.line, fill = o.fill || K.white, sw = o.sw || 1;
+  return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="'+rx+'" fill="'+fill+'" stroke="'+stroke+'" stroke-width="'+sw+'"'+(o.dash?' stroke-dasharray="'+o.dash+'"':'')+'/>';
+}
+function B(x,y,w,h,label,o){
+  o = o || {};
+  return R(x,y,w,h,o) + T(x+w/2, y+h/2+3, label, { size:o.lsize||7.5, tone:o.ltone||K.ink });
+}
+function DIA(cx,cy,w,h,label,o){
+  o = o || {};
+  const pts = cx+','+(cy-h/2)+' '+(cx+w/2)+','+cy+' '+cx+','+(cy+h/2)+' '+(cx-w/2)+','+cy;
+  return '<polygon points="'+pts+'" fill="'+(o.fill||K.white)+'" stroke="'+(o.stroke||K.line)+'" stroke-width="1"/>'
+    + (label ? T(cx, cy+2.5, label, { size:o.lsize||6.5 }) : '');
+}
+function CY(x,y,w,h,label,o){
+  o = o || {};
+  const ry = 4;
+  return '<path d="M'+x+' '+(y+ry)+' h'+w+' v'+(h-2*ry)+' a'+(w/2)+' '+ry+' 0 0 1 -'+w+' 0 z" fill="'+K.white+'" stroke="'+K.line+'"/>'
+    + '<ellipse cx="'+(x+w/2)+'" cy="'+(y+ry)+'" rx="'+(w/2)+'" ry="'+ry+'" fill="'+K.white+'" stroke="'+K.line+'"/>'
+    + (label ? T(x+w/2, y+h/2+ry+1, label, { size:o.lsize||7 }) : '');
+}
+function PIN(x,y,w,h,label,o){
+  o = o || {};
+  return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="'+(h/2)+'" fill="'+(o.fill||K.white)+'" stroke="'+(o.stroke||K.line)+'"/>'
+    + (label ? T(x+w/2, y+h/2+3, label, { size:o.lsize||7 }) : '');
+}
+function PL(pts,o){
+  o = o || {};
+  const stroke = o.stroke || K.line2, dash = o.dash ? ' stroke-dasharray="'+o.dash+'"' : '', sw = o.sw || 1;
+  const d = 'M' + pts.map(p => p[0]+' '+p[1]).join(' L');
+  if (o.arrow === false) return '<path d="'+d+'" fill="none" stroke="'+stroke+'" stroke-width="'+sw+'"'+dash+'/>';
+  const a = pts[pts.length-2], b = pts[pts.length-1];
+  const ang = Math.atan2(b[1]-a[1], b[0]-a[0]), hl = 5, w = 2.6;
+  const ex = b[0]-hl*Math.cos(ang), ey = b[1]-hl*Math.sin(ang);
+  const d2 = 'M' + pts.slice(0,-1).map(p => p[0]+' '+p[1]).join(' L') + ' L' + ex + ' ' + ey;
+  return '<path d="'+d2+'" fill="none" stroke="'+stroke+'" stroke-width="'+sw+'"'+dash+'/>'
+    + '<path d="M'+b[0]+' '+b[1]+' L'+(ex+w*Math.sin(ang))+' '+(ey-w*Math.cos(ang))+' L'+(ex-w*Math.sin(ang))+' '+(ey+w*Math.cos(ang))+' Z" fill="'+stroke+'"/>';
+}
+function L(x1,y1,x2,y2,o){ return PL([[x1,y1],[x2,y2]], o); }
+function CIR(cx,cy,r,o){
+  o = o || {};
+  return '<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="'+(o.fill||K.white)+'" stroke="'+(o.stroke||K.line)+'" stroke-width="'+(o.sw||1)+'"/>'
+    + (o.label ? T(cx, cy+2.5, o.label, { size:o.lsize||6.5 }) : '');
+}
+function DOT(cx,cy,r,fill){ return '<circle cx="'+cx+'" cy="'+cy+'" r="'+(r||2)+'" fill="'+(fill||K.line2)+'"/>'; }
+function SVG(body){ return '<svg viewBox="0 0 240 130" role="img" aria-hidden="true">'+body+'</svg>'; }
+
+/* ---------------- 31 种图形 ---------------- */
+const D = [
+
+/* ===== 架构与系统 ===== */
+{
+  id:'context', name:'系统上下文图', en:'System Context Diagram', cat:'arch',
+  kw:['外部系统','边界','交互方','C4','context','系统周边','谁在用'],
+  best:'最擅长：说清“这个系统和外面的谁有关系”，一眼看懂范围。',
+  def:'把系统画成一个黑盒，周围只放与它交互的人、外部系统和数据源。',
+  asks:['系统边界到哪为止？','谁在用它，它又依赖谁？','哪些东西属于外部，不归我们管？'],
+  use:['新项目第一次对齐范围','和业务方确认“这次做不做支付对接”','架构评审开场，先统一上下文'],
+  never:['不要画内部的表、类、服务','不要把数据库细节放进来','不要用产品 Logo 代替外部系统方块'],
+  parts:['被测系统（一个方块）','外部角色','外部系统','数据源 / 消费方','带方向的交互箭头'],
+  vs:{ name:'容器图', diff:'上下文图只回答“有没有关系”，容器图才回答“内部有几个服务”。先画上下文定边界，再拆容器。' },
+  prompt:`请画一张 C4 系统上下文图（System Context Diagram）。
+
+系统：【填：系统名】—— 一句话职责：【填】
+外部角色：【填：角色1】【填：角色2】
+外部系统：【填：系统1】【填：系统2】
+数据源 / 下游：【填】
+
+要求：
+1. 目标系统只画成一个方块，放中间；外部元素环绕四周。
+2. 只画高层交互，不画内部组件、表或类。
+3. 每条连线用动词标注：调用、读取、推送、回调。
+4. 外部系统用统一的中性方块，不用厂商 Logo。
+5. 用一个虚线边界框标出“本次范围”。
+6. 输出 Mermaid flowchart LR，或按 C4 语境生成。`
+},
+{
+  id:'container', name:'容器图（C4 L2）', en:'Container Diagram', cat:'arch',
+  kw:['C4','服务划分','应用','数据库','消息队列','可部署单元','container'],
+  best:'最擅长：说清系统内部有几个可部署单元，以及它们用什么协议说话。',
+  def:'把系统拆成应用、服务、数据库、消息队列等可独立运行的单元，并画出它们之间的调用。',
+  asks:['系统里到底有几个服务、几个库？','前端怎么和后端说话，跑在哪个协议上？','哪些是已有系统，哪些是这次新建？'],
+  use:['技术方案评审','新人接手项目的第一张图','和运维 / 安全对齐组件清单'],
+  never:['不要下钻到类、方法、字段','不要画业务流程和时间顺序','不要把同一服务的内部模块拆成多个容器'],
+  parts:['容器（可部署单元）','外部系统','人工使用者','协议 / 中间件标注','技术选型标签'],
+  vs:{ name:'组件图', diff:'容器图看“部署单元”，组件图看“某个容器内部怎么分模块”。先容器，后组件。' },
+  prompt:`请画一张 C4 容器图（Container Diagram）。
+
+系统：【填：系统名】
+容器清单：
+- 【填：Web 前端】技术【填】职责【填】
+- 【填：API 服务】技术【填】职责【填】
+- 【填：数据库】技术【填】
+- 【填：消息队列】技术【填】
+外部系统：【填】
+
+要求：
+1. 每个容器一个方块，方块内标注 [名称] / [技术] / [职责]。
+2. 连线上标注协议与方向，例如“HTTPS 同步调用”“AMQP 异步发布”。
+3. 本次新建的容器用强调色，已有系统用灰色。
+4. 不下钻到类、表、字段。
+5. 输出 Mermaid flowchart 或 C4 结构。`
+},
+{
+  id:'component', name:'组件图', en:'Component Diagram', cat:'arch',
+  kw:['模块划分','组件','接口','服务内部','C4 L3'],
+  best:'最擅长：说清“一个服务内部由哪几块组成，谁依赖谁”。',
+  def:'把单个容器拆成职责清晰、可替换的组件，并标出它们之间的依赖和接口。',
+  asks:['这个服务内部怎么分层？','改动这一块会牵动哪几块？','哪些组件是可替换的边界？'],
+  use:['给某个服务做重构设计','定位“这个功能应该放哪层”','评审模块依赖有没有反向调用'],
+  never:['不要用它画整个系统的服务划分','不要画消息的先后顺序','不要在一个框里塞十几个组件'],
+  parts:['容器边界框','组件方块','提供的接口','依赖箭头','外部依赖'],
+  vs:{ name:'包图', diff:'组件图偏运行时与职责边界，包图偏代码目录与命名空间。设计阶段用组件图，实现阶段用包图。' },
+  prompt:`请画一张组件图，描述【填：服务/容器名】的内部结构。
+
+组件清单：
+- 【填：Controller 层】职责【填】
+- 【填：应用服务】职责【填】
+- 【填：领域模型】职责【填】
+- 【填：仓储实现】职责【填】
+外部依赖：【填：如 MySQL / Redis / 外部 API】
+
+要求：
+1. 外层画一个容器边界框，组件放在里面。
+2. 组件之间用有方向的箭头表示依赖，标注调用的接口名。
+3. 依赖必须单向，不允许出现双向箭头；如存在反向调用请标红提示。
+4. 标注每个组件的可替换边界。
+5. 输出 Mermaid flowchart 或 C4 组件结构。`
+},
+{
+  id:'deployment', name:'部署图', en:'Deployment Diagram', cat:'arch',
+  kw:['部署','服务器','容器','K8s','节点','环境','运维','上线'],
+  best:'最擅长：说清“这些程序最后跑在哪台机器 / 哪个集群上”。',
+  def:'把软件组件映射到主机、容器、集群等运行环境，展示部署形态和网络区域。',
+  asks:['服务部署在几个节点上？','生产环境和测试环境差在哪？','扩容时加的是什么单位？'],
+  use:['上线方案评审','和运维确认资源与端口','容量规划和故障域分析'],
+  never:['不要用它解释业务逻辑','不要把网络策略细节混进来（用网络拓扑图）','不要画代码结构'],
+  parts:['节点 / 主机 / 集群','运行单元','环境或区域边界','部署连线','端口与资源标注'],
+  vs:{ name:'网络拓扑图', diff:'部署图回答“什么程序跑在哪”，网络拓扑图回答“流量经过哪些网段和边界”。' },
+  prompt:`请画一张部署图，描述【填：系统名】在生产环境的部署形态。
+
+运行环境：
+- 区域 / VPC：【填】
+- 节点或集群：【填：如 K8s 集群 3 节点 / 2 台 ECS】
+- 部署单元：【填：容器名 + 副本数】
+- 中间件：【填：MySQL 主从 / Redis / MQ】
+
+要求：
+1. 外层用虚线框表示环境或节点，内部放部署单元。
+2. 标出副本数与资源规格。
+3. 标注对外入口（负载均衡 / 网关）与内部调用方向。
+4. 标出跨节点、跨可用区的连线。
+5. 输出 Mermaid flowchart 或结构化文本，便于转成图形。`
+},
+{
+  id:'network', name:'网络拓扑图', en:'Network Diagram', cat:'arch',
+  kw:['网络','VPC','子网','防火墙','安全组','流量','边界','东西向','南北向'],
+  best:'最擅长：说清流量经过哪些网段和安全边界，哪里是故障点。',
+  def:'从网络视角画清入口、网段、隔离边界和东西向 / 南北向流量路径。',
+  asks:['外部流量从哪进来，经过哪些边界？','哪些服务在同一个子网里？','哪一跳是单点或安全薄弱点？'],
+  use:['安全评审和威胁建模前置','排查“为什么 A 连不通 B”','等保 / 合规材料配图'],
+  never:['不要用它讲业务职责','不要把服务名写得比网段还显眼','不要省掉信任边界标注'],
+  parts:['公网入口','VPC / 子网','防火墙 / 安全组','信任边界','流量方向箭头'],
+  vs:{ name:'部署图', diff:'网络图按网段与边界组织，部署图按运行单元组织。同一系统可以两张都有。' },
+  prompt:`请画一张网络拓扑图。
+
+范围：【填：环境与区域】
+入口：【填：CDN / SLB / API 网关】
+网段：【填：VPC 10.0.0.0/16，公有子网 / 私有子网】
+边界控制：【填：WAF / 安全组 / 防火墙规则】
+
+要求：
+1. 按网络区域分层：公网 → DMZ → 应用子网 → 数据子网。
+2. 用虚线框标出信任边界，并标注边界上的控制措施。
+3. 南北向流量实线，东西向流量虚线，并写清协议和端口。
+4. 标出单点与潜在故障点。
+5. 输出 Mermaid flowchart，或给出可绘制的节点边清单。`
+},
+{
+  id:'layered', name:'分层架构图', en:'Layered / Block Diagram', cat:'arch',
+  kw:['分层','技术栈','架构图','上层下层','block','功能块'],
+  best:'最擅长：说清“系统从上到下分几层，每层负责什么”。',
+  def:'用横向条带表示层次，从接入到存储自上而下排列，强调职责分层而不是具体技术。',
+  asks:['系统分了哪几层，各层职责是什么？','请求从哪一层进，在哪一层落地？','哪层不允许跨层调用？'],
+  use:['讲清整体结构给非技术同学','技术选型讨论前的框架共识','写设计文档的架构总览'],
+  never:['不要用它表达调用时序','不要把并列的服务硬排成上下层','不要用它替代容器图'],
+  parts:['层（条带）','层内关键能力','跨层箭头','技术选型标签（可选）'],
+  vs:{ name:'容器图', diff:'分层图讲“职责堆叠”，容器图讲“可部署单元”。分层图更抽象，适合讲道理；容器图更具体，适合讲实现。' },
+  prompt:`请画一张分层架构图，描述【填：系统名】。
+
+层次（自上而下）：
+1. 【填：接入层】负责【填】
+2. 【填：应用层】负责【填】
+3. 【填：领域层】负责【填】
+4. 【填：基础设施层】负责【填】
+
+要求：
+1. 每层一条横向条带，左侧写层名，右侧列该层关键能力。
+2. 层与层之间用短箭头表示允许的依赖方向。
+3. 用强调色标出本次改动涉及的那一层。
+4. 不允许出现跨层反向箭头；若存在请单独标注为违规。
+5. 输出 Mermaid flowchart TB，用 subgraph 表示每层。`
+},
+
+/* ===== 流程与行为 ===== */
+{
+  id:'flowchart', name:'流程图', en:'Flowchart', cat:'flow',
+  kw:['步骤','流程','判断','分支','决策','先后','线性流程'],
+  best:'最擅长：把“先做什么、遇到条件怎么走”讲成一条谁都看得懂的路径。',
+  def:'用步骤框、判断菱形和箭头，描述一个过程的执行顺序与分支。',
+  asks:['第一步做什么，最后一步是什么？','在哪个点分叉，条件是什么？','异常时回到哪一步？'],
+  use:['说明一个功能的具体执行步骤','写排查手册和操作 SOP','和产品对齐分支条件'],
+  never:['不要用它展示多角色分工（用泳道图）','不要用它展示跨服务的时间顺序（用时序图）','不要在一张图里塞 3 个业务流程'],
+  parts:['开始 / 结束','处理步骤','判断菱形','分支标签','异常与回滚路径'],
+  vs:{ name:'活动图', diff:'流程图偏“人看得懂的步骤”，活动图偏“系统内部的控制流”，有并行与同步条。' },
+  prompt:`请画一张流程图。
+
+流程名称：【填】
+触发条件：【填】
+步骤：
+1. 【填】
+2. 【填】
+3. 判断：【填条件】→ 是：【填】 / 否：【填】
+4. 【填】
+结束状态：【填】
+
+要求：
+1. 开始/结束用跑道形，处理用矩形，判断用菱形。
+2. 每条分支线上写清条件，不要留空箭头。
+3. 标出异常路径和回退位置。
+4. 主线从左到右或从上到下，避免交叉连线。
+5. 输出 Mermaid flowchart。`
+},
+{
+  id:'swimlane', name:'泳道图', en:'Swimlane Diagram', cat:'flow',
+  kw:['角色','分工','泳道','跨部门','谁做什么','协作'],
+  best:'最擅长：说清“每个角色分别做什么、在哪一步交接”。',
+  def:'按角色或系统划分横向泳道，把流程步骤放进对应泳道，跨泳道的箭头就是交接点。',
+  asks:['这一步是谁做的？','交接发生在哪，谁等谁？','哪个角色是瓶颈？'],
+  use:['跨部门流程梳理','产品 / 运营 / 研发的职责边界确认','客服工单流转设计'],
+  never:['不要给单角色流程硬加泳道','不要用它画系统内部调用（用时序图）','不要让一条泳道全是空框'],
+  parts:['泳道（角色）','步骤框','跨道箭头','交接物 / 单据','判断分支'],
+  vs:{ name:'BPMN', diff:'泳道图是“谁做什么”的可视化；BPMN 还要求事件、网关、定时器、异常，能被流程引擎执行。' },
+  prompt:`请画一张泳道图。
+
+角色（泳道）：
+1. 【填：用户】
+2. 【填：客服】
+3. 【填：系统】
+4. 【填：仓库】
+
+流程步骤（写清每一步属于哪个角色）：
+1. 【填】
+2. 【填】
+3. 【填】
+
+要求：
+1. 每个角色一条横向泳道，步骤放在自己泳道内。
+2. 跨泳道用箭头表示交接，并在箭头上写交接物。
+3. 判断节点用菱形，分支标签写清条件。
+4. 标出超时或退回的处理路径。
+5. 输出 Mermaid flowchart，用 subgraph 表示每条泳道。`
+},
+{
+  id:'activity', name:'活动图', en:'Activity Diagram', cat:'flow',
+  kw:['控制流','并行','同步','fork','join','UML','系统内部'],
+  best:'最擅长：表达系统内部的控制流，尤其是并行分支和汇合。',
+  def:'UML 行为图，用活动节点、判断、并行分叉与汇合条描述一个操作内部的执行逻辑。',
+  asks:['哪些步骤可以并行？','并行结果在哪汇合？','哪个活动是失败的必经点？'],
+  use:['设计批量任务或调度逻辑','表达多分支并行处理','接口内部实现说明'],
+  never:['不要用它代替业务流程图给非技术读者','不要把角色分工塞进来','不要和流程图混用同一套记号'],
+  parts:['初始节点 / 终止节点','活动节点','判断节点','分叉与汇合条','并行流'],
+  vs:{ name:'流程图', diff:'流程图的重点是“看得懂”，活动图的重点是“控制流建模精确”，有 fork/join。' },
+  prompt:`请画一张 UML 活动图，描述【填：操作名】的内部执行逻辑。
+
+活动清单：【填】
+并行点：【填：哪些活动可并行】
+判断条件：【填】
+异常处理：【填】
+
+要求：
+1. 用实心圆表示开始，同心圆表示结束。
+2. 并行分支用粗黑条 fork，汇合用粗黑条 join。
+3. 判断节点用菱形，分支带守卫条件。
+4. 标注可能抛异常的活动及其处理路径。
+5. 输出 Mermaid flowchart，或给出 PlantUML activity 语法。`
+},
+{
+  id:'bpmn', name:'BPMN 业务流程', en:'BPMN 2.0', cat:'flow',
+  kw:['业务流程','流程引擎','事件','网关','定时器','异常','Camunda','审批'],
+  best:'最擅长：表达可被流程引擎执行的业务流程，含事件、网关、超时和异常。',
+  def:'面向业务过程的标准化记号：池与泳道、事件、任务、网关，能落到流程引擎里跑。',
+  asks:['流程有哪些事件和定时器？','在哪个网关分流、条件是什么？','出错时补偿或升级到哪？'],
+  use:['流程要接入 Camunda / Flowable 等引擎','跨组织流程的正式定义','需要明确 SLA 与超时处理的流程'],
+  never:['不要用它画系统部署或代码结构','不要给一次性简单流程上 BPMN','不要画出引擎不支持的“装饰性”元素'],
+  parts:['池 / 泳道','开始与结束事件','任务','排他 / 并行网关','中间事件与定时器'],
+  vs:{ name:'泳道图', diff:'泳道图给人看，BPMN 给引擎看。要不要落引擎，是唯一判断标准。' },
+  prompt:`请画一张 BPMN 2.0 业务流程。
+
+流程名：【填】
+参与方（池 / 泳道）：【填】
+开始事件：【填】
+任务序列：【填】
+网关：排他网关在【填】处，条件为【填】
+定时器：超过【填】小时触发【填】
+异常路径：【填】
+
+要求：
+1. 用池包裹泳道，泳道内放任务。
+2. 事件用圆形（开始细线、结束粗线），网关用菱形。
+3. 序列流用实线箭头；跨池消息用虚线。
+4. 每个网关出口标注条件表达式。
+5. 输出 BPMN XML，或给出可直接建模的元素与连线清单。`
+},
+{
+  id:'state', name:'状态图', en:'State Machine Diagram', cat:'flow',
+  kw:['状态','状态机','生命周期','迁移','事件触发','订单状态','状态流转'],
+  best:'最擅长：说清一个对象的生命周期——有哪些状态、什么事件让它变。',
+  def:'把对象的所有状态画成节点，把触发迁移的事件画成带标签的箭头。',
+  asks:['这个东西一共有几个状态？','哪些事件会让它前进或回退？','有没有走不到或回不去的状态？'],
+  use:['订单、工单、审批单的状态设计','写状态机代码前的建模','排查“卡在某个状态出不来”的故障'],
+  never:['不要用它表达步骤流程（用流程图）','不要遗漏终态与非法迁移','不要画成“步骤链”却叫状态图'],
+  parts:['状态（圆角框）','迁移箭头','事件 / 守卫条件','初始状态','终态'],
+  vs:{ name:'流程图', diff:'流程图问“下一步做什么”，状态图问“现在是什么状态、什么能改变它”。' },
+  prompt:`请画一张 UML 状态图，描述【填：对象名，如订单】的生命周期。
+
+状态清单：【填：待支付 / 已支付 / 已发货 / 已完成 / 已取消 / 已退款】
+初始状态：【填】
+终态：【填】
+迁移（事件 + 守卫条件）：
+- 【状态A】--【事件】[条件]-->【状态B】
+
+要求：
+1. 状态用圆角矩形，初始状态用实心圆，终态用同心圆。
+2. 每条迁移线标注「事件 [守卫条件] / 动作」。
+3. 标出所有非法或需要人工介入的迁移。
+4. 检查是否存在无法到达的状态或死锁状态，若有单独列出。
+5. 输出 Mermaid stateDiagram-v2。`
+},
+{
+  id:'userflow', name:'用户流程图', en:'User Flow', cat:'flow',
+  kw:['用户路径','页面跳转','体验','注册','下单','漏斗','触点'],
+  best:'最擅长：说清用户从进入到完成目标，经过哪些页面和岔路。',
+  def:'以用户为视角，画出跨页面的路径、决策点和退出点。',
+  asks:['用户从哪进来，几步能完成目标？','哪一步最容易流失？','出错后用户被带到哪里？'],
+  use:['注册 / 下单 / 提交工单等主路径设计','和产品对齐页面跳转','评估异常态与空态的用户去向'],
+  never:['不要用它画系统调用','不要把后端服务画进来','不要只画 happy path'],
+  parts:['入口页面','操作步骤','判断与岔路','退出 / 流失点','异常与回退'],
+  vs:{ name:'用户旅程图', diff:'用户流程图是“路径与页面”，旅程图是“阶段 + 情绪 + 痛点”，后者更偏研究与共情。' },
+  prompt:`请画一张用户流程图。
+
+目标用户：【填】
+目标：【填：如完成下单】
+入口：【填】
+路径：
+1. 【页面/操作】
+2. 【页面/操作】
+3. 岔路：【条件】→【去向】
+异常路径：【填：报错、超时、权限不足】
+
+要求：
+1. 每个节点是一个页面或一次用户操作。
+2. 判断点用菱形，标出每个岔路的条件和去向。
+3. 标出流失风险最高的 1–2 个节点。
+4. 异常路径用虚线，并写清回到哪一步。
+5. 输出 Mermaid flowchart LR。`
+},
+{
+  id:'decisiontree', name:'决策树', en:'Decision Tree', cat:'flow',
+  kw:['决策','规则','多条件','分支','判定','风控','if else'],
+  best:'最擅长：把一堆条件规则摊开，让人看清每条路径最后落到哪。',
+  def:'从根问题出发，逐层判断条件，最终到达结论或动作。',
+  asks:['一共要判断几个条件？','每种组合最后走哪个结论？','规则之间有没有重叠或漏判？'],
+  use:['风控与审核规则设计','故障处理的分诊逻辑','复杂 if/else 的可视化评审'],
+  never:['不要用它表达有回环的流程','不要用它代替状态机','不要让分支深度超过 4 层还不拆'],
+  parts:['根问题','判断节点','分支条件','叶子结论','规则优先级'],
+  vs:{ name:'流程图', diff:'决策树是纯判定结构，没有回环；流程图允许循环和回退。' },
+  prompt:`请画一张决策树。
+
+根问题：【填】
+判断维度（按优先级）：
+1. 【填维度 + 阈值】
+2. 【填维度 + 阈值】
+3. 【填维度 + 阈值】
+叶子结论：【填：结论 1 / 2 / 3】
+
+要求：
+1. 根在上、叶子在下，每条边标注判断条件。
+2. 同一层的判断维度保持统一，便于横向比较。
+3. 标出默认分支（所有条件都不满足时）。
+4. 检查条件是否有重叠或遗漏，如有请单列说明。
+5. 输出 Mermaid flowchart TD 或决策表。`
+},
+
+/* ===== 交互与调用 ===== */
+{
+  id:'sequence', name:'时序图', en:'Sequence Diagram', cat:'io',
+  kw:['调用顺序','调用链','同步异步','超时','重试','接口','API','消息'],
+  best:'最擅长：说清一次请求里谁先谁后，以及超时、重试、补偿怎么办。',
+  def:'按时间向下排列参与者，用横向箭头表示消息、调用与返回。',
+  asks:['谁调用谁，先后顺序是什么？','哪些调用是同步、哪些是异步？','失败后在哪一步重试或补偿？'],
+  use:['API 设计评审','跨服务调用链分析','排查超时与幂等问题的讨论材料'],
+  never:['不要用它画完整系统架构','不要用它代替数据库表关系','不要把十个业务场景塞进一张图'],
+  parts:['参与者 / 生命线','同步消息','异步消息','返回消息（虚线）','激活条与异常标注'],
+  vs:{ name:'事件流图', diff:'时序图强调“一次请求的严格先后”，事件流图强调“一个事件被谁订阅、扇出到哪”。' },
+  prompt:`请画一张 UML 时序图，描述“【填：场景，如用户提交订单】”的成功与失败流程。
+
+参与者：
+- 【填】
+- 【填】
+
+主流程：
+1. 【填：A 同步调用 B】
+2. 【填】
+
+异常流程：
+- 【填：超时】→ 【填：重试 / 降级 / 补偿】
+- 【填：库存不足】→ 【填：回滚已锁定库存】
+
+要求：
+1. 同步调用用实线箭头，异步消息用开放箭头，返回用虚线。
+2. 每条箭头标注方法名和关键参数。
+3. 标出超时时间与重试次数。
+4. 画出补偿或回滚路径。
+5. 不画数据库字段等实现细节。
+6. 输出 Mermaid sequenceDiagram。`
+},
+{
+  id:'eventflow', name:'事件流图', en:'Event Flow Diagram', cat:'io',
+  kw:['事件','消息','发布订阅','异步','扇出','MQ','Kafka','解耦'],
+  best:'最擅长：说清一个事件被谁发布、被谁订阅、扇出到哪些下游。',
+  def:'以事件为中心，展示生产者、消息通道与多个消费者之间的异步关系。',
+  asks:['这个事件有几个消费者？','新增消费者会不会影响生产方？','消息丢了或重复了怎么处理？'],
+  use:['事件驱动架构设计','新增订阅方的兼容性评估','排查“为什么下游没收到消息”'],
+  never:['不要用它表达严格的调用先后（用时序图）','不要省略重复消费与失败重试策略','不要用它画同步 RPC 链路'],
+  parts:['生产者','事件 / Topic','消费者','异步箭头','重试与死信队列'],
+  vs:{ name:'时序图', diff:'时序图按时间轴逐跳展开一次调用；事件流图按拓扑展开事件与订阅关系，不强调时间。' },
+  prompt:`请画一张事件流图。
+
+事件：【填：事件名】
+生产者：【填】
+通道：【填：Topic / 队列名】
+消费者：【填：下游 1 / 下游 2 / 下游 3】
+
+要求：
+1. 事件用横条表示，生产者与消费者分布在两侧。
+2. 异步传递用虚线箭头，标注消息格式与关键字段。
+3. 标明消费语义：至少一次 / 最多一次 / 精确一次。
+4. 画出失败重试与死信队列路径。
+5. 标出新增消费者时对生产方的影响范围。
+6. 输出 Mermaid flowchart LR。`
+},
+
+/* ===== 数据 ===== */
+{
+  id:'er', name:'ER 图', en:'Entity-Relationship Diagram', cat:'data',
+  kw:['表结构','数据库','外键','主键','建表','字段','关系','基数'],
+  best:'最擅长：说清表与表之间怎么连、是 1 对 1 还是 1 对多。',
+  def:'用实体（表）、属性和关系线描述数据模型，标注主键、外键与基数。',
+  asks:['这张表的主键是什么？','A 和 B 是一对多还是多对多？','这次改动要加哪张表、哪个字段？'],
+  use:['建表评审','新人熟悉库结构','需求评审时确认数据落地方式'],
+  never:['不要用它表达对象行为','不要把业务规则写成注释塞进表里','不要省略连接表的基数'],
+  parts:['实体（表）','字段与类型','主键 / 外键','关系线与基数','连接表'],
+  vs:{ name:'类图', diff:'ER 图描述数据库落地形态（表、字段、约束），类图描述代码结构与行为。设计先 ER，实现看类图。' },
+  prompt:`请画一张 ER 图。
+
+实体：
+1. 【表名】：字段【填】，主键【填】，索引【填】
+2. 【表名】：字段【填】
+3. 【表名】：字段【填】
+
+关系：
+- 【表A】1 : N 【表B】，通过【外键】
+- 【表C】N : N 【表D】，通过连接表【表名】
+
+要求：
+1. 每张表画成分区矩形：表名、字段列表、约束。
+2. 标出主键、唯一键、外键。
+3. 关系线两端标注基数（1 / N / 0..1）。
+4. 多对多必须画出连接表。
+5. 输出 Mermaid erDiagram。`
+},
+{
+  id:'dfd', name:'数据流图', en:'Data Flow Diagram', cat:'data',
+  kw:['数据流','数据来源','输入输出','数据存储','处理过程','STRIDE','威胁建模'],
+  best:'最擅长：说清数据从哪进、经过哪些处理、落到哪个存储。',
+  def:'以处理过程为中心，画出外部实体、数据流、数据存储与信任边界。',
+  asks:['这条数据进来后经过谁？','最后落到哪个库或文件？','哪一段跨越了信任边界？'],
+  use:['数据采集到落库的链路说明','安全威胁建模（STRIDE）输配图','数据合规与隐私评审'],
+  never:['不要用它展示时序','不要用它代替表结构','不要把控制流条件画成数据流'],
+  parts:['外部实体','处理过程','数据存储','数据流箭头','信任边界'],
+  vs:{ name:'数据血缘图', diff:'数据流图讲“系统怎么处理数据”，血缘图讲“这个字段/指标由哪些上游算出来”。' },
+  prompt:`请画一张数据流图（DFD）。
+
+外部实体：【填】
+处理过程：【填：P1 / P2 / P3】
+数据存储：【填：D1 / D2】
+数据流：从【】到【】，内容【】
+信任边界：【填：哪些流跨越了权限或网络边界】
+
+要求：
+1. 外部实体用方框，处理过程用圆形或圆角框，数据存储用双横线。
+2. 每条流标注数据内容与传输方式（同步 / 批量 / 流式）。
+3. 用虚线标出信任边界，并标注跨越边界的流是否加密。
+4. 标出敏感数据字段。
+5. 输出 Mermaid flowchart，或给出 STRIDE 威胁标注清单。`
+},
+{
+  id:'lineage', name:'数据血缘图', en:'Data Lineage', cat:'data',
+  kw:['血缘','指标','字段溯源','口径','上游下游','数据仓库','溯源'],
+  best:'最擅长：说清一个指标或字段到底由哪些上游算出来。',
+  def:'沿数据加工链路，从源表一路追到目标表或指标，标出加工逻辑与责任人。',
+  asks:['这个指标依赖哪几张源表？','改这张源表会影响哪些报表？','口径在哪一层被改过？'],
+  use:['指标口径争议的定责','下线字段前的影响面评估','数据质量问题回溯'],
+  never:['不要用它表达业务步骤','不要只画表名不画加工逻辑','不要让血缘线交叉到看不清'],
+  parts:['源表 / 源字段','加工任务','中间层','目标指标','责任人标注'],
+  vs:{ name:'数据流图', diff:'血缘图是逆向可溯源的加工链，数据流图是系统视角的处理过程。' },
+  prompt:`请画一张数据血缘图。
+
+目标指标 / 字段：【填】
+上游链路：
+- 【源表.字段】→ 【加工任务】→ 【中间表】
+- 【中间表】→ 【加工任务】→ 【目标指标】
+
+要求：
+1. 按层从左到右排列：源系统 → ODS → DWD → DWS → 指标。
+2. 每条边标注加工逻辑摘要（聚合、过滤、关联键）。
+3. 标出字段级映射，而不只是表级。
+4. 标出每个节点的责任人与更新频率。
+5. 指出口径发生变化的那一层。
+6. 输出 Mermaid flowchart LR。`
+},
+{
+  id:'pipeline', name:'数据管道图', en:'Data Pipeline Diagram', cat:'data',
+  kw:['ETL','数据同步','采集','清洗','入仓','调度','管道'],
+  best:'最擅长：说清数据怎么被定时抽取、清洗、入仓，卡在哪一环。',
+  def:'按加工阶段串联数据源、抽取、转换、入库与消费，并标出调度与失败重试。',
+  asks:['数据多久同步一次？','转换在哪一步做？','失败后从哪重跑？'],
+  use:['数据同步方案设计','排查数据延迟','数据平台架构说明'],
+  never:['不要用它表达业务规则分支','不要省略调度频率与失败策略','不要和血缘图混用'],
+  parts:['数据源','抽取','转换','加载 / 入仓','调度与重试'],
+  vs:{ name:'数据流图', diff:'管道图强调“加工阶段与调度”，数据流图强调“数据实体在系统中流动”。' },
+  prompt:`请画一张数据管道图。
+
+数据源：【填】
+阶段：
+1. 抽取：【工具 + 频率】
+2. 清洗 / 转换：【规则】
+3. 加载：【目标库 / 表】
+4. 消费：【报表 / 接口 / 模型】
+
+要求：
+1. 阶段从左到右串联，数据存储在下方对齐。
+2. 标注每阶段的调度频率、数据量级、耗时。
+3. 标出失败重试与断点续跑策略。
+4. 标出数据延迟的监控点。
+5. 输出 Mermaid flowchart LR。`
+},
+
+/* ===== 代码与模型 ===== */
+{
+  id:'class', name:'类图', en:'Class Diagram', cat:'code',
+  kw:['类','继承','实现','组合','属性','方法','UML','面向对象'],
+  best:'最擅长：说清类与类之间的结构关系——继承、实现、组合。',
+  def:'UML 结构图，用类框（名称 / 属性 / 方法）和关系线描述静态结构。',
+  asks:['谁继承谁、谁实现哪个接口？','这个类聚合了哪些对象？','依赖是单向还是双向？'],
+  use:['面向对象设计评审','重构前的结构梳理','面试或评审中讲清模型'],
+  never:['不要用它画整个系统的服务划分','不要用它表达调用顺序','不要画出不会用到的方法'],
+  parts:['类框（三段）','继承（空心三角）','实现（虚线三角）','组合 / 聚合（菱形）','关联与基数'],
+  vs:{ name:'ER 图', diff:'类图带行为与关系语义（方法、接口、组合），ER 图只关心数据落地与约束。' },
+  prompt:`请画一张 UML 类图。
+
+类清单：
+- 【类名】：属性【填】，方法【填】
+- 【类名】：属性【填】，方法【填】
+接口：【填】
+
+关系：
+- 【子类】继承【父类】
+- 【实现类】实现【接口】
+- 【A】组合【B】，基数【1 : N】
+
+要求：
+1. 类框分三段：类名 / 属性 / 方法。
+2. 继承用空心三角实线，实现用空心三角虚线，组合用实心菱形。
+3. 标注关系两端基数。
+4. 只画当前讨论涉及的方法，不画 getter/setter。
+5. 输出 Mermaid classDiagram。`
+},
+{
+  id:'package', name:'包图 / 模块图', en:'Package Diagram', cat:'code',
+  kw:['包','模块','目录','命名空间','分层依赖','工程结构'],
+  best:'最擅长：说清代码目录怎么分、模块之间允许谁依赖谁。',
+  def:'用带标签页的包框表示模块或命名空间，用依赖箭头表示允许的引用方向。',
+  asks:['这个功能代码应该放哪个模块？','模块之间有没有循环依赖？','哪些包不允许被外部直接引用？'],
+  use:['新建模块前的边界设计','治理循环依赖','给新人讲代码结构'],
+  never:['不要用它画运行时部署','不要画出每个类','不要省略依赖方向'],
+  parts:['包 / 模块','子包嵌套','依赖箭头','循环依赖标记','公开与内部边界'],
+  vs:{ name:'组件图', diff:'包图对应代码目录结构，组件图对应职责与运行边界。' },
+  prompt:`请画一张包图 / 模块图，描述【填：工程名】的代码结构。
+
+模块：
+- 【包名】职责【填】
+- 【包名】职责【填】
+依赖方向：
+- 【A】→【B】：允许
+- 【C】→【A】：禁止
+
+要求：
+1. 用带标签页的包框表示模块，可嵌套子包。
+2. 依赖用虚线箭头，方向即编译期依赖方向。
+3. 用红色标出循环依赖。
+4. 标明哪些模块是公开 API、哪些是内部实现。
+5. 输出 Mermaid flowchart，用 subgraph 表示包。`
+},
+{
+  id:'dependency', name:'依赖关系图', en:'Dependency Graph', cat:'code',
+  kw:['依赖','影响面','循环依赖','调用关系','模块关系','拓扑'],
+  best:'最擅长：说清一堆模块/服务之间谁依赖谁，以及影响半径。',
+  def:'把模块、服务或任务画成节点，把依赖画成有向边，用于发现环路与关键节点。',
+  asks:['谁依赖谁，依赖方向对不对？','有没有环？','动这个节点会连带影响哪些？'],
+  use:['改动影响面评估','构建顺序与发布顺序设计','拆分巨石应用前的现状盘点'],
+  never:['不要在没有方向的情况下画线','不要用它表达时间顺序','不要混入不属于依赖的业务流'],
+  parts:['节点（模块 / 服务 / 任务）','有向边','环高亮','关键路径标注','外部依赖'],
+  vs:{ name:'包图', diff:'包图带有代码目录语义，依赖关系图更通用，可表示服务、任务、构建产物之间的依赖。' },
+  prompt:`请画一张依赖关系图。
+
+节点清单：【填】
+依赖边：【A → B 表示 A 依赖 B】
+重点关注：【填：是否存在环 / 某个节点的影响面】
+
+要求：
+1. 全部使用有向箭头，禁止无向连线。
+2. 用红色高亮环，并列出参与环的节点。
+3. 标出入度为 0 的起点与出度为 0 的终点。
+4. 为指定节点标出直接与间接影响范围（分层着色）。
+5. 输出 Mermaid flowchart 或 DOT。`
+},
+{
+  id:'domainmodel', name:'领域模型图', en:'Domain Model', cat:'code',
+  kw:['领域','聚合','实体','值对象','业务概念','DDD','限界上下文'],
+  best:'最擅长：说清业务里有哪些概念、它们怎么归类成一个聚合。',
+  def:'用业务语言描述实体、值对象、聚合边界与领域关系，不绑定数据库或框架。',
+  asks:['这个概念是实体还是值对象？','哪些对象必须一起改，属于同一聚合？','两个上下文之间的边界在哪？'],
+  use:['DDD 建模与聚合划分','和业务方对齐术语','微服务拆分前的领域梳理'],
+  never:['不要直接画成数据库表','不要混入技术实现细节','不要跨上下文画一根“什么都连着”的线'],
+  parts:['实体','值对象','聚合边界','领域服务','限界上下文边界'],
+  vs:{ name:'ER 图', diff:'领域模型用业务语言、按一致性边界划聚合；ER 图按数据库落地划表与外键。' },
+  prompt:`请画一张领域模型图。
+
+限界上下文：【填】
+聚合：
+- 聚合根【填】，内含实体【填】、值对象【填】
+业务关系：
+- 【A】与【B】：1 : N，业务含义【填】
+
+要求：
+1. 用虚线框标出聚合边界，聚合根加粗标出。
+2. 实体与值对象用不同形状区分。
+3. 关系线写业务含义，不写外键。
+4. 不出现表名、字段类型、框架类名。
+5. 标出跨聚合只允许通过 ID 引用。
+6. 输出 Mermaid classDiagram 或结构化文本。`
+},
+
+/* ===== 计划与协作 ===== */
+{
+  id:'gantt', name:'甘特图', en:'Gantt Chart', cat:'plan',
+  kw:['排期','时间','任务','依赖','里程碑','计划','工期'],
+  best:'最擅长：说清谁在什么时间段做什么，以及任务之间的先后依赖。',
+  def:'以时间为横轴、任务为纵轴，用条形表示工期与依赖关系。',
+  asks:['这事什么时候能做完？','哪几个任务必须串行？','关键路径是哪条？'],
+  use:['项目排期与资源安排','跟老板对齐交付时间','识别关键路径与风险缓冲'],
+  never:['不要用它表达流程分支','不要把任务拆到 1 天粒度再画 50 行','不要忽略依赖关系只画条形'],
+  parts:['任务行','时间轴','条形（工期）','依赖箭头','里程碑标记'],
+  vs:{ name:'看板', diff:'甘特图讲“时间与依赖”，看板讲“当前状态与流动”。计划期用甘特，执行期用看板。' },
+  prompt:`请画一张甘特图。
+
+项目：【填】
+时间范围：【填】
+任务：
+| 任务 | 开始 | 工期 | 依赖 |
+| 【填】 | 【填】 | 【填】天 | 【无 / 任务A】 |
+
+要求：
+1. 任务按阶段分组，用不同颜色区分阶段。
+2. 标出关键路径。
+3. 标出里程碑节点。
+4. 每个任务标注负责人或角色。
+5. 输出 Mermaid gantt。`
+},
+{
+  id:'timeline', name:'时间线', en:'Timeline', cat:'plan',
+  kw:['发展历程','版本','里程碑','事件顺序','历史'],
+  best:'最擅长：说清一件事按时间发生过什么，适合讲变化和版本演进。',
+  def:'沿一条时间轴排列关键事件，可上下交错标注，突出先后与节点。',
+  asks:['这个系统的版本演进是怎样的？','故障前后分别发生了什么？','关键决策在哪个时间点？'],
+  use:['项目复盘与演进史','版本发布记录','故障时间线（排查复盘）'],
+  never:['不要用它表达任务工期（用甘特图）','不要把无时间属性的内容硬塞进去','不要在一条线上堆 30 个点'],
+  parts:['时间轴','事件节点','时间标签','事件说明','阶段分段'],
+  vs:{ name:'甘特图', diff:'时间线记录“发生了什么”，甘特图规划“要做什么、做多久”。' },
+  prompt:`请画一张时间线。
+
+主题：【填】
+时间范围：【填】
+事件（按时间排序）：
+- 【日期】【事件】【影响】
+
+要求：
+1. 一条水平时间轴，事件节点上下交错，避免标签重叠。
+2. 每个节点标注日期与一句话说明。
+3. 用色带区分阶段。
+4. 标出关键转折点。
+5. 输出 Mermaid timeline。`
+},
+{
+  id:'kanban', name:'看板', en:'Kanban', cat:'plan',
+  kw:['任务','状态','待办','进行中','完成','流动','WIP'],
+  best:'最擅长：一眼看出任务卡在哪个状态、哪里堆积。',
+  def:'按状态分列，把任务卡片放在当前状态列中，用列内数量暴露瓶颈。',
+  asks:['现在有多少任务卡在评审？','哪一列在堆积？','这周实际完成了什么？'],
+  use:['团队日常任务管理','识别流程瓶颈','向上汇报当前进度'],
+  never:['不要用它表达时间排期（用甘特图）','不要列太多导致卡片不可见','不要只画列不画真实卡片'],
+  parts:['状态列','任务卡片','WIP 限制','阻塞标记','负责人头像或缩写'],
+  vs:{ name:'甘特图', diff:'看板回答“现在在哪一步”，甘特回答“什么时候做完”。' },
+  prompt:`请画一张看板。
+
+列：【待办 / 开发中 / 评审中 / 已完成】
+卡片（示例，用真实任务）：
+- 待办：【填】【填】
+- 开发中：【填】
+- 评审中：【填】
+- 已完成：【填】
+
+要求：
+1. 每列顶部写列名与当前卡片数。
+2. 阻塞卡片加红色标记并写阻塞原因。
+3. 标注 WIP 上限，超限的列高亮。
+4. 卡片包含标题与负责人缩写。
+5. 输出 Mermaid flowchart，用 subgraph 表示列。`
+},
+{
+  id:'journey', name:'用户旅程图', en:'User Journey Map', cat:'plan',
+  kw:['体验','情绪','触点','痛点','阶段','共情'],
+  best:'最擅长：说清用户在每个阶段的动作、想法和情绪起伏。',
+  def:'按阶段横向展开用户行为、触点、痛点与情绪曲线。',
+  asks:['用户在哪一步最沮丧？','每个阶段有哪些触点？','痛点对应哪个功能缺口？'],
+  use:['体验问题定位','需求优先级讨论','和设计对齐用户感受'],
+  never:['不要用它画页面跳转（用用户流程图）','不要编造没有依据的情绪','不要只画笑脸曲线不写痛点'],
+  parts:['阶段','用户动作','触点渠道','痛点','情绪曲线'],
+  vs:{ name:'用户流程图', diff:'旅程图关注“感受与痛点”，用户流程图关注“路径与页面”。' },
+  prompt:`请画一张用户旅程图。
+
+用户角色：【填】
+阶段：【填：认知 / 试用 / 使用 / 复购 / 流失】
+每个阶段：
+- 动作：【填】
+- 触点：【填】
+- 痛点：【填】
+- 情绪（1–5）：【填】
+
+要求：
+1. 横向按阶段分列。
+2. 每列自上而下：动作、触点、痛点。
+3. 下方画情绪曲线，低点高亮。
+4. 标出最关键的一个体验断点及其改进方向。
+5. 输出 Mermaid journey。`
+},
+
+/* ===== 分析与决策 ===== */
+{
+  id:'fishbone', name:'鱼骨图', en:'Fishbone / Ishikawa', cat:'think',
+  kw:['根因','原因分析','故障','多因素','归因','5why'],
+  best:'最擅长：把一个问题的可能原因按维度摊开，避免只盯着一个原因。',
+  def:'鱼头是问题，主骨两侧的斜刺是原因类别，细刺是具体原因。',
+  asks:['这个故障可能来自哪几类原因？','我们是不是只查了一个方向？','哪几个原因最值得先验证？'],
+  use:['线上故障复盘','质量问题归因','上线前的风险排查'],
+  never:['不要把它当成结论（它只列可能）','不要画没有证据支撑的原因','不要和影响面分析混在一张图'],
+  parts:['鱼头（问题）','主骨','原因类别（人 / 机 / 料 / 法 / 环）','具体原因','优先验证标记'],
+  vs:{ name:'影响关系图', diff:'鱼骨图向前追原因，影响关系图向后看后果。' },
+  prompt:`请画一张鱼骨图。
+
+问题（鱼头）：【填：现象 + 时间 + 影响】
+原因类别（主骨）：【代码 / 配置 / 依赖 / 数据 / 环境 / 人】
+每类下的具体原因：【填】
+已排除的原因：【填】
+待验证的高优先级原因：【填】
+
+要求：
+1. 鱼头在右，主骨横向，原因类别作为斜刺上下分布。
+2. 每条细刺写一个具体原因，不写抽象名词。
+3. 用颜色区分“已排除 / 待验证 / 已确认”。
+4. 标出最值得先验证的 1–2 条。
+5. 输出 Mermaid flowchart，按类别分组。`
+},
+{
+  id:'impact', name:'影响关系图', en:'Impact Map', cat:'think',
+  kw:['影响面','改动影响','波及','风险评估','上下游','回归范围'],
+  best:'最擅长：说清这次改动会波及哪些模块、哪些人、哪些下游。',
+  def:'以变更为中心，向外扩散到直接受影响与间接受影响的节点，并标风险等级。',
+  asks:['改这个会影响谁？','哪些需要回归测试？','哪些下游团队要提前通知？'],
+  use:['改动前的影响面评估','发布计划与通知清单','回归测试范围界定'],
+  never:['不要用它追根因（用鱼骨图）','不要把所有节点都标成高风险','不要省略间接影响'],
+  parts:['变更中心','直接影响','间接影响','风险等级','责任方'],
+  vs:{ name:'依赖关系图', diff:'依赖图是全局静态关系，影响关系图是“从这次变更出发”的定向分析。' },
+  prompt:`请画一张影响关系图。
+
+变更内容：【填】
+变更点：【填：文件 / 接口 / 表 / 配置】
+
+要求：
+1. 变更点放中心，向外分层：直接影响 → 间接影响。
+2. 每个受影响节点标注：影响类型（功能 / 数据 / 契约 / 性能）、风险等级（高 / 中 / 低）。
+3. 高风险的节点单独列出并给出验证方式。
+4. 标出需要通知的下游团队。
+5. 输出 Mermaid flowchart，或表格 + 图形说明。`
+},
+{
+  id:'quadrant', name:'四象限图', en:'Quadrant Chart', cat:'think',
+  kw:['优先级','取舍','方案比较','二维','价值风险','分类'],
+  best:'最擅长：用两个维度把一堆选项分堆，快速达成“先做哪个”的共识。',
+  def:'两条正交轴形成四个象限，把选项放进去并标注位置含义。',
+  asks:['两个判断维度该怎么选？','哪些是高价值低成本的？','哪些应该直接放弃？'],
+  use:['需求优先级排序','技术方案取舍','风险与收益对比'],
+  never:['不要用三个以上维度硬塞进二维','不要不写轴的含义','不要把所有点都放在右上角'],
+  parts:['横轴','纵轴','四个象限含义','数据点','优先级标注'],
+  vs:{ name:'雷达图', diff:'四象限只比较两个维度、适合分类决策；雷达图比较多维度评分、适合画像。' },
+  prompt:`请画一张四象限图。
+
+横轴：【填：如 实现成本，左低右高】
+纵轴：【填：如 业务价值，下低上高】
+象限含义：
+- 右上：【填】
+- 左上：【填】
+- 右下：【填】
+- 左下：【填】
+待评估项（含大致坐标）：【填】
+
+要求：
+1. 轴线带箭头并写清两端含义。
+2. 四个象限各写一句结论，如“优先做 / 快速试 / 排期 / 放弃”。
+3. 每个点标注名称，避免重叠。
+4. 用颜色区分优先级。
+5. 输出 Mermaid quadrantChart。`
+},
+{
+  id:'mindmap', name:'思维导图', en:'Mind Map', cat:'think',
+  kw:['大纲','拆解','发散','知识结构','需求拆解','主题'],
+  best:'最擅长：把一个主题层层拆开，让人看到全貌和层级关系。',
+  def:'中心是主题，向四周发散出一级、二级分支，形成层级结构。',
+  asks:['这件事包含哪几块？','每块下面还有什么？','有没有漏掉的维度？'],
+  use:['需求拆解与范围讨论','技术方案要点梳理','个人知识整理'],
+  never:['不要用它表达先后或依赖','不要在一张图里放超过 4 层','不要用它代替正式流程图'],
+  parts:['中心主题','一级分支','二级分支','关键词标签','分类色'],
+  vs:{ name:'决策树', diff:'思维导图是发散式的层级整理，决策树是收敛式的条件判定。' },
+  prompt:`请画一张思维导图。
+
+中心主题：【填】
+一级分支：【填：4–6 个】
+每个分支下的二级要点：【填】
+
+要求：
+1. 中心主题居中，一级分支向两侧发散。
+2. 每个节点只写关键词，不写整句。
+3. 同一分支用同一颜色。
+4. 层级不超过 4 层。
+5. 输出 Mermaid mindmap。`
+}
+];
+
+/* ---------------- 形态示意（认形状用） ---------------- */
+const PREVIEW = {
+  context: function(){
+    return R(84,46,72,36,{stroke:'#2563EB',sw:1.6,rx:6}) + T(120,69,'系统',{size:9,tone:'#1E3A8A'})
+      + PIN(94,10,52,18,'用户') + L(120,28,120,46)
+      + B(6,54,60,24,'支付平台') + L(66,66,84,66)
+      + B(174,54,60,24,'物流系统') + L(174,66,156,66)
+      + B(94,102,52,20,'消息队列') + L(120,102,120,82);
+  },
+  container: function(){
+    return PIN(11,8,52,16,'用户') + L(37,24,37,40)
+      + B(8,40,58,26,'Web / App')
+      + B(84,40,58,26,'API 服务',{stroke:'#2563EB',fill:'#EFF6FF'})
+      + CY(160,32,64,40,'数据库')
+      + B(84,96,58,22,'消息队列')
+      + L(66,53,84,53) + L(142,53,160,53) + L(113,66,113,96);
+  },
+  component: function(){
+    return R(6,16,228,102,{rx:8,dash:'5 4',stroke:'#94A3B8'})
+      + T(16,30,'订单服务（容器边界）',{size:7,anchor:'start',tone:'#64748B'})
+      + B(20,42,58,22,'Controller')
+      + B(92,42,56,22,'应用服务',{stroke:'#2563EB',fill:'#EFF6FF'})
+      + B(164,42,56,22,'领域模型')
+      + B(20,92,58,22,'仓储实现')
+      + B(164,92,56,22,'外部适配')
+      + L(78,53,92,53) + L(148,53,164,53)
+      + PL([[106,64],[60,92]],{})
+      + L(192,64,192,92);
+  },
+  deployment: function(){
+    return R(6,18,110,98,{rx:8,dash:'5 4'}) + T(14,32,'node-1 · docker',{size:7,anchor:'start',tone:'#64748B'})
+      + R(124,18,110,98,{rx:8,dash:'5 4'}) + T(132,32,'node-2 · 副本',{size:7,anchor:'start',tone:'#64748B'})
+      + B(20,44,82,22,'api 服务 ×2')
+      + B(20,80,82,22,'worker ×1')
+      + B(138,44,82,22,'nginx')
+      + CY(138,76,82,32,'MySQL 主从')
+      + L(102,55,138,55) + L(102,91,138,91);
+  },
+  network: function(){
+    return B(6,52,42,22,'Internet')
+      + B(56,52,30,22,'WAF')
+      + R(94,16,140,100,{rx:8,dash:'5 4'}) + T(102,29,'VPC 10.0.0.0/16',{size:6.8,anchor:'start',tone:'#64748B'})
+      + R(104,38,120,30,{rx:6,fill:'#FCFCFD'}) + T(164,55,'公有子网',{size:6.5,tone:'#64748B'})
+      + R(104,76,120,30,{rx:6,fill:'#FCFCFD'}) + T(164,93,'私有子网',{size:6.5,tone:'#64748B'})
+      + B(112,43,40,18,'SLB',{lsize:6.5})
+      + B(168,80,44,18,'DB',{lsize:6.5,stroke:'#2563EB',fill:'#EFF6FF'})
+      + L(48,63,56,63) + PL([[86,63],[104,52]],{}) + PL([[152,52],[178,80]],{});
+  },
+  layered: function(){
+    const rows = [['接入层','#FCFCFD','#CBD5E1'],['应用层','#EFF6FF','#2563EB'],['领域层','#FCFCFD','#CBD5E1'],['基础设施层','#FCFCFD','#CBD5E1']];
+    return rows.map(function(r,i){
+      const y = 12 + i*28;
+      return R(22,y,196,24,{rx:5,fill:r[1],stroke:r[2]}) + T(34,y+16,r[0],{size:7.5,anchor:'start'});
+    }).join('');
+  },
+  flowchart: function(){
+    return PIN(10,56,36,18,'开始')
+      + B(58,52,48,26,'校验参数')
+      + DIA(146,65,44,34,'')
+      + B(186,26,46,22,'受理')
+      + B(186,88,46,22,'拒绝')
+      + L(46,65,58,65) + L(106,65,124,65)
+      + PL([[168,65],[177,65],[177,37],[186,37]],{})
+      + PL([[168,65],[177,65],[177,99],[186,99]],{})
+      + T(176,54,'是',{size:6.2,tone:'#64748B'}) + T(176,84,'否',{size:6.2,tone:'#64748B'});
+  },
+  swimlane: function(){
+    const lanes = [['用户',18],['客服',54],['系统',90]];
+    let s = '';
+    lanes.forEach(function(l,i){
+      s += R(24,l[1],204,32,{rx:4,fill:i%2?'#FCFCFD':'#FFFFFF'})
+        + T(34,l[1]+20,l[0],{size:7,anchor:'start',tone:'#64748B'});
+    });
+    s += B(40,25,44,18,'提交',{lsize:6.8})
+      + B(100,61,44,18,'受理',{lsize:6.8,stroke:'#0F766E',fill:'#ECFDF5'})
+      + B(164,61,44,18,'审核',{lsize:6.8})
+      + B(100,97,44,18,'入库',{lsize:6.8});
+    s += PL([[84,34],[92,34],[92,70],[100,70]],{})
+      + L(144,70,164,70)
+      + PL([[186,79],[186,106],[144,106]],{});
+    return s;
+  },
+  activity: function(){
+    return DOT(16,65,4)
+      + B(30,54,44,22,'提交',{lsize:6.8})
+      + R(86,40,5,50,{rx:0,fill:'#334155',stroke:'#334155'})
+      + B(102,44,54,18,'校验',{lsize:6.8})
+      + B(102,74,54,18,'计价',{lsize:6.8})
+      + R(166,40,5,50,{rx:0,fill:'#334155',stroke:'#334155'})
+      + B(182,54,44,22,'落库',{lsize:6.8})
+      + CIR(234,65,5,{sw:2})
+      + L(20,65,30,65) + L(74,65,86,65)
+      + PL([[91,56],[102,53]],{}) + PL([[91,74],[102,83]],{})
+      + PL([[156,53],[166,56]],{}) + PL([[156,83],[166,74]],{})
+      + L(171,65,182,65);
+  },
+  bpmn: function(){
+    return R(6,14,228,102,{rx:6})
+      + T(14,27,'采购流程（Pool）',{size:7,anchor:'start',tone:'#64748B'})
+      + '<path d="M6 34 h228 M6 74 h228" stroke="#CBD5E1" fill="none"/>'
+      + T(14,58,'业务方',{size:6.8,anchor:'start',tone:'#64748B'})
+      + T(14,100,'采购部',{size:6.8,anchor:'start',tone:'#64748B'})
+      + CIR(52,54,6,{sw:1.2})
+      + B(68,44,50,20,'提交申请',{lsize:6.8})
+      + DIA(128,54,30,26,'',{stroke:'#0F766E'})
+      + '<path d="M122 49 l12 10 M134 49 l-12 10" stroke="#0F766E" stroke-width="1.3" fill="none"/>'
+      + B(152,44,54,20,'审批',{lsize:6.8})
+      + CIR(216,54,6,{sw:2.2})
+      + B(68,88,50,20,'下单',{lsize:6.8})
+      + L(58,54,68,54) + L(118,54,113,54) + L(143,54,152,54) + L(206,54,210,54)
+      + PL([[180,64],[180,88],[118,88]],{dash:'4 3'});
+  },
+  state: function(){
+    return DOT(48,12,3.5)
+      + B(20,20,58,24,'草稿',{lsize:6.8})
+      + B(100,52,58,24,'已提交',{lsize:6.8,stroke:'#0F766E',fill:'#ECFDF5'})
+      + B(168,20,60,24,'已完成',{lsize:6.8})
+      + B(100,98,58,24,'已关闭',{lsize:6.8})
+      + L(48,15,48,20)
+      + PL([[78,32],[100,58]],{}) + T(80,44,'支付',{size:6,tone:'#64748B'})
+      + PL([[158,58],[172,44]],{}) + T(170,56,'发货',{size:6,tone:'#64748B'})
+      + L(129,76,129,98) + T(141,90,'超时',{size:6,tone:'#64748B'})
+      + PL([[172,44],[140,98]],{dash:'4 3'});
+  },
+  userflow: function(){
+    function page(x,y,label,accent){
+      return R(x,y,54,34,{rx:5,stroke:accent?'#0F766E':'#CBD5E1',fill:accent?'#ECFDF5':'#FFF'})
+        + '<path d="M'+x+' '+(y+9)+' h54" stroke="#E2E8F0" fill="none"/>'
+        + T(x+27,y+25,label,{size:6.8});
+    }
+    return page(8,20,'首页') + page(82,20,'填写') + page(156,20,'确认',true)
+      + L(62,37,82,37) + L(136,37,156,37)
+      + page(82,86,'报错页')
+      + PL([[109,54],[109,86]],{dash:'4 3'})
+      + PL([[95,120],[30,120],[30,54]],{dash:'4 3',stroke:'#F43F5E'});
+  },
+  decisiontree: function(){
+    return B(88,8,64,22,'是否免审?',{lsize:6.8})
+      + B(26,50,62,20,'额度 ≤ 1000',{lsize:6.8})
+      + B(150,50,62,20,'额度 > 1000',{lsize:6.8})
+      + B(4,94,56,20,'直接通过',{lsize:6.5,stroke:'#0F766E',fill:'#ECFDF5'})
+      + B(68,94,56,20,'人工审核',{lsize:6.5})
+      + B(132,94,56,20,'拒绝',{lsize:6.5})
+      + B(192,94,44,20,'升级',{lsize:6.5})
+      + PL([[106,30],[70,50]],{}) + PL([[134,30],[168,50]],{})
+      + PL([[44,70],[32,94]],{}) + PL([[76,70],[96,94]],{})
+      + PL([[168,70],[160,94]],{}) + PL([[190,70],[212,94]],{});
+  },
+  sequence: function(){
+    const xs = [40,92,148,200];
+    const names = ['用户','前端','订单服务','数据库'];
+    let s = '';
+    xs.forEach(function(x,i){
+      s += R(x-27,10,54,18,{rx:3,fill:i===2?'#F5F3FF':'#FFF',stroke:i===2?'#7C3AED':'#CBD5E1'})
+        + T(x,22,names[i],{size:6.8})
+        + '<path d="M'+x+' 28 v92" stroke="#CBD5E1" stroke-dasharray="3 4" fill="none"/>';
+    });
+    s += L(40,46,92,46) + T(66,42,'提交',{size:6,tone:'#64748B'})
+      + L(92,60,148,60) + T(120,56,'POST /order',{size:6,tone:'#64748B'})
+      + L(148,74,200,74) + T(174,70,'insert',{size:6,tone:'#64748B'})
+      + PL([[200,88],[148,88]],{dash:'4 3'}) + T(174,84,'ok',{size:6,tone:'#64748B'})
+      + PL([[148,100],[92,100]],{dash:'4 3'}) + T(120,96,'201',{size:6,tone:'#64748B'})
+      + R(146,54,3,32,{rx:0,fill:'#7C3AED',stroke:'#7C3AED'});
+    return s;
+  },
+  eventflow: function(){
+    return B(4,52,46,22,'生产者',{lsize:6.8})
+      + '<rect x="64" y="54" width="62" height="20" rx="10" fill="#F5F3FF" stroke="#7C3AED"/>'
+      + T(95,68,'Topic',{size:7,tone:'#5B21B6'})
+      + B(150,16,84,20,'消费者 A',{lsize:6.8})
+      + B(150,50,84,20,'消费者 B',{lsize:6.8})
+      + B(150,84,84,20,'消费者 C',{lsize:6.8})
+      + L(50,63,64,63)
+      + PL([[126,64],[138,64],[138,26],[150,26]],{dash:'4 3'})
+      + PL([[126,64],[150,60]],{dash:'4 3'})
+      + PL([[126,64],[138,64],[138,94],[150,94]],{dash:'4 3'});
+  },
+  er: function(){
+    function tbl(x,y,title,rows){
+      let s = R(x,y,64,17+rows.length*11,{rx:4,fill:'#FFF',stroke:'#B45309'});
+      s += '<path d="M'+x+' '+(y+17)+' h64" stroke="#B45309" fill="none"/>';
+      s += T(x+6,y+12,title,{size:7,anchor:'start',tone:'#92400E',weight:700});
+      rows.forEach(function(r,i){ s += T(x+6,y+28+i*11,r,{size:6.2,anchor:'start',tone:'#64748B'}); });
+      return s;
+    }
+    return tbl(6,14,'orders',['id PK','user_id FK','amount'])
+      + tbl(92,58,'users',['id PK','name'])
+      + tbl(174,14,'items',['id PK','order_id FK'])
+      + L(70,30,92,64) + T(76,42,'N:1',{size:6,tone:'#92400E'})
+      + L(70,24,174,24) + T(122,20,'1:N',{size:6,tone:'#92400E'});
+  },
+  dfd: function(){
+    return B(4,52,44,24,'客户',{lsize:6.8})
+      + CIR(88,64,20,{stroke:'#B45309'}) + T(88,67,'校验',{size:6.5})
+      + CY(134,74,50,32,'D1 订单库')
+      + B(200,52,36,24,'报表',{lsize:6.5})
+      + L(48,64,68,64) + PL([[102,70],[134,86]],{})
+      + PL([[184,84],[194,84],[194,64],[200,64]],{})
+      + PL([[88,44],[88,26],[170,26],[170,84]],{stroke:'#F43F5E',dash:'4 3'})
+      + T(120,22,'外部输入',{size:6,tone:'#BE123C'});
+  },
+  lineage: function(){
+    return B(4,18,54,20,'ods.order',{lsize:6.5})
+      + B(4,50,54,20,'ods.user',{lsize:6.5})
+      + B(4,82,54,20,'ods.pay',{lsize:6.5})
+      + B(86,44,56,34,'dwd 清洗',{lsize:6.8,stroke:'#B45309',fill:'#FFFBEB'})
+      + B(168,18,64,20,'dws 汇总',{lsize:6.5})
+      + B(168,58,64,20,'指标 GMV',{lsize:6.5,stroke:'#B45309',fill:'#FFFBEB'})
+      + PL([[58,28],[86,54]],{}) + L(58,60,86,60) + PL([[58,92],[86,72]],{})
+      + PL([[142,56],[168,34]],{}) + PL([[142,66],[168,68]],{});
+  },
+  pipeline: function(){
+    return CY(6,40,38,42,'源库')
+      + B(58,50,44,24,'抽取',{lsize:6.8})
+      + B(114,50,44,24,'转换',{lsize:6.8,stroke:'#B45309',fill:'#FFFBEB'})
+      + CY(170,40,40,42,'数仓')
+      + B(60,92,124,20,'调度：每日 02:00 · 重试 3 次',{lsize:6.3})
+      + L(44,62,58,62) + L(102,62,114,62) + L(158,62,170,62)
+      + PL([[109,74],[109,92]],{dash:'3 3'});
+  },
+  class: function(){
+    function cls(x,y,w,title,fields,meths,accent){
+      const h = 17 + fields.length*10 + (meths.length ? meths.length*10 + 4 : 0);
+      let s = R(x,y,w,h,{rx:3,fill:'#FFF',stroke:accent?'#BE123C':'#CBD5E1'});
+      s += T(x+w/2,y+12,title,{size:7.2,weight:700,tone:'#0F172A'});
+      s += '<path d="M'+x+' '+(y+17)+' h'+w+'" stroke="#E2E8F0" fill="none"/>';
+      fields.forEach(function(f,i){ s += T(x+5,y+27+i*10,f,{size:6,anchor:'start',tone:'#64748B'}); });
+      const y2 = y + 17 + fields.length*10;
+      if (meths.length){
+        s += '<path d="M'+x+' '+y2+' h'+w+'" stroke="#E2E8F0" fill="none"/>';
+        meths.forEach(function(m,i){ s += T(x+5,y2+10+i*10,m,{size:6,anchor:'start',tone:'#64748B'}); });
+      }
+      return s;
+    }
+    return R(76,6,88,26,{rx:3,stroke:'#BE123C',fill:'#FFF1F2'})
+      + T(120,16,'«interface»',{size:5.8,tone:'#9F1239'})
+      + T(120,26,'Payment',{size:7,weight:700})
+      + cls(10,76,84,'Alipay',['- appId'],['+ pay()'],true)
+      + cls(146,76,84,'Wechat',['- mchId'],['+ pay()'],true)
+      + PL([[52,76],[100,32]],{dash:'4 3'}) + PL([[188,76],[140,32]],{dash:'4 3'});
+  },
+  package: function(){
+    function pkg(x,y,w,h,label,accent){
+      const c = accent ? '#BE123C' : '#CBD5E1';
+      return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="4" fill="'+(accent?'#FFF1F2':'#FFF')+'" stroke="'+c+'"/>'
+        + '<rect x="'+x+'" y="'+(y-8)+'" width="'+(w*0.55)+'" height="10" rx="3" fill="#FFF" stroke="'+c+'"/>'
+        + T(x+w/2,y+h/2+9,label,{size:6.8});
+    }
+    return pkg(8,32,92,32,'api',true)
+      + pkg(8,94,92,28,'domain')
+      + pkg(128,32,100,32,'infrastructure')
+      + pkg(128,94,100,28,'common')
+      + PL([[54,64],[54,94]],{dash:'4 3'})
+      + PL([[100,48],[128,48]],{dash:'4 3'})
+      + PL([[100,108],[128,108]],{dash:'4 3'})
+      + PL([[178,94],[178,64]],{dash:'4 3',stroke:'#F43F5E'});
+  },
+  dependency: function(){
+    return B(6,50,52,24,'模块 A',{lsize:6.8})
+      + B(94,12,52,24,'模块 B',{lsize:6.8})
+      + B(94,86,52,24,'模块 C',{lsize:6.8})
+      + B(178,50,52,24,'模块 D',{lsize:6.8,stroke:'#BE123C',fill:'#FFF1F2'})
+      + PL([[32,50],[32,24],[94,24]],{})
+      + PL([[58,62],[94,94]],{})
+      + PL([[146,24],[178,50]],{})
+      + PL([[178,74],[146,94]],{stroke:'#F43F5E',dash:'4 3'})
+      + T(120,82,'环',{size:6.2,tone:'#BE123C'});
+  },
+  domainmodel: function(){
+    return R(8,14,140,102,{rx:8,dash:'5 4',stroke:'#94A3B8'}) + T(16,28,'Order 聚合',{size:7,anchor:'start',tone:'#64748B'})
+      + B(20,36,96,26,'Order（聚合根）',{lsize:6.6,stroke:'#BE123C',fill:'#FFF1F2'})
+      + B(20,78,62,24,'OrderItem',{lsize:6.6})
+      + B(92,78,44,24,'Money',{rx:12,lsize:6.6})
+      + '<rect x="160" y="38" width="70" height="56" rx="8" fill="#FFF" stroke="#CBD5E1"/>'
+      + T(195,54,'Payment',{size:6.8})
+      + T(195,68,'另一聚合',{size:6,tone:'#94A3B8'})
+      + PL([[68,62],[51,78]],{}) + PL([[116,62],[114,78]],{})
+      + PL([[156,66],[160,66]],{dash:'4 3'}) + T(158,60,'ID',{size:5.8,tone:'#64748B'});
+  },
+  gantt: function(){
+    let s = '';
+    for (let i=0;i<=4;i++){ s += '<path d="M'+(60+i*40)+' 14 v100" stroke="#F1F5F9" fill="none"/>'; }
+    const rows = [['设计',18,0,1.6],['开发',40,1.2,2.6],['联调',62,3.4,1.8],['上线',84,4.2,0.9]];
+    rows.forEach(function(r,i){
+      s += T(8,r[1]+11,r[0],{size:6.8,anchor:'start',tone:'#334155'});
+      s += '<rect x="'+(60+r[2]*33)+'" y="'+r[1]+'" width="'+(r[3]*33)+'" height="13" rx="6" fill="'+(i===1?'#DCFCE7':'#EEF2F7')+'" stroke="'+(i===1?'#15803D':'#CBD5E1')+'"/>';
+    });
+    s += T(60,124,'W1',{size:6,tone:'#94A3B8'}) + T(190,124,'W4',{size:6,tone:'#94A3B8'});
+    return s;
+  },
+  timeline: function(){
+    let s = '<path d="M12 66 h216" stroke="#CBD5E1" fill="none"/>';
+    const pts = [[40,32,'v1.0'],[92,100,'v1.2'],[144,32,'v2.0'],[196,100,'v2.1']];
+    pts.forEach(function(p){
+      s += DOT(p[0],66,3.5,p[2]==='v2.0'?'#15803D':'#94A3B8');
+      s += '<path d="M'+p[0]+' 66 v'+(p[1]-66)+'" stroke="#CBD5E1" fill="none"/>';
+      const up = p[1] < 66;
+      s += T(p[0], p[1] + (up ? -6 : 13), p[2], {size:6.8,tone:'#334155'});
+      s += T(p[0], p[1] + (up ? 5 : 24), '事件', {size:6,tone:'#94A3B8'});
+    });
+    return s;
+  },
+  kanban: function(){
+    const cols = [['待办',10,2],['开发中',86,2],['评审',162,1]];
+    let s = '';
+    cols.forEach(function(c,ci){
+      s += R(c[1],16,68,102,{rx:6,fill:'#FCFCFD',stroke:'#E2E8F0'});
+      s += T(c[1]+34,30,c[0],{size:6.8,tone:'#64748B'});
+      for (let k=0;k<c[2];k++){
+        s += R(c[1]+7,38+k*32,54,24,{rx:4,fill:'#FFF',stroke:(ci===1&&k===0)?'#15803D':'#CBD5E1'});
+        s += '<rect x="'+(c[1]+13)+'" y="'+(45+k*32)+'" width="26" height="3" rx="1.5" fill="#E2E8F0"/>';
+        s += '<rect x="'+(c[1]+13)+'" y="'+(53+k*32)+'" width="38" height="3" rx="1.5" fill="#E2E8F0"/>';
+      }
+    });
+    return s;
+  },
+  journey: function(){
+    const stages = [['认知',20],['试用',74],['使用',128],['复购',182]];
+    let s = '';
+    stages.forEach(function(st){
+      s += R(st[1],14,46,22,{rx:4,fill:'#FCFCFD'}) + T(st[1]+23,29,st[0],{size:6.8});
+      s += R(st[1],100,46,16,{rx:4,fill:'#FFF',stroke:'#E2E8F0'}) + T(st[1]+23,111,'触点',{size:6,tone:'#94A3B8'});
+    });
+    const pts = [[43,80],[97,50],[151,94],[205,42]];
+    s += '<path d="M' + pts.map(function(p){ return p[0]+' '+p[1]; }).join(' L') + '" fill="none" stroke="#15803D" stroke-width="1.4"/>';
+    pts.forEach(function(p){ s += DOT(p[0],p[1],3,'#15803D'); });
+    s += T(151,86,'痛点',{size:6,tone:'#BE123C'});
+    return s;
+  },
+  fishbone: function(){
+    let s = '<path d="M12 68 h196" stroke="#94A3B8" stroke-width="1.4" fill="none"/>';
+    s += R(212,52,26,32,{rx:3,stroke:'#F43F5E',fill:'#FFF1F2'}) + T(225,72,'问题',{size:6.2,tone:'#9F1239'});
+    s += '<path d="M208 68 L212 68" stroke="#94A3B8" fill="none"/>';
+    const ribs = [[54,-1],[88,1],[122,-1],[156,1]];
+    ribs.forEach(function(r){
+      const x = r[0], d = r[1];
+      s += '<path d="M'+x+' 68 L'+(x-18)+' '+(68+d*34)+'" stroke="#CBD5E1" fill="none"/>';
+      s += '<path d="M'+(x-6)+' '+(68+d*11)+' l-9 '+(d*5)+'" stroke="#E2E8F0" fill="none"/>';
+      s += '<path d="M'+(x-12)+' '+(68+d*22)+' l-9 '+(d*5)+'" stroke="#E2E8F0" fill="none"/>';
+      s += T(x-16, 68 + d*34 + (d>0?14:-6), '类别', {size:6,tone:'#64748B'});
+    });
+    return s;
+  },
+  impact: function(){
+    return B(86,52,68,26,'本次变更',{lsize:7,stroke:'#F43F5E',fill:'#FFF1F2'})
+      + B(4,14,62,20,'订单接口',{lsize:6.5})
+      + B(4,94,62,20,'报表',{lsize:6.5,stroke:'#F43F5E',fill:'#FFF1F2'})
+      + B(174,14,62,20,'下游团队',{lsize:6.5})
+      + B(174,94,62,20,'缓存键',{lsize:6.5})
+      + PL([[86,58],[66,34]],{}) + PL([[86,72],[66,94]],{})
+      + PL([[154,58],[174,34]],{}) + PL([[154,72],[174,94]],{});
+  },
+  quadrant: function(){
+    let s = '<path d="M120 14 v100 M24 64 h192" stroke="#CBD5E1" fill="none"/>';
+    s += T(120,126,'成本 →',{size:6,tone:'#94A3B8'}) + T(34,24,'价值 ↑',{size:6,tone:'#94A3B8'});
+    s += T(72,44,'优先做',{size:6.5,tone:'#15803D'}) + T(168,44,'快速试',{size:6.5,tone:'#64748B'});
+    s += T(72,88,'排期',{size:6.5,tone:'#64748B'}) + T(168,88,'放弃',{size:6.5,tone:'#9F1239'});
+    [[62,38],[78,52],[150,42],[172,58],[64,80],[140,84],[188,96]].forEach(function(p){
+      s += DOT(p[0],p[1],3.2,'#94A3B8');
+    });
+    return s;
+  },
+  mindmap: function(){
+    return '<rect x="86" y="54" width="68" height="24" rx="12" fill="#F8FAFC" stroke="#475569"/>'
+      + T(120,69,'主题',{size:7.2})
+      + B(4,12,58,18,'分支 1',{lsize:6.5})
+      + B(4,55,58,18,'分支 2',{lsize:6.5})
+      + B(4,98,58,18,'分支 3',{lsize:6.5})
+      + B(178,12,58,18,'分支 4',{lsize:6.5})
+      + B(178,55,58,18,'分支 5',{lsize:6.5})
+      + B(178,98,58,18,'分支 6',{lsize:6.5})
+      + '<path d="M86 62 C68 50 74 24 62 21" fill="none" stroke="#CBD5E1"/>'
+      + '<path d="M86 66 C76 66 74 64 62 64" fill="none" stroke="#CBD5E1"/>'
+      + '<path d="M86 70 C68 82 74 104 62 107" fill="none" stroke="#CBD5E1"/>'
+      + '<path d="M154 62 C172 50 166 24 178 21" fill="none" stroke="#CBD5E1"/>'
+      + '<path d="M154 66 C164 66 166 64 178 64" fill="none" stroke="#CBD5E1"/>'
+      + '<path d="M154 70 C172 82 166 104 178 107" fill="none" stroke="#CBD5E1"/>';
+  }
+};
+
+D.forEach(function(it){
+  it.draw = PREVIEW[it.id] || function(){ return ''; };
+});
+
+/* ---------------- 索引与搜索字段 ---------------- */
+D.forEach(function(it){
+  it.catName = CATNAME[it.cat];
+  it._fields = [
+    { label:'名称', text: it.name },
+    { label:'英文名', text: it.en },
+    { label:'关键词', text: (it.kw || []).join(' ') },
+    { label:'最擅长', text: it.best },
+    { label:'定义', text: it.def },
+    { label:'场景', text: (it.use || []).join(' ') },
+    { label:'构成', text: (it.parts || []).join(' ') },
+    { label:'分类', text: it.catName },
+    { label:'回答的问题', text: (it.asks || []).join(' ') }
+  ];
+});
+
+/* ---------------- 表达目的 -> 图形 ---------------- */
+const PURPOSES = [
+  { need:'系统对外和谁交互、边界在哪', first:['context'], also:['container'], never:['class','er'] },
+  { need:'系统内部有几个服务、几个库', first:['container'], also:['deployment'], never:['context','class'] },
+  { need:'一个服务内部怎么分模块', first:['component'], also:['package'], never:['context','sequence'] },
+  { need:'程序最后跑在哪台机器上', first:['deployment'], also:['network'], never:['container','flowchart'] },
+  { need:'流量经过哪些网段和安全边界', first:['network'], also:['deployment'], never:['layered','state'] },
+  { need:'一次请求里谁先调谁、失败怎么办', first:['sequence'], also:['eventflow'], never:['context','er'] },
+  { need:'一个事件被谁订阅、扇出到哪', first:['eventflow'], also:['sequence'], never:['flowchart','er'] },
+  { need:'一个操作的步骤和条件分支', first:['flowchart'], also:['activity'], never:['state','context'] },
+  { need:'多个角色各自做什么、在哪交接', first:['swimlane'], also:['bpmn','userflow'], never:['sequence','class'] },
+  { need:'流程要接入流程引擎、还有定时器和异常', first:['bpmn'], also:['swimlane'], never:['flowchart','state'] },
+  { need:'对象有哪些状态、什么事件让它变', first:['state'], also:['decisiontree'], never:['flowchart','userflow'] },
+  { need:'用户从进入到完成，经过哪些页面', first:['userflow'], also:['journey'], never:['sequence','gantt'] },
+  { need:'一堆条件规则最后落到哪个结论', first:['decisiontree'], also:['flowchart'], never:['state','mindmap'] },
+  { need:'表与表怎么连、1 对多还是多对多', first:['er'], also:['domainmodel'], never:['class','dfd'] },
+  { need:'数据从哪进、经过谁、落到哪个库', first:['dfd'], also:['pipeline'], never:['er','sequence'] },
+  { need:'一个指标或字段由哪些上游算出来', first:['lineage'], also:['pipeline'], never:['er','dfd'] },
+  { need:'类与类之间的继承、组合关系', first:['class'], also:['domainmodel'], never:['er','context'] },
+  { need:'代码目录怎么分、模块允许谁依赖谁', first:['package'], also:['dependency'], never:['context','deployment'] },
+  { need:'改动这个节点会连带影响哪些地方', first:['dependency','impact'], also:['fishbone'], never:['gantt','journey'] },
+  { need:'业务概念怎么归类成一个聚合', first:['domainmodel'], also:['er'], never:['flowchart','deployment'] },
+  { need:'谁在什么时间做什么、什么时候能完', first:['gantt'], also:['timeline','kanban'], never:['state','flowchart'] },
+  { need:'这件事按时间发生过什么', first:['timeline'], also:['gantt'], never:['kanban','er'] },
+  { need:'任务现在卡在哪个状态', first:['kanban'], also:['gantt'], never:['timeline','sequence'] },
+  { need:'用户在哪一步最沮丧、痛点是什么', first:['journey'], also:['userflow'], never:['gantt','er'] },
+  { need:'这个故障可能来自哪几种原因', first:['fishbone'], also:['impact'], never:['quadrant','mindmap'] },
+  { need:'几个方案怎么取舍、先做哪个', first:['quadrant'], also:['mindmap'], never:['fishbone','gantt'] },
+  { need:'把一件事层层拆开看全貌', first:['mindmap'], also:['quadrant'], never:['state','er'] }
+];
+
+/* ---------------- 相近图形对比 ---------------- */
+const COMPARE = [
+  { a:'流程图 ↔ 时序图', r:'谁先谁后但参与者是「步骤」→ 流程图；参与者是「系统 / 服务」并且要标同步异步 → 时序图。' },
+  { a:'流程图 ↔ BPMN', r:'给人看、不会被引擎执行 → 流程图；要落 Camunda / Flowable、有事件和定时器 → BPMN。' },
+  { a:'泳道图 ↔ BPMN', r:'只关心「谁做什么」→ 泳道图；还要能被流程引擎执行、含网关与异常 → BPMN。' },
+  { a:'状态图 ↔ 流程图', r:'问「下一步做什么」→ 流程图；问「现在是什么状态、什么能改变它」→ 状态图。' },
+  { a:'时序图 ↔ 事件流图', r:'一次请求的严格逐跳顺序 → 时序图；一个事件被多个下游订阅的扇出 → 事件流图。' },
+  { a:'系统上下文图 ↔ 容器图', r:'只定边界、只说「有没有关系」→ 上下文图；要拆出服务、库、队列 → 容器图。' },
+  { a:'容器图 ↔ 组件图', r:'可部署单元级别 → 容器图；某个单元内部怎么分模块 → 组件图。' },
+  { a:'部署图 ↔ 网络拓扑图', r:'什么程序跑在哪个节点 → 部署图；流量经过哪些网段与安全边界 → 网络拓扑图。' },
+  { a:'ER 图 ↔ 类图', r:'数据库落地形态（表 / 字段 / 约束）→ ER 图；代码结构与行为（方法 / 继承 / 组合）→ 类图。' },
+  { a:'ER 图 ↔ 领域模型图', r:'按表和外键组织 → ER 图；按业务语言和一致性边界（聚合）组织 → 领域模型图。' },
+  { a:'数据流图 ↔ 数据血缘图', r:'系统怎么处理数据 → 数据流图；某个字段 / 指标由哪些上游算出 → 血缘图。' },
+  { a:'包图 ↔ 依赖关系图', r:'带代码目录与命名空间语义 → 包图；服务、任务、构建产物之间的通用依赖 → 依赖关系图。' },
+  { a:'甘特图 ↔ 时间线', r:'计划要做什么、做多久、有什么依赖 → 甘特图；已经发生过什么 → 时间线。' },
+  { a:'看板 ↔ 甘特图', r:'现在在哪一步、哪里堆积 → 看板；什么时候能完、关键路径在哪 → 甘特图。' },
+  { a:'用户流程图 ↔ 用户旅程图', r:'路径与页面跳转 → 用户流程图；阶段、情绪与痛点 → 旅程图。' },
+  { a:'鱼骨图 ↔ 影响关系图', r:'向前追原因 → 鱼骨图；向后看后果和影响面 → 影响关系图。' }
+];
+
+/* ---------------- 相近图形（由「表达目的」表 + 「怎么区分」表推导） ---------------- */
+const RELATED = {};
+function link(a, b){
+  if (!a || !b || a === b) return;
+  RELATED[a] = RELATED[a] || [];
+  if (RELATED[a].indexOf(b) === -1) RELATED[a].push(b);
+}
+PURPOSES.forEach(function(p){
+  const group = p.first.concat(p.also);
+  group.forEach(function(a){
+    group.forEach(function(b){ link(a, b); });
+  });
+});
+function nameToId(label){
+  const key = label.replace(/\s/g, '');
+  let hit = D.filter(function(d){ return d.name.replace(/\s/g, '') === key; })[0];
+  if (hit) return hit.id;
+  hit = D.filter(function(d){ return d.name.replace(/\s/g, '').indexOf(key) === 0; })[0];
+  return hit ? hit.id : null;
+}
+COMPARE.forEach(function(row){
+  const parts = row.a.split('↔');
+  if (parts.length !== 2) return;
+  const a = nameToId(parts[0].trim()), b = nameToId(parts[1].trim());
+  link(a, b); link(b, a);
+});
+
+/* ---------------- 状态 ---------------- */
+const state = { cat:'all', tokens:[], loose:false, openId:null };
+const $ = function(id){ return document.getElementById(id); };
+
+/* ---------------- 渲染：分类 ---------------- */
+function renderChips(){
+  const counts = { all: D.length };
+  D.forEach(function(d){ counts[d.cat] = (counts[d.cat] || 0) + 1; });
+  let html = '<button class="chip" data-cat="all" aria-pressed="'+(state.cat==='all')+'">全部<span class="n">'+D.length+'</span></button>';
+  CATS.forEach(function(c){
+    html += '<button class="chip" data-cat="'+c.id+'" aria-pressed="'+(state.cat===c.id)+'">'+c.name+'<span class="n">'+(counts[c.id]||0)+'</span></button>';
+  });
+  $('chips').innerHTML = html;
+  $('chips').querySelectorAll('.chip').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      state.cat = btn.dataset.cat;
+      renderChips(); renderGrid();
+    });
+  });
+}
+
+/* ---------------- 渲染：卡片 ---------------- */
+function tokenize(q){
+  return q.trim().toLowerCase().split(/[\s,，、;；/]+/).filter(Boolean).slice(0, 6);
+}
+
+function matchItem(it, tokens, loose){
+  const hits = [];
+  for (let i = 0; i < tokens.length; i++){
+    const tk = tokens[i], places = [];
+    it._fields.forEach(function(f){
+      if (f.text.toLowerCase().indexOf(tk) !== -1) places.push(f.label);
+    });
+    if (!places.length){
+      if (!loose) return null;
+      continue;
+    }
+    hits.push({ token: tk, places: Array.from(new Set(places)).slice(0, 3) });
+  }
+  return hits.length ? hits : null;
+}
+
+function currentResults(){
+  const tokens = state.tokens;
+  let list = D.filter(function(d){ return state.cat === 'all' || d.cat === state.cat; });
+  if (!tokens.length) return { items: list.map(function(it){ return { it: it, hits: [] }; }), loose: false };
+
+  let scored = [];
+  list.forEach(function(it){
+    const h = matchItem(it, tokens, false);
+    if (h) scored.push({ it: it, hits: h, score: h.length });
+  });
+  if (scored.length) return { items: scored, loose: false };
+
+  list.forEach(function(it){
+    const h = matchItem(it, tokens, true);
+    if (h) scored.push({ it: it, hits: h, score: h.length });
+  });
+  return { items: scored, loose: true };
+}
+
+/* 命中原因：tokens + 结果集里实际命中的字段 */
+function reasonText(items){
+  if (!items.length || !items[0].hits || !items[0].hits.length) return '';
+  const tokens = [], places = [];
+  items.forEach(function(e){
+    (e.hits || []).forEach(function(h){
+      if (tokens.indexOf(h.token) === -1) tokens.push(h.token);
+      h.places.forEach(function(p){ if (places.indexOf(p) === -1) places.push(p); });
+    });
+  });
+  return tokens.slice(0, 4).join(' / ') + ' → ' + places.slice(0, 4).join(' · ');
+}
+
+function renderGrid(){
+  const res = currentResults();
+  const items = res.items;
+
+  // 状态行
+  const sl = $('statusline');
+  if (!state.tokens.length){
+    sl.innerHTML = '共 <b>'+D.length+'</b> 种图形 · 点卡片看最擅长什么、怎么描述给 AI';
+  } else {
+    let r = '<span>命中 <b>'+items.length+'</b> 种'+(res.loose ? '（宽松匹配：任一关键词满足）' : '')+'</span>';
+    const rs = reasonText(items);
+    if (rs) r += '<span class="reason">' + rs + '</span>';
+    sl.innerHTML = r;
+  }
+
+  const grid = $('grid');
+  grid.innerHTML = items.map(function(entry){
+    const it = entry.it;
+    const why = entry.hits && entry.hits.length
+      ? '<span class="reason" style="margin-top:8px;display:inline-block">命中：' + entry.hits.map(function(h){ return h.token; }).join(' / ') + '</span>'
+      : '';
+    return '<button class="card" data-cat="'+it.cat+'" data-id="'+it.id+'" aria-label="打开 '+it.name+' 详情">'
+      + '<span class="art">' + SVG(it.draw()) + '</span>'
+      + '<span class="meta">'
+        + '<span class="row"><h3>'+it.name+'</h3><span class="en">'+it.en+'</span></span>'
+        + '<span class="best">'+it.best+'</span>'
+        + '<span class="tag">'+it.catName+'</span>'
+        + why
+      + '</span></button>';
+  }).join('');
+
+  grid.querySelectorAll('.card').forEach(function(btn){
+    btn.addEventListener('click', function(){ openDrawer(btn.dataset.id); });
+  });
+
+  $('empty').hidden = items.length > 0;
+}
+
+/* ---------------- 渲染：目的表 ---------------- */
+function byId(id){ for (let i=0;i<D.length;i++) if (D[i].id === id) return D[i]; return null; }
+
+function renderPurposes(){
+  const rows = PURPOSES.map(function(p){
+    const first = p.first.map(function(id){ const d = byId(id); return '<button data-id="'+id+'" data-cat="'+(d?d.cat:'')+'">'+d.name+'</button>'; }).join('');
+    const also = p.also.map(function(id){ const d = byId(id); return '<button data-id="'+id+'" data-cat="'+(d?d.cat:'')+'">'+d.name+'</button>'; }).join('');
+    const never = p.never.map(function(id){ const d = byId(id); return '<span>'+d.name+'</span>'; }).join('');
+    return '<div class="prow">'
+      + '<div class="need">'+p.need+'</div>'
+      + '<div class="opts">'+first+also+'</div>'
+      + '<div class="no">'+never+'</div>'
+      + '</div>';
+  }).join('');
+  $('plist').innerHTML = '<div class="prow"><div>我想表达</div><div>首选 / 也可以</div><div>别用它</div></div>' + rows;
+  $('plist').querySelectorAll('button').forEach(function(b){
+    b.addEventListener('click', function(){ openDrawer(b.dataset.id); });
+  });
+}
+
+/* ---------------- 渲染：对比表 ---------------- */
+function renderCompare(){
+  $('ctable').innerHTML = COMPARE.map(function(c){
+    return '<tr><td>'+c.a+'</td><td>'+c.r+'</td></tr>';
+  }).join('');
+}
+
+/* ---------------- 详情抽屉 ---------------- */
+function openDrawer(id){
+  const it = byId(id);
+  if (!it) return;
+  state.openId = id;
+
+  const sameCat = D.filter(function(x){ return x.id !== it.id && x.cat === it.cat; });
+  const near = (RELATED[id] || []).map(byId).filter(Boolean);
+  const rel = near.concat(sameCat.filter(function(x){ return near.indexOf(x) === -1; })).slice(0, 7);
+
+  const body =
+      '<div class="art" data-cat="'+it.cat+'">' + SVG(it.draw()) + '</div>'
+
+    + '<div class="block"><h4>一句话定义</h4><p class="def">'+it.def+'</p></div>'
+
+    + '<div class="block"><h4>它回答的问题</h4><ul class="ul">'+it.asks.map(function(x){ return '<li>'+x+'</li>'; }).join('')+'</ul></div>'
+
+    + '<div class="block"><h4>最擅长</h4><div class="hl">'+it.best+'</div></div>'
+
+    + '<div class="block"><h4>什么时候用它</h4><ul class="ul">'+it.use.map(function(x){ return '<li>'+x+'</li>'; }).join('')+'</ul></div>'
+
+    + '<div class="block"><h4>别用它来</h4><ul class="ul avoid">'+it.never.map(function(x){ return '<li>'+x+'</li>'; }).join('')+'</ul></div>'
+
+    + '<div class="block"><h4>图里应该有</h4><div class="pills">'+it.parts.map(function(x){ return '<span>'+x+'</span>'; }).join('')+'</div></div>'
+
+    + '<div class="block"><h4>容易和谁混</h4><p class="vs"><b>对比「'+it.vs.name+'」：</b>'+it.vs.diff+'</p></div>'
+
+    + '<div class="block"><h4>AI 描述模板（填【】即可）</h4>'
+      + '<div class="prompt"><pre id="promptText">'+esc(it.prompt)+'</pre></div>'
+      + '<div class="copyrow"><button class="btn primary" id="copyBtn">复制模板</button><span class="hint">复制后在对话里替换【】内容</span></div>'
+    + '</div>'
+
+    + '<div class="block"><h4>同类图形</h4><div class="rel">'
+      + rel.map(function(x){ return '<button data-id="'+x.id+'">'+x.name+'</button>'; }).join('')
+    + '</div></div>';
+
+  const drawer = $('drawer');
+  drawer.innerHTML =
+      '<header><div class="t"><h2 id="dTitle">'+it.name+'</h2><div class="en">'+it.en+' · '+it.catName+'</div></div>'
+    + '<button class="close" id="closeBtn" aria-label="关闭">'
+    + '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 6 12 12M18 6 6 18"/></svg>'
+    + '</button></header>'
+    + '<div class="body" data-cat="'+it.cat+'">'+body+'</div>';
+
+  drawer.dataset.cat = it.cat;
+  drawer.setAttribute('aria-label', it.name + ' 详情');
+
+  $('overlay').classList.add('on');
+  drawer.classList.add('on');
+  document.body.style.overflow = 'hidden';
+  drawer.scrollTop = 0;
+  drawer.querySelector('.body').scrollTop = 0;
+  $('closeBtn').focus();
+
+  $('closeBtn').addEventListener('click', closeDrawer);
+  drawer.querySelectorAll('.rel button').forEach(function(b){
+    b.addEventListener('click', function(){
+      const target = b.dataset.id;
+      closeDrawer();
+      setTimeout(function(){ openDrawer(target); }, 220);
+    });
+  });
+  $('copyBtn').addEventListener('click', function(){
+    copyText(it.prompt, it.name);
+  });
+  history.replaceState(null, '', '#' + it.id);
+}
+
+function closeDrawer(){
+  const drawer = $('drawer');
+  drawer.classList.remove('on');
+  $('overlay').classList.remove('on');
+  document.body.style.overflow = '';
+  state.openId = null;
+  history.replaceState(null, '', location.pathname + location.search);
+}
+
+/* ---------------- 复制 ---------------- */
+function copyText(text, name){
+  function manual(){
+    const pre = $('promptText');
+    if (pre){
+      const range = document.createRange();
+      range.selectNodeContents(pre);
+      const sel = window.getSelection();
+      sel.removeAllRanges(); sel.addRange(range);
+    }
+    toast('浏览器阻止了自动复制，模板已选中，请按 ⌘C / Ctrl+C');
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){
+      toast('已复制「' + name + '」描述模板');
+    }).catch(function(){
+      legacyCopy(text, manual);
+    });
+  } else {
+    legacyCopy(text, manual);
+  }
+}
+
+function legacyCopy(text, fallback){
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.setAttribute('readonly', '');
+  ta.style.position = 'fixed';
+  ta.style.top = '-1000px';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  let ok = false;
+  try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+  document.body.removeChild(ta);
+  if (ok) toast('已复制描述模板');
+  else fallback();
+}
+
+let toastTimer = null;
+function toast(msg){
+  const t = $('toast');
+  t.textContent = msg;
+  t.classList.add('on');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){ t.classList.remove('on'); }, 2600);
+}
+
+/* ---------------- 事件 ---------------- */
+function applySearch(){
+  const raw = $('q').value;
+  state.tokens = tokenize(raw);
+  renderGrid();
+}
+
+function resetAll(){
+  state.cat = 'all';
+  state.tokens = [];
+  $('q').value = '';
+  renderChips();
+  renderGrid();
+}
+
+$('searchBtn').addEventListener('click', applySearch);
+$('resetBtn').addEventListener('click', resetAll);
+$('q').addEventListener('keydown', function(e){
+  if (e.key === 'Enter'){ e.preventDefault(); applySearch(); }
+  if (e.key === 'Escape'){ resetAll(); }
+});
+$('q').addEventListener('input', function(){
+  if ($('q').value.trim() === ''){ state.tokens = []; renderGrid(); }
+});
+$('overlay').addEventListener('click', closeDrawer);
+document.addEventListener('keydown', function(e){
+  if (e.key === 'Escape' && state.openId) closeDrawer();
+});
+window.addEventListener('hashchange', function(){
+  const id = decodeURIComponent(location.hash.replace('#',''));
+  if (id && byId(id)) openDrawer(id);
+});
+
+/* ---------------- 启动 ---------------- */
+renderChips();
+renderPurposes();
+renderCompare();
+renderGrid();
+
+const deep = decodeURIComponent(location.hash.replace('#',''));
+if (deep && byId(deep)) openDrawer(deep);
+</script>
+</body>
+</html>

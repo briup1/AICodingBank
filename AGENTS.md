@@ -32,6 +32,8 @@
 
 ## 按需资源
 
+- 不知道选哪种图、要描述给 AI：`docs/reference/diagram-atlas.html`（离线图形画册）
+- 要给 Agent 点名一种思维模式、或替它换一条推理路径：`docs/reference/thinking-atlas.html`（离线思维模式画册，按卡点检索 + 可复制调用语）
 - `EXTENDING.md`
 - `CONTEXT.md`
 - `best_practices/README.md`

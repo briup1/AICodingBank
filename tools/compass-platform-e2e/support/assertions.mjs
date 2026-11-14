@@ -41,7 +41,12 @@ export function uiReady(ui, expected, text) {
   if (expected.ui === 'result_or_empty' && !(ui.cards > 0 || (ui.cards === 0 && ui.empty))) return false
   if (expected.ui === 'response' && !ui.text.trim()) return false
   if (expected.contains && !ui.text.includes(expected.contains)) return false
+  // 数据集“通过标准”里的排除词：只查助手可见回复，避免用户问句本身被误判为泄露。
+  const answer = text.trim() || ui.text
+  if ((expected.not_contains ?? []).some(word => answer.includes(word))) return false
   // Committed answer must actually appear in this turn, not only in the stream.
-  if (text.trim() && !ui.text.replace(/\s/g, '').includes(text.trim().slice(0, 24).replace(/\s/g, ''))) return false
+  // DOM 会去掉 Markdown 标记，比较前统一归一化空白与标记字符。
+  const plain = value => value.replace(/[^\p{L}\p{N}]/gu, '')
+  if (text.trim() && !plain(ui.text).includes(plain(text.trim()).slice(0, 24))) return false
   return true
 }

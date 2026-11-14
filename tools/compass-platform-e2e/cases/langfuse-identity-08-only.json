@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "scenarios": [
+    {
+      "id": "lf-identity-08-port-explanation",
+      "turns": [
+        {
+          "message": "港口识别方式说明",
+          "expect": {
+            "action": "status_only",
+            "ui": "response"
+          }
+        }
+      ]
+    }
+  ]
+}

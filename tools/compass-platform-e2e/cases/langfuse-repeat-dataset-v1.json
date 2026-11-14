@@ -1,0 +1,254 @@
+{
+  "schemaVersion": 1,
+  "scenarios": [
+    {
+      "id": "lf-repeat-ds-01-query-again",
+      "turns": [
+        {
+          "message": "上海到洛杉矶，40HQ 的运价",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": {
+              "pol_code": "CNSHA",
+              "pod_code": "USLAX",
+              "container_types": [
+                "40HQ"
+              ]
+            }
+          }
+        },
+        {
+          "message": "再查一次上海到洛杉矶，40HQ",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": {
+              "pol_code": "CNSHA",
+              "pod_code": "USLAX",
+              "container_types": [
+                "40HQ"
+              ]
+            },
+            "not_contains": [
+              "正在获取",
+              "请稍候",
+              "已提交",
+              "仍在查询",
+              "稍后展示"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "lf-repeat-ds-02-filter-carrier",
+      "turns": [
+        {
+          "message": "上海到洛杉矶，40HQ 的运价",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": {
+              "pol_code": "CNSHA",
+              "pod_code": "USLAX",
+              "container_types": [
+                "40HQ"
+              ]
+            }
+          }
+        },
+        {
+          "message": "刚才那批里只看马士基",
+          "expect": {
+            "action": "filter_existing",
+            "ui": "response"
+          }
+        }
+      ]
+    },
+    {
+      "id": "lf-repeat-ds-03-any-more-results",
+      "turns": [
+        {
+          "message": "上海到洛杉矶，40HQ 的运价",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": {
+              "pol_code": "CNSHA",
+              "pod_code": "USLAX",
+              "container_types": [
+                "40HQ"
+              ]
+            }
+          }
+        },
+        {
+          "message": "还有结果吗",
+          "expect": {
+            "action": "status_only",
+            "ui": "response",
+            "contains": "结束",
+            "not_contains": [
+              "已提交",
+              "正在获取",
+              "请稍候",
+              "稍后展示",
+              "仍在查询",
+              "还在查"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "lf-repeat-ds-04-carrier-recall",
+      "turns": [
+        {
+          "message": "上海到洛杉矶，40HQ 的运价",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": {
+              "pol_code": "CNSHA",
+              "pod_code": "USLAX",
+              "container_types": [
+                "40HQ"
+              ]
+            }
+          }
+        },
+        {
+          "message": "刚才那批里马士基有几条",
+          "expect": {
+            "action": "filter_existing",
+            "ui": "response"
+          }
+        }
+      ]
+    },
+    {
+      "id": "lf-repeat-ds-05-route-change",
+      "turns": [
+        {
+          "message": "上海到洛杉矶，40HQ 的运价",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": {
+              "pol_code": "CNSHA",
+              "pod_code": "USLAX",
+              "container_types": [
+                "40HQ"
+              ]
+            }
+          }
+        },
+        {
+          "message": "那上海到鹿特丹，40HQ 呢",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": {
+              "pol_code": "CNSHA",
+              "pod_code": "NLRTM",
+              "container_types": [
+                "40HQ"
+              ]
+            },
+            "not_contains": [
+              "刚才那个还在查",
+              "仍在获取",
+              "请稍候",
+              "稍后展示"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "lf-repeat-ds-06-zero-result-followup",
+      "turns": [
+        {
+          "message": "上海到海防，只看船司官网价",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": {
+              "pol_code": "CNSHA",
+              "pod_code": "VNHPH"
+            }
+          }
+        },
+        {
+          "message": "所以是没结果吗",
+          "expect": {
+            "action": "status_only",
+            "ui": "response",
+            "not_contains": [
+              "正在获取",
+              "稍后展示",
+              "已提交",
+              "请稍候",
+              "仍在查询"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "lf-repeat-ds-07-complete-once",
+      "turns": [
+        {
+          "message": "上海到洛杉矶，40HQ 的运价",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": {
+              "pol_code": "CNSHA",
+              "pod_code": "USLAX",
+              "container_types": [
+                "40HQ"
+              ]
+            },
+            "not_contains": [
+              "正在获取",
+              "请稍候",
+              "稍后展示"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "lf-repeat-ds-08-waiting-not-rewritten",
+      "turns": [
+        {
+          "message": "上海到洛杉矶，40HQ 的运价",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": {
+              "pol_code": "CNSHA",
+              "pod_code": "USLAX",
+              "container_types": [
+                "40HQ"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

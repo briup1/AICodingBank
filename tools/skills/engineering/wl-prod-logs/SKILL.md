@@ -1,14 +1,13 @@
 ---
 name: wl-prod-logs
-description: 仅由用户主动调用，使用 Ego 只读查询伏羲 prod 服务的 Loki 日志并分析；不处理发布、配置或数据库。
-disable-model-invocation: true
+description: 按需使用 Ego 只读查询伏羲 prod 服务的 Loki 日志并分析；不处理发布、配置或数据库。
 ---
 
 # 伏羲生产日志查询
 
 ## 启用与范围
 
-只在用户本轮主动明确调用 `/skill:wl-prod-logs` 或明确点名 `wl-prod-logs` 时启用；普通“查日志”不自动启用，也不把其他 Skill 的调用当作本 Skill 授权。Pi 的命令入口依赖安装和重新加载；其他宿主是否强制此设置须分别核实。
+涉及伏羲生产服务日志查询时按需启用；加载不等于获得敏感日志访问授权。Pi 的命令入口依赖安装和重新加载；其他宿主的可用性须分别核实。
 
 本 Skill 与 `wl-web-auto` 独立，不加载、不修改该 Skill。使用 Ego 浏览器；先读取当前会话中真实位置的 `ego-browser` Skill，执行 `ego-browser skill` 并完整读取至结束标记，以其 TaskSpace、控制权和收尾规则为准。不要使用受限于非生产环境的 `agent-tools fuxi` 查询生产，也不要绕过平台鉴权。
 

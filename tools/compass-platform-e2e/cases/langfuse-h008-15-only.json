@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "scenarios": [
+    {
+      "id": "lf-h008-15-agent-generic-hold",
+      "turns": [
+        {
+          "message": "上海到洛杉矶，代理的，要保舱",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": {
+              "pol_code": "CNSHA",
+              "pod_code": "USLAX"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

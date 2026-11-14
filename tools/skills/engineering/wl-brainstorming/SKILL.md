@@ -1,6 +1,6 @@
 ---
 name: wl-brainstorming
-description: Turn an unclear software idea into an approved, testable design only when the user or project explicitly selects this standalone design route. Not the default for new features; use wl-auto-delivery for ordinary lifecycle requests. Do not execute approved designs.
+description: Turn an unclear software idea into an approved, testable design when a standalone design route fits the task. Avoid duplicating existing plans; do not execute approved designs.
 ---
 
 # WL Brainstorming
@@ -9,7 +9,7 @@ Produce an approved design, not implementation.
 
 ## 使用边界
 
-这是非默认的独立设计路线，仅用户或项目规则显式选择时进入；普通新功能请求按 [wl-auto-delivery](../../workbench/wl-auto-delivery/SKILL.md) 路由。已存在需求/方案时复用真实批准及范围，不叠加 `wl-req-confirm` / `wl-design-doc` 重做同一阶段。显式选择后沿下文工作，不因兼容其他路线省略本路线的批准与验证。
+这是按需使用的独立设计路线；普通明确的新功能无需强行进入。已存在需求/方案时复用真实批准及范围，不叠加 `wl-req-confirm` / `wl-design-doc` 重做同一阶段；这两个技能仍须用户主动选择。沿下文工作，不省略本路线的批准与验证。
 
 ## Workflow
 

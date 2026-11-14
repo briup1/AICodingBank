@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "scenarios": [
+    {
+      "id": "lf-repeat-ds-01-query-again",
+      "turns": [
+        {
+          "message": "上海到洛杉矶，40HQ 的运价",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": {
+              "pol_code": "CNSHA",
+              "pod_code": "USLAX",
+              "container_types": [
+                "40HQ"
+              ]
+            }
+          }
+        },
+        {
+          "message": "再查一次上海到洛杉矶，40HQ",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": {
+              "pol_code": "CNSHA",
+              "pod_code": "USLAX",
+              "container_types": [
+                "40HQ"
+              ]
+            },
+            "not_contains": [
+              "正在获取",
+              "请稍候",
+              "已提交",
+              "仍在查询",
+              "稍后展示"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

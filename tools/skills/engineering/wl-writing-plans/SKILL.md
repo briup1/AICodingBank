@@ -1,6 +1,6 @@
 ---
 name: wl-writing-plans
-description: Create a detailed test-first implementation plan only when the user or project explicitly requests this planning format. Not the default execution entry; ordinary approved-design work uses wl-ticket-run. Do not use with unresolved requirements or architecture.
+description: Create a detailed test-first implementation plan when the task needs that format. Avoid duplicating existing plans; do not use with unresolved requirements or architecture.
 ---
 
 # WL Writing Plans
@@ -9,7 +9,7 @@ Create an executable implementation plan. Do not implement it.
 
 ## 使用边界
 
-这是非默认的详细实施计划路线，仅用户或项目规则显式选择时使用；普通开发沿 [wl-auto-delivery](../../workbench/wl-auto-delivery/SKILL.md) 进入 `wl-ticket-run`。已有方案和任务清单原位复用，不叠加第二套业务预期、方案或任务清单；只补本次要求的测试优先施工细节。未决业务/架构问题回实际来源阶段，不因发现缺口自动开启另一套设计流程。
+这是按需使用的详细实施计划路线；普通明确任务无需强行增加计划。已有方案和任务清单原位复用，不叠加第二套业务预期、方案或任务清单；只补本次要求的测试优先施工细节。`wl-ticket-run` 须用户主动选择才加载。未决业务或架构问题回实际来源阶段，不因发现缺口自动开启另一套设计流程。
 
 ## Preconditions
 

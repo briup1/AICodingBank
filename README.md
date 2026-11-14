@@ -18,6 +18,7 @@
 | 怎么加：Skill、岗位、最佳实践、第三方 | [EXTENDING.md](EXTENDING.md) |
 | 术语 | [CONTEXT.md](CONTEXT.md) |
 | 能力总览（自动生成，勿手改） | [CATALOG.md](CATALOG.md) |
+| 想画图但不知道选哪种图 | [工程图形画册](docs/reference/diagram-atlas.html)（离线 HTML，31 种图形的形态与用法） |
 | 岗位手册 | [roles/README.md](roles/README.md) |
 | 最佳实践记录规范 | [best_practices/README.md](best_practices/README.md) |
 | 每个目录的中文注解 | [docs/reference/工作台目录地图.md](docs/reference/工作台目录地图.md) |
