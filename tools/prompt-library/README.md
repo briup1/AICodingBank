@@ -8,6 +8,7 @@
 | --- | --- | --- | --- |
 | [sdd/](sdd/README.md) | Spec 驱动开发（SDD） | 公众号文章，2026-11-09 入库 | 6 |
 | [deepen/](deepen/README.md) | 更深入而不是更大 | 用户 2026-11-09 提供，原始出处未标注 | 1 |
+| [project-delivery/](project-delivery/README.md) | 项目经理驱动的全流程交付 | 用户 2026-11-15 提供 | 1 |
 
 ## 加一套新的
 
