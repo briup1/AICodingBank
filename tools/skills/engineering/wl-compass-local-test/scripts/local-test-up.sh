@@ -12,6 +12,11 @@ for a in "$@"; do
   esac
 done
 [ -f "$WT/backend-service/pom.xml" ] || { echo "❌ $WT 不是 compass-platform worktree（缺 backend-service/pom.xml）"; exit 1; }
+# 浏览器业务测试必须先准备真实身份，禁止以健康检查代替鉴权验证。
+if [ -z "${COMPASS_LOCAL_ACCESS_TOKEN:-}" ] || [ -z "${COMPASS_LOCAL_WHALE_IDENTITY:-}" ]; then
+  echo '❌ 缺少 COMPASS_LOCAL_ACCESS_TOKEN 或 COMPASS_LOCAL_WHALE_IDENTITY；先按 SKILL.md 准备有效 Dev 登录态。' >&2
+  exit 1
+fi
 SLUG="$(basename "$WT")"
 LT="${COMPASS_LOCAL_TEST_HOME:-$HOME/.local/state/compass-local-test}/$SLUG"
 mkdir -p "$LT/logs" "$LT/artifacts"
@@ -22,14 +27,14 @@ for t in "dev-mysql8.hgj.net 3306" "dev-middle.hgj.net 6379" "10.10.10.145 27017
 done
 
 echo "== 1. 端口检查 =="
-for port in 18080 9967; do
+for port in 18080 18081 9967; do
   p=$(lsof -nP -tiTCP:$port -sTCP:LISTEN 2>/dev/null || true)
   if [ -n "$p" ]; then
     echo "❌ 端口 $port 被 pid=$p 占用：$(ps -p "$p" -o command= | cut -c1-80)"
     echo "   如是残留请先跑 local-test-down.sh $SLUG"; exit 1
   fi
 done
-echo "  18080/9967 空闲"
+echo "  18080/18081/9967 空闲"
 
 echo "== 2. RocketMQ（共享件，已有则复用）=="
 if docker ps --format '{{.Names}}' | grep -q '^wl-rocketmq-broker$'; then
@@ -66,10 +71,20 @@ for i in $(seq 1 30); do
   [ "$i" = 30 ] && { echo "❌ 后端 60s 未就绪，看日志"; exit 1; }
 done
 
-echo "== 5. 启动前端 :9967 =="
+echo "== 5. 启动鉴权代理并验证协议状态 =="
+node "$SCRIPT_DIR/local-auth-proxy.mjs" start --listen 127.0.0.1:18081 --target http://127.0.0.1:18080 || exit 1
+for i in $(seq 1 10); do
+  if curl --noproxy '*' -sf -m 3 'http://127.0.0.1:18081/api/v1/agreement/gate-status?lang=zh-CN' | node -e 'let s="";process.stdin.on("data",x=>s+=x);process.stdin.on("end",()=>{try{let r=JSON.parse(s);process.exit(r.code===200 && r.data && typeof r.data==="object" ? 0 : 1)}catch{process.exit(1)}})'; then
+    echo '  协议状态身份验证通过'; break
+  fi
+  [ "$i" = 10 ] && { echo '❌ 协议状态鉴权未通过，不能交付浏览器业务测试；检查登录态和代理日志。' >&2; exit 1; }
+  sleep 1
+done
+
+echo "== 6. 启动前端 :9967 =="
 [ -d "$WT/agents-web/node_modules" ] || (cd "$WT/agents-web" && pnpm install --prefer-offline >/dev/null 2>&1)
 cp -n "$SCRIPT_DIR/../assets/env.wl-local" "$WT/agents-web/.env.wl-local" 2>/dev/null || true
-(cd "$WT/agents-web" && nohup pnpm dev -- --mode wl-local --port 9967 --no-open > "$LT/logs/frontend.log" 2>&1 &)
+(cd "$WT/agents-web" && nohup env APP_API_GATEWAY=http://127.0.0.1:18081 pnpm dev -- --mode wl-local --port 9967 --no-open > "$LT/logs/frontend.log" 2>&1 &)
 for i in $(seq 1 30); do
   sleep 2
   curl -sf -o /dev/null -m 2 localhost:9967/ && { echo "  前端就绪 (${i}x2s)"; break; }
@@ -81,6 +96,7 @@ cat <<SUMMARY
 ✅ 本地自测环境就绪（需求: $SLUG）
   后端      http://127.0.0.1:18080   (日志 $LT/logs/backend.log)
   前端      http://localhost:9967
+  鉴权代理  http://127.0.0.1:18081
   产物目录  $LT/artifacts/
   登录态    浏览器打开 http://localhost:9967 → 跳 dev-login 登录一次（14天有效）
   API smoke 按 SKILL.md「验证链路」执行

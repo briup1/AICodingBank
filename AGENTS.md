@@ -13,7 +13,7 @@
 
 ## 能力
 
-- `CATALOG.md`
+- `CATALOG.md`（按能力和边界找 Skill；本机 Pi 按需入口及 Review/排障默认路由见 `~/.pi/agent/skill-index.local.md`，存在时按需读取；具体 Skill 的触发条件和更高优先级规则仍须遵守）
 - `skills.yaml`
 - `skills-lock.json`
 - `tools/skills/`

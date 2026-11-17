@@ -12,7 +12,9 @@ description: compass-platform 本地自测环境一站式搭建与验证——�
 ```text
 ┌─ 本机（新代码）─────────────────────────────┐
 │ agents-web vite :9967  (.env.wl-local)      │
-│      │ 直接 HTTP（CORS 已放开）              │
+│      │                                      │
+│ 本机身份代理 :18081（仅 127.0.0.1）          │
+│      │ 注入当前用户 Dev 身份                 │
 │ compass-backend :18080  (java -jar, profile=local)
 │      │                                      │
 │ ├─ RocketMQ 本地 docker :19876/:10911       │  ← 唯一本地中间件，隔离 dev MQ
@@ -84,13 +86,18 @@ ${COMPASS_LOCAL_TEST_HOME:-~/.local/state/compass-local-test}/<worktree-slug>/
 
 ## 一键启动（推荐）
 
+浏览器业务测试必须先在当前 shell 准备 `COMPASS_LOCAL_ACCESS_TOKEN` 和
+`COMPASS_LOCAL_WHALE_IDENTITY`（Dev 真实登录态及认证中心返回的完整身份对象 Base64）；
+只从安全渠道获取，不打印、不写仓库和日志。缺失或协议状态接口鉴权失败时停止，不得报告就绪。
+不要代用户确认协议。身份失效或认证中心不可用时等待人工登录或排障，不伪造身份、不切换环境。
+
 ```bash
 ~/.agents/skills/wl-compass-local-test/scripts/local-test-up.sh [worktree目录]
 # 加 --no-build 复用旧 jar（没改后端代码时）
 ```
 
 先完成「启动数量与特殊批准」核对，再运行脚本。脚本自动完成：dev 网络五连检查 → 端口占用校验（被占会指明 pid 和归属，防误杀）
-→ MQ 复用/首建（compose）→ 构建 jar → 起后端并等健康检查 → 起前端并等就绪 → 打印就绪摘要。
+→ MQ 复用/首建（compose）→ 构建 jar → 起后端并等健康检查 → 起本机身份代理 → 只读核验协议状态业务码 → 起前端并等就绪 → 打印就绪摘要。
 生成物按「生成物位置约定」落盘。下面 0-4 步是手动等价流程与原理说明（排障时读）。
 
 ## 启动流程（手动等价版，按序执行）
@@ -164,8 +171,9 @@ pnpm dev -- --mode wl-local --port 9967 --no-open > "$LT/logs/frontend.log" 2>&1
 
 - 坑 #5：`APP_API_GATEWAY` 必须是完整 URL。设成空串走 `/api` fallback 会拼出
   `/api/api/v1/...`（ofetch 直接字符串拼接），全 404。
-- 不用 vite proxy：`WebConfig` 已 `addAllowedOriginPattern("*")`，跨域直连即可；
-  登录回调用 `?token=` 回跳 localhost 也是项目原生支持的（`runInLocal` 分支跳 dev-login）。
+- 浏览器业务测试的 `APP_API_GATEWAY` 必须指向本机身份代理 `http://127.0.0.1:18081`；
+  健康检查或静态页面检查可直连后端，但不能据此宣称登录和业务链路可用。
+  登录回调用 `?token=` 回跳 localhost 是项目原生支持的。
 - 首次 `pnpm install --prefer-offline` 约 10s（本机 store 有缓存）。
 
 ### 4.（可选）assist-bot 本地
@@ -185,30 +193,42 @@ FREIGHT_SERVER_BASE_URL=http://127.0.0.1:18080 APP_ENV=dev uv run python main.py
 #    用 hgj-session 的 capture 思路：系统 Chrome + profile ~/.hgj-session/profiles/hgj-client-dev 打开
 #    https://dev-login.hgj.com/login ，人工登录（注意：capture 脚本的 headless 自检与
 #    agent-browser 0.27 不兼容会误报，直接手动 open + cookies get 即可）。
-# ② 从 profile 读 cookie：真正用于 API 的是 .hgj.com 的 sso_sessionid（不是 hgj-dev-access-token）。
+# ② 从当前 Dev 登录会话取 token；以认证中心校验为准，不凭 cookie 名或存在与否判断有效。
 # ③ 换身份：whale-identity = base64(JSON)，JSON 来自：
 curl -s -X POST "http://iter-apisix.hgj.com/whale-auth-center/auth" \
-  -H "Content-Type: application/json" -d '{"accessToken":"<sso_sessionid>"}'
+  -H "Content-Type: application/json" -d '{"accessToken":"<有效 Dev token>"}'
 #    → data.whaleIdentity 整体 base64（个人用户 enterpriseInfo 为空，后端兜底 enterpriseId=userId）
 # ④ 每个请求带三个头：
-#    access-token: <sso_sessionid>
+#    access-token: <有效 Dev token>
 #    whale-identity: <base64 JSON>
 #    app-name: smart-agent
-# 401 排查顺序：未授权( requireTaskOwner 缺上下文→whale-identity 没生效) → 缺少 whale-identity(过滤器层没传)
+# 认证中心返回 401：重新登录同一 Dev 账号再换身份；换身份成功而本地仍 401：检查代理和身份头。
 ```
 
-## 本机浏览器联调鉴权代理（显式启用）
+## 本机浏览器联调鉴权代理（业务测试必需）
 
-本地前端直连 `127.0.0.1:18080` 时不会经过 APISIX，浏览器请求必须由本机临时代理补充三个身份头。为避免改业务仓库，Skill 提供可选脚本：
+本地直连后端不经过 APISIX，由现有代理补充身份头，无需修改业务代码。
+
+恢复与交付按这一条链路执行：
+
+```text
+当前 Dev 会话 → 认证中心校验并换身份（失效则重新登录）
+→ 身份仅在内存中传给代理 → 前端指向 :18081 并重载
+→ 协议状态 HTTP 200 / code=200 → 历史会话加载成功、输入框可用 → 交付
+```
+
+协议状态为待确认时，展示完整协议交用户决定；已确认时不应再弹窗。
+代理固定绑定启动时的账号；切换账号须更新代理身份后重新验证。
+浏览器会话获取脚本失败时，按浏览器 Skill 复用当前可见 Dev 登录会话，不机械重试启动器。
 
 ```bash
 PROXY=~/.agents/skills/wl-compass-local-test/scripts/local-auth-proxy.mjs
 
 # 当前 shell 中准备凭证；不要写入仓库或日志
-export COMPASS_LOCAL_ACCESS_TOKEN="<sso_sessionid>"
+export COMPASS_LOCAL_ACCESS_TOKEN="<有效 Dev token>"
 export COMPASS_LOCAL_WHALE_IDENTITY="$(printf %s '<whaleIdentity JSON>' | base64 | tr -d '\n')"
 
-# 仅监听本机 127.0.0.1，不默认启动
+# 仅监听本机 127.0.0.1，凭证准备后启动
 node "$PROXY" start --listen 127.0.0.1:18081 --target http://127.0.0.1:18080
 
 # 以本机代理为前端接口地址（只影响当前启动的前端进程）
@@ -221,7 +241,7 @@ node "$PROXY" stop
 
 注意：认证中心返回的 `data.whaleIdentity` 是对象，必须先将整个 JSON 对象 Base64 编码后再放入请求头。
 
-安全边界：代理只允许绑定 `127.0.0.1`，目标只允许本机 HTTP 服务；token 只从当前进程环境读取，不落盘、不打印；缺少凭证时拒绝启动。该能力默认关闭，不影响其他本地测试。
+安全边界：代理只允许绑定 `127.0.0.1`，目标只允许本机 HTTP 服务；token 只从当前进程环境读取，不落盘、不打印；缺少凭证时拒绝启动。浏览器业务测试须先通过代理对协议状态接口做只读检查，HTTP 200 且业务 `code=200` 才能宣称鉴权就绪。健康检查不能代替鉴权；不得代用户接受协议。
 
 ## 验证链路（API 级 smoke，5 分钟）
 
@@ -268,7 +288,7 @@ curl -s -X POST localhost:18080/api/v1/freight/search $H -d '{"channel":"web","l
 | 编译报"程序包 xxx 不存在"几百条 | settings.xml 曾被写入 Windows localRepository（2026-10-09 已修正并留注释防回潮） | 已根治；若从同事机器重新同步 settings.xml 需复查该行；worktree 里误入的 `C:\Users\HGJ` 目录可删 |
 | 端口被占/指向 dev MQ（开着 nacos 时） | nacos 远程配置 addFirst 压过命令行 | nacos config+discovery 都 disabled |
 | `mvn spring-boot:run` 参数没生效 | jvmArguments 被静默丢弃 | 用 jar 方式 |
-| 401 未授权 / 缺少 whale-identity | 没构造身份头 | 见「鉴权配方」 |
+| 协议加载卡住 / 401 | 登录态失效或本地身份头缺失 | 按「鉴权代理」恢复链路验证，先换身份再查代理 |
 | free-time-query 400 旧任务未保存完整候选 | 首查没带免箱条件，或缓存命中老任务 | 首查带 free_time_conditions 重新建任务 |
 | 前端全部 404 | APP_API_GATEWAY 设成空串 | 必须完整 URL（坑 #5） |
 | broker 起不来 "Is a directory" | bind 挂载单文件在 Docker Desktop 不可用 | named volume（见步骤 1） |
