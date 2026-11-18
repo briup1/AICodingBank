@@ -28,4 +28,4 @@ plugin.mjs 导出工厂供隔离夹具调用，不是可直接安装的 Plugin �
 - 新建 CLI 模型会话属于启动另一个 Agent；本机约束要求通过 Herdr 启动 Pi 并确认 high，不能自行运行 OpenCode 子会话替代。下一步真实 OpenCode 验收需用户明确允许“隔离宿主测试进程”作为该约束的例外，或用户亲自启动测试会话。未经此确认不启动。
 - 当前会话尚未完成隔离配置，也未验证如何排除全局指令/外部 Skills 的干扰。不得将本原型标记为上线或跨宿主可用。
 
-详见 ../../../docs/research/2026-10-19-progressive-loading-host-audit.md。
+详见 ../../../工作台文档/调研报告/2026-10-19-progressive-loading-host-audit.md。

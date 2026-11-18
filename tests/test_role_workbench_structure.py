@@ -8,21 +8,21 @@ from urllib.parse import unquote, urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
 ROLE_PATHS = (
-    'roles/project-manager/ROLE.md',
-    'roles/engineering/architect/ROLE.md',
-    'roles/engineering/developer/ROLE.md',
-    'roles/engineering/tester/ROLE.md',
-    'roles/media/editor/ROLE.md',
-    'roles/shared/researcher/ROLE.md',
-    'roles/engineering/ui/ROLE.md',
-    'roles/engineering/frontend/ROLE.md',
+    '岗位手册/project-manager/ROLE.md',
+    '岗位手册/engineering/architect/ROLE.md',
+    '岗位手册/engineering/developer/ROLE.md',
+    '岗位手册/engineering/tester/ROLE.md',
+    '岗位手册/media/editor/ROLE.md',
+    '岗位手册/shared/researcher/ROLE.md',
+    '岗位手册/engineering/ui/ROLE.md',
+    '岗位手册/engineering/frontend/ROLE.md',
 )
 
 
 class RoleWorkbenchStructureTests(unittest.TestCase):
     def test_roles_have_explicit_enablement(self):
         self.assertEqual(
-            {str(p.relative_to(ROOT)) for p in (ROOT / 'roles').rglob('ROLE.md')},
+            {str(p.relative_to(ROOT)) for p in (ROOT / '岗位手册').rglob('ROLE.md')},
             set(ROLE_PATHS),
         )
         for relative in ROLE_PATHS:
@@ -40,12 +40,12 @@ class RoleWorkbenchStructureTests(unittest.TestCase):
         self.assertIn('enabled: true\n', pm)
         self.assertIn('## 开工开场', pm)
         self.assertIn('项目经理', pm)
-        researcher = (ROOT / 'roles/shared/researcher/ROLE.md').read_text(encoding='utf-8')
+        researcher = (ROOT / '岗位手册/shared/researcher/ROLE.md').read_text(encoding='utf-8')
         self.assertIn('status: active\n', researcher)
         self.assertIn('enabled: true\n', researcher)
         self.assertIn('enabled_scope:', researcher)
-        active = {'roles/shared/researcher/ROLE.md', 'roles/engineering/ui/ROLE.md',
-                  'roles/engineering/frontend/ROLE.md', 'roles/engineering/tester/ROLE.md'}
+        active = {'岗位手册/shared/researcher/ROLE.md', '岗位手册/engineering/ui/ROLE.md',
+                  '岗位手册/engineering/frontend/ROLE.md', '岗位手册/engineering/tester/ROLE.md'}
         for relative in active:
             text = (ROOT / relative).read_text(encoding='utf-8')
             self.assertIn('enabled: true\n', text)
@@ -54,18 +54,18 @@ class RoleWorkbenchStructureTests(unittest.TestCase):
             text = (ROOT / relative).read_text(encoding='utf-8')
             self.assertIn('status: draft\n', text, relative)
             self.assertIn('enabled: false\n', text, relative)
-        for directory in ('roles', 'personal', 'tools/execution-profiles'):
+        for directory in ('岗位手册', 'personal', 'tools/execution-profiles'):
             self.assertEqual(list((ROOT / directory).rglob('SKILL.md')), [])
 
     def test_roles_have_distinct_work_chains_and_handoffs(self):
         expectations = {
-            'roles/engineering/architect/ROLE.md': ('比较必要选项', '事实、假设和待确认决定', '实现者能据此行动'),
-            'roles/engineering/developer/ROLE.md': ('最小改法', '先复现', '没有专用Skill不等于不能开工'),
-            'roles/engineering/frontend/ROLE.md': ('用户操作', '加载、空态、失败和恢复', '构建通过不等于交互正确'),
-            'roles/engineering/tester/ROLE.md': ('通过、失败、阻塞或未覆盖', '不从当前实现反推正确答案', '不为通过修改预期'),
-            'roles/engineering/ui/ROLE.md': ('用户操作 → 页面变化', '前端能落实、测试能判断', '设计自查不是独立审阅'),
-            'roles/media/editor/ROLE.md': ('读者', '核心主张和结构', '成稿不等于获准发布'),
-            'roles/shared/researcher/ROLE.md': ('实际阅读关键原文', '区分事实、推断与建议', '不把未命中当作不存在'),
+            '岗位手册/engineering/architect/ROLE.md': ('比较必要选项', '事实、假设和待确认决定', '实现者能据此行动'),
+            '岗位手册/engineering/developer/ROLE.md': ('最小改法', '先复现', '没有专用Skill不等于不能开工'),
+            '岗位手册/engineering/frontend/ROLE.md': ('用户操作', '加载、空态、失败和恢复', '构建通过不等于交互正确'),
+            '岗位手册/engineering/tester/ROLE.md': ('通过、失败、阻塞或未覆盖', '不从当前实现反推正确答案', '不为通过修改预期'),
+            '岗位手册/engineering/ui/ROLE.md': ('用户操作 → 页面变化', '前端能落实、测试能判断', '设计自查不是独立审阅'),
+            '岗位手册/media/editor/ROLE.md': ('读者', '核心主张和结构', '成稿不等于获准发布'),
+            '岗位手册/shared/researcher/ROLE.md': ('实际阅读关键原文', '区分事实、推断与建议', '不把未命中当作不存在'),
         }
         for relative, phrases in expectations.items():
             text = (ROOT / relative).read_text(encoding='utf-8')
@@ -73,7 +73,7 @@ class RoleWorkbenchStructureTests(unittest.TestCase):
             self.assertGreaterEqual(len(steps), 4, relative)
             for phrase in phrases:
                 self.assertIn(phrase, text, relative)
-        roles = (ROOT / 'roles/README.md').read_text(encoding='utf-8')
+        roles = (ROOT / '岗位手册/README.md').read_text(encoding='utf-8')
         self.assertIn('不是执行者接单前必须通读的前言', roles)
         self.assertIn('没有专用Skill不等于不能执行', roles)
 
@@ -99,7 +99,7 @@ class RoleWorkbenchStructureTests(unittest.TestCase):
             result = subprocess.run(['bash', '-c', command.group(1)], cwd=directory,
                                     capture_output=True, text=True, check=True)
         expected = []
-        for manual in (ROOT / 'roles').rglob('ROLE.md'):
+        for manual in (ROOT / '岗位手册').rglob('ROLE.md'):
             expected.extend(f'{manual}:{line}' for line in manual.read_text(encoding='utf-8').splitlines()
                             if re.match(r'^(name|status|enabled|enabled_scope):', line))
         self.assertCountEqual(result.stdout.splitlines(), expected)
@@ -115,12 +115,12 @@ class RoleWorkbenchStructureTests(unittest.TestCase):
         self.assertIn('ROLE.md#三段式派单', strategy)
         self.assertNotIn('> 你是〔角色〕', strategy)
         self.assertNotIn('### 三段式派单接口', strategy)
-        roles = (ROOT / 'roles/README.md').read_text(encoding='utf-8')
+        roles = (ROOT / '岗位手册/README.md').read_text(encoding='utf-8')
         for rule in ('临时职责与交付', '不要求先有 ROLE.md', '不自动写入岗位名册',
                      '不能改称临时角色来绕过', '角色称谓不创造专业能力或权限'):
             self.assertIn(rule, roles)
         extending = (ROOT / 'EXTENDING.md').read_text(encoding='utf-8')
-        self.assertIn('roles/README.md#临时职责与交付', extending)
+        self.assertIn('岗位手册/README.md#临时职责与交付', extending)
 
     def test_pm_inline_commands_keep_required_guards(self):
         pm = (ROOT / ROLE_PATHS[0]).read_text(encoding='utf-8')
@@ -171,7 +171,7 @@ class RoleWorkbenchStructureTests(unittest.TestCase):
         self.assertIn('以下命令仅用于 Herdr 通道', pm)
 
     def test_categories_and_supporting_directories_exist(self):
-        paths = ['roles', 'tools', '.local']
+        paths = ['岗位手册', 'tools', '.local']
         paths += [f'tools/skills/{name}' for name in
                   ('engineering', 'media', 'shared', 'workbench')]
         paths += [f'tools/{name}' for name in
@@ -181,20 +181,22 @@ class RoleWorkbenchStructureTests(unittest.TestCase):
 
     def test_new_documentation_links_resolve(self):
         paths = [ROOT / name for name in ('README.md', 'AGENTS.md', 'EXTENDING.md')]
-        paths += list((ROOT / 'roles').rglob('*.md'))
+        paths += list((ROOT / '岗位手册').rglob('*.md'))
+        paths += [ROOT / '工作方法/开发与验收.md', ROOT / '工作方法/新产品与新功能调研.md',
+                  ROOT / '工作方法/已有项目的现状与改动分析.md']
         # Only check shared docs, not ignored project paths or runtime evidence.
         paths += [ROOT / name for name in (
-            '.local/README.md', 'docs/reference/Compass跨仓回归导航.md',
-            'docs/migrations/2026-11-18-workbench-task-navigation.md',
+            '.local/README.md', '工作台文档/参考资料/Compass跨仓回归导航.md',
+            '工作台文档/迁移记录/2026-11-18-workbench-task-navigation.md',
         )]
         paths += list((ROOT / 'tools').glob('README.md'))
         paths += list((ROOT / 'tools').glob('*/README.md'))
         paths += list((ROOT / 'tools/skills').glob('*/README.md'))
         paths += [ROOT / 'tools/execution-profiles/delegation.md']
         paths += list((ROOT / 'tools/skills/workbench/wl-herdrs').rglob('*.md'))
-        paths += [ROOT / 'best_practices' / name for name in ('README.md', 'STANDARD.md', 'TEMPLATE.md')]
-        paths += list((ROOT / 'best_practices').glob('20*/README.md'))
-        paths += [ROOT / 'docs/wl-ai-skills/specs/2026-10-18-role-workbench-structure-design.md']
+        paths += [ROOT / '实践案例' / name for name in ('README.md', 'STANDARD.md', 'TEMPLATE.md')]
+        paths += list((ROOT / '实践案例').glob('20*/README.md'))
+        paths += [ROOT / '工作台文档/工作台能力/specs/2026-10-18-role-workbench-structure-design.md']
         for path in paths:
             text = path.read_text(encoding='utf-8')
             for href in re.findall(r'\[[^\]]*\]\(([^)]+)\)', text):
@@ -205,10 +207,10 @@ class RoleWorkbenchStructureTests(unittest.TestCase):
 
     def test_workbench_entry_routes_by_intent(self):
         entry = (ROOT / 'AGENTS.md').read_text(encoding='utf-8')
-        self.assertIn('personal/projects.local.md', entry)
-        self.assertIn('roles/project-manager/ROLE.md', entry)
+        self.assertIn('本机资料/projects.local.md', entry)
+        self.assertIn('岗位手册/project-manager/ROLE.md', entry)
         self.assertIn('worktree list --porcelain', entry)
-        self.assertIn('docs/reference/Compass跨仓回归导航.md', entry)
+        self.assertIn('工作台文档/参考资料/Compass跨仓回归导航.md', entry)
         self.assertNotIn('tools/compass-platform-e2e/README.md', entry)
         self.assertNotIn('/Users/', entry)
         self.assertEqual(list(ROOT.glob('WORKBENCH*')), [])
@@ -220,7 +222,7 @@ class RoleWorkbenchStructureTests(unittest.TestCase):
 
     def test_private_files_and_runtime_data_are_ignored(self):
         private_paths = (
-            'personal/projects.local.md',
+            '本机资料/projects.local.md',
             '.local/sessions/probe.json',
             '.local/records/probe.md',
         )

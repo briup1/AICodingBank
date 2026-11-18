@@ -8,4 +8,4 @@
 - 回滚方式：`git revert -m 1 8df15b189c8e55465950e87e7f0926a32622d8a7` → 重跑 Python/Node 检查 → 复核工作台入口与 Skill 登记。
 - 更快手段：无 feature flag；如尚未推送，可将本地 `main` 重置回合并前提交，但不得对共享远端使用强推。
 - 限制：这是 merge commit，必须使用 `-m 1`；回滚会一并撤销该分支包含的目录迁移、文档和测试契约变化，执行前需确认是否有后续提交依赖新路径。
-- 观察期：本次没有部署或运行服务；后续首次使用新入口时重点核对 `AGENTS.md`、`personal/projects.local.md`、`skills.yaml` 与目标 Skill 路径。
+- 观察期：本次没有部署或运行服务；后续首次使用新入口时重点核对 `AGENTS.md`、`本机资料/projects.local.md`、`skills.yaml` 与目标 Skill 路径。

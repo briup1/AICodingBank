@@ -53,7 +53,7 @@ class VisualArtifactWorkbenchTests(unittest.TestCase):
                 continue
             self.assertTrue((ROOT / target).is_file(), target)
         ignored = subprocess.run(
-            ["git", "check-ignore", "personal/projects.local.md"],
+            ["git", "check-ignore", "本机资料/projects.local.md"],
             cwd=ROOT, capture_output=True, text=True, check=False,
         )
         self.assertEqual(ignored.returncode, 0)

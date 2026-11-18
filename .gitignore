@@ -7,9 +7,10 @@ __pycache__/
 node_modules/
 
 # The local project index stays local.
-personal/projects.local.md
+本机资料/projects.local.md
+本机资料/需求分析技能.local.md
 # User-maintained local test accounts; never publish credentials.
-personal/compass-test-accounts.local.md
+本机资料/compass-test-accounts.local.md
 tools/execution-profiles/*.local.yaml
 # Keep runtime conventions, not runtime state.
 /.local/*

@@ -20,7 +20,7 @@
 - `template-*.md` — 10 个技术栈模板（历史材料，未在本轮验证）
 - [samples/](samples) — 用户级 / 项目级入口文件样例
 - [rules/](rules) — 按文件路径触发的分层规则样例（`.claude/rules/`）
-- 配套生成提示词与四层 steering 方法见 [best_practices 记录](../../best_practices/2026-06-10-项目入口规则-生成CLAUDE.md与AGENTS.md提示词/README.md)
+- 配套生成提示词与四层 steering 方法见 [实践案例 记录](../../../实践案例/2026-06-10-项目入口规则-生成CLAUDE.md与AGENTS.md提示词/README.md)
 
 ## 使用方式
 

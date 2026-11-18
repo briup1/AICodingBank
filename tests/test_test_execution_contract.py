@@ -33,7 +33,7 @@ class TestExecutionContractTests(unittest.TestCase):
         self.assertIn('tools/execution-profiles/test-execution.md', agents)
         entries = [
             'tools/execution-profiles/README.md',
-            'roles/engineering/tester/ROLE.md',
+            '岗位手册/engineering/tester/ROLE.md',
             'tools/skills/engineering/wl-qa-test-planner/SKILL.md',
             'tools/skills/engineering/wl-ticket-run/SKILL.md',
             'tools/skills/workbench/wl-auto-delivery/SKILL.md',

@@ -39,7 +39,7 @@ description: 仅用户主动点名或选择本 Skill 时加载使用；任务匹
 固定生成：
 
 ```text
-docs/requirements/NNNN-slug/design.wl-design-doc.html
+工作台文档/工作台需求/NNNN-slug/design.wl-design-doc.html
 ```
 
 规则：

@@ -19,7 +19,7 @@ Produce an approved design, not implementation.
 4. Present two or three viable approaches with trade-offs. Recommend the approach that best fits the existing architecture and favors extension points over isolated new logic.
 5. Present the proposed architecture, components, data flow, failure handling, compatibility, rollout or rollback needs, and test strategy. Scale detail to complexity and use ASCII flowcharts for flows.
 6. Obtain explicit user approval before implementation begins.
-7. Save the approved design to `docs/wl-ai-skills/specs/YYYY-MM-DD-<topic>-design.md` unless the project specifies another location.
+7. Save the approved design to `工作台文档/工作台能力/specs/YYYY-MM-DD-<topic>-design.md` unless the project specifies another location.
 8. Review the document for ambiguity, contradictions, placeholders, unjustified scope, and unverifiable acceptance criteria.
 9. Hand off the approved design to `wl-writing-plans` only when the user or project explicitly selects that detailed planning format. Otherwise deliver this stage and stop; choosing this design route does not automatically select another planning or execution route.
 

@@ -11,6 +11,6 @@ Skill 本体已按主要用途迁入 [skills](skills/README.md)，名称、验�
 | 共用程序 | [scripts](scripts/README.md) | 真正跨能力共用的程序 |
 | 通用格式 | [templates](templates/README.md) | 真正共用的交接格式 |
 
-最佳实践记录单独放在 [best_practices](../best_practices/README.md)，它能记录技术、内容等问题，不强行归为工具的一部分。岗位只引用能力；Skill 专用脚本、模板、参考资料随包，不拆散。
+最佳实践记录单独放在 [实践案例](../实践案例/README.md)，它能记录技术、内容等问题，不强行归为工具的一部分。岗位只引用能力；Skill 专用脚本、模板、参考资料随包，不拆散。
 
-本轮只完成文件迁移和引用适配，没有启用岗位、批量安装、更新上游或修改凭证配置。旧 Skill 路径保留兼容软链，不是第二份源码。
+仓库内旧 Skill 兼容路径已退役；现行正文与宿主链接的区别见[技能维护说明](skills/README.md)。

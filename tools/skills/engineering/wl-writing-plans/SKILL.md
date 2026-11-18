@@ -46,7 +46,7 @@ List every file expected to be created, modified, or deleted. If implementation 
 
 ## Plan format
 
-Save to `docs/wl-ai-skills/plans/YYYY-MM-DD-<feature-name>.md` unless the project overrides the location. Include:
+Save to `工作台文档/工作台能力/plans/YYYY-MM-DD-<feature-name>.md` unless the project overrides the location. Include:
 
 ```text
 Goal and non-goals

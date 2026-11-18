@@ -57,7 +57,7 @@ export function saveAuth(env, identity, storage, root = AUTH_ROOT) {
 }
 export function localAccount(env) {
   if (!['dev', 'beta'].includes(env)) return null
-  const path = new URL('../../../personal/compass-test-accounts.local.md', import.meta.url)
+  const path = new URL('../../../本机资料/compass-test-accounts.local.md', import.meta.url)
   const text = readFileSync(path, 'utf8')
   const label = env === 'dev' ? 'Dev' : 'Beta'
   const section = text.split(`## ${label} · Web 查价助手`)[1]?.split('\n## ')[0]

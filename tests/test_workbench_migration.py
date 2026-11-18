@@ -29,7 +29,7 @@ class WorkbenchMigrationTests(unittest.TestCase):
         self.assertTrue(lock['skills'])
 
     def test_practice_records_are_dated_and_keep_historical_status(self):
-        base = ROOT / 'best_practices'
+        base = ROOT / '实践案例'
         records = [p for p in base.iterdir() if p.is_dir() and not p.is_symlink()]
         self.assertGreaterEqual(len(records), 4)
         for record in records:
@@ -41,6 +41,14 @@ class WorkbenchMigrationTests(unittest.TestCase):
             self.assertTrue(metadata['source'])
         self.assertTrue((base / 'STANDARD.md').is_file())
         self.assertTrue((base / 'TEMPLATE.md').is_file())
+
+    def test_chinese_roots_have_no_legacy_aliases(self):
+        for retired in ("roles", "best_practices", "tools/prompt-library", "实践案例/历史项目重构skill"):
+            path = ROOT / retired
+            self.assertFalse(path.exists() or path.is_symlink(), retired)
+        for name in ("实践案例", "岗位手册", "提示词库"):
+            self.assertFalse((ROOT / name).is_symlink())
+            self.assertTrue((ROOT / name / "README.md").is_file())
 
     def test_legacy_entry_paths_are_retired_without_skill_copies(self):
         for retired in ('skills', 'skills-on-demand', 'ai_coding_sec_dev_workflow'):
@@ -70,16 +78,17 @@ class WorkbenchMigrationTests(unittest.TestCase):
             'tools/skills/engineering/legacy-snapshots/ralph-wiggum',
             'tools/skills/shared/legacy-snapshots/agent-browser',
         )
-        manifest = json.loads((ROOT / "docs/migrations/2026-10-18-path-map.json").read_text())
+        manifest = json.loads((ROOT / "工作台文档/迁移记录/2026-10-18-path-map.json").read_text())
         for move in manifest["moves"]:
-            target = ROOT / move["to"]
+            # 清单记录当时的路径；沿后续硬迁移核对现行归宿。
+            target = ROOT / move["to"].replace("best_practices/", "实践案例/", 1)
             if any(move["to"] == p or move["to"].startswith(p + "/") for p in retired_snapshots):
                 self.assertFalse(target.exists(), move)
                 continue
             self.assertTrue(target.is_dir(), move)
             self.assertFalse(target.is_symlink(), move)
             if move["compatibility_symlink"] and not move["from"].startswith(
-                    ("claudecode_guide/", "skills/", "skills-on-demand/", "ai_coding_sec_dev_workflow")):
+                    ("best_practices/", "claudecode_guide/", "skills/", "skills-on-demand/", "ai_coding_sec_dev_workflow")):
                 # claudecode_guide 内部软链与根兼容入口已按批准退役，见归位/退役记录。
                 old = ROOT / move["from"]
                 self.assertTrue(old.is_symlink(), move)
@@ -110,16 +119,16 @@ class WorkbenchMigrationTests(unittest.TestCase):
         for relative in removed:
             self.assertFalse((ROOT / relative).exists(), relative)
         self.assertTrue((ROOT / 'tools/skills/engineering/ai_coding_sec_dev_workflow/SKILL.md').is_file())
-        self.assertTrue((ROOT / 'best_practices/2026-03-24-历史项目学习-生成系统学习文档/prompt.md').is_file())
-        review = (ROOT / 'docs/migrations/2026-10-18-cleanup-candidates.md').read_text()
+        self.assertTrue((ROOT / '实践案例/2026-03-24-历史项目学习-生成系统学习文档/prompt.md').is_file())
+        review = (ROOT / '工作台文档/迁移记录/2026-10-18-cleanup-candidates.md').read_text()
         self.assertIn('本轮删除 7 个文件', review)
         self.assertIn('C04 已按用户要求保留并提炼', review)
 
     def test_claudecode_guide_content_relocated_to_canonical_homes(self):
         for relative in (
-                'best_practices/2026-06-16-任务编排-目标驱动的多角色任务提示词/prompt.md',
-                'best_practices/2026-10-09-任务描述-轻量化任务描述模板/prompt.md',
-                'best_practices/2026-06-10-项目入口规则-生成CLAUDE.md与AGENTS.md提示词/生成AGENTS.md提示词-分层优化版.md',
+                '实践案例/2026-06-16-任务编排-目标驱动的多角色任务提示词/prompt.md',
+                '实践案例/2026-10-09-任务描述-轻量化任务描述模板/prompt.md',
+                '实践案例/2026-06-10-项目入口规则-生成CLAUDE.md与AGENTS.md提示词/生成AGENTS.md提示词-分层优化版.md',
                 'tools/templates/project-entry/template-java-springboot.md',
                 'tools/templates/project-entry/samples/用户级-claude.md',
                 'tools/templates/project-entry/rules',
@@ -127,7 +136,7 @@ class WorkbenchMigrationTests(unittest.TestCase):
                 'tools/integrations/subagent-配置指南.md',
                 'tools/integrations/examples/opencode/opencode.json',
                 'tools/integrations/examples/claude-code/settings-permissions.json',
-                'docs/reference/skills-cheatsheets/AI Coding 全场景工具地图.md',
+                '工作台文档/参考资料/skills-cheatsheets/AI Coding 全场景工具地图.md',
         ):
             self.assertTrue((ROOT / relative).exists(), relative)
         self.assertFalse((ROOT / 'claudecode_guide').exists())
@@ -138,9 +147,9 @@ class WorkbenchMigrationTests(unittest.TestCase):
         self.assertTrue((ROOT / 'tools/skills/media/legacy-snapshots/remotion-best-practices/SKILL.md').is_file())
 
     def test_migration_and_cleanup_are_separate(self):
-        text = (ROOT / 'docs/migrations/2026-10-18-role-workbench-migration.md').read_text()
+        text = (ROOT / '工作台文档/迁移记录/2026-10-18-role-workbench-migration.md').read_text()
         self.assertIn('未删除', text)
-        review = (ROOT / 'docs/migrations/2026-10-18-cleanup-candidates.md').read_text()
+        review = (ROOT / '工作台文档/迁移记录/2026-10-18-cleanup-candidates.md').read_text()
         self.assertIn('全部有明确去向', review)
         # 归位空壳经单独批准后删除，与本次迁移、清理仍相互独立。
         self.assertFalse((ROOT / 'claudecode_guide').exists())

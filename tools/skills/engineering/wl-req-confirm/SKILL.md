@@ -198,7 +198,7 @@ As a <角色>, I want <能力>, so that <价值>
 ## 产出
 
 ```
-docs/requirements/NNNN-slug/
+工作台文档/工作台需求/NNNN-slug/
 ├── requirement.wl-req-confirm.md      ← 唯一事实来源
 ├── requirement.wl-req-confirm.html    ← 生成物，供人阅读
 └── assets/                            ← 按需保留截图等证据附件
