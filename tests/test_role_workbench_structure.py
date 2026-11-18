@@ -181,8 +181,12 @@ class RoleWorkbenchStructureTests(unittest.TestCase):
 
     def test_new_documentation_links_resolve(self):
         paths = [ROOT / name for name in ('README.md', 'AGENTS.md', 'EXTENDING.md')]
-        for directory in ('roles', 'personal', '.local'):
-            paths += list((ROOT / directory).rglob('*.md'))
+        paths += list((ROOT / 'roles').rglob('*.md'))
+        # Only check shared docs, not ignored project paths or runtime evidence.
+        paths += [ROOT / name for name in (
+            '.local/README.md', 'docs/reference/Compass跨仓回归导航.md',
+            'docs/migrations/2026-11-18-workbench-task-navigation.md',
+        )]
         paths += list((ROOT / 'tools').glob('README.md'))
         paths += list((ROOT / 'tools').glob('*/README.md'))
         paths += list((ROOT / 'tools/skills').glob('*/README.md'))
@@ -199,10 +203,14 @@ class RoleWorkbenchStructureTests(unittest.TestCase):
                     continue
                 self.assertTrue((path.parent / unquote(parts.path)).exists(), (path, href))
 
-    def test_workbench_entry_is_a_resource_index(self):
+    def test_workbench_entry_routes_by_intent(self):
         entry = (ROOT / 'AGENTS.md').read_text(encoding='utf-8')
         self.assertIn('personal/projects.local.md', entry)
         self.assertIn('roles/project-manager/ROLE.md', entry)
+        self.assertIn('worktree list --porcelain', entry)
+        self.assertIn('docs/reference/Compass跨仓回归导航.md', entry)
+        self.assertNotIn('tools/compass-platform-e2e/README.md', entry)
+        self.assertNotIn('/Users/', entry)
         self.assertEqual(list(ROOT.glob('WORKBENCH*')), [])
         for name in ('README.md', 'profile.example.md', 'profile.local.md',
                      'preferences.local.md', 'runtime.local.md'):
