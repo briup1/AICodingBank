@@ -71,6 +71,33 @@ export function syncMarkers(repo, remote, confirmed) {
   saveConfig(config); ready(repo, policy); return policy;
 }
 
+export function recoverDivergedMarker(repo, remote, confirmed) {
+  if (!confirmed) throw new Error('恢复分叉需要 --confirm');
+  if (!/^[a-zA-Z0-9._-]+$/.test(remote || '')) throw new Error('远端名称无效');
+  const policy = policyFor(repo);
+  if (!policy || !policy.markers.length) throw new Error('尚未登记 Dev 标记');
+  if (git(repo, ['symbolic-ref', '--quiet', '--short', 'HEAD']).text !== policy.devBranch) throw new Error('只能在 Dev 工作区恢复');
+  if (git(repo, ['status', '--porcelain']).text) throw new Error('Dev 工作区必须干净');
+  for (const state of ['MERGE_HEAD', 'CHERRY_PICK_HEAD', 'REVERT_HEAD', 'rebase-merge', 'rebase-apply', 'sequencer']) {
+    if (existsSync(git(repo, ['rev-parse', '--path-format=absolute', '--git-path', state]).text)) throw new Error('有进行中的 Git 操作');
+  }
+  const head = commit(repo, 'HEAD');
+  for (const marker of policy.markers) {
+    if (git(repo, ['rev-parse', '--verify', marker.ref]).text !== marker.sha || commit(repo, marker.sha) !== marker.sha) throw new Error('标记缺失或被改写');
+  }
+  if (!policy.markers.some(m => isAncestor(repo, m.sha, head))) throw new Error('本地 Dev 不包含已登记标记');
+  if (!policy.markers.some(m => m.sha === head && git(repo, ['rev-parse', `${head}^{tree}`]).text === git(repo, ['rev-parse', `${head}^1^{tree}`]).text)) throw new Error('仅支持本地 Dev 顶点为已登记的空标记');
+  const ref = `refs/remotes/${remote}/${policy.devBranch}`;
+  const remoteTip = commit(repo, ref);
+  if (isAncestor(repo, remoteTip, head) || isAncestor(repo, head, remoteTip)) throw new Error('Dev 未分叉，不需要恢复');
+  if (!isAncestor(repo, `${head}^1`, remoteTip)) throw new Error('远端 Dev 不包含标记父提交，不能自动恢复');
+  const remoteLive = git(repo, ['ls-remote', '--heads', remote, `refs/heads/${policy.devBranch}`]).text.split(/\s+/)[0];
+  if (remoteLive !== remoteTip) throw new Error('远端 Dev 已变化，请先 fetch 并重新核对');
+  git(repo, ['merge', '--no-edit', ref]);
+  ready(repo, policy);
+  return { head: commit(repo, 'HEAD'), previousHead: head, remoteTip, markers: policy.markers };
+}
+
 function options(args) {
   const result = {};
   for (let i = 0; i < args.length; i++) {
@@ -89,6 +116,7 @@ export function main(args) {
   if (action === 'register') return register(repo, opts.dev);
   if (action === 'init-marker') return initMarker(repo, opts.id, opts.confirm);
   if (action === 'sync-markers') return syncMarkers(repo, opts.remote || 'origin', opts.confirm);
+  if (action === 'recover-diverged-marker') return recoverDivergedMarker(repo, opts.remote || 'origin', opts.confirm);
   if (action === 'check-ref') {
     const policy = policyFor(repo);
     return policy ? checkCandidate(repo, policy, opts.target, opts.source) : allow('未登记仓库');

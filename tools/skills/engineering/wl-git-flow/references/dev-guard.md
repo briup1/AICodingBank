@@ -66,6 +66,17 @@ node /path/to/dev-guard/cli.mjs init-marker \
 
 保护起点是 M：M 以前的 Dev 历史不会自动带 M，不能承诺追溯覆盖；已存在集成历史的 Dev 上补标记，只保护后续携带该标记的历史。明确引用 `feature/dev`/远端 Dev 名称的反向操作仍直接拒绝。缓存的远端旧 Dev 若位于标记之前，允许本地新标记发布，不能把该旧缓存视为已标记历史。
 
+### 未推送空标记与远端 Dev 前进后分叉
+
+仅当本地 Dev 顶点就是已登记的单父空标记、远端 Dev 仍包含该标记的父提交，且工作区干净时，可在先 fetch 后使用：
+
+```bash
+node tools/skills/engineering/wl-git-flow/scripts/dev-guard/cli.mjs recover-diverged-marker \
+  --repo /path/to/dev-worktree --remote origin --confirm
+```
+
+命令核对远端实时 SHA 后把远端合入本地 Dev，保留全部提交与原标记；不推送。远端仍未带标记时，只有已被包含进本地带标记 Dev 的远端引用才允许通过就绪检查。远端发生变化、存在本地后续提交或历史不满足条件时拒绝；冲突需要在 Dev 工作区处理。恢复后按授权推送 Dev 和原标记 tag；不要强推。
+
 ### 3. 新 clone / 显式同步
 
 ```bash

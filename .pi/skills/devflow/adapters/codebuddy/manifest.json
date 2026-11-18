@@ -1,0 +1,37 @@
+{
+  "version": "1.0",
+  "id": "codebuddy",
+  "dispatch_tool": "task",
+  "topology": "team",
+  "team_name_prefix": "multi-agents-devflow-",
+  "stage_executor": "devflow-stage-team-member",
+  "research_executor": "devflow-research-team-member",
+  "required_tools": ["task", "team_create", "send_message", "team_delete", "use_skill"],
+  "host_agents": [
+    {
+      "id": "devflow-stage-executor",
+      "file": "stage-executor.md",
+      "description": "DevFlow 通用阶段执行器：每次只运行提示中指定的一个逻辑角色",
+      "access": "write"
+    },
+    {
+      "id": "devflow-research-helper",
+      "file": "research-helper.md",
+      "description": "DevFlow 通用只读调研助手：执行代码或知识检索，不执行代码审查",
+      "access": "read"
+    }
+  ],
+  "agent": {
+    "agentMode": "agentic",
+    "enabled": true,
+    "enabledAutoRun": true,
+    "read_permission_mode": "bypassPermissions",
+    "report_permission_mode": "bypassPermissions",
+    "write_permission_mode": "bypassPermissions"
+  },
+  "command": {
+    "description": "通过 CodeBuddy 生命周期适配器运行可移植的 DevFlow",
+    "argument_hint": "<软件交付请求>",
+    "allowed_tools": ["use_skill", "task", "team_create", "send_message", "team_delete", "read_file", "write_to_file", "search_content", "list_dir", "execute_command", "ask_followup_question", "codebase_search"]
+  }
+}

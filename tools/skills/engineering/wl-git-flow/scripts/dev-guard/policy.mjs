@@ -81,7 +81,9 @@ export function ready(cwd, policy) {
       const marked = policy.markers.some(m => isAncestor(cwd, m.sha, sha));
       // A cached remote tip preceding initialization must not prevent publishing the new marker.
       const beforeBoundary = ref.startsWith('refs/remotes/') && policy.markers.some(m => isAncestor(cwd, sha, m.sha));
-      if (!marked && !beforeBoundary) throw new Error(`保护未就绪：${ref} 已重建或尚无标记，请初始化/同步后重试`);
+      const localDev = ref.startsWith('refs/remotes/') ? git(cwd, ['rev-parse', '--verify', `refs/heads/${policy.devBranch}`], { optional: true }) : null;
+      const mergedIntoMarkedDev = localDev?.status === 0 && policy.markers.some(m => isAncestor(cwd, m.sha, localDev.text)) && isAncestor(cwd, sha, localDev.text);
+      if (!marked && !beforeBoundary && !mergedIntoMarkedDev) throw new Error(`保护未就绪：${ref} 已重建或尚无标记，请初始化/同步后重试`);
     }
   }
 }

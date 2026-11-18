@@ -1,0 +1,37 @@
+{
+  "version": "1.0",
+  "id": "claude",
+  "compatibility": {
+    "verified_on": "2026-07-17",
+    "documentation": "https://code.claude.com/docs/en/sub-agents"
+  },
+  "dispatch_tool": "agent",
+  "topology": "spawn",
+  "stage_executor": "devflow-stage-executor",
+  "research_executor": "devflow-research-helper",
+  "required_tools": ["Agent"],
+  "installation": {
+    "project_dir": ".claude",
+    "agents_dir": "agents",
+    "skills_dir": "skills",
+    "skill_set": "portable"
+  },
+  "host_agents": [
+    {
+      "id": "devflow-stage-executor",
+      "file": "stage-executor.md",
+      "body": "../shared/agents/stage-executor.md",
+      "description": "仅在 DevFlow 明确派发 DESIGN 及后续阶段时使用；每次执行一个逻辑角色",
+      "frontmatter": {"model": "inherit", "permissionMode": "acceptEdits"},
+      "access": "write"
+    },
+    {
+      "id": "devflow-research-helper",
+      "file": "research-helper.md",
+      "body": "../shared/agents/research-helper.md",
+      "description": "仅在 DevFlow 明确派发有边界的代码或知识检索时使用，不执行代码审查",
+      "frontmatter": {"model": "inherit", "tools": "Read, Glob, Grep", "permissionMode": "plan"},
+      "access": "read"
+    }
+  ]
+}

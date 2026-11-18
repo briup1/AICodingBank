@@ -1,0 +1,3 @@
+# DevFlow 命令
+
+读取命令后的软件交付请求并调用 `devflow` Skill。每阶段优先执行 `prepare --emit-prompt → start → finish`，仅在恢复已 prepare 阶段时单独生成 prompt。REQUIREMENT 由主 Agent 调用需求澄清 Skill，报告完成后必须展示摘要并等待用户明确确认，执行 `approve --stage REQUIREMENT --user-confirmed` 后才能继续；SUMMARY 由主 Agent 汇总已验证产物，这两个阶段都不创建子 Agent。实际 route 中其他阶段必须按 adapter 拓扑创建真实、独立的执行者并登记。CodeBuddy 必须创建带 `team_name` 的 Team member，并把完整阶段 prompt 直接用于首次 `Task`；禁止先创建待命 member 再二次派发，也禁止退化为普通 `task` subagent。用户输入 `/devflow resume <slug>` 或 `/devflow 继续 <slug>` 时，直接运行 `resume --project-root . --slug <slug> --fresh-team`。返回的同名旧 Team 直接删除，不读取状态、不尝试唤醒；状态文件不存在时删除返回的旧 Team 后立即停止 resume 并要求重新提交原需求。生命周期能力不可用时停止并报告，不得调用项目中的旧 `architect`、`leader` 等同名角色顶替。

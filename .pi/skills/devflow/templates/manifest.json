@@ -1,0 +1,111 @@
+{
+  "version": "1.0",
+  "artifacts": [
+    {
+      "path": "01-solo/solo-report.md",
+      "stage": "SOLO",
+      "template": "solo-report.md",
+      "template_version": "1.1",
+      "content_concepts": [["范围", "scope"], ["计划", "plan"], ["变更", "changes"], ["自审", "self review"], ["测试", "tests"], ["API 接口文档", "api documentation"], ["剩余风险", "remaining risks"]]
+    },
+    {
+      "path": "01-requirement/requirement-report.md",
+      "stage": "REQUIREMENT",
+      "template": "requirement-report.md",
+      "template_version": "1.0",
+      "content_concepts": [["目标与背景", "outcome and context"], ["范围", "scope"], ["排除项", "out of scope"], ["决策与理由", "decisions and rationale"], ["验收标准", "acceptance criteria"], ["假设与证据", "assumptions and evidence"], ["未决问题", "open questions"]]
+    },
+    {
+      "path": "02-design/tech-design.md",
+      "stage": "DESIGN",
+      "template": "tech-design.md",
+      "template_version": "1.1",
+      "content_concepts": [["背景与目标", "context"], ["证据与约束", "evidence and constraints"], ["方案", "approach"], ["影响范围", "impact"], ["风险与对策", "risks"], ["回滚方案", "rollback"]]
+    },
+    {
+      "path": "02-design/execution-plan.md",
+      "stage": "DESIGN",
+      "template": "execution-plan.md",
+      "template_version": "1.1",
+      "content_concepts": [["目标与完成定义", "purpose"], ["上下文与范围", "context and scope"], ["执行任务", "tasks"], ["验证与验收", "validation and acceptance"], ["风险、恢复与回滚", "risks and recovery"]]
+    },
+    {
+      "path": "02-design/design-context/overview.md",
+      "stage": "DESIGN",
+      "condition": "requires_design_artifacts",
+      "template": "design-context-overview.md",
+      "template_version": "1.0",
+      "content_concepts": [["设计来源与目标", "source and goals"], ["页面结构", "structure"], ["响应式与状态", "responsive"], ["验收视口", "viewports"]]
+    },
+    {
+      "path": "02-design/design-context/components.md",
+      "stage": "DESIGN",
+      "condition": "requires_design_artifacts",
+      "template": "design-context-components.md",
+      "template_version": "1.0",
+      "content_concepts": [["组件清单", "components"], ["复用策略", "reuse"], ["视觉令牌", "tokens"], ["资源", "assets"]]
+    },
+    {
+      "path": "03-code/change-report.md",
+      "stage": "IMPLEMENT",
+      "template": "change-report.md",
+      "template_version": "1.1",
+      "content_concepts": [["变更摘要", "summary"], ["修改文件", "files changed"], ["验证结果", "validation"], ["计划偏差", "deviations"], ["API 接口文档", "api documentation"], ["剩余风险", "remaining risks"]]
+    },
+    {
+      "path": "03-code/review-report.md",
+      "stage": "REVIEW",
+      "template": "review-report.md",
+      "template_version": "1.0",
+      "content_concepts": [["审查结论", "verdict"], ["问题清单", "findings"], ["严重级别", "severity", "priority"], ["证据", "evidence"]]
+    },
+    {
+      "path": "04-test/test-report.md",
+      "stage": "TEST",
+      "template": "test-report.md",
+      "template_version": "1.1",
+      "content_concepts": [["测试范围", "scope"], ["项目测试能力", "test capabilities"], ["风险与覆盖矩阵", "coverage matrix", "test matrix"], ["测试命令", "commands"], ["测试结果", "results"], ["未运行项与剩余风险", "not run", "remaining risks"]]
+    },
+    {
+      "path": "05-knowledge/knowledge-report.md",
+      "stage": "KNOWLEDGE",
+      "template": "knowledge-report.md",
+      "template_version": "1.0",
+      "content_concepts": [["事实", "facts"], ["决策", "decisions"], ["经验", "lessons"], ["来源", "sources"]]
+    },
+    {
+      "path": "workflow-summary.md",
+      "stage": "SUMMARY",
+      "template": "workflow-summary.md",
+      "template_version": "1.0",
+      "content_concepts": [["交付结果", "outcome"], ["产物", "artifacts"], ["验证", "validation"], ["剩余风险", "remaining risks"]]
+    }
+  ],
+  "blueprints": [
+    {
+      "id": "api-docs-implement",
+      "target_pattern": "03-code/api-docs.md",
+      "template": "api-docs.md",
+      "template_version": "1.0"
+    },
+    {
+      "id": "api-docs-solo",
+      "target_pattern": "01-solo/api-docs.md",
+      "template": "api-docs.md",
+      "template_version": "1.0"
+    },
+    {
+      "id": "design-context-section",
+      "target_pattern": "02-design/design-context/sections/<section-id>.md",
+      "template": "design-context-section.md",
+      "template_version": "1.0"
+    }
+  ],
+  "system_templates": [
+    {
+      "id": "workflow-state",
+      "template": "workflow-state.json",
+      "template_version": "2.0"
+    }
+  ]
+}

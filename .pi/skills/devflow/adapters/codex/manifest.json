@@ -1,0 +1,9 @@
+{
+  "version": "1.0",
+  "id": "codex",
+  "dispatch_tool": "spawn_agent",
+  "topology": "spawn",
+  "stage_executor": "dynamic",
+  "research_executor": "dynamic",
+  "required_tools": ["spawn_agent", "send_message", "wait_agent"]
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "DevFlow"
+  short_description: "以需求协同、阶段隔离、证据规则和确定性门禁运行可恢复的软件交付流程"
+  default_prompt: "使用 $devflow 按需求协同、独立执行阶段、可维护模板和确定性门禁完成这个软件交付任务。"

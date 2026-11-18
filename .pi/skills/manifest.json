@@ -1,0 +1,6 @@
+{
+  "version": "1.0",
+  "skill_sets": {
+    "portable": ["devflow", "devflow-clarify-requirements"]
+  }
+}

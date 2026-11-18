@@ -1,0 +1,69 @@
+{
+  "version": "1.0",
+  "stage_rules": {
+    "REQUIREMENT": "stages/requirement.md",
+    "DESIGN": "stages/design.md",
+    "IMPLEMENT": "stages/implement.md",
+    "REVIEW": "stages/review.md",
+    "TEST": "stages/test.md",
+    "KNOWLEDGE": "stages/knowledge.md",
+    "SOLO": "stages/solo.md",
+    "SUMMARY": "stages/summary.md"
+  },
+  "profiles": [
+    {
+      "id": "frontend",
+      "title": "前端专项规则",
+      "file": "../references/frontend-workflow.md",
+      "stages": ["REQUIREMENT", "DESIGN", "IMPLEMENT", "REVIEW", "TEST", "SOLO"],
+      "signals": {
+        "filenames": ["vite.config.js", "vite.config.ts", "next.config.js", "next.config.mjs", "next.config.ts", "nuxt.config.js", "nuxt.config.ts", "angular.json", "svelte.config.js"],
+        "package_dependencies": ["react", "react-dom", "next", "vue", "nuxt", "@angular/core", "svelte", "@sveltejs/kit", "vite"],
+        "evidence_extensions": [".tsx", ".jsx", ".vue", ".svelte", ".css", ".scss"],
+        "request_terms_only": true,
+        "terms": ["前端", "页面", "界面", "组件", "交互", "frontend", "react", "vue", "angular", "svelte", "css"]
+      }
+    },
+    {
+      "id": "backend",
+      "title": "后端、API 与数据专项规则",
+      "file": "../references/backend-workflow.md",
+      "stages": ["REQUIREMENT", "DESIGN", "IMPLEMENT", "REVIEW", "TEST", "SOLO"],
+      "signals": {
+        "filenames": ["go.mod", "Cargo.toml", "pom.xml", "build.gradle", "build.gradle.kts"],
+        "package_dependencies": ["express", "fastify", "koa", "@nestjs/core", "hapi"],
+        "path_parts": ["backend", "server", "api"],
+        "terms": ["后端", "接口", "数据库", "迁移", "事务", "服务端", "backend", "server", "http api", "database", "migration"]
+      }
+    },
+    {
+      "id": "golang",
+      "title": "Go 专项规则",
+      "file": "profiles/golang.md",
+      "stages": ["DESIGN", "IMPLEMENT", "REVIEW", "TEST", "SOLO"],
+      "signals": {
+        "filenames": ["go.mod"],
+        "evidence_extensions": [".go"],
+        "terms": ["golang", "go 语言"]
+      }
+    },
+    {
+      "id": "sql",
+      "title": "SQL 与数据变更专项规则",
+      "file": "profiles/sql.md",
+      "stages": ["DESIGN", "IMPLEMENT", "REVIEW", "TEST", "SOLO"],
+      "signals": {
+        "evidence_extensions": [".sql"],
+        "path_parts": ["migration", "migrations"],
+        "terms": ["sql", "数据库", "数据表", "索引", "事务", "迁移", "database", "index", "transaction", "migration"]
+      }
+    },
+    {
+      "id": "design-implementation",
+      "title": "设计稿实现专项规则",
+      "file": "../references/design-implementation.md",
+      "stages": ["REQUIREMENT", "DESIGN", "IMPLEMENT", "REVIEW", "TEST", "SOLO"],
+      "signals": {"state_flag": "requires_design_artifacts"}
+    }
+  ]
+}

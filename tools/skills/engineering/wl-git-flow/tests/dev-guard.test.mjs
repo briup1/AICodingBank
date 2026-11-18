@@ -7,7 +7,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import { performance } from 'node:perf_hooks';
 import { checkCommand, checkPush, checkCandidate, commit, loadConfig, policyFor, ready } from '../scripts/dev-guard/policy.mjs';
-import { register, initMarker, syncMarkers, saveConfig } from '../scripts/dev-guard/cli.mjs';
+import { register, initMarker, syncMarkers, saveConfig, recoverDivergedMarker } from '../scripts/dev-guard/cli.mjs';
 import { manage } from '../scripts/dev-guard/install.mjs';
 import piAdapter from '../scripts/dev-guard/adapters/pi.mjs';
 import { DevGuard } from '../scripts/dev-guard/adapters/opencode.mjs';
@@ -56,6 +56,35 @@ before(() => {
 });
 after(() => {
   process.env = oldEnv; rmSync(base, { recursive: true, force: true });
+});
+
+test('未推送标记与远端前进分叉时保留双方历史恢复保护', () => {
+  const local = join(base, 'recovery'), remote = join(base, 'recovery.git');
+  assert.equal(run('git', ['init', '--bare', '--initial-branch=master', remote]).status, 0);
+  assert.equal(run('git', ['clone', remote, local]).status, 0);
+  const g = (...args) => {
+    const r = run('git', ['-C', local, ...args]);
+    assert.equal(r.status, 0, r.stderr); return r.stdout.trim();
+  };
+  g('config', 'user.name', 'Dev Guard Test'); g('config', 'user.email', 'test@example.invalid');
+  g('config', 'core.hooksPath', join(base, 'empty-hooks'));
+  writeFileSync(join(local, 'a'), 'a'); g('add', 'a'); g('commit', '-m', 'base');
+  g('switch', '-c', 'feature/dev'); g('push', '-u', 'origin', 'feature/dev');
+  register(local); const m = initMarker(local, 'recovery', true);
+  // The remote advances from the marker's parent without containing the marker.
+  const other = join(base, 'recovery-other');
+  assert.equal(run('git', ['clone', '-b', 'feature/dev', remote, other]).status, 0);
+  const h = (...args) => { const r = run('git', ['-C', other, ...args]); assert.equal(r.status, 0, r.stderr); return r.stdout.trim(); };
+  h('config', 'user.name', 'Dev Guard Test'); h('config', 'user.email', 'test@example.invalid');
+  writeFileSync(join(other, 'b'), 'b'); h('add', 'b'); h('commit', '-m', 'remote advance'); h('push');
+  g('fetch', 'origin', 'feature/dev'); const remoteTip = g('rev-parse', 'origin/feature/dev');
+  assert.throws(() => ready(local, policyFor(local)), /未就绪/);
+  assert.throws(() => recoverDivergedMarker(local, 'origin', false), /confirm/);
+  recoverDivergedMarker(local, 'origin', true);
+  ready(local, policyFor(local));
+  assert.equal(run('git', ['-C', local, 'merge-base', '--is-ancestor', m.sha, 'HEAD']).status, 0);
+  assert.equal(run('git', ['-C', local, 'merge-base', '--is-ancestor', remoteTip, 'HEAD']).status, 0);
+  assert.equal(readFileSync(join(local, 'b'), 'utf8'), 'b');
 });
 
 test('标记是空提交，正常需求同时进入 Dev/Beta 不误判', () => {

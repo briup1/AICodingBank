@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "scenarios": [
+    {
+      "id": "lf-port-24d999e5",
+      "turns": [
+        {
+          "message": "帮我查询广东发往乌兹别克斯坦的运费多少",
+          "expect": {
+            "action": "no_query",
+            "ui": "response"
+          }
+        }
+      ]
+    },
+    {
+      "id": "lf-port-60194490",
+      "turns": [
+        {
+          "message": "PVG CAI",
+          "expect": {
+            "action": "no_query",
+            "ui": "response"
+          }
+        }
+      ]
+    },
+    {
+      "id": "lf-repeat-bb25bddf",
+      "turns": [
+        {
+          "message": "上海到洛杉矶，40HQ 的运价",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": {
+              "pol_code": "CNSHA",
+              "pod_code": "USLAX",
+              "container_types": ["40HQ"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "lf-h008-4cf5345d",
+      "turns": [
+        {
+          "message": "上海到洛杉矶，代理的，要保舱",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": {"pol_code": "CNSHA", "pod_code": "USLAX"}
+          }
+        }
+      ]
+    },
+    {
+      "id": "lf-h008-0629961c",
+      "turns": [
+        {
+          "message": "上海到洛杉矶，只看一代好价",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": {"pol_code": "CNSHA", "pod_code": "USLAX"}
+          }
+        }
+      ]
+    },
+    {
+      "id": "lf-h008-b65b9148",
+      "turns": [
+        {
+          "message": "上海到洛杉矶，只要船司保舱",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": {"pol_code": "CNSHA", "pod_code": "USLAX"}
+          }
+        }
+      ]
+    },
+    {
+      "id": "lf-h008-d905baab",
+      "turns": [
+        {
+          "message": "上海到洛杉矶，只要代理直营",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": {"pol_code": "CNSHA", "pod_code": "USLAX"}
+          }
+        }
+      ]
+    },
+    {
+      "id": "lf-h008-91e4b1af",
+      "turns": [
+        {
+          "message": "上海到洛杉矶，只要代理保舱",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": {"pol_code": "CNSHA", "pod_code": "USLAX"}
+          }
+        }
+      ]
+    },
+    {
+      "id": "lf-h008-6bfdb10e",
+      "turns": [
+        {
+          "message": "上海到洛杉矶，只看参考价的运价",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": {"pol_code": "CNSHA", "pod_code": "USLAX"}
+          }
+        }
+      ]
+    },
+    {
+      "id": "lf-h008-7147149f",
+      "turns": [
+        {
+          "message": "上海到洛杉矶，一代好价，要保柜",
+          "expect": {
+            "action": "new_search",
+            "task": "COMPLETE",
+            "ui": "result_or_empty",
+            "route": {"pol_code": "CNSHA", "pod_code": "USLAX"}
+          }
+        }
+      ]
+    }
+  ]
+}

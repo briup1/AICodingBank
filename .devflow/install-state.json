@@ -1,0 +1,365 @@
+{
+  "version": 1,
+  "installer_version": "0.2.3",
+  "installations": {
+    "portable:pi": {
+      "host": "pi",
+      "edition": "portable",
+      "package_version": "0.2.3",
+      "files": [
+        {
+          "path": ".pi/skills/devflow-clarify-requirements/SKILL.md",
+          "sha256": "f6c880cc6e08074d6ad77413fe02fd3b9cb2eba5fb7a5aac681f9709168ba3fd"
+        },
+        {
+          "path": ".pi/skills/devflow-clarify-requirements/agents/openai.yaml",
+          "sha256": "1b689a0de554882727d07c2ce4979b0c5095eb6ddd8454717f6fe6833a534bcd"
+        },
+        {
+          "path": ".pi/skills/devflow/SKILL.md",
+          "sha256": "951f40bffe0a208932e13ccbd455e8fa81a08ffe2c8a054e8a5cab08bd291f8f"
+        },
+        {
+          "path": ".pi/skills/devflow/adapters/claude/adapter.md",
+          "sha256": "4c900784055fce72b81a357b0623faec06462eec800f1eaa493f7ea711e9f06c"
+        },
+        {
+          "path": ".pi/skills/devflow/adapters/claude/manifest.json",
+          "sha256": "91fd83f1b9614dcb50a1ef0c72e780fefdb3998c5a20c49236a4ede56453ef5b"
+        },
+        {
+          "path": ".pi/skills/devflow/adapters/codebuddy/adapter.md",
+          "sha256": "87741a0456d308bfa7628d1aa44d71063e9bd7f394868112978c3d70c12cf780"
+        },
+        {
+          "path": ".pi/skills/devflow/adapters/codebuddy/agents/research-helper.md",
+          "sha256": "f3a71ac648f0355db4f73133874c95fe29d367f14cb3050207bbbb5abefc76a5"
+        },
+        {
+          "path": ".pi/skills/devflow/adapters/codebuddy/agents/stage-executor.md",
+          "sha256": "3ec563b999edeb6a27488bdb950ae18558d7b48f18a77af501f324dbd1cf287d"
+        },
+        {
+          "path": ".pi/skills/devflow/adapters/codebuddy/cleanup_team.py",
+          "sha256": "71c99d5ba697ef3c559f8c174f20d0d8db1806cd1ec0e33196f506033bbbecb4"
+        },
+        {
+          "path": ".pi/skills/devflow/adapters/codebuddy/install.py",
+          "sha256": "d67a33eb0f301e2be50e4ddc844a2fab866078518ae305198106c1cf908ea9ea"
+        },
+        {
+          "path": ".pi/skills/devflow/adapters/codebuddy/manifest.json",
+          "sha256": "8eca16089382d057f05f79dae9e7d19fe783fd8970704a7c48f96c6c45e541d8"
+        },
+        {
+          "path": ".pi/skills/devflow/adapters/codex/adapter.md",
+          "sha256": "6c932bb87489ebc64146debe3c309212b67201db9486f6f446d83b5dd2799e18"
+        },
+        {
+          "path": ".pi/skills/devflow/adapters/codex/manifest.json",
+          "sha256": "bdd786bad54cb8619e90d0d9158b576688036df265e452d924bc46d7949ae364"
+        },
+        {
+          "path": ".pi/skills/devflow/adapters/cursor/adapter.md",
+          "sha256": "fc4edbb4c2bf0176f969c984c2f7cc1172f3e4c0fedbce733326fd3c95ff982f"
+        },
+        {
+          "path": ".pi/skills/devflow/adapters/cursor/manifest.json",
+          "sha256": "273653a6168c5d13b85f90f37f3d75d90027da9aed8755f2aafb9f15e9b8701f"
+        },
+        {
+          "path": ".pi/skills/devflow/adapters/dsh/adapter.md",
+          "sha256": "7136b7adafaccbe97d27f9311d77b6a7a67f7037f3dbc75d28be10bd9e6f0ec0"
+        },
+        {
+          "path": ".pi/skills/devflow/adapters/dsh/manifest.json",
+          "sha256": "b726f018ca5e8a55ad1f455896f735570412fb4956ed08e0929161bedc287d06"
+        },
+        {
+          "path": ".pi/skills/devflow/adapters/hermes/adapter.md",
+          "sha256": "3460380b46ff62ff5cf6cb8327e8575709a96e9fff2305f930331a82a22d487f"
+        },
+        {
+          "path": ".pi/skills/devflow/adapters/hermes/manifest.json",
+          "sha256": "13d0f012ad17e5bd84732c1871be78775050f759070b6fe3ebdec9b26ff988ce"
+        },
+        {
+          "path": ".pi/skills/devflow/adapters/pi/adapter.md",
+          "sha256": "ac1acdab693a62b3b6ecfca012888adffbc2b1ffa090495d67146f4c23dc1274"
+        },
+        {
+          "path": ".pi/skills/devflow/adapters/pi/manifest.json",
+          "sha256": "9c0435121f9e01bebcd3da6750823b941cfcc9a878303cfe3f2b2f3b4f93a5cb"
+        },
+        {
+          "path": ".pi/skills/devflow/adapters/shared/agents/research-helper.md",
+          "sha256": "45d077db8ea86d9370569f428064fa48dde32b6c7a3b048e0da06d97eca76b96"
+        },
+        {
+          "path": ".pi/skills/devflow/adapters/shared/agents/stage-executor.md",
+          "sha256": "c59317c1337391c63ab7c7da7ad126b6dd879c3e3f510e63b367e60670b8c555"
+        },
+        {
+          "path": ".pi/skills/devflow/agents/devflow-architect.md",
+          "sha256": "08cf53eb7e974600e9754b731ff799b6e175f15a6a682376c0ea8685f006e961"
+        },
+        {
+          "path": ".pi/skills/devflow/agents/devflow-code-explorer.md",
+          "sha256": "1bf05afb8a1ae725d23f679ee6d89f265d2b70467451a72bdd2b4bf8560f4e3d"
+        },
+        {
+          "path": ".pi/skills/devflow/agents/devflow-code-reviewer.md",
+          "sha256": "dff0d3f0c59b8a653f6d9373fcca8c57c185ca35320f8effb4440d514e33eb47"
+        },
+        {
+          "path": ".pi/skills/devflow/agents/devflow-developer.md",
+          "sha256": "cde6c465499625aad7fc9ff5b0641f029ca825ebe4371c6b2bde439311756a2e"
+        },
+        {
+          "path": ".pi/skills/devflow/agents/devflow-knowledge-engineer.md",
+          "sha256": "502e16b6d4b7d1c555b9e4844e9a0483704d8638dd073ccefa062a432cc52246"
+        },
+        {
+          "path": ".pi/skills/devflow/agents/devflow-knowledge-retriever.md",
+          "sha256": "001c51b0410759f2c47b7e3c2114fd710909757808cd6c4675edf20e992046c5"
+        },
+        {
+          "path": ".pi/skills/devflow/agents/devflow-requirement-owner.md",
+          "sha256": "d246485c316dc359661ea39f65be5447a8646cfaa18224f8fe121f38c6e9ca43"
+        },
+        {
+          "path": ".pi/skills/devflow/agents/devflow-solo-developer.md",
+          "sha256": "4193caf8bdfdb01bad34d7109544aa4ba21b24ab2ee69ea45d57c59fe3fe3af0"
+        },
+        {
+          "path": ".pi/skills/devflow/agents/devflow-summarizer.md",
+          "sha256": "8869a42e148f94eea4673fbd68f69ba725cc3313beea9e790c0ed77ec02758ee"
+        },
+        {
+          "path": ".pi/skills/devflow/agents/devflow-test-engineer.md",
+          "sha256": "d50cae3b0a261ad506a4ec785ea4b1edfabf7cef23981cf3c1aa3ef9df5ee149"
+        },
+        {
+          "path": ".pi/skills/devflow/agents/manifest.json",
+          "sha256": "07a05c1e3f9fbe68d3268f3f4e7da50d95ed8433fd83203346c07adc0e16ea45"
+        },
+        {
+          "path": ".pi/skills/devflow/agents/openai.yaml",
+          "sha256": "394485d25ad8038afd7d51f7531d63cdc75034b07decd5ddc9a3f3c9f9882b2a"
+        },
+        {
+          "path": ".pi/skills/devflow/commands/devflow.md",
+          "sha256": "e9918aa3d7ae0ab0a18fd9af66e182b36d4fe63eadfaa39c268a720a43511611"
+        },
+        {
+          "path": ".pi/skills/devflow/config/workflow.json",
+          "sha256": "5e8bad3c55d4d655b528cc5723dd4c87b4eda76ef0a1a5ba43ca277482a908ee"
+        },
+        {
+          "path": ".pi/skills/devflow/references/agent-execution.md",
+          "sha256": "733efd84b2f4c942d551c1b7637cb5ae44fb8744af8d14302efecc595484d8ff"
+        },
+        {
+          "path": ".pi/skills/devflow/references/backend-workflow.md",
+          "sha256": "7dc8672c8f5fca26087fed8463838966797f91b4f8748a410a7cc18c1dfd620a"
+        },
+        {
+          "path": ".pi/skills/devflow/references/design-implementation.md",
+          "sha256": "75062a4cd234c18a9072fc2695b2ca206126e427910ed80fdda29f6b10302656"
+        },
+        {
+          "path": ".pi/skills/devflow/references/frontend-workflow.md",
+          "sha256": "e86ba1e372c97834b198be3f0e1727d82ffa4696b899da7da447ee7f828d72fa"
+        },
+        {
+          "path": ".pi/skills/devflow/references/manual-runtime.md",
+          "sha256": "df1754836d7d9f446f730d036fca75c7065d6d529fd16cf1b44c2a9249b233d9"
+        },
+        {
+          "path": ".pi/skills/devflow/references/preview-deploy.md",
+          "sha256": "898df76a7956532253c7ff8a5ac5a51f8110471b386235e8689067dd7f1b1510"
+        },
+        {
+          "path": ".pi/skills/devflow/references/quality.md",
+          "sha256": "a8a19f674c05e081e1a2fd37bc5205d1dca40db22f23d599f94f286ece0596a8"
+        },
+        {
+          "path": ".pi/skills/devflow/references/runtime-core.md",
+          "sha256": "7ea0fa99cfb67e0510dbe7929d6f9b982b025af5a1eb747822feeaa1b5b80859"
+        },
+        {
+          "path": ".pi/skills/devflow/references/workflow-contract.md",
+          "sha256": "2dbbf5a9e96c2828e5849a4a44b03e3ae8acef4a2fc4b1e84629ea69121e903a"
+        },
+        {
+          "path": ".pi/skills/devflow/rules/core.md",
+          "sha256": "998b8259bd85984bb64f4927381321d8e5668cea4fbc17e7c0ed030343af06e3"
+        },
+        {
+          "path": ".pi/skills/devflow/rules/manifest.json",
+          "sha256": "bf6736ac0384bded344a4456bb08cca7f2d86eb219b52240ffebb95a26978739"
+        },
+        {
+          "path": ".pi/skills/devflow/rules/profiles/golang.md",
+          "sha256": "6572084ff684495e56aaa134fc38524b009e3db4bfcd5aeeb1b684d24bafaf9f"
+        },
+        {
+          "path": ".pi/skills/devflow/rules/profiles/sql.md",
+          "sha256": "9d8bfb165ec5ca37107840004c97bc5f2a973c52df73edf9eacec8c0a362be44"
+        },
+        {
+          "path": ".pi/skills/devflow/rules/stages/design.md",
+          "sha256": "5498754b47eae8260580ca5285877f845b5c5c108ccc1091061f94a2e8436c7a"
+        },
+        {
+          "path": ".pi/skills/devflow/rules/stages/implement.md",
+          "sha256": "607b49a8bb5b8268cefe1417a5c87a83487355f2a43f4fc30f91ce3136cea828"
+        },
+        {
+          "path": ".pi/skills/devflow/rules/stages/knowledge.md",
+          "sha256": "dd370031d4c4ce43fa1a0babddfd39d0a6ed840964e7cce15e912df53a426bf2"
+        },
+        {
+          "path": ".pi/skills/devflow/rules/stages/requirement.md",
+          "sha256": "a268855bae13d57551ab842439c37f65a461408dceada98151b06fb985026d5f"
+        },
+        {
+          "path": ".pi/skills/devflow/rules/stages/review.md",
+          "sha256": "739a43116a568fa81f59c2400f3d0575dd6b4fb9be6a8b66fd203be53caa8e1f"
+        },
+        {
+          "path": ".pi/skills/devflow/rules/stages/solo.md",
+          "sha256": "fd4620c9616df4fe63a4c10fe53728b88059168ea361e28fcf2381abde7c2158"
+        },
+        {
+          "path": ".pi/skills/devflow/rules/stages/summary.md",
+          "sha256": "c8c25dbd1fa39869a3a828cc8bb7699d33874ecbd6c236b81c33907c04f95d98"
+        },
+        {
+          "path": ".pi/skills/devflow/rules/stages/test.md",
+          "sha256": "826b439c83b4fc67042bbe18e57a0acaf489dc651f1296fa212c60f1d4610bd2"
+        },
+        {
+          "path": ".pi/skills/devflow/scripts/adapter_registry.py",
+          "sha256": "283ebcb7444055fe79680764f4f8402cf9e11697f1bafd87534259ea3fb1912d"
+        },
+        {
+          "path": ".pi/skills/devflow/scripts/agent_registry.py",
+          "sha256": "8fb7f3256ed1ae7497904b9dab2f388061d6e6833c8bfa1541dd2e9f7a41aaf0"
+        },
+        {
+          "path": ".pi/skills/devflow/scripts/build_helper_prompt.py",
+          "sha256": "9aeb3ebc61fa206ae1b3d0ce6f1f2991d99d8219db9e1c0b90a6ce5aece41581"
+        },
+        {
+          "path": ".pi/skills/devflow/scripts/build_stage_prompt.py",
+          "sha256": "ca1f571a7c39b4252f6c136390d187b952677e4bbb431527c67bb207156bd32c"
+        },
+        {
+          "path": ".pi/skills/devflow/scripts/inspect_context.py",
+          "sha256": "57f38c64af54a33d95355c46ab43cc5ed865230c42fffc1232aa7f6e95aea680"
+        },
+        {
+          "path": ".pi/skills/devflow/scripts/install_adapter.py",
+          "sha256": "20c2bbe87fb3bc6c844b155c2af352fa13a6487f09677bcc00c22e8667ded9e1"
+        },
+        {
+          "path": ".pi/skills/devflow/scripts/preflight_preview.sh",
+          "sha256": "0a490fc02022bc54f93f726f6e72a641123030eccd8a3648f40caca0da435a1e"
+        },
+        {
+          "path": ".pi/skills/devflow/scripts/rule_registry.py",
+          "sha256": "dcd4fbd456800042c8f0756fba9597ef15792180b1a722b99695644ae60891c4"
+        },
+        {
+          "path": ".pi/skills/devflow/scripts/template_registry.py",
+          "sha256": "90ebf51ae0c9980ad27ae0e51499c92531f956069d268ca04d7f7a0cbef26503"
+        },
+        {
+          "path": ".pi/skills/devflow/scripts/validate_artifacts.py",
+          "sha256": "4cd3c40810a3694a74e06afd098793079f41dfb7dfa95386bfaa0d2e89775939"
+        },
+        {
+          "path": ".pi/skills/devflow/scripts/validate_config.py",
+          "sha256": "5f8abe0b2dc6e809b69cc8de268872507c991504a271e61e25baf447d7ab0a94"
+        },
+        {
+          "path": ".pi/skills/devflow/scripts/validate_design_artifacts.py",
+          "sha256": "a30aa4b825219b698717390cd8f614029f21db23c937757e49909ed8547fbb5c"
+        },
+        {
+          "path": ".pi/skills/devflow/scripts/validate_plan.py",
+          "sha256": "20adb46e4698db8776abbf40a59775806ebc3a887a63546340b0e28fb7671af1"
+        },
+        {
+          "path": ".pi/skills/devflow/scripts/workflow_state.py",
+          "sha256": "f44855c70c82f9a9bca9bcc894dccfca846b32a462f5e718bd786d5dc6f06362"
+        },
+        {
+          "path": ".pi/skills/devflow/templates/api-docs.md",
+          "sha256": "e92c629f53141b0f90063d906c20fb8a2039ef74543b5a9b6560e08bb3aa72bf"
+        },
+        {
+          "path": ".pi/skills/devflow/templates/change-report.md",
+          "sha256": "3e74d6fa3f036c6e2ef430a085b2b2c19fec601bb9d137ed3ad6875d6b84add8"
+        },
+        {
+          "path": ".pi/skills/devflow/templates/design-context-components.md",
+          "sha256": "23356f5144ec0fac5c82a4260cbe33f3fd28892d28eac25c3d4d37d2f2fcd4bb"
+        },
+        {
+          "path": ".pi/skills/devflow/templates/design-context-overview.md",
+          "sha256": "ba3839402f9bcc2962243767c1c6277aa01846cee0c13e0cfacecb489ec99c7f"
+        },
+        {
+          "path": ".pi/skills/devflow/templates/design-context-section.md",
+          "sha256": "9ad70f9fa0b1b466dc26a16a4e776dcb65e556c7d5899a8a95494cc015cba57d"
+        },
+        {
+          "path": ".pi/skills/devflow/templates/execution-plan.md",
+          "sha256": "7988da349a6616c22bb3eea8ededb588337a14a08557d3681a921d14723b46ef"
+        },
+        {
+          "path": ".pi/skills/devflow/templates/knowledge-report.md",
+          "sha256": "2724635b49083fe1bbc0c29a67a657742e60abd2ae2382bbe9d690815d11894e"
+        },
+        {
+          "path": ".pi/skills/devflow/templates/manifest.json",
+          "sha256": "4ba5501e46178e1d6a2aef5c42a5a9cb2f2a35bfaf3397e6188735ca4955d34e"
+        },
+        {
+          "path": ".pi/skills/devflow/templates/requirement-report.md",
+          "sha256": "9e9eb93e9c12583c7c9c79bf03771d12264d125156aa9d1adc3fd29f976c990d"
+        },
+        {
+          "path": ".pi/skills/devflow/templates/review-report.md",
+          "sha256": "4831dca6fd2616ddff418173c50942a500fdfa695340ed0c512668d3c402adc6"
+        },
+        {
+          "path": ".pi/skills/devflow/templates/solo-report.md",
+          "sha256": "0ebd495733699f8623e97ae30f6fab5f15c8432d9950391a90aeb06792abd72b"
+        },
+        {
+          "path": ".pi/skills/devflow/templates/tech-design.md",
+          "sha256": "18d73a8ac2f6b57c821a86343a703be3ea0504a4706fe6cce24834fde29102c0"
+        },
+        {
+          "path": ".pi/skills/devflow/templates/test-report.md",
+          "sha256": "28c9a061c88784c1058432dc5dc9db1073c61b23e726f014d0002aa4a7552fbe"
+        },
+        {
+          "path": ".pi/skills/devflow/templates/workflow-state.json",
+          "sha256": "8cf2cefecb3c59faca9251a6081c428386cc37996cadcbb03adf1d15fefb3641"
+        },
+        {
+          "path": ".pi/skills/devflow/templates/workflow-summary.md",
+          "sha256": "146d2350a790d738a2a50a004da2077c834ead8928a327d326ee553844dd07f1"
+        },
+        {
+          "path": ".pi/skills/manifest.json",
+          "sha256": "36eb41a069331f6a24a470098bc0df496f3ba213c28a2f1c3cf771454a8adec8"
+        }
+      ]
+    }
+  }
+}

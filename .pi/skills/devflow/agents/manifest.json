@@ -1,0 +1,15 @@
+{
+  "version": "1.0",
+  "roles": [
+    {"id": "devflow-solo-developer", "kind": "stage", "stage": "SOLO", "input_stages": [], "input_artifacts": [], "workspace_evidence": ["当前任务相关代码、测试和实际 diff"], "file": "devflow-solo-developer.md", "description": "小型任务执行者：完成计划、实现、自审、测试和报告", "access": "write"},
+    {"id": "devflow-requirement-owner", "kind": "stage", "stage": "REQUIREMENT", "execution": "coordinator", "input_stages": [], "input_artifacts": [], "workspace_evidence": ["为回答决策分支所需的项目代码、文档和现有行为"], "file": "devflow-requirement-owner.md", "description": "需求负责人：由协调者完成证据调研、用户澄清和需求报告", "access": "report"},
+    {"id": "devflow-architect", "kind": "stage", "stage": "DESIGN", "input_stages": ["REQUIREMENT"], "input_artifacts": ["01-requirement/requirement-report.md"], "workspace_evidence": ["受影响调用链、接口、数据结构、测试和项目约定"], "file": "devflow-architect.md", "description": "架构师：根据已确认需求生成技术方案和执行计划", "access": "report"},
+    {"id": "devflow-developer", "kind": "stage", "stage": "IMPLEMENT", "input_stages": ["DESIGN"], "input_artifacts": ["02-design/tech-design.md", "02-design/execution-plan.md"], "workspace_evidence": ["执行计划范围内的代码、测试和配置"], "file": "devflow-developer.md", "description": "开发者：实施已批准计划并填写变更报告", "access": "write"},
+    {"id": "devflow-code-reviewer", "kind": "stage", "stage": "REVIEW", "input_stages": ["REQUIREMENT", "DESIGN", "IMPLEMENT"], "input_artifacts": ["01-requirement/requirement-report.md", "02-design/execution-plan.md", "03-code/change-report.md"], "workspace_evidence": ["当前任务的实际 diff 和相关代码"], "file": "devflow-code-reviewer.md", "description": "代码审查员：独立审查已完成实现和实际 diff", "access": "report"},
+    {"id": "devflow-test-engineer", "kind": "stage", "stage": "TEST", "input_stages": ["REQUIREMENT", "DESIGN", "REVIEW"], "input_artifacts": ["01-requirement/requirement-report.md", "02-design/execution-plan.md", "03-code/review-report.md"], "workspace_evidence": ["当前实现、实际 diff、现有测试、CI 配置和可执行命令"], "file": "devflow-test-engineer.md", "description": "测试工程师：独立补齐项目已有层级的必要测试并运行风险验证", "access": "test-write"},
+    {"id": "devflow-knowledge-engineer", "kind": "stage", "stage": "KNOWLEDGE", "input_stages": ["DESIGN", "REVIEW", "TEST"], "input_artifacts": ["02-design/tech-design.md", "03-code/review-report.md", "04-test/test-report.md"], "workspace_evidence": ["最终实际 diff"], "file": "devflow-knowledge-engineer.md", "description": "条件知识工程师：只沉淀新增且跨任务可复用的事实和决策", "access": "report"},
+    {"id": "devflow-summarizer", "kind": "stage", "stage": "SUMMARY", "execution": "coordinator", "input_stages": ["*"], "input_artifacts": ["01-solo/solo-report.md", "03-code/change-report.md", "03-code/review-report.md", "04-test/test-report.md", "05-knowledge/knowledge-report.md"], "workspace_evidence": [], "file": "devflow-summarizer.md", "description": "总结角色：由协调者汇总最终交付与验证证据", "access": "report"},
+    {"id": "devflow-code-explorer", "kind": "helper", "file": "devflow-code-explorer.md", "description": "只读、有边界的代码检索助手，不执行代码审查", "access": "read"},
+    {"id": "devflow-knowledge-retriever", "kind": "helper", "file": "devflow-knowledge-retriever.md", "description": "只读、有边界的文档和知识检索助手", "access": "read"}
+  ]
+}

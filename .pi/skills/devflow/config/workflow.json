@@ -1,0 +1,16 @@
+{
+  "version": "2.0",
+  "max_stage_failures": 2,
+  "max_batch_tasks": 3,
+  "required_approval_gates": ["REQUIREMENT"],
+  "manual_gates": ["DESIGN", "REVIEW", "TEST"],
+  "optional_stages": ["KNOWLEDGE"],
+  "routes": {
+    "small": ["SOLO", "SUMMARY"],
+    "medium": ["REQUIREMENT", "DESIGN", "IMPLEMENT", "REVIEW", "TEST", "KNOWLEDGE", "SUMMARY"],
+    "large": ["REQUIREMENT", "DESIGN", "IMPLEMENT", "REVIEW", "TEST", "KNOWLEDGE", "SUMMARY"]
+  },
+  "compatible_routes": {
+    "medium": [["REQUIREMENT", "DESIGN", "IMPLEMENT", "REVIEW", "TEST", "SUMMARY"]]
+  }
+}
