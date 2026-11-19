@@ -1,6 +1,6 @@
 # Skill 总目录（install.py 自动生成，勿手改）
 
-共 89 个 · 已验证 63 · 待验证 26
+共 90 个 · 已验证 63 · 待验证 27
 
 想看深度使用经验 → wiki entity 页；想改行为 → SKILL.md；本目录只回答“它能干什么、边界在哪”。
 
@@ -143,6 +143,8 @@
   边界：仅定义行为约定；Herdr 通道依赖 HERDR_ENV=1 与当前 CLI，备用通道须实际可用，不绕过用户禁令、审批拒绝或资源访问限制
 
 ## 教学
+- **ai-learning-coach-skill**（第三方·YNDSlll/ai-learning-coach-skill@b735cc96602e44e27ef7fd88a828734f07fd97be·**待验证（未安装）**）— 通过学习阶梯、资源筛选、练习、自测和费曼反馈辅助学习
+  边界：学习教练提示词，不提供持久进度或定时任务；尚未完成真实学习场景验证，不启用
 - **deepagents-getting-started**（自研·已验证 2026-08-21）— 提供 DeepAgents 0.7.8 的最小闭环、总体架构和核心组件选型规则
   边界：不处理具体后端安全、子 Agent 拆分或版本敏感 API 查询
 - **scaffold-exercises**（第三方·mattpocock/skills·已验证 2026-08-23）— 脚手架生成练习目录：分节、题目、答案、讲解，过 lint

@@ -59,9 +59,9 @@
         {
           "message": "所以是没结果吗",
           "expect": {
-            "action": "status_only",
+            "action": "filter_existing",
             "ui": "response",
-            "contains": "结束"
+            "contains": "结果"
           }
         }
       ]
@@ -149,9 +149,9 @@
         {
           "message": "还有结果吗",
           "expect": {
-            "action": "status_only",
+            "action": "filter_existing",
             "ui": "response",
-            "contains": "结束"
+            "contains": "结果"
           }
         }
       ]
