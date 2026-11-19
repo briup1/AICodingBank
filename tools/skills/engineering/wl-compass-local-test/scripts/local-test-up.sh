@@ -12,14 +12,12 @@ for a in "$@"; do
   esac
 done
 [ -f "$WT/backend-service/pom.xml" ] || { echo "❌ $WT 不是 compass-platform worktree（缺 backend-service/pom.xml）"; exit 1; }
-# 浏览器业务测试必须先准备真实身份，禁止以健康检查代替鉴权验证。
-if [ -z "${COMPASS_LOCAL_ACCESS_TOKEN:-}" ] || [ -z "${COMPASS_LOCAL_WHALE_IDENTITY:-}" ]; then
-  echo '❌ 缺少 COMPASS_LOCAL_ACCESS_TOKEN 或 COMPASS_LOCAL_WHALE_IDENTITY；先按 SKILL.md 准备有效 Dev 登录态。' >&2
-  exit 1
-fi
 SLUG="$(basename "$WT")"
 LT="${COMPASS_LOCAL_TEST_HOME:-$HOME/.local/state/compass-local-test}/$SLUG"
 mkdir -p "$LT/logs" "$LT/artifacts"
+# 缺少身份时自动从本机登记的 Dev 测试账号恢复；凭据只在子进程内存中使用。
+# 代理步骤仍会以 gate-status 业务码校验，不把健康检查当作鉴权成功。
+AUTH_SESSION="$SCRIPT_DIR/local-auth-session.mjs"
 
 echo "== 0. dev 网络检查（FAIL 项会导致起不来或查询无数据）=="
 for t in "dev-mysql8.hgj.net 3306" "dev-middle.hgj.net 6379" "10.10.10.145 27017" "iter-apisix.hgj.com 443"; do
@@ -27,7 +25,7 @@ for t in "dev-mysql8.hgj.net 3306" "dev-middle.hgj.net 6379" "10.10.10.145 27017
 done
 
 echo "== 1. 端口检查 =="
-for port in 18080 18081 9967; do
+for port in 18080 9967; do
   p=$(lsof -nP -tiTCP:$port -sTCP:LISTEN 2>/dev/null || true)
   if [ -n "$p" ]; then
     echo "❌ 端口 $port 被 pid=$p 占用：$(ps -p "$p" -o command= | cut -c1-80)"
@@ -71,15 +69,13 @@ for i in $(seq 1 30); do
   [ "$i" = 30 ] && { echo "❌ 后端 60s 未就绪，看日志"; exit 1; }
 done
 
-echo "== 5. 启动鉴权代理并验证协议状态 =="
-node "$SCRIPT_DIR/local-auth-proxy.mjs" start --listen 127.0.0.1:18081 --target http://127.0.0.1:18080 || exit 1
-for i in $(seq 1 10); do
-  if curl --noproxy '*' -sf -m 3 'http://127.0.0.1:18081/api/v1/agreement/gate-status?lang=zh-CN' | node -e 'let s="";process.stdin.on("data",x=>s+=x);process.stdin.on("end",()=>{try{let r=JSON.parse(s);process.exit(r.code===200 && r.data && typeof r.data==="object" ? 0 : 1)}catch{process.exit(1)}})'; then
-    echo '  协议状态身份验证通过'; break
-  fi
-  [ "$i" = 10 ] && { echo '❌ 协议状态鉴权未通过，不能交付浏览器业务测试；检查登录态和代理日志。' >&2; exit 1; }
-  sleep 1
-done
+echo "== 5. 恢复鉴权代理并验证协议状态 =="
+node "$AUTH_SESSION" --state "$LT" --slug "$SLUG" --listen 127.0.0.1:18081 --target http://127.0.0.1:18080 || exit 1
+if ! curl --noproxy '*' -sf -m 5 'http://127.0.0.1:18081/api/v1/agreement/gate-status?lang=zh-CN' | node -e 'let s="";process.stdin.on("data",x=>s+=x);process.stdin.on("end",()=>{try{let r=JSON.parse(s);process.exit(r.code===200 && r.data && typeof r.data==="object" ? 0 : 1)}catch{process.exit(1)}})'; then
+  echo '❌ 协议状态鉴权未通过，不能交付浏览器业务测试；检查登录态和代理日志。' >&2
+  exit 1
+fi
+echo '  协议状态身份验证通过'
 
 echo "== 6. 启动前端 :9967 =="
 [ -d "$WT/agents-web/node_modules" ] || (cd "$WT/agents-web" && pnpm install --prefer-offline >/dev/null 2>&1)

@@ -64,6 +64,7 @@ stop_by_port() { # $1=端口 $2=命令行特征串（防误杀别的任务的进
 
 echo "== 1. 停本需求进程 =="
 stop_by_port 18080 'compass-backend-service\.jar'
+stop_by_port 18081 'local-auth-proxy\.mjs'
 stop_by_port 9967  'wl-local'
 stop_by_port 8010  'assist-bot|main:app'
 
